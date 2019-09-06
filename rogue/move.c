@@ -620,7 +620,7 @@ coord *tc;
 		}
 	    }
 	    else {
-		if (can_see) 
+		if (can_see && !fighting) 
 		    msg("A strange white mist envelops the %s.",mname);
 		if (on(*th, ISUNDEAD)) {
 		    if (can_see && !fighting) 
