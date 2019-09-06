@@ -1,0 +1,7 @@
+1)	messages longer than screen width wipe out part of the upper line of
+	the level.  endmsg() in io.c should be changed to test for
+	these things.
+2)	when you are in a darkened room and a monster moves across the
+	doorway, the doorway goes blank instead of staying as a plus.
+	this also happens in a lit room if the monster is invisible.
+	problem is in chase.c

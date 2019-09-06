@@ -1,0 +1,832 @@
+2.01 - Dec 17/84
+1)	MAXTRAPS set to 20, up from 15.  the dungeon gets nastier
+2)	hitpoints gained per level change/loss increased by 50%.
+	this will be essential when new monsters added and amulet
+	level is increased to 50 or so.
+
+2.01 - Dec 21/84
+1)	MAXPDEF set to 4 (maximum number of saved characters).
+
+2.01 - Dec 23/84
+1)	all load control and time code now non-optional.  controlled
+	by external variables initialized in tunable.c.  load average
+	is now read by a separate program and obtained via popen(3).
+2)	2 new armors added, mithril and crystalline.
+3)	when wearing crystalline armor, a wielded weapon can be turned 
+	into a wand of lightning by bolts of lightning from monsters
+	(75% chance)
+4)	blessed (enchanted) food lasts 3 times as long as regular food
+	up to 6000 turns (regular food is 2000 max)
+5)	tidied up messages so they all have periods on the end, etc.
+6)	not being able to play because of holiday() code is distinguished
+	by a separate message
+7)	when wearing crystalline armor, monsters that normally hug won't
+
+2.01 - Dec 24/84
+1)	fixed handling of being hit by lightning shot by yourself
+2)	fixed inventory message for sticks with one charge
+3)	a highly charged (>50) stick or weapon of lightning can do extra damage
+
+2.01 - Dec 25/84
+1)	mithril armor decreases by 25% the chance of being hit by magic
+	or wands (VS_MAGIC and VS_WAND -5) except by silver arrows
+2)	all forms of teleportation cause confusion unless you are currently
+	affected by a clear thought potion.  wizard teleportation via ^X
+	is exempt
+3)	falling through a maze or normal trapdoor can cause damage and you can
+	die from it.  also, you are confused unless currently affected by a
+	clear thought potion
+4)	when askme is set, more prompting for names is made for scrolls and
+	potions
+
+2.01 - Dec 26/84
+1)	fixed bug for when wizard or after reading scroll of creation, making
+	an object of which there is only a single type does not redisplay the
+	level
+2)	ring of teleportation can also cause confusion.  oversight in changes
+	made in other code
+3)	19 new weapons added.  list of weapons used to start with has not
+	changed
+4)	calculation of worth of multiply occuring objects changed to include
+	multiplying by the count of the number of objects
+5)	silver arrows are aimed by magic and so miss only if monster saves
+	against magic and the arrow otherwise would have missed anyway
+6)	fixed bug if entering wizard's password from the command line and is
+	typed in wrong, then a game restore is attempted
+7)	changed format of asking for object creation to allow more objects
+	to be chosen
+8)	format of name being saved in the score file is changed to indicate
+	level number and level name of the person
+
+2.01 - Dec 27/84
+1)	added 17 new monsters.  the scorefile name of the monster that killed
+	you is incompatible in indexing, but that's life.
+
+2.01 - Dec 30/84
+1)	wererats can now summon giant rats, up to 4 of them
+2)	ogres are now greedy
+
+2.01 - Jan 2/85
+1)	elves that carry bows have a 10% chance of carrying silver arrows
+2)	slightly higher probabilities of traps being successfully set
+3)	format of top ten adventurers output changed to two lines for
+	neatness since more stuff added
+
+2.01 - Jan 3/85
+1)	a cursed scroll of create monster now creates 3 to 6 monsters
+	around you.  a normal one and a blessed one create just one
+
+2.01 - Jan 6/85
+1)	amulet moved up to level 50 for safety  :-)
+2)	added new weapons, including a claymore and a footbow
+3)	some of new weapons now available during initial selection
+
+2.01 - Jan 7/84
+1)	more weapons added
+2)	code to handle creation of objects completely rewritten to no longer
+	have a limit on the number of items 
+3)	fixed bug in wizard monster creation routine to allow ESC to terminate
+	without selection
+
+2.01 - Jan 11/85
+1)	fixed code in chase.c so that a monster can actually use a footbow
+	if it's carrying one
+2)	fixed bug in chase.c that wrong pointer is used to point to a
+	monster's silver arrow.  it turns out that the code executes as
+	expected but the comments are then wrong
+
+2.01 - Jan 13/85
+1)	added fire traps as another type of trap.  needed for burning oil
+2)	changed name of molotov cocktails to burning oil.  when thrown and
+	misses monster, it makes a fire trap and also lights up the room
+3)	6 new rings added - carrying - pack loses 1/3 of its weight
+			  - adornment - worth 1000 gp, but nothing else
+			  - levitation - avoids traps and things like that
+			  - fire resistance, lightning resistance, and
+			    cold resistance - obvious
+4)	certain monsters will die instantly when hit by burning oil
+
+2.01 - Jan 14/85
+1)	full damage is always done with burning oils except on fireproof
+	monsters
+2)	monsters that divide will not do so when hit by burning oil
+3)	fixed bugs in messages for firetraps
+
+0.00 Alpha - Jan 15/85
+1)	flameproof monsters aren't burnt by burning oil
+2)	version and name of game changed to UltraRogue.  hopefully,
+	it will live up to it's name
+3)	format of scoring output changed to remove redundant information
+4)	crysknife can poison now.  if the monster doesn't save against
+	poison, it loses half its hit points
+5)	flameproof monsters ignore firetraps and can run through them
+6)	many special properties of weapons changed from hardcoded names
+	to flags
+7)	boomerangs and other weapons that return do so now
+8)	maximum attempts to set traps per level changed from 8 to 16
+9)	maximum transactions at a trading post changed from 4 to 8
+
+0.00 Alpha - Jan 16/85
+1)	corrected code for handling of silver and poisoned weapons
+
+1.00 Alpha - Feb 1/85
+1)	it's now possible to roll crystalline armor at start
+2)	enchanting armor causes it to weigh 20% less for each + and 20% more
+	for each -
+
+1.00 Alpha - Feb 4/85
+1)	quitting uses experience point score instead of gold
+2)	corrected handling of weight of enchanted armor
+3)	discovering a firetrap lights the room
+4)	it's now possible to die from fire traps
+
+1.00 Alpha - Feb 5/85
+1)	changed weight of enchanted objects in wrong place.  now fixed
+2)	minor fix to messages in trader.c
+3)	changed the effect of a scroll of acquirement.  a blessed scroll
+	now works as in old version, a normal or cursed scroll will
+	allow acquirement of an object of random type.
+4)	split rogue.c into rogue.c and monsdata.c
+
+1.00 Alpha - Feb 10/85
+1)	armor doesn't rust if you're not wearing any
+2)	added 8 artifacts, now trying to make rogue compile again
+3)	time window for restored games changed to 60s instead of 25s.
+
+1.00 Alpha - Feb 13/85
+1)	misc. tidying up of messages.  some changed to be wizard only
+	messages
+2)	one unique monster added, have not yet tested nastiness of beast
+3)	changed chasing code to hopefully remove bug that stops running
+	in a room even though monster is invisible or can surprise
+4)	seeing distance is now a variable so that later enhancements can
+	be made
+5)	added apply command ('A') to make an artifact work (does nothing 
+	right now)
+6)	it is now possible to trip and fall down the stairs, and die
+	in the process
+7)	blessed objects weigh 20% less and cursed weigh 20% more
+8)	fighting (but not to death) allowed until 1/3 of max hit points
+9)	time of stiffening by basilisks, etc., is now randomized
+10)	tidied up code to handle signals and autosaving
+11)	poison pool traps implemented
+12)	quaffing a potion of haste self when already hasted lasts a
+	longer time than before
+13)	if strength is high enough, the hero can break free of 
+	a hold
+14)	creation of artifacts now supported (sort of)
+15)	scoring routines changed to track gold and experience separately.
+	now i have to figure out how to set the gold to zero without
+	resetting the score file
+16)	gold is counted (including worth of objects) even for quitting and
+	dying.  however, position in scorefile is determined by experience 
+	points only
+17)	three new scrolls 1) nothing - does nothing
+			  2) silver plating - magic aimed weapons seldom miss
+			  3) ownership - make weapons return
+18)	6 types of food now - details still to be fixed up
+19)	corrected handling of normal and cursed scrolls of acquirement
+
+1.00 Alpha Feb 14/85
+1)	creation of artifacts mostly working now.  no code to support
+	their special functions yet
+2)	corrected names of artifacts and food so the inventory routine
+	gives correct case and plural forms of names
+3)	handling of duration of enchanted food fixed
+
+1.00 Alpha Feb 15/85
+1)	creation, picking up, dropping, and throwing artifacts now apparently
+	correct.  no functions yet implemented yet
+2)	mad wizard changed to mad sorceress and is no longer confused.
+	level, intelligence, experience points and damage increased
+3)	nymphs try to steal the most valuable magic item carried now
+4)	picking up an artifact gives experience equal to 0.1 of it's
+	worth in gold
+5)	new wizard command 'V' added to find the worth of an object
+
+1.00 Alpha Feb 16/85
+1)	monsters that steal magic and gold no longer vanish when they've 
+	stolen an item.  instead, it turns invisible and tries to run away.
+	a nymph isn't so bad, but watch out for the mad sorceress.
+	the monster will carry around the item until killed
+2)	picking up things with a full pack in a trading post no longer
+	identifies it
+3)	falling into a poison trap does not automatically poison current 
+	weapon and there is a 75% probability of losing 1/3 hit points 
+	and 2 strength
+4)	buying anything in a trading post tells you what it is and all others
+	of the same type
+5)	quaffing a potion of healing at or near max hit points increases
+	maximum by more
+6)	a wand of nothing does nothing
+7)	cursed scroll of ownership causes thrown weapon to always disappear
+
+1.00 Alpha Feb 17/85
+1)	corrected handling of wizard scorefile manipulation commands
+2)	corrected code to create objects via the scroll of acquirement
+3)	a cursed scroll of acquirement creates a cursed object
+4)	wearing a ring of levitation allows you to move over any kind of
+	trap without being harmed
+5)	poisoned weapons now identified as such in inventory name
+
+1.00 Alpha Feb 25/85
+1)	corrected handling of scoring of gold for total winners
+2)	changed mad sorceress to be non-unique to make dungeon really nasty
+3)	added code to calculate cost of silver, poisoned, and owned weapons
+4)	code to stop running when a monster appears corrected for when
+	monster can surprise or is invisible
+
+1.00 Alpha Mar 1/85
+1)	cursed potion of see invisible does nothing when wearing ring
+	of see invisible.
+2)	putting on a ring of see invisible while blind cures blindness
+
+1.01 Alpha Mar 4/85
+1)	changed encryption scheme used by read/write routines to code
+	supplied by Michael Mauldin (mlm@cmu-cs-cad.arpa)
+2)	eating too much causes paralysis for a short time
+3)	changed rnd (random integer in a certain range) routine to use
+	a better algorithm
+4)	changed version string for internal checking to something more
+	useful
+
+1.01 Alpha Mar 8/85
+1)	changed inv_name to show silver weapons properly
+2)	changed name of "silver weapon" scroll to "magic hitting"
+3)	scrolls of ownership and magic hitting now prompt for weapon to
+	apply scroll to
+4)	rnd changed back to old algorithm because new one is SLOW
+
+1.01 Alpha Mar 20/85
+1)	picking up an artifact more than once does not add more experience
+	points
+2)      new unique and VERY NASTY monster added, Lucifer.  only appears
+	on level one when you have an artifact on you.  he is NOT
+	pleasant.  i am certain that he will prevent total winners until
+	i can tune his parameters.
+
+1.01 Alpha Mar 22/85
+1)	changed maximum objects per normal level from 9 to 5
+2)	changed monster window to half it's current value to stretch
+	out the levels new monsters can appear over
+3)	increased traps per level again from 20 to 25
+
+1.01 Alpha Mar 28/85
+1)	decreased abilities of Lucifer to try things out
+2)	changed probability of food up and other stuff down
+3)	changed probability of potion of gain level down
+
+1.01 Alpha Apr 1/85
+1)	changed traps per level up to 30
+2)	fixed bug in wearing ring of cold resistance
+3)	changed window for saving to 180s because save/restore with
+	new algorithm is much slower
+4)	added support for lairs of unique monsters, 1 in 15 chance of
+	being summoned while going up the stairs
+5)	trading posts can't appear until level 15, up from level 5
+6)	you can't be blinded when wearing a ring of extra sight
+7)	hit points per level gained/lost reduced to original values
+8)	deleted some wizard commands and re-arranged some of the rest
+9)	changed how wizard teleportation specifies type of level
+10)	modified parameters of sucessfully striking a monster
+11)	Lucifer devalued again
+
+1.02 Alpha Apr 2/85
+1)	reduced probability of being summoned at random while running around
+2)	restored probability of hitting parameter
+3)	doubled requirements for experience level changes
+
+1.02 Alpha Apr 4/85
+1)	restored requirements for experience level changes
+2)	increased probability that a monster hits on an attack
+3)	changed probability of food downwards and other stuff upwards
+4)	changed probability of some scroll's cursed and blessed probabilities
+
+1.02 Alpha Apr 5/85
+1)	throne room monsters no longer hasted
+2)	fixed messages for scrolls of magic hitting and ownership
+3)	infinite loops in wanderer() due to trying to place a monster
+	in a different room than the hero on a THRONE level
+4)	changed format of scorefile to include what artifacts were
+	retrieved
+5)	initial attributes of a fighter increased
+6)	Lucifer downgraded again (sigh)
+
+1.02 Alpha Apr 12/85
+1)	food probability adjusted upwards
+2)	size of string to hold fruit food name increased
+3)	monsters per treasure room increased to 20 from 15
+4)	maximum number of magic objects per level increased from 5 to 7
+5)	added code to differentiate a winner carrying all artifacts
+	and some
+6)	reduced probability of summoning
+
+1.02 Alpha Apr 16/85
+1)	monsters that can walk through stone are not affected by wand of
+	antimatter.  so much for an easy kill of Lucifer
+2)	throne rooms always contain treasure, up to 3 times as much as normal
+
+1.02 Alpha Apr 23/85
+1)	max monsters/treasures in a party room upped again from 20 to 30
+
+1.02 Alpha Apr 26/85
+1)	improved wizard outfitting command to start with more and better stuff
+2)	fighters gain and lose 12 instead of 10 hit points max per level
+3)	throne rooms always contain lots of treasure
+4)	fixed message in experience level changes to include period
+
+1.02 Alpha Apr 28/85
+1)	monsters that can breathe can do so more than once with 50% chance
+	after each use of losing (or retaining) ability
+2)	catch zapping and bolts into darkened rooms, passages, and phased
+	players in walls and flag as error for wizard
+3)	mad sorceress improved in ability
+4)	changing name of fruit in options now also changes name in rest of game
+5)	handling of SIGINT and SIGQUIT corrected for when escaping to shell
+	and returning.  used to exit with endit().  now does quit() to
+	prompt before exiting
+6)	options listing now includes name of option for the environment
+	variable
+7)	throne rooms made nastier by increasing hit points further and also
+	decreasing AC of monster even more
+8)	monsters below level 80 start getting nastier in a lot of ways
+	and is level dependent (deeper == nastier)
+
+1.02 Alpha Apr 29/85
+1)	all monsters in throne rooms can now walk through walls
+2)	past level 80, all monsters that can use breath weapons will never
+	lose that ability
+3)	Lucifer upgraded
+
+1.02 Alpha Apr 30/85
+1)	algorithm for nastier monsters below level 80 changed (nastier)
+2)	potion of raise level made much rarer
+3)	being drained a level is restored only half the time
+4)	monsters in thone rooms can see invisible heros
+5)	scrolls of acquirement are rarer and are more likely to be cursed
+
+1.02 Alpha May 1/85
+1)	Lucifer hit points upgraded
+2)	Lucifer never loses ability to zap with breath weapon
+3)	fixed bug in returning of weapons with blessed scroll of
+	ownership read on them
+4)	circular buffer implemented for messages and each line of buffer
+	increased in size
+5)	rings, weapons, sticks, and armor can explode if enchanted too much
+6)	owned things show up that way in inventory
+
+1.02 Alpha May 2/85
+1)	length of time that all food lasts increased
+2)	throwing a scare monster scroll curses it
+
+1.02 Alpha May 3/85
+1)	attacking rust monsters with bare hands causes segmentation faults
+	fixed by checking for whether hero wields a weapon or not
+2)	evil sorceresses (and nymphs) will steal anything, including
+	what you're wearing, below level 95
+3)	it's now imposssible to enchant a ring of slow digestion beyond 3
+	since food consumption code is not designed to handle it
+
+1.02 Alpha May 6/85
+1)	adjusted probability of things exploding when enchanted too much from
+	1 in 8 to 1 in 5
+2)	being summoned while just wandering in the dungeon is changed
+	to 1 in 99999 to make life interesting
+3)	stick of fire now kills monsters that are flammable
+4)	fixed bug in handling firetraps for monsters
+5)	corrected new code to handle monsters running through fire traps
+
+1.02 Alpha May 8/85
+1)	fixed bug in wizard dungeon level change command
+2)	total daemons changed from 30 to 60 to allow for new things
+3)	fighting while blinded changed from "it" to "the monster"
+4)	algorithm for making monsters nastier below level 80 made
+	even nastier
+5)	fire traps always burn even when levitated
+6)	fixed monster name lookup in shoot_bolt when bolt misses
+7)	monster lair traps implemented for levels below 50
+8)	rust traps implemented to rust armor
+9)	messages for CANRUST monsters hitting you after armor is
+	destroyed is changed
+10)	placement of player in a throne room corrected
+11)	unique monsters are always awakened by the hero entering the room
+12)	a monster with enough strength can shatter crystalline armor with
+	a single blow
+13)	a monster with enough strength can make the armor ring when hit,
+	aggravating all monsters on the level
+14)	monsters that can shriek can shatter crystalline armor
+15)	strength of monsters below level 80 also increases with level
+16)	check more often for null pointers when refering to current armor
+	in fight.c and monster.c
+17)	selling or dropping an artifact in a post loses it forever, but
+	you can still go up the stairs as if you did have it.  same with
+	it being stolen by a monster
+
+1.02 Alpha May 10/85
+1)	creation of firetraps done only when there is room in the traps array
+2)	potion of extra hearing - cursed, normal and blessed
+3)	potion of extra scent - cursed, normal, and blessed
+4)	hero can smell or hear monsters whenever they appear in dungeon
+	or possibly when he enters a room, always when potions have been
+	quaffed
+
+1.02 Alpha May 11/85
+1)	scroll of food detection implemented
+2)	corrected algorithm for blessed food and added message when
+	eating it so people trying will know to try it again
+3)	code to handle super food consumption added
+4)	changed algorithm for ring of slow digestion food consumption
+	to not use hardwired enchantment levels
+5)	hearing and smelling new monster messages changed to reflect
+	distance and rooms somewhat
+6)	partial implementation of artifact powers completed
+7)	many of minor malevolent and side effects implemented
+8)	some major malevolent effects implemented
+9)	Phial of Galadriel implemented
+10)	Palantir of Might implemented
+
+1.02 Alpha May 12/85
+1)	fixed dying by fire traps to remove seg fault while trying to
+	print reason for dying
+2)	selling an artifact or having it stolen and vanishing when
+	monster that stole it is killed loses the artifact permanently 
+	and the ability to go upwards is lost if it's the only artifact 
+	in the hero's possesion
+3)	login name included in scorefile
+4)	stick of invisibility - makes monsters appear or disappear
+	cursed (all in room), normal(one in direction), blessed(one
+	appears in direction)
+5)	implemented Amulet of Yendor, Silmaril of Ea, Sceptre of Might,
+	Wand of Orcus
+6)	partial implementation of Magic Purse of Yendor
+7)	20 units of food are consumed every time a artifact power is attempted
+8)	code for blessed scrolls of magic mapping, gold detection,
+	food detection, potions of magic detection and monster detection
+	in place
+9)	minimal code for wand of invisibility implemented
+
+1.02 Alpha May 13/85
+1)	minimal code for potions of super heroism and disguise added
+2)	no healing when phased and in rock
+3)	changed "owned" to "claimed" in inv_name() for weapons
+4)	wand of invisibility implemented
+5)	bug in removing rings of add ability fixed when unwearing one
+6)	leaving rooms when wearing ring of illumination darkens it
+
+1.02 Alpha May 14/85
+1)	rewrote all code to handle changes in the five major player
+	abilities
+2)	completed implementation of the Crown of Might
+3)	implemented blessed mapping and detection abilities
+4)	more minor effects
+5)	more major effects
+6)	copy over login name to scorefile name entry only if it's
+	not the same as the name entry started with
+7)	falling down stairs probability shifted according to encumberance
+8)	undead monsters are not affected by poison
+9)	ring of regeneration restores hit points faster
+10)	ring of sustain health stops disease and parasitic infections, but
+	doesn't cure them
+
+1.02 Alpha May 15/85
+1)	fixed bugs in handling power boosted strength and dexterity
+2)	implemented potions of disguise and superheroism
+
+1.02 Alpha May 16/85
+1)	changed potion of disguise to be like a scare monster scroll and
+	shortened length of time it lasts
+2)	implemented more minor effects
+3)	cursed scroll of magic mapping done - forgets map
+4)	fighting stops "hits" and "misses" messages to stop having to
+	hit the spacebar all the time
+5)	1 in 50 chance when fighting to stop fighting completely at random.
+	a neater way of stopping fighting when neither side is hitting the
+	other
+6)	moving over some traps using the 'm' command can result in no
+	trapping, especially if player is thief
+7)	asleep on top of a sleep trap doesn't print many messages
+	about what the trap is
+8)	reduced nastiness of level-dependent monster characteristics
+9)	make probability of losing breath weapon dungeon level dependent
+10)	fixed bug in stopping running when a monster enters room
+11)	Magic Purse of Yendor code in place but not tested
+
+1.02 Beta May 17/85
+1)	fixed bag of holding code for Magic Purse of Yendor
+2)	can't put Magic Purse inside itself
+3)	lowered probability of a nonthief moving over a trap successfully
+4)	add contents of Purse to score
+5)	added more major and minor effects
+6)	lowered probability of an artifact being deactivated by a minor
+	effect
+
+1.02 Beta May 18/85
+1)	check for no wielded weapon or no armor worn when being hit
+	by breath weapon
+2)	check for no wielded weapon when blasting it in default major
+	effect of artifact activation
+3)	changed many messages in minor effects to check for blindness
+4)	it is possible to trip and stumble over your weapon, and die in
+	the process.  poisoned weapons do a lot of damage to the hero
+5)	fighting or shooting some wands at the quartermaster increases
+	the cost of things and probability of things being cursed
+	by other quartermasters and in trading posts.  monsters on level
+	are aggravated
+6)	fighters using the 'f' or 'F' commands are get bonus number
+	of attacks dependent upon level per turn
+7)	when not under influence of potions of extra scent or extra hearing,
+	thieves have higher probability of hearing or smelling a monster
+8)	cursed detection scrolls and potions implemented
+9)	scroll of electrification implemented
+
+1.02 Beta May 19/85
+1)	five new rings added
+2)	worth of artifacts increased by a factor of 10
+3)	when msgline is blank and last message is requested via ^P,
+	don't decrement message buffer index the same way since it was 
+	not incremented to clear the line
+4)	initial hit point bonus for constitutions above 15
+5)	new command listen ('=') to listen for nearby monsters
+6)	ring of breathing - player is unaffected by gases
+7)	ring of free action - player can't be held or slowed except by an
+	artifact side effect
+8)	reduced duration of confusion after teleportation
+9)	ring of wizardry - doubles spell and prayer ability for players
+	who are not clerics nor magicians
+10)	listen for monsters nearby with higher probability for thief
+11)	ring of resurrection - you might come back from the grave: cursed,
+	normal, and blessed versions
+12)	ring of teleport control - get to choose position and might actually
+	end up there: cursed, normal, and blessed versions
+13)	corrected multi-attack code to allow only fighters
+14)	cursed detection magic identifies itself for later in the dungeon
+15)	silver weapons do twice damage to undead monsters
+16)	source frozen for version as reference.  further updates sent
+	out will be via context diffs
+
+1.02 Beta May 20/85
+1)	modified saving throw for resurrection to take into account current
+	constitution adjusted for luck and ring values
+2)	rings of resurrection and teleport control now has enchantment 
+	amount printed
+3)	a failed resurrection now waits for the user to read the message
+	before continuing with termination
+4)	off-by-one error in counting resurrection attempts
+5)	added diagonal moves to teleport control (sort of)
+6)	successful control of teleport modified by luck and ring values
+7)	corrected initialization of resurrection count
+8)	moved tripping, summoning, and other things inside the test for
+	valid commands
+9)	changed algorithm for determining successful resurection with
+	everything
+10)	bug in listen command changed you to a thief when using it
+
+1.02 Beta May 21/85
+
+1)	a blessed scroll acquirement allows creation of an artifact or
+	monster even if not wizard
+2)	infestation is not supposed to be immediately fatal
+
+1.02 Beta May 22/85
+1)	moved new.things (this file) into directory rogue to make updates
+	via context diffs more easy to apply
+2)	corrected message of deactivation of artifacts
+3)	changed definition of .rog_defs to an external variable in
+	tunable.c for customization purposes
+
+1.02 Beta May 23/85
+1)	termination after load average is too high does a save instead
+	of just quitting
+
+1.02 Beta May 25/85
+1)	corrected code for adding userid after name in scorefile
+2)	redisplaying of messages after being cleared by msg("") fixed
+
+1.02 Beta May 27/85
+1)	dungeon level dependent monster ability algorithm made less
+	nasty
+2)	throne room monster ability modification algorithm made less
+	nasty
+3)	some of Lucifer's abilities made less nasty
+4)	levitated and phased allows upward movement through rock
+5)	discovered trading post stays lit when exiting room
+
+1.02 Beta May 28/85
+1)	fixed firetraps combined with rings of levitation
+2)	fixed messages for major effects blasting of weapon
+3)	disguise can be seen through by monsters with high experience
+	for hitting, zapping, and throwing things at the hero
+4)	increased safe amount to enchant ring from 4 to 5
+
+1.02 Beta May 29/85
+1)	documented 'f' and 'F' commands under help command
+
+1.02 Beta June 1/85
+1)	increased the value of some items
+
+1.02 Beta June 3/85
+1)	made leprechauns and nymphs harder to kill and more likely
+	to stay around
+2)	nymphs now attack whenever possible
+3)	monsters ignore rust traps now
+4)	changed help for 'f' and 'F' commands slightly
+
+1.02 Beta June 3/85
+1)	missed change of ".rog_defs" to ROGDEFS 
+	(thanx jason%ucblilac.CC@berkeley.arpa)
+2)	anything can be claimed now.  inventory names and worth of objects
+	changed to reflect this
+
+1.02 Beta June 4/85
+1)	check for monster wielding a weapon didn't check for null pointer
+2)	changed #include "stdio.h" to <stdio.h> in save.c
+3)	include mach_dep.h in io.c, save.c, and wizard.c
+
+1.02 Beta June 6/85
+1)	shattering of crystalline armor when hit hard is less likely
+	when armor is well enchanted
+
+1.02 Beta June 7/85
+1)	check for null pointer to damage string in determining how much
+	damage a blow or weapon striking does
+2)	added code from jason@ucblilac.CC@berkeley.arpa for support
+	of job control and tty interfacing for 4.x bsd systems
+3)	quaffing non-cursed potion of super heroism removes fear and
+	also prevents it until super heroism wears off
+4)	corrected oversights in jason's code for when terminating
+	by various legal means
+5)	generalized message for selling/dropping artifact in trading post
+6)	prices of objects in trading posts are now fixed at object creation
+	time
+7)	algorithm for randomizing prices by quartermasters and in trading 
+	posts changed
+8)	prices as determined by bad luck made worse
+
+1.02 Beta June 8, 85
+1)	corrected tty and job control handling for urogue -s and
+	urogue restore of saved games option
+
+1.02 Beta June 9, 85
+1)	too much movement when disguised turns it off
+2)	reduced gain in monster strength below level 80
+3)	improved resistance of crystalline armor to shattering when hit
+4)	confused monsters can lose their confusion
+5)	food detection also looks in monster's packs too
+6)	evil sorceresses and nymphs can curse something in your pack
+	while they are looking through it
+7)	fix tty characteristics when restoring a game
+8)	improved chances of taking it with you when you are resurrected
+9)	corrected author and SIGQUIT handling
+
+1.02 Beta June 10, 85
+1)	selling an object in a trading post marks the value in a private
+	location in case hero wants to buy it back
+2)	reduced slightly the chance of nasty side effects when using
+	artifacts
+3)	shattering armor removal algorithm fixed
+4)	lightning proof and being zapped by lightning checks for no armor
+	and/or no wielded weapons
+5)	change Makefile to be more efficient when maintaining distribution
+	and private copies by linking only once instead of twice
+6)	going to a new level and not wearing any armor causes seg faults
+	when testing for greedy monsters
+7)	null pointers when calculating damage caused by weapons handled
+	incorrectly
+8)	setting traps, traps due to falling objects that create traps,
+	and artifact side effects have more room by making trap array 
+	bigger
+
+1.02 Gamma June 19, 85
+1)      put in changes and moved things around in preparation for
+	changes to be received from dan@ciprico for sys3 (aka USGV3)
+	unix.  generalized conditional compilation code to allow
+	further extension to multiple system source code versions.  no
+	recompilation is neccesary with these changes.
+
+1.02 Gamma June 21, 85
+1)	fixed bug in quaffing gain ability when dexterity or strength
+	has been lost
+2)	wearing a ring of wizardry doubles spell points for casting and
+	praying for all player classes provided that they have enough
+	ability to cast or pray
+
+1.02 Gamma June 24, 85
+1)	gazing monsters have no effect when hero is invisible
+2)	reduced probability of losing disguise when moving about
+3)	leprechauns now attack
+
+1.02 Gamma July 7, 85
+1)	can't read scrolls when blind
+2)	test for null pointers when refering to weapons and armor
+	in do_minor() in artifact.c
+3)	taking off armor removes stone from shoe
+
+1.02 Gamma July 8, 85
+1)	corrected flag handling for nymphs and evil sorceresses
+	cursing an object that hero is carrying
+
+1.02 Gamma July 10, 85
+1)	handling of ring of wizardry and spell points for clerics and
+	magicians fixed
+
+1.02 Gamma July 12, 85
+1)	fixed handling of wizard spell points because of limitations in
+	certain C compilers.  thanx to dan@ciprico
+2)	reset CBREAK mode in rip.c routine score() so that showpack() can 
+	prompt and wait for a blank to continue displaying items
+3)	reduced slightly the probability of a monster hitting back to
+	original values as received from edjames@ucbshadow
+4)	incomplete changes to handle the ring of wizardry in casting
+	and praying
+
+1.02 Gamma July 18, 85
+1)	make dexterity of a monster level dependent past level 60 of
+	dungeon
+
+1.02 Gamma July 21, 85
+1)	silver weapons can't rust no matter what
+2)	hitting a rusting monster with a non-metallic weapon no longer
+	tells you the rust vanishes
+3)	no message of rust vanishing from your armor if it is
+	inherently rustproof
+4)	fixed grammar on messages about falling through various traps
+
+1.02 Gamma July 23, 85
+1)	changed code to ensure quartermasters sell things at positive
+	cost only
+2)	quaffing a blessed potion of gain ability sometimes increases
+	the player's body AC as well
+3)	fixed initialization code for fighters to give them extra
+	body AC and also more damage from bare handed attack
+
+1.02 Gamma July 26, 85
+1)	wearing a ring of adornment also causes greedy monsters to run
+	after you
+2)	monster's level dependent attributes are dependent upon the maximum
+	level you have been
+3)	a blessed scroll of magic mapping show traps and such too
+4)	monsters stepping into firetraps while hero isn't in room
+	also marks the room as lit
+
+1.02 Delta July 28, 85
+1)	sys3 support added, courtesy dan@ciprico
+2)	new random number routines added to the optional files
+	for people without srandom and random
+
+1.02 Delta, July 29, 85
+1)	teleporting turns off being held by a bear trap
+2)	being hit by a breath weapon while running stops you running
+3)	replaced Makefile.install with one supplied by jason@ucblilac
+4)	fighting mummies with no weapon usually causes seg faults so
+	pointer must be checked  (dan@ciprico)
+5)	entering a room through a secret door while phased is supposed to
+	light the room (dan@ciprico)
+6)	trying to dip where there's no pool gives wrong message
+
+1.02 Delta, July 30, 85
+1)	added support for news option in command line
+2)	quit signals produce core files only in wizard mode
+3)	wearing a ring of adornment adds 4 to number of transactions
+	allowed in trading posts
+4)	ring of burden deleted and replaced by ring of vampiric regeneration
+5)	ring of carrying comes in various degrees now and cursed is like
+	the ring of burden used to be
+6)	ring of vampiric regeneration restores amount of damage done to
+	monster to player, sort of like a vampire does
+7)	ring of regeneration hit points now made somewhat experience
+	level dependent
+8)	food consumption of the regeneration rings make experience
+	level dependent
+9)	wand of blasting and grenades implemented
+
+1.02	August 9, 85
+1)	baseline release for urogue
+2)	friendly fiend wants a ring of adornment
+3)	player startup body AC initialized wrong
+4)	negative transaction count after selling ring of adornment fixed
+5)	fixed opening of authors file
+
+1.02	August 11, 85
+1)	inventory name of a claimed ring had blanks in wrong place
+2)	fixed printing of inventory and counting of things inside
+	the Magic Purse of Yendor
+
+1.02	August 12, 85
+1)	Closes PERMOK and PASSCTL after they are no longer needed.  This is
+	a good practice, and was part of the reason for screwing up our server.
+2)	Quaffing a restoration after superheroism had nasty effects.
+3)	Screen no longer clears right after score file is displayed on death.
+4)	Changing your Ac from 10 would not affect status line.
+5)	Expression tree overflowed on trader.c using the 4.1 compiler.
+
+	above changes by tecot@cmu-cs-k.arpa.  the system they run has
+	a "networked" filesystem under 4.1 bsd.
+
+6)	a thrown grenade hitting a monster also explodes and makes a lot
+	of noise
+7)	probabilities of magic items of various kinds changed to make
+	things harder
+8)	costs of things re-arranged to reflect value to player more
+	accurately
+
+------- End of File ------

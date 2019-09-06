@@ -1,0 +1,60 @@
+#
+# Makefile for installing and linking UltraRogue
+# The file tunable.c contains the parameters that you want to tune
+# for your installation.
+#
+
+CC = cc -g  # was -O
+CHOWN= /etc/chown
+CHGRP= chgrp
+CHMOD=chmod
+RM = /bin/rm -f
+INSTALLDIR = /usr/games/lib/urogue
+UROGUE = /usr/games/urogue
+LIB = libsrogue.o
+URUSER= daemon
+URGROUP= daemon
+URMODE= 4511
+LAUSER = daemon
+LAGROUP = wheel #The group that can read kmem
+LAMODE= 2500
+INSTDIRMODE= 0700
+
+.o.c:		
+		$(CC) -O -c $*.o
+
+
+all:		urogue control namefinder lav
+
+control:	control.o tunable.o
+		$(CC) control.o tunable.o -o control
+
+urogue:		$(LIB) tunable.o
+		$(CC) -o urogue $(LIB) tunable.o -lcurses -ltermlib
+
+namefinder:	namefinder.o tunable.o
+		$(CC) namefinder.o tunable.o -o namefinder
+
+lav:		lav.o
+		$(CC) lav.o -o lav
+		
+install:	all
+		install -o $(URUSER) -g $(URGROUP) -m $(URMODE) urogue $(UROGUE)
+		install -s -o $(LAUSER) -g $(LAGROUP) -m $(LAMODE) lav $(INSTALLDIR)
+
+uninstall:	uninit clean 
+		$(RM) $(UROGUE)
+
+uninit:		namefinder
+		$(RM) `namefinder`
+		
+init:		namefinder uninit
+		touch `namefinder`
+		$(CHOWN) $(URUSER) `namefinder`
+		$(CHGRP) $(URGROUP) `namefinder`
+		$(CHOWN) $(URUSER) $(INSTALLDIR)
+		$(CHGRP) $(URGROUP) $(INSTALLDIR)
+		$(CHMOD) $(INSTDIRMODE) $(INSTALLDIR)
+
+clean:		
+		$(RM) -f urogue control namefinder tunable.o core

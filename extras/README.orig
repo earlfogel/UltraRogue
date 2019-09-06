@@ -1,0 +1,104 @@
+Congratulations!  You are now reading the installation information file
+for UltraRogue Release 1.  If this is a full source distribution, I
+would appreciate it if you dropped me a line saying who you got this
+from and what version you have (including date).  If this isn't a full
+source distribution, then I still wouldn't mind hearing from you
+anyway.  Please don't tell the players of the game where you got this
+from as I don't want to be beseiged by requests for things.  I would
+appreciate forwarding bug reports and descriptions of local
+enhancements so that I may incorporate them into the latest release.
+
+Note carefully that Alpha versions are considered test versions with
+probably tons of bugs and incomplete implementations of things.  Beta
+versions are more reliable, but probably still contain major bugs.
+Versions without an Alpha or Beta designation are considered
+"production" and bugs reported may not be fixed until the next official
+version is announced.  If you run a ctags or a cxref on the source, you
+will probably notice many unreferenced fields and symbolic constants.
+DON'T USE THEM FOR ANYTHING if you wish to remain compatible with
+future releases of urogue.  Otherwise, any enhancements I make may not
+be compatible and fixing bugs will become your responsibility.
+
+Binary-only distribution are targeted for a specific version of Unix.
+You must have a BSD, System 3, or System 5 (or other) version created
+for you.  Otherwise, many, many system-dependent features will cause
+strange errors when urogue is started up.
+
+You may distribute an installation source copy as you please, but a full
+source distribution should be made after asking me first.  i'm not
+fussy about reasons and stuff, just that i want to know first.
+
+Modify the initialization constants in tunable.c before you run
+make.  Note that HOLIDAY is really a boolean and is currently set to
+allow playing at any time provided load is low.  Setting HOLIDAY to 1
+will prevent playing between 9 and 5 during weekdays no matter what the
+load is.  Everything else there should be self explanatory.  The lav
+program is the only one that needs to have read access to /dev/kmem.
+Urogue itself can have an owner of anything as long as it's owner can
+write into the score file and read the passctl, news, and permok files
+used for control.  If you have an older version of urogue, srogue, or
+arogue, the .rog_defs and .rogue_save files are incompatible.  The
+external variable ROGDEFS in tunable.c is used to provide a facility
+for keeping multiple versions of urogue around that either have
+different formats or different contents.  Some earlier versions of
+urogue retained the encryption algorithms for reading and writing that
+are used by other rogue versions.  Versions 1.02 Alpha and onwards use
+a different and more secure algorithm, although it still will not even
+slow down the NSA.
+
+Review the makefile to verify that the specified uid's and other
+such things exist or need modification for your environment.
+
+After running make, then run "control -i" (for initialize).  This will
+set up the list of people allowed to bypass load control and also
+allows you to specify the wizard's password.  To initialize the score
+file so that there is something in it, play a game and kill at least
+one monster before quitting.  When the scorefile is empty, urogue will
+fill it.  Note: re-making urogue will also reset the score, password,
+and authorized user files each time unless you take steps to preserve
+them.  (Note: the Makefile in the rogue sources directory doesn't reset
+these files).
+
+For testing the game, the environment variable SEED can be set to
+contain an integer seed.  This seed is used only if you start up urogue
+with the wizard's password prompt by urogue "".
+
+Restoring a saved game is done by "urogue -r" for the default save file
+of ~/rogue.save.  Any other name is restored by "urogue save-file".
+
+There are 8 different treasures to be picked up in this version of rogue.
+The first is on level 25 and is relatively easy to pick up.  The last is
+on level 100 and is very difficult to get.  Carrying any one of the unique
+treasures allows the rogue to go up the stairs, but one has to be
+very careful.
+
+The environment variable SROGUEOPTS is used to set up the default things
+for a player.  The options that can be set are:
+
+terse:		short output messages
+flush:		flush typeahead when fighting
+jump:		show position only at the end of running
+step:		show inventories one line at a time
+askme:		ask about unidentified things
+name:		the rogue's name
+fruit:		the funny fruit used by the rogue
+file:		default savefile name
+score:		default scorefile name
+class:		default player class
+
+Here is my current address.  If this doesn't work, contact the person
+who gave you this version.  I want to keep in touch and watch the user
+community grow.
+
+Herb Chong, BASc
+Computer Consultant 
+
+I'm user-friendly -- I don't byte, I nybble....
+
+UUCP:  {decvax|utzoo|ihnp4|allegra|clyde}!watmath!water!watdcsu!herbie
+CSNET: herbie%watdcsu@waterloo.csnet
+ARPA:  herbie%watdcsu%waterloo.csnet@csnet-relay.arpa
+NETNORTH, BITNET, EARN: herbie@watdcs, herbie@watdcsu
+POST:  Department of Computing Services
+       University of Waterloo
+       N2L 3G1  (519)885-1211 x3524

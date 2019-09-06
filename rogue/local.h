@@ -1,0 +1,11 @@
+#define	I_APPEAL	1
+#define	I_ARM		2
+#define	I_CHAR		3
+#define	I_DEX		4
+#define	I_HITS		5
+#define	I_INTEL		6
+#define	I_STR		7
+#define	I_WEAP		8
+#define	I_WEAPENCH	9
+#define	I_WELL		10
+#define	I_WIS		11

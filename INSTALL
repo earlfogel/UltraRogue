@@ -1,0 +1,55 @@
+This software builds on linux and windows.  Probably other *nix's too,
+but I haven't tried.
+
+To build urogue, change to the rogue directory and type make:
+
+    cd rogue
+    make
+
+Normally urogue stores any files it needs in the user's home directory,
+but if you want, it can use a shared score file on multi-user systems.
+To use a shared score file, edit tunable.c to set the file path, then
+create an empty file at that location and make it writable by anyone who
+will be playing urogue.
+
+
+Building on Windows
+-------------------
+
+To build on Windows, I use msys2 and mingw.
+
+Download msys2 from www.msys2.org.
+
+Run msys2 (from Start Menu). This gives you a unix-like shell window.
+
+Now update msys2:
+
+  $ pacman -Syu
+  If needed, close msys2 window and run it again.
+
+Now update the packages included with msys2:
+
+  pacman -Su
+
+To install additional packages:
+
+  pacman -S vim
+  pacman -S diffutils file grep make mingw-w64-x86_64-toolchain
+
+Now run a MinGW 64-bit shell (from Start Menu).
+
+Build urogue and copy it to Windows along with any required DLLs:
+
+  cd rogue
+  make -f Makefile.win
+  mkdir /c/urogue
+  cp urogue.exe /c/urogue
+  cp /mingw64/bin/libwinpthread-1.dll /c/urogue
+
+Run it in a Windows command window:
+
+  cmd
+  c:
+  cd \urogue
+  urogue
+

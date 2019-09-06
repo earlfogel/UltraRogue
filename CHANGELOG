@@ -1,0 +1,375 @@
+August 2019
+-----------
+
+Make ^R (refresh command) clear window, then refresh.
+
+Adjust food value based on window size (from 1.0.7)
+so food lasts longer in larger dungeons.
+
+Fix misaligned columns on scoreboard when scores are large.
+
+Do away with libsrogue, stat.h, pwd.h and encread/encwrite routines.
+
+Cleanup some gcc "may be used uninitialized" warnings.
+
+Blessed potion of healing slightly improved.
+
+New scroll of peace - calms monsters around you.
+
+Clerics can pray for light and peace.
+
+Fix: init_weapon() now sets object type to WEAPON
+
+Blessed scroll of genocide improved.
+
+Can apply artifacts from within purse.
+
+Monsters can't steal Claimed objects, even on the deepest levels.
+
+Gelatinous blue horror changed to 'H' and stone gargoyle to 'G'.
+
+Move to gender-neutral language.
+
+If you lose the Magic Purse, it gets recreated on a future level.
+
+Casting spells and praying repeatedly (via repeat counts) is a bit more
+efficient -- it remembers the previous spell or prayer.
+
+Occasionally monsters are not hostile, based on player's charisma
+and monster's (LOW|MED|HIGH)FRIENDLY attributes.
+
+Removed old flush and terse options.
+
+New option to choose type of run (doorstop).
+
+New command-line options to choose level of difficulty (-easy and -hard).
+Easy:
+ - pack can hold more items
+ - players start out with more stuff
+ - reduce damage for players with thick skin (ie. s_arm<10).
+ - fewer traps
+ - fewer cursed items
+ - less likely to be summoned to a throne room
+Hard:
+ - reduce benefit of high armor class
+ - can't start game with best armor
+ - artifacts are more dangerous
+ - fewer blessed items
+ - more likely to be summoned to a throne room
+
+
+July 2019
+---------
+
+When choosing which monsters to use in a game, make sure to
+include monsters summoned by other monsters we include.
+
+Workaround: doctor daemon still dies sometimes, so restore will
+recreate it.
+
+Fix: ring of sustain ability (etc.) shouldn't blow up when enchanted
+
+Can enter wizard mode when restoring a game (for debugging).
+
+Improve accuracy of id_monster().
+
+Make genocide scroll more rare.
+
+If there's no food on the first two levels, there will be on the third.
+
+Bumping into a wall also searches for secret doors.
+
+Shops now have shopkeepers.
+
+Chance of hitting high level opponents improved from none to slim.
+This fixes a problem where players with very good armor would never be hit,
+making the deepest dungeon levels too easy.
+
+Use wgetch() for user input and let curses deal with escape sequences
+(eg. arrow keys), as this is more portable.
+
+Removed some quaint old code (shell escapes, load average checks,
+wizard password file).
+
+If urogue can't access a central score file, put it in the users's home
+directory instead.
+
+Stolen artifacts sometimes reappear if thief disappears, and
+occasionally scavengers drop stuff when they disappear.
+
+Scorefile, saved characters and save/restore now work on Windows.
+
+Monsters don't get a saving throw against blessed sticks/wands
+or the Sceptre of Might.
+
+Can unwield a weapon.
+
+Can arrow up and down when setting options.
+
+Fix: reset food_left if it gets completely out of whack.
+
+Fix: new health status display updates properly.
+
+Supereat ends, after a while.
+
+
+June 2019
+---------
+
+'~' command shows experience needed to reach next level, as per 1.0.7.
+
+Fix: save/restore of doctor daemon sometimes failed.
+
+Make backspace work when typing filenames and options.
+
+Show blessed/cursed status of food and rings when itemizing pack
+when game ends.
+
+Fix: reset keyboard state when restore of saved game fails.
+
+Swapped 'c' and 'C' commands, as per 1.0.7.
+
+rip.c: show what happened just before you died.
+
+Gain ability potions are more rare, as per 1.0.7.
+
+When running, <shift><dir> acts like <ctrl><dir> used to
+(run ends before you run into things).
+Also, <ctrl><dir> runs now alternate searching and moving.
+
+In genocide(), truncate long names in list so they don't wrap.
+In genocide(), press 'b' to back up and show list again,
+press 'q' or ESC to exit.
+
+If there are fewer than NLEVMONS*100 monsters, we'll run out of new
+monsters before we run out of levels.  So space them out a bit more.
+Conversely, if there are too many monsters, we show new monsters more
+often or we'll never see them all.
+
+Can 'm'ove through monsters when phasing.
+
+Try harder to find a place for dropped items.
+
+Can't fight when diseased or infested ('f' and 'F' commands).
+
+Once activated, the Silmaril maps new levels automatically.
+
+Less chance of being sent to a throne room when you go up a level.
+
+Backport monster flags from 1.0.3, and bumped the
+t_flags and m_flags arrays from 10 and 4 to 16 each.
+This lets new monsters have new abilities and lets us
+add new flags (i.e. CLASSIC).
+
+Now includes most monsters from 1.0.3 with a command-line
+option to choose which set to use:
+  -mc: classic monsters from 1.0.2
+  -mr: a random selection of monsters
+  -ma: all 300+ monsters
+The default is classic monsters plus a few random extras for variety.
+
+Defined a few new constants in rogue.h so array sizes aren't hard
+coded in multiple places (NT_FLAGS, NM_FLAGS, NMSGS, NFINGERS).
+
+Show blind/diseased/infest etc. state in status bar.
+
+Ring of extra sight protects from monsters that can
+turn you to stone when you see them.  If you don't
+have one of those, enchanted armor helps too.
+
+Implement
+ISLARGE, ISSMALL, ISFAST, CANFLY, CANTRAMPLE, CANSWIM, DRAINBRAIN, DRAINWISDOM, NOMETAL
+
+
+May 2019
+--------
+
+'F' command now fights a group of monsters.  I.e., when the monster you're
+fighting dies, it picks another and keeps fighting as long as there's a
+monster in reach.
+
+Fewer interruptions (and fewer messages) when fighting ('f' and 'F' commands).  
+In particular, you don't get tired of fighting as quickly, and you don't stop
+fighting when zapped, unless the bolt causes damage.
+
+Nymphs can no longer curse protected items.
+
+Once activated, the Phial lights up new levels automatically.
+
+Magic mapping shows secret doors as '&'.  This works around a bug where
+magic mapping released monsters from treasure rooms.
+
+Scoreboard now shows which entry is current run, if you made it into the
+top 10.
+
+Magic and prayer points slowly regenerate when not hungry or hurt.
+
+'x' command to rest (same as '.', but left-handed)
+'g' command to move right (same as 'l', but left-handed)
+
+'f/F' commands avoid quartermaster and monsters that divide when hit.
+
+If a 'F'ight ends quickly because there are no more monsters in reach,
+wait a bit in case others come in range (if not hurt or hungry).
+
+Don't stop 'F'ighting when hit by a second monster.
+
+Enchanted armor offers some protection from magical attacks.
+
+Fixed calculation of how much mithril protects against magic.
+
+Create a unique ID for each game.  Users can restart saved games over and
+over (by copying the save file), but each game will only be added to the
+scorefile once.
+
+Warn player each turn while suffocating.
+
+Increase chance of finding secret doors (less typing).
+
+Scroll of genocide shows which monsters are already gone
+(e.g. due to earlier scroll of genocide).
+
+'d'rop multiple food at once, like arrows and rocks.
+
+Fights end when we recover from being held, paralized, etc. instead
+of at the start (to reduce the number of annoying messages).
+
+Fix: half the time find_slot was called with arguments in the wrong order.
+
+Removed wizard scorefile commands from rip.c, and replaced
+it with program to delete lines from score file (scorefile.c).
+
+
+April 2019
+----------
+
+Fix: save/restore favorite fruit, number of items in pack and bag.
+
+Check that save file is complete, because sometimes it isn't (due
+to gcc address sanitizer)
+
+Add support for arrow keys (via ANSI escape sequences, not curses, sigh).
+
+Protected crystaline armor doesn't shatter.
+
+Stop 'f'ighting when hit by a second monster (used to be when attacked).
+
+Save/restore which monsters are available (e.g. not genocided).
+
+Fixed a use-after-free error in chase(), using position after monster dies.
+Fixed a use-after-free error in runners(). If the next monster in the list
+dies (eg. after being zapped by the current monster) we reset the pointer
+to the next monster (nitem). Initialize t_quiet in new_monster().
+Thanks valgrind.
+
+
+March 2019
+----------
+
+Backported and enhanced save/restore code from urogue 1.0.7.  Also daemon
+code as it's needed for save/restore.  I.e., ported save.c, state.c and
+daemon.c from 1.0.7, with changes to many other files.
+
+Made evil sorceress more vulnerable (change AC from -16 to -10 as in 1.0.7).
+
+When enchanting weapons, keep hit and damage closer together.
+
+When game ends, use space to page through final info, rather
+than alternating space and return.
+
+When fighting, reduce number of "bounce" messages from zapped bolts.
+Also, quit fighting when fainting from hunger.
+
+Cleanup unused code in pack.c.
+
+Plugged some memory leaks.  E.g., in new_level() monsters from old level
+were freed, but the contents of their packs were not.
+
+
+February 2019
+-------------
+
+Added ',' command to pick up an object
+
+
+January 2019
+------------
+
+Artifacts:
+
+Trying to invoke an artifact, and failing, may cause minor or major harm.
+ - reduced the chance of minor bad effects
+ - removed major bad effects
+
+Parasites:
+
+Originally, parasitic infestation could only be cured by a cure disease
+scroll.  Now infestations clear up on their own (like diseases, but more
+slowly).
+
+Fighting:
+
+When using 'f' or 'F' commands, don't ask for a direction if there's only
+one monster in reach and visible (to reduce typing and wrist strain).
+
+
+November 2018
+-------------
+
+Electrification:
+
+When you read a scroll of electrification, nearby monsters are damaged for 
+several turns.  This is done by iterating through the monster list.  But if
+one dies, it gets removed from the list and the 'next' pointer becomes
+invalid, leading to a segmentation fault.  So we save it in tmp_item,
+temporarily.
+
+$ diff -u command.c.bak command.c
+--- command.c.bak       2002-04-28 09:41:01.000000000 -0600
++++ command.c   2018-11-22 14:18:09.990385258 -0600
+@@ -509,15 +509,18 @@
+        if (on(player, ISELECTRIC)) {
+            int lvl;
+            struct linked_list *item;
++           struct linked_list tmp_item;
+            struct thing *tp;
+
+            for (item = mlist; item != NULL; item = next(item)) {
+                tp = (struct thing *) ldata(item);
+-               if (DISTANCE(tp->t_pos.y, tp->t_pos.x, hero.y, hero.x) < 5)   {
++               if (tp && DISTANCE(tp->t_pos.y, tp->t_pos.x, hero.y, hero.x) < 5) {
+                    if ((tp->t_stats.s_hpt -= roll(2,4)) <= 0) {
+                        msg("The %s is killed by an electric shock.",
+                                monsters[tp->t_index].m_name);
++                       tmp_item.l_next = item->l_next;
+                        killed(item, TRUE, TRUE);
++                       item = &tmp_item;
+                        continue;
+                    }
+                    lvl = tp->t_stats.s_intel - 5;
+
+Wizard mode:
+
+Originally wizard mode required typing a null character as a command-line
+argument to urogue (and typing a password), but that's too hard, so you can
+now use 'urogue -w -w' instead.
+
+
+Earlier
+-------
+
+ - pack.c, weapons.c, sticks.c
+   (delay cleanup of items until we're finished with them,
+    i.e. after they've been thrown or dropped)
+
+ - monsters.c
+   initialize and use flags correctly
+
+ - save.c
+   Save and restore don't work in modern operating systems.
+   They used a hack (save would dump all the program's memory to disk;
+   restore would overwrite the running image (code and data) with the
+   old image).
+
+ - init.c
+   Write strings to buffers instead of pointers.
