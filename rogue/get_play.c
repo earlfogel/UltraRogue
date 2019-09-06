@@ -48,9 +48,14 @@ geta_player ()
 	    if(def_array[i][I_STR])
 		cnt++;
 
+	if (difficulty >= 2) {
+	    for(i=0; i<MAXPDEF; i++)
+		if(def_array[i][I_ARM] == CRYSTAL_ARMOR)
+		    def_array[i][I_ARM] -= 2;
+	}
 	if (difficulty > 2) {
 	    for(i=0; i<MAXPDEF; i++)
-		if(def_array[i][I_ARM] >= MITHRIL)
+		if(def_array[i][I_ARM] == MITHRIL)
 		    def_array[i][I_ARM] -= 2;
 	}
 
