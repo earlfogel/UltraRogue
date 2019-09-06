@@ -154,7 +154,7 @@ pray ()
     short i, num_prayers, which_prayer, pray_points;
     bool nohw = FALSE;
     int c;
-    static int repeat_prayer, repeat_count = 0;
+    static int repeat_prayer = -1;
 
     if (player.t_ctype != C_CLERIC && pstats.s_wisdom < 17) {
 	msg("You are not permitted to pray.");
@@ -181,9 +181,8 @@ pray ()
     if(ISWEARING(R_WIZARD))
 	pray_points *= 2;
 
-    if (repeat_count>0) {
+    if (repeat_prayer >= 0) {
         which_prayer = repeat_prayer;
-        repeat_count--;
         goto cast_prayer;
     }
 
@@ -288,8 +287,9 @@ cast_prayer:
 
     pray_time += cleric_spells[which_prayer].s_cost;
 
-    if (repeat_count == 0 && count > 0) {
-	repeat_count = count;
+    if (count == 0)
+	repeat_prayer = -1;
+    else if (repeat_prayer < 0) {
 	repeat_prayer = which_prayer;
     }
 }
@@ -384,7 +384,7 @@ cast ()
     int c;
     short i, num_spells, which_spell, avail_points;
     bool nohw = FALSE;
-    static int repeat_spell, repeat_count = 0;
+    static int repeat_spell = -1;
 
     if (player.t_ctype != C_MAGICIAN && pstats.s_intel < 16) {
 	msg("You are not permitted to cast spells.");
@@ -411,9 +411,8 @@ cast ()
     if (ISWEARING(R_WIZARD))
 	avail_points *= 2;
 
-    if (repeat_count>0) {
+    if (repeat_spell >= 0) {
 	which_spell = repeat_spell;
-	repeat_count--;
 	goto cast_spell;
     }
 
@@ -528,8 +527,9 @@ cast_spell:
     }
     spell_power += magic_spells[which_spell].s_cost;
 
-    if (repeat_count == 0 && count > 0) {
-	repeat_count = count;
+    if (count == 0)
+	repeat_spell = -1;
+    else if (repeat_spell < 0) {
 	repeat_spell = which_spell;
     }
 }
