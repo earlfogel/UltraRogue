@@ -1,3 +1,32 @@
+# UltraRogue Remix
+
+UltraRogue is an old ascii-graphics game developed by Herb Chong in the
+1980s and 1990s.  It's one of many roguelike games inspired by Dungeons and
+Dragons and by the original game Rogue.
+
+For this version of urogue, I pulled code from several old versions,
+so it's something of a remix.  I wanted to keep the feel of the classic
+urogue, but to streamline the gameplay to reduce the strain on aging
+wrists.
+
+## Prerequisites
+
+A C compiler, the ncurses library, and make.
+
+## Installation
+
+This software builds on linux and windows.  Probably other unix's too,
+but I haven't tried.
+
+To build urogue, change to the rogue directory and type make:
+
+    cd rogue
+    make
+
+Then run 'urogue' in an 80x24 or larger terminal window.
+
+## Getting Started
+
 UltraRogue is an old ascii-graphics game developed by Herb Chong in the
 1980s and 1990s.  It's one of many roguelike games inspired by Dungeons and
 Dragons and by the original 1980 unix game Rogue.  A few others from
@@ -56,13 +85,18 @@ Here are a few other commands to get you started:
 To restore a saved game, use "urogue -r" for the default save file,
 or "urogue <filename>" for any other.
 
-For this version of urogue, I pulled code from several previous versions,
-so it's something of a remix.  I wanted to keep the feel of the classic
-urogue, but to streamline the gameplay to reduce the strain on my aging
-wrists.
-
 Older UltraRogue versions (which may no longer be playable) are available
 from the roguelike archive at: https://britzl.github.io/roguearchive/
 
-Earl Fogel
-September 2019
+## Authors
+
+UltraRogue was originally written by Herb Chong, with many additional
+contributors.  The Roguelike Restoration Project released UltraRogue 1.0.7
+in 2005.
+
+This version of UltraRogue, forked in 2018, is maintained by Earl Fogel.
+
+## License
+
+See the LICENSE.TXT file for details.
+
