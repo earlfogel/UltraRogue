@@ -1,4 +1,4 @@
-# UltraRogue Remix
+# UltraRogue
 
 UltraRogue is an old ascii-graphics game developed by Herb Chong in the
 1980s and 1990s.  It's one of many roguelike games inspired by Dungeons and
@@ -27,12 +27,7 @@ Then run 'urogue' in an 80x24 or larger terminal window.
 
 ## Getting Started
 
-UltraRogue is an old ascii-graphics game developed by Herb Chong in the
-1980s and 1990s.  It's one of many roguelike games inspired by Dungeons and
-Dragons and by the original 1980 unix game Rogue.  A few others from
-this time period were Advanced Rogue, Hack and Larn.
-
-As in the other roguelike games of this time period, you use keyboard
+As in other early roguelike games, in urogue you use keyboard
 commands to wander through a dungeon fighting monsters and collecting
 treasure.  The dungeon, monsters, and treasure are all displayed on screen
 as text characters.  For example, you are an '@' sign, and monsters are
