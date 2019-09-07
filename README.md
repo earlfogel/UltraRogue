@@ -2,7 +2,7 @@
 
 ### Table of Contents
 * [Introduction](#introduction)
-* [What's New?](#what-s-new-)
+* [What's New?](#whats-new)
 * [Getting Started](#getting-started)
 * [Prerequisites](#prerequisites)
 * [Installation](#installation)
