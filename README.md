@@ -1,13 +1,13 @@
 # UltraRogue
 
 ### Table of Contents
-[Introduction](#introduction)
-[What's New?](#what-s-new-)
-[Getting Started](#getting-started)
-[Prerequisites](#prerequisites)
-[Installation](#installation)
-[Authors](#authors)
-[License](#license)
+* [Introduction](#introduction)
+* [What's New?](#what-s-new-)
+* [Getting Started](#getting-started)
+* [Prerequisites](#prerequisites)
+* [Installation](#installation)
+* [Authors](#authors)
+* [License](#license)
 
 ## Introduction
 
@@ -29,8 +29,8 @@ CHANGELOG.  Also, ...
 
 To keep things interesting, urogue chooses a random selection of monsters
 to use.  By default, each game includes the classic monsters from urogue
-1.0.2 plus a random assortment of others.  If you don't like that, you can
-use command line options to change this behavior:
+1.0.2 plus a random assortment of others.  If you don't like this, you can
+use command line options to change it:
 
     * -mc: use the classic monsters from 1.0.2
     * -mr: use a random selection of monsters
@@ -55,11 +55,11 @@ monsters and monsters that divide when hit.
 
 ### Running Around
 
-Pressing <shift> and a direction key runs until you nearly run into
+Pressing \<shift\> and a direction key runs until you nearly run into
 something.  There is an option (door_stop) that makes you run until
 you do run into something.
 
-Pressing <ctrl> and a direction key does a searching run -- where you
+Pressing \<ctrl\> and a direction key does a searching run -- where you
 stop and search after every step.  This is particularly useful when
 searching for secret doors, but it does mean that any monsters that are
 chasing you quickly catch up.
@@ -107,8 +107,8 @@ it's generally more convenient to use the keyboard movement keys:
     b	down & left                     
     n	down & right
 
-These keys move one space at a time. To speed things up, press <SHIFT> and
-a movement key to run until you reach something interesting.  Press <CTRL>
+These keys move one space at a time. To speed things up, press \<SHIFT\> and
+a movement key to run until you reach something interesting.  Press \<CTRL\>
 and a movement key to run, searching at each step.
 
 Here are a few other commands to get you started:
@@ -132,7 +132,7 @@ Here are a few other commands to get you started:
     Q	quit
 
 To restore a saved game, use "urogue -r" for the default save file,
-or "urogue <filename>" for any other.
+or "urogue \<filename\>" for any other.
 
 Older UltraRogue versions (which may no longer be playable) are available
 from the roguelike archive at: https://britzl.github.io/roguearchive/
