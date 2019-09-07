@@ -1120,7 +1120,7 @@ int y;
 	tp = THINGPTR(item);
 /* msg("Monster at %d %d", hero.x-x, hero.y-y); */
 
-	if (!on(*tp, BLOWDIVIDE)) {
+	if (!on(*tp, BLOWDIVIDE) && !on(*tp, ISFRIENDLY)) {
 	    return(TRUE);
 	}
     }

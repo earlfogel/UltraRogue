@@ -135,6 +135,12 @@ bool thrown;
 	    else
 		hit(NULL, mname);
 
+            /* hitting a friendly monster is curtains */
+            if (on(*tp, ISFRIENDLY)) {
+                turn_off(*tp, ISFRIENDLY);
+                turn_on(*tp, ISMEAN);
+            }
+
 	    /* If the player hit a rust monster */
 	    if (on(*tp, CANRUST)) {
 		if (!thrown && (weap != NULL) &&
