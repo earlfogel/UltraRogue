@@ -314,10 +314,10 @@ init_monsters (char flag)
 {
     int i, j, k;
     int nmonst = 0, nsummoned = 0;
-    char *summoned[NUMMONST+1];
+    char *summoned[nummonst+1];
     bool keep;
 
-    for (i=1; i<NUMMONST-1; i++) {
+    for (i=1; i<nummonst-1; i++) {
 	keep = TRUE;
 	if (flag == 'r') {  /* Select monsters at random */
 	    /* keep at least one monster for the first level */
@@ -373,7 +373,7 @@ init_monsters (char flag)
     }
 
     /* put back any summoned monsters we still need */
-    for (i=NUMMONST-1; i>1; i--) {
+    for (i=nummonst-1; i>1; i--) {
 	if (monsters[i].m_normal==FALSE && monsters[i].m_wander==FALSE) {
 	    for (j=0; j<nsummoned; j++) {
 		if (strcmp(monsters[i].m_name, summoned[j]) == 0) {
@@ -390,7 +390,7 @@ init_monsters (char flag)
 			if (k == nsummoned)  /* we didn't find it */
 			    summoned[nsummoned++] = monsters[i].m_typesum;
 		    }
-		    if (nsummoned > NUMMONST) {
+		    if (nsummoned > nummonst) {
 			endwin();
 			printf("Too many (%d) summoned monsters, aborting", nsummoned);
 			exit(1);

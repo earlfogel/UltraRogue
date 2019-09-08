@@ -1045,7 +1045,7 @@ save_file(FILE *savef)
     ur_write_int(savef, monster);
 
     /* which monsters still exist, eg. not genocided */
-    for(i = 0; i < NUMMONST+2; i++) {
+    for(i = 0; i < nummonst+2; i++) {
         ur_write_short(savef, (short) monsters[i].m_normal);
         ur_write_short(savef, (short) monsters[i].m_wander);
     }
@@ -1241,7 +1241,7 @@ restore_file(FILE *savef)
     beast = find_thing(mlist, i);
 
     /* which monsters still exist, eg. not genocided */
-    for(i = 0; i < NUMMONST+2; i++) {
+    for(i = 0; i < nummonst+2; i++) {
 	monsters[i].m_normal = (bool) ur_read_short(savef);
 	monsters[i].m_wander = (bool) ur_read_short(savef);
     }

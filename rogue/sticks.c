@@ -192,7 +192,7 @@ bool blessed;
 		    oldch = tp->t_oldch;
 		    delta.y = y;
 		    delta.x = x;
-		    new_monster(item, rnd(NUMMONST-1) + 1, &delta, FALSE);
+		    new_monster(item, rnd(nummonst-1) + 1, &delta, FALSE);
 		    monster = tp->t_type;
 		    if (off(*tp, ISRUN))
 			runto(&delta, &hero);

@@ -362,7 +362,7 @@ makemon ()
 {
     int i;
     short which_monst;
-    int num_monst = NUMMONST+2, pres_monst=1, num_lines=2*(LINES-3);
+    int num_monst = nummonst+2, pres_monst=1, num_lines=2*(LINES-3);
     char monst_name[40];
 
     /* Print out the monsters */
@@ -385,7 +385,7 @@ makemon ()
 	}
 
 	/* Print right column */
-	for (i=0; i<left_limit && pres_monst <= NUMMONST+2; i++) {
+	for (i=0; i<left_limit && pres_monst <= nummonst+2; i++) {
 	    sprintf(monst_name, "[%d] %s",
 				pres_monst, monsters[pres_monst].m_name);
 	    wmove(hw, i+2, COLS/2);
@@ -415,11 +415,11 @@ makemon ()
 	    return;
 	}
 	which_monst = atoi(monst_name);
-	if (which_monst < 1 || which_monst > NUMMONST+2) {
+	if (which_monst < 1 || which_monst > nummonst+2) {
 	    mvwaddstr(hw, 0, 0, "Please enter a number in the displayed range -- ");
 	    draw(hw);
 	}
-    } until (which_monst > 0 && which_monst <= NUMMONST+2);
+    } until (which_monst > 0 && which_monst <= nummonst+2);
     restscr(cw);
     creat_mons (&player, which_monst, TRUE);
     touchwin(cw);

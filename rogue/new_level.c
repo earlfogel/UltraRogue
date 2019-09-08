@@ -74,7 +74,7 @@ new_level (
 
     if (ltype == POSTLEV) {
         item = new_item(sizeof (struct thing));         /* Friendly Fiend */
-        new_monster(item, NUMMONST+2, &stairs, TRUE);
+        new_monster(item, nummonst+2, &stairs, TRUE);
     }
     else put_things(ltype);                     /* Place objects (if any) */
 
@@ -85,7 +85,7 @@ new_level (
     if (has_artifact && level == 1) {
 	struct thing *tp;
 	item = new_item(sizeof (struct thing));
-	new_monster(item, NUMMONST+1, &stairs, FALSE);
+	new_monster(item, nummonst+1, &stairs, FALSE);
 	tp = (struct thing *) ldata(item);
 	turn_on(*tp, CANINWALL);
 	turn_on(*tp, CANHUH);
@@ -467,7 +467,7 @@ do_throne ()
 	
 	level = save_level + roll(2,3);		/* send the hero down */
 
-	i = NUMMONST - roll(1, NUMUNIQUE);
+	i = nummonst - roll(1, NUMUNIQUE);
 	item = new_item(sizeof *tp);
 	tp = THINGPTR(item);
 	do

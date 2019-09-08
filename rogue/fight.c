@@ -232,19 +232,19 @@ bool thrown;
 	        msg("The %s summons help!", mname);
 	        helpname = monsters[tp->t_index].m_typesum;
 	        if (helpname) {
-		    for (which=1; which<NUMMONST; which++) {
+		    for (which=1; which<nummonst; which++) {
 			 if (strcmp(helpname, monsters[which].m_name) == NULL)
 			     break;
 		    }
-		    if (which >= NUMMONST)
+		    if (which >= nummonst)
 			debug("Couldn't find summoned one.");
 		} else {
 		    debug("Couldn't find monster to summon.");
-		    which = NUMMONST+1;
+		    which = nummonst+1;
 		}
 
 		/* summoned monster was genocided */
-		if (which <= NUMMONST && 
+		if (which <= nummonst && 
 		     !monsters[which].m_normal &&
 		     !monsters[which].m_wander) {
 		     msg("The %s becomes very annoyed at you!", mname);
@@ -1524,7 +1524,7 @@ bool points;
 	}
     }
 
-    if (tp->t_index == NUMMONST+2) {
+    if (tp->t_index == nummonst+2) {
                         /* killed Friendly Fiend */
         struct linked_list *list;
         struct object *obj;

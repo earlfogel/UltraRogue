@@ -28,7 +28,6 @@
 #define	MAXDOORS	4	/* Maximum doors to a room */
 #define	MAXPRAYERS	14	/* Maximum number of prayers for cleric */
 #define	MAXSPELLS	21	/* Maximum number of spells (for magician) */
-#define NUMMONST	318     /* Current number of monsters */
 #define NUMUNIQUE	39      /* Number of UNIQUE creatures */
 #define NLEVMONS	3       /* Number of new monsters per level */
 #define NT_FLAGS	16	/* Number of struct thing flags */
@@ -998,6 +997,7 @@ extern int luck;			/* how expensive things to buy thing */
 extern int game_id;			/* unique identifier for each game */
 extern int difficulty;			/* 1 easy, 2 normal, 3 hard */
 extern int maxpack;			/* max items that fit in pack */
+extern int nummonst;			/* number of types of monsters */
 extern char take;			/* Thing the rogue is taking */
 extern char prbuf[];			/* Buffer for sprintfs */
 extern char outbuf[];			/* Output buffer for stdout */

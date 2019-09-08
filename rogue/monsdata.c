@@ -2262,4 +2262,4 @@ struct monster monsters[] = {
 		{40,	120000,	75,	9, 	HPT("18d24+100"),
 		"3d8/3d8/3d8"}},
 };
-int nummonst = NUMMONST;
+int nummonst = (sizeof monsters / sizeof (struct monster)) - 3;

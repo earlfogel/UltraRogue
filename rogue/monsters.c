@@ -24,15 +24,15 @@ bool no_unique;
     float nlevmons = NLEVMONS;
 
     /* 
-     * Do we want a merchant? Merchant is always in place 'NUMMONST' 
+     * Do we want a merchant? Merchant is always in place 'nummonst' 
      */
-    if (wander && monsters[NUMMONST].m_wander && rnd(100) < 3) return NUMMONST;
+    if (wander && monsters[nummonst].m_wander && rnd(100) < 3) return nummonst;
 
     /*
      * Calculate the number of new monsters revealed per level,
      * to ensure we have enough to go around, and not too many.
      */
-    nlevmons = NUMMONST/100.0;
+    nlevmons = nummonst/100.0;
 
     cur_level = level;
     range = 4*NLEVMONS;
@@ -52,11 +52,11 @@ bool no_unique;
 	}
 	if (d < 1)
 	    d = rnd(NLEVMONS) + 1;
-	if (d > NUMMONST - NUMUNIQUE - 1) {
+	if (d > nummonst - NUMUNIQUE - 1) {
 	    if (no_unique)
-		d = rnd(range) + (NUMMONST - NUMUNIQUE - 1) - (range - 1);
-	    else if (d > NUMMONST - 1)
-		d = rnd(range+NUMUNIQUE) + (NUMMONST-1) - (range+NUMUNIQUE-1);
+		d = rnd(range) + (nummonst - NUMUNIQUE - 1) - (range - 1);
+	    else if (d > nummonst - 1)
+		d = rnd(range+NUMUNIQUE) + (nummonst-1) - (range+NUMUNIQUE-1);
 	}
     }
     while  ( wander ? !monsters[d].m_wander || !monsters[d].m_normal 
@@ -504,7 +504,7 @@ genocide ()
     struct thing *mp;
     int i;
     struct linked_list *nip;
-    int num_monst = NUMMONST-1, pres_monst=1, num_lines=2*(LINES-3);
+    int num_monst = nummonst-1, pres_monst=1, num_lines=2*(LINES-3);
     short which_monst;
     char monst_name[60];
     char monst_num[4];	/* blank if monster is already gone */
@@ -536,7 +536,7 @@ genocide ()
 	}
 
 	/* Print right column */
-	for (i=0; i<left_limit && pres_monst<=NUMMONST-1; i++) {
+	for (i=0; i<left_limit && pres_monst<=nummonst-1; i++) {
 	    sprintf(monst_num, "%d", pres_monst);
 	    if (monsters[pres_monst].m_normal == FALSE &&
 		monsters[pres_monst].m_wander == FALSE) {
@@ -576,7 +576,7 @@ get_monst:
 	return;
     }
     which_monst = atoi(monst_name);
-    if ((which_monst < 1 || which_monst > NUMMONST-1)) {
+    if ((which_monst < 1 || which_monst > nummonst-1)) {
 	mvwaddstr(hw, 0, 0, "Please enter a number in the displayed range -- ");
 	draw(hw);
 	goto get_monst;
@@ -630,7 +630,7 @@ int monster;
      * if none match, check all monsters
      */
     strcpy(buf, "");
-    for (i=1; i<NUMMONST+2; i++) {
+    for (i=1; i<nummonst+2; i++) {
 	if (monsters[i].m_appear == monster) {
 	    strcat(buf, monsters[i].m_name);
 	    strcat(buf, ",");
@@ -871,7 +871,7 @@ struct thing *tp;
     /* See if player can afford an item */
     if (min_worth > purse) {
 	msg("The %s eyes your small purse and departs.",
-			monsters[NUMMONST].m_name);
+			monsters[nummonst].m_name);
 	/* Get rid of the monster */
 	killed(item, FALSE, FALSE);
 	monst_dead = TRUE;
@@ -879,7 +879,7 @@ struct thing *tp;
     }
 
     /* Display the goods */
-    msg("The %s shows you his wares.--More--", monsters[NUMMONST].m_name);
+    msg("The %s shows you his wares.--More--", monsters[nummonst].m_name);
     wait_for(' ');
     msg("");
     clearok(cw, TRUE);

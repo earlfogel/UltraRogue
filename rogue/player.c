@@ -108,7 +108,7 @@ steal ()
 	    if (rnd(++count) == 0) s_item = pack_ptr;
 
 	/* if we have a merchant, get an item */
-	if (s_item == NULL && tp->t_index == NUMMONST)
+	if (s_item == NULL && tp->t_index == nummonst)
 	    s_item = new_thing();
 
 

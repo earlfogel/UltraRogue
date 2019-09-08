@@ -395,7 +395,7 @@ bool flee;
 
 		/* Will it breathe at random */
 		if (on(*tp, CANBRANDOM)) {
-		    if (rnd(level/20) == 0 && tp->t_index != NUMMONST+1)
+		    if (rnd(level/20) == 0 && tp->t_index != nummonst+1)
 			turn_off(*tp, CANBRANDOM);
 
 		    /* Select type of breath */
