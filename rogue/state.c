@@ -907,7 +907,7 @@ ur_read_window(FILE *savef, WINDOW *win)
 		win->_maxx+1,win->_maxy+1,maxx+1,maxy+1);
 	endwin();
 	printf("%s\nPlease resize window and try again.\n", oops);
-	exit(0);
+	exit(1);
     }
 
 
@@ -1046,6 +1046,7 @@ save_file(FILE *savef)
 
     /* which monsters still exist, eg. not genocided */
     for(i = 0; i < nummonst+2; i++) {
+	ur_write_int(savef, nummonst);
         ur_write_short(savef, (short) monsters[i].m_normal);
         ur_write_short(savef, (short) monsters[i].m_wander);
     }
@@ -1242,6 +1243,12 @@ restore_file(FILE *savef)
 
     /* which monsters still exist, eg. not genocided */
     for(i = 0; i < nummonst+2; i++) {
+	i = ur_read_int(savef);
+	if (i != nummonst) {
+	    endwin();
+	    printf("Saved game has %d monsters, expected %d.\n", i, nummonst);
+	    return(FALSE);
+	}
 	monsters[i].m_normal = (bool) ur_read_short(savef);
 	monsters[i].m_wander = (bool) ur_read_short(savef);
     }
@@ -1384,7 +1391,7 @@ restore_file(FILE *savef)
 	if (find_slot(DAEMON, DAEMON_DOCTOR) == NULL) {
 	    endwin();
 	    printf("\nSorry, the doctor is out.\n");
-	    exit(0);
+	    exit(1);
 	}
     }
     if (find_slot(DAEMON, DAEMON_STOMACH) == NULL) {
@@ -1393,7 +1400,7 @@ restore_file(FILE *savef)
 	if (find_slot(DAEMON, DAEMON_STOMACH) == NULL) {
 	    endwin();
 	    printf("\nSorry, your stomach has gone away.\n");
-	    exit(0);
+	    exit(1);
 	}
     }
     if (find_slot(DAEMON, DAEMON_RUNNERS) == NULL) {
@@ -1402,7 +1409,7 @@ restore_file(FILE *savef)
 	if (find_slot(DAEMON, DAEMON_RUNNERS) == NULL) {
 	    endwin();
 	    printf("\nSorry, the monsters are too tired to play\n");
-	    exit(0);
+	    exit(1);
 	}
     }
 

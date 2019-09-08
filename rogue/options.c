@@ -275,7 +275,7 @@ WINDOW *win;
 		sp += strlen(home);
 		continue;
 	    }
-	} else if (c == KEY_BACKSPACE) {
+	} else if (c == '\010' || c == KEY_BACKSPACE) {
 	    *sp-- = '\0';
 	    wmove(win, oy, ox+strlen(buf)-1);
 	    wclrtoeol(win), draw(win);

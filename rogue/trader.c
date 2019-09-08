@@ -1,7 +1,4 @@
 /*
- * Last Modified: 08/05/86
- */
-/*
  * Anything to do with trading posts
  *
  */
@@ -230,7 +227,7 @@ sell_it()
 
 /*
  * open_market:
- *	Retruns TRUE when ok do to transacting
+ *	Returns TRUE when ok to do transacting
  */
 int
 open_market()

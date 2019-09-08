@@ -1,5 +1,5 @@
 /*
- * Last Modified: 08/12/86
+ * UltraRogue list of monsters
  */
 #include "curses.h"
 #include "rogue.h"

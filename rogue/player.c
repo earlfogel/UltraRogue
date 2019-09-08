@@ -183,7 +183,7 @@ pray ()
 
     if (repeat_prayer >= 0) {
         which_prayer = repeat_prayer;
-        goto cast_prayer;
+        goto do_prayer;
     }
 
     /* Prompt for prayer */
@@ -269,7 +269,7 @@ pray ()
 	}
     }
 
-cast_prayer:
+do_prayer:
 
     if ((cleric_spells[which_prayer].s_cost + pray_time) > pray_points) {
 	msg("Your prayer fails.");
@@ -413,7 +413,7 @@ cast ()
 
     if (repeat_spell >= 0) {
 	which_spell = repeat_spell;
-	goto cast_spell;
+	goto do_spell;
     }
 
     /* Prompt for spells */
@@ -502,7 +502,7 @@ cast ()
 	}
     }
 
-cast_spell:
+do_spell:
 
     if ((spell_power + magic_spells[which_spell].s_cost) > avail_points) {
 	msg("Your attempt fails.");
