@@ -122,13 +122,11 @@ command ()
 		if (ch == KEY_END)   ch = 'b';
 		if (ch == KEY_NPAGE) ch = 'n';
 		if (ch == KEY_B2)    ch = 's';
-#ifdef EARL
 		if (ch == 'x') {
 		    ch = '.'; /* rest - left handed */
 		} else if (ch == CTRL('f') && !wizard) {
 		    ch = 'F'; /* a common typo */
 		}
-#endif
 		if (mpos != 0 && !running)
 		    msg("");	/* Erase message if its there */
 	    }
