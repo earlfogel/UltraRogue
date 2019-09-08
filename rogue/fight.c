@@ -892,6 +892,8 @@ bool thrown;
 	if (damage > 10)
 	    msg("Ouch! That hurts!");
 	fighting = FALSE;
+    } else if (fighting && damage > s_hpt/5) {
+	msg("The %s scored an excellent hit on you!", mname);
     }
 
     count = 0;
