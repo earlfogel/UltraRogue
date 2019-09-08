@@ -1,6 +1,5 @@
 /*
  * Anything to do with trading posts
- *
  */
 
 #include "curses.h"
