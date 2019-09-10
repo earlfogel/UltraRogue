@@ -1665,7 +1665,7 @@ struct linked_list **bag;
     }
 added:
     obj = (struct object *) ldata(item);
-    msg("Added %s (%c).", inv_name(obj, 1), bag_char(obj,*bag));
+    msg("Added %s.", inv_name(obj, 1));
     return;
 }
 
