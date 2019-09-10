@@ -650,7 +650,8 @@ bool thrown;
                 msg("You feel slightly less wise now.");
                                 
                 pstats.s_wisdom = max(pstats.s_wisdom - 1, 3);
-		if (difficulty >= 2)
+		if (difficulty > 2 ||
+                    (difficulty == 2 && rnd(2) == 0))
 		    max_stats.s_wisdom = pstats.s_wisdom;
 
                 /* Now put back the ring changes */
@@ -669,7 +670,8 @@ bool thrown;
 
                 msg("You feel slightly less intelligent now.");
                 pstats.s_intel = max(pstats.s_intel - 1, 3);
-		if (difficulty >= 2)
+		if (difficulty > 2 ||
+		    (difficulty == 2 && rnd(2) == 0))
 		    max_stats.s_intel = pstats.s_intel;
 
                 /* Now put back the ring changes */
