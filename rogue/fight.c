@@ -638,7 +638,7 @@ bool thrown;
 		turn_on(*mp, DIDDRAIN);  
 	    }
 
-            /* permanently drain a wisdom point */
+            /* drain a wisdom point */
             if (on(*mp, DRAINWISDOM) && rnd(100) < 15
 		&& !ISWEARING(R_SUSABILITY)) {
                 /* Undo any ring changes */
@@ -650,14 +650,15 @@ bool thrown;
                 msg("You feel slightly less wise now.");
                                 
                 pstats.s_wisdom = max(pstats.s_wisdom - 1, 3);
-                max_stats.s_wisdom = pstats.s_wisdom;
+		if (difficulty >= 2)
+		    max_stats.s_wisdom = pstats.s_wisdom;
 
                 /* Now put back the ring changes */
                 pstats.s_wisdom += ring_str;
 
             }
 
-            /* permanently drain a intelligence point */
+            /* drain a intelligence point */
             if (on(*mp, DRAINBRAIN) && rnd(100) < 15
 		&& !ISWEARING(R_SUSABILITY)) {
                 /* Undo any ring changes */
@@ -668,7 +669,8 @@ bool thrown;
 
                 msg("You feel slightly less intelligent now.");
                 pstats.s_intel = max(pstats.s_intel - 1, 3);
-                max_stats.s_intel = pstats.s_intel;
+		if (difficulty >= 2)
+		    max_stats.s_intel = pstats.s_intel;
 
                 /* Now put back the ring changes */
                 pstats.s_intel += ring_str;
