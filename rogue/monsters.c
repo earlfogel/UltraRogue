@@ -244,7 +244,7 @@ bool max_monster;
 	(on(*tp, MEDFRIENDLY) && i < 2 * (pstats.s_charisma - 8)) ||
 	(on(*tp, HIGHFRIENDLY) && i < 3 * (pstats.s_charisma - 8)))
     {
-	turn_on(*tp, ISFRIENDLY);
+	/* turn_on(*tp, ISFRIENDLY); */
 	turn_off(*tp, ISMEAN);
 	tp->t_dest = &(tp->t_pos);
 	turn_off(*tp, ISRUN);
