@@ -196,7 +196,8 @@ bool thrown;
 		aggravate();
 		if (rnd(wizard ? 3 : 50) == 0 && cur_armor != NULL 
 		    && cur_armor->o_which == CRYSTAL_ARMOR
-		    && !(cur_armor->o_flags & ISPROT)) {
+		    && (difficulty > 2 || !(cur_armor->o_flags & ISPROT))
+		    ) {
 
 		    struct linked_list *item;
 		    struct object *obj;
@@ -389,7 +390,8 @@ bool thrown;
 	     */
 	    if (cur_armor != NULL && cur_armor->o_which == CRYSTAL_ARMOR) {
 		if (rnd(mp->t_stats.s_str + (cur_armor->o_ac/2)) > 20
-		    && !(cur_armor->o_flags & ISPROT)) {
+		    && (difficulty > 2 || !(cur_armor->o_flags & ISPROT))
+		    ) {
 
 		    struct linked_list *item;
 		    struct object *obj;
