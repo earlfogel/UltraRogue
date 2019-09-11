@@ -149,6 +149,21 @@ bool max_monster;
     /* If this monster is unique, genocide it */
     if (on(*tp, ISUNIQUE)) mp->m_normal = FALSE;
 
+    /* gods get special abilities */
+    if (on(*tp, ISGOD)) {
+	turn_on(*tp, CANFRIGHTEN);
+	turn_on(*tp, CANCAST);  /* not implemented */
+	turn_on(*tp, CANFLY);
+	turn_on(*tp, CANBARGAIN);  /* not implemented */
+	turn_on(*tp, ISLARGE);
+	turn_on(*tp, CANTELEPORT);  /* not implemented */
+	turn_on(*tp, CANSPEAK);  /* not implemented */
+	turn_on(*tp, CANDARKEN);  /* not implemented */
+	turn_on(*tp, CANSEE);
+	turn_on(*tp, CANLIGHT);  /* not implemented */
+	turn_on(*tp, BMAGICHIT);
+    }
+
     tp->t_turn = TRUE;
     tp->t_pack = NULL;
 
