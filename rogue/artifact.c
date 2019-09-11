@@ -81,7 +81,7 @@ apply ()
 	    }
 	    debug("Rolled %d.", chance);
 	    if (chance > pstats.s_lvl*4) {
-		if (rnd(4) == 0 && difficulty > 2)
+		if (rnd(7) == 0 && difficulty > 2)
 		    do_major(obj);
 		else
 		    do_minor(obj);
