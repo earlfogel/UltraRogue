@@ -843,18 +843,23 @@ struct object *tr;
 		    msg("Your hand glows yellow for an instant.");
 		    return;
 		}
-		msg("Your %s glows bright red for a moment.", 
+		if (cur_weapon->o_flags & ISPROT) {
+		    msg("Your %s vibrates for a moment.", inv_name(cur_weapon, TRUE));
+		    cur_weapon->o_flags &= ~ISPROT;
+		} else {
+		    msg("Your %s glows bright red for a moment.", 
 			weaps[cur_weapon->o_which].w_name);
-	        if (cur_weapon->o_hplus > 0)
-		    cur_weapon->o_hplus = -rnd(3);
-		else
-		    cur_weapon->o_hplus -= rnd(3);
-	        if (cur_weapon->o_dplus > 0)
-		    cur_weapon->o_dplus = -rnd(3);
-		else
-		    cur_weapon->o_dplus -= rnd(3);
-		cur_weapon->o_flags = ISCURSED|ISLOST;
-		cur_weapon->o_ac = 0;
+		    if (cur_weapon->o_hplus > 0)
+			cur_weapon->o_hplus = -rnd(3);
+		    else
+			cur_weapon->o_hplus -= rnd(3);
+		    if (cur_weapon->o_dplus > 0)
+			cur_weapon->o_dplus = -rnd(3);
+		    else
+			cur_weapon->o_dplus -= rnd(3);
+		    cur_weapon->o_flags = ISCURSED|ISLOST;
+		    cur_weapon->o_ac = 0;
+		}
 	otherwise:
 		do_minor(tr);
     }
