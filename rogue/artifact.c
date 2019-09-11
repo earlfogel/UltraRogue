@@ -793,17 +793,22 @@ struct object *tr;
 		    if ((obj = OBJPTR(item)) == cur_weapon)
 			break;
 		if (obj) {
-		    if (obj->o_flags & ISMETAL)
-			msg("Your %s melts and disappears.", inv_name(obj, TRUE));
-		    else
-			msg("Your %s crumbles in your hands.",
-				    inv_name(obj, TRUE));
-		    obj->o_flags &= ~ISCURSED;
-		    dropcheck(obj);
-		    detach(pack, item);
-		    freeletter(item);
-		    inpack--;
-		    discard(item);
+		    if (obj->o_flags & ISPROT) {
+			msg("Your %s vibrates for a moment.", inv_name(obj, TRUE));
+			obj->o_flags &= ~ISPROT;
+		    } else {
+			if (obj->o_flags & ISMETAL)
+			    msg("Your %s melts and disappears.", inv_name(obj, TRUE));
+			else
+			    msg("Your %s crumbles in your hands.",
+					inv_name(obj, TRUE));
+			obj->o_flags &= ~ISCURSED;
+			dropcheck(obj);
+			detach(pack, item);
+			freeletter(item);
+			inpack--;
+			discard(item);
+		    }
 		}
 	}
 	when 9: {
@@ -818,14 +823,19 @@ struct object *tr;
 		    if ((obj = OBJPTR(item)) == cur_armor)
 			break;
 		if (obj) {
-		    msg("Your %s crumbles into small black powdery dust.",
-				inv_name(obj, TRUE));
-		    obj->o_flags &= ~ISCURSED;
-		    dropcheck(obj);
-		    detach(pack, item);
-		    freeletter(item);
-		    inpack--;
-		    discard(item);
+		    if (obj->o_flags & ISPROT) {
+			msg("Your %s vibrates for a moment.", inv_name(obj, TRUE));
+			obj->o_flags &= ~ISPROT;
+		    } else {
+			msg("Your %s crumbles into small black powdery dust.",
+				    inv_name(obj, TRUE));
+			obj->o_flags &= ~ISCURSED;
+			dropcheck(obj);
+			detach(pack, item);
+			freeletter(item);
+			inpack--;
+			discard(item);
+		    }
 		}
 	}
 	when 10:
