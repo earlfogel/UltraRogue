@@ -165,6 +165,7 @@
 #define D_DROWN		-9
 #define D_FALL		-10
 #define D_FIRE		-11
+#define D_GENOCIDE	-12
 
 /*
  * Things that appear on the screens

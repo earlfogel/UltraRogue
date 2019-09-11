@@ -590,8 +590,14 @@ get_monst:
 	genocide();
 	return;
     }
+    if (strcmp(monst_name, "0") == 0 && difficulty >= 2) {	/* suicide */
+	death(D_GENOCIDE);
+	return;
+    }
     which_monst = atoi(monst_name);
-    if ((which_monst < 1 || which_monst > nummonst-1)) {
+    /* nummonst==quartermaster, nummonst+2=shopkeeper */
+    if (which_monst < 1 ||
+        (which_monst > nummonst && which_monst != nummonst+2)) {
 	mvwaddstr(hw, 0, 0, "Please enter a number in the displayed range -- ");
 	draw(hw);
 	goto get_monst;
