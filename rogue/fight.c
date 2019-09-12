@@ -931,8 +931,8 @@ int wplus;
     /* give monsters a chance to hit well armored player and vice versa */
     if (difficulty == 2 && need > 20)
 	need = 20 + ((need - 20)/2);
-    else if (difficulty > 2 && need > 15)
-	need = 15 + ((need - 15)/2);
+    else if (difficulty > 2 && need > 20)
+	need = 20 + ((need - 20)/2) - 2;
 
     return (res+wplus >= need);
 }
