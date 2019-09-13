@@ -171,6 +171,7 @@ WINDOW *win;
 	waddstr(win, "Normal");
     else if (difficulty > 2)
 	waddstr(win, "Hard");
+    wclrtoeol(win);
 }
 
 
@@ -360,6 +361,7 @@ WINDOW *win;
 {
     int oy, ox, ny, nx;
     bool op_bad;
+    int ch;
 
     curs_set(1);			/* show cursor */
     op_bad = TRUE;
@@ -370,7 +372,8 @@ WINDOW *win;
     {
 	wmove(win, oy, ox);
 	draw(win);
-	switch (wgetch(win))
+	ch = wgetch(win);
+	switch (ch)
 	{
 	    case '\n':
 	    case '\r':
@@ -386,7 +389,17 @@ WINDOW *win;
 		curs_set(0);
 		return MINUS;
 	    default:
-		mvwaddstr(win, ny, nx + 5, "(no change allowed)");
+		if (wizard) {
+		    if (ch >= '1' && ch <= '3') {
+			*difficulty = ch - '0';
+			put_diff(difficulty, win);
+			getyx(win, ny, nx);
+		    } else {
+			mvwaddstr(win, ny, nx + 5, "(1, 2 or 3)");
+		    }
+		} else {
+		    mvwaddstr(win, ny, nx + 5, "(no change allowed)");
+		}
 	}
     }
     wmove(win, ny, nx + 5);
