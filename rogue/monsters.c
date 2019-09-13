@@ -318,7 +318,8 @@ wanderer ()
     tp = THINGPTR(item);
     turn_on(*tp, ISRUN);
     turn_off(*tp, ISDISGUISE);
-    tp->t_dest = &hero;
+    if (off(*tp, ISFRIENDLY))
+	tp->t_dest = &hero;
 
     tp->t_pos = cp;	/* Assign the position to the monster */
 
@@ -393,9 +394,11 @@ int x;
 	off(*tp, ISHELD) && off(*tp, ISRUN) && !is_stealth(&player) &&
 	(off(player, ISINVIS) || on(*tp, CANSEE))))
     {
-	tp->t_dest = &hero;
-	turn_on(*tp, ISRUN);
-	turn_off(*tp, ISDISGUISE);
+	if (off(*tp, ISFRIENDLY)) {
+	    tp->t_dest = &hero;
+	    turn_on(*tp, ISRUN);
+	    turn_off(*tp, ISDISGUISE);
+	}
     }
 
     /* Handle monsters that can gaze */
