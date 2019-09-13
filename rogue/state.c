@@ -1013,6 +1013,20 @@ save_file(FILE *savef)
     for(i = 0; i < MAXSTICKS; i++)
         ur_write_string(savef,ws_type[i]);
 
+    ur_write_string(savef,"\nPotion colors\n");
+    for(i = 0; i < ncolors; i++)
+        ur_write_string(savef,rainbow[i]);
+
+    ur_write_string(savef,"\nRing stones\n");
+    for(i = 0; i < nstones; i++)
+        ur_write_string(savef,stones[i]);
+
+    ur_write_string(savef,"\nWand materials\n");
+    for(i = 0; i < nwood; i++)
+        ur_write_string(savef,wood[i]);
+    for(i = 0; i < nmetal; i++)
+        ur_write_string(savef,metal[i]);
+
     ur_write_string(savef, "\nTraps on this level\n");
     ur_write_int(savef, MAXTRAPS);
     for(i = 0; i < MAXTRAPS; i++)
@@ -1199,6 +1213,25 @@ restore_file(FILE *savef)
     DUMPSTRING
     for(i=0; i < MAXSTICKS; i++)
         ws_type[i] = ur_read_string(savef);
+
+#if 0
+msg("Restoring %d colors, %d stones, %d woods, %d metals",
+ncolors, nstones, nwood, nmetal);
+sleep(2);
+#endif
+    DUMPSTRING
+    for(i=0; i < ncolors; i++)
+        rainbow[i] = ur_read_string(savef);
+
+    DUMPSTRING
+    for(i=0; i < nstones; i++)
+        stones[i] = ur_read_string(savef);
+
+    DUMPSTRING
+    for(i=0; i < nwood; i++)
+        wood[i] = ur_read_string(savef);
+    for(i=0; i < nmetal; i++)
+        metal[i] = ur_read_string(savef);
 
     DUMPSTRING
     i = ur_read_int(savef);

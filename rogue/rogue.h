@@ -999,6 +999,14 @@ extern int game_id;			/* unique identifier for each game */
 extern int difficulty;			/* 1 easy, 2 normal, 3 hard */
 extern int maxpack;			/* max items that fit in pack */
 extern int nummonst;			/* number of types of monsters */
+extern char *rainbow[];			/* potion colors */
+extern char *stones[];			/* ring stones */
+extern char *wood[];			/* wand woods */
+extern char *metal[];			/* wand metals */
+extern int ncolors;			/* number of potion colors */
+extern int nstones;			/* number of ring stones */
+extern int nwood;			/* number of wand woods */
+extern int nmetal;			/* number of wand metals */
 extern char take;			/* Thing the rogue is taking */
 extern char prbuf[];			/* Buffer for sprintfs */
 extern char outbuf[];			/* Output buffer for stdout */
