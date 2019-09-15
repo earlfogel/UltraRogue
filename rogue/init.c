@@ -10,7 +10,7 @@
 #include "rogue.h"
 
 
-char *rainbow[] = {
+static char *rainbow[] = {
 	"Red",		"Blue",		"Green",	"Yellow",
 	"Black",	"Brown",	"Orange",	"Pink",
 	"Purple",	"Grey",		"White",	"Silver",
@@ -20,7 +20,7 @@ char *rainbow[] = {
 	"Aquamarine",	"Scarlet",	"Khaki",	"Crimson",
 	"Indigo",	"Beige",	"Lavender",	"Saffron",
 } ;
-int ncolors = (sizeof rainbow / sizeof (char *));
+#define NCOLORS (sizeof rainbow / sizeof (char *))
 
 static char *sylls[] = {
     "a", "ab", "ag", "aks", "ala", "an", "ankh", "app", "arg", "arze",
@@ -42,7 +42,7 @@ static char *sylls[] = {
     "zant", "zap", "zeb", "zim", "zok", "zon", "zum",
 } ;
 
-char *stones[] = {
+static char *stones[] = {
 	"Agate",		"Alexandrite",		"Amethyst",
 	"Azurite",		"Carnelian",		"Chrysoberyl",
 	"Chrysoprase",		"Citrine",		"Diamond",
@@ -56,9 +56,9 @@ char *stones[] = {
 	"Spinel",		"Tiger eye",		"Topaz",
 	"Tourmaline",		"Turquoise",
 } ;
-int nstones = (sizeof stones / sizeof (char *));
+#define NSTONES (sizeof stones / sizeof (char *))
 
-char *wood[] = {
+static char *wood[] = {
 	"Avocado wood",	"Balsa",	"Banyan",	"Birch",
 	"Cedar",	"Cherry",	"Cinnibar",	"Dogwood",
 	"Driftwood",	"Ebony",	"Eucalyptus",	"Hemlock",
@@ -66,15 +66,15 @@ char *wood[] = {
 	"Oak",		"Pine",		"Redwood",	"Rosewood",
 	"Teak",		"Walnut",	"Zebra wood", 	"Persimmon wood",
 } ;
-int nwood = (sizeof wood / sizeof (char *));
+#define NWOOD (sizeof wood / sizeof (char *))
 
-char *metal[] = {
+static char *metal[] = {
 	"Aluminium",	"Bone",		"Brass",	"Bronze",
 	"Copper",	"Chromium",	"Iron",		"Lead",
 	"Magnesium",	"Pewter",	"Platinum",	"Steel",
 	"Tin",		"Titanium",	"Zinc",
 } ;
-int nmetal = (sizeof metal / sizeof (char *));
+#define NMETAL (sizeof metal / sizeof (char *))
 
 
 
@@ -187,7 +187,7 @@ init_colors ()
     for (i = 0 ; i < MAXPOTIONS ; i++)
     {
 	do
-	    str = rainbow[rnd(ncolors)] ;
+	    str = rainbow[rnd(NCOLORS)] ;
 	until (isupper(*str)) ;
 	str2 = ALLOC(LINELEN);
 	strcpy(str2, str);
@@ -253,7 +253,7 @@ init_stones ()
     for (i = 0 ; i < MAXRINGS ; i++)
     {
 	do
-	    str = stones[rnd(nstones)] ;
+	    str = stones[rnd(NSTONES)] ;
 	until (isupper(*str)) ;
 	r_stones[i] = str ;
 	r_know[i] = FALSE ;
@@ -280,13 +280,13 @@ init_materials ()
 	do
 	    if (rnd(100) > 50)
 	    {
-		str = metal[rnd(nmetal)] ;
+		str = metal[rnd(NMETAL)] ;
 		if (isupper(*str))
 			ws_type[i] = "wand" ;
 	    }
 	    else
 	    {
-		str = wood[rnd(nwood)] ;
+		str = wood[rnd(NWOOD)] ;
 		if (isupper(*str))
 			ws_type[i] = "staff" ;
 	    }
