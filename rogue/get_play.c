@@ -27,7 +27,7 @@ geta_player ()
 	char	pbuf[LINELEN];
 	short    cnt,i;
 
-	strcpy(char_file,home);
+	strcpy(char_file, home);
 	strcat(char_file, ROGDEFS);
 
 	if ((fd = open(char_file, 0)) < 0) {
@@ -195,8 +195,8 @@ int dmadd;
 	int   i;
 	bool	no_write;
 
-	strcpy(char_file,home);
-	strcat(char_file, ROGDEFS );
+	strcpy(char_file, home);
+	strcat(char_file, ROGDEFS);
 
 	no_write = FALSE;
 	wclear(hw);
