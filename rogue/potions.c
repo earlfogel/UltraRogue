@@ -187,7 +187,7 @@ bool blessed;
 		waddstr(cw, morestr);
 		overlay(hw, cw);
 		draw(cw);
-		wait_for(' ');
+		wait_for(0);
 		msg("");
 		if (is_potion) 
 		    p_know[P_MFIND] = TRUE;
@@ -198,7 +198,7 @@ bool blessed;
 		waddstr(cw, morestr);
 		overlay(mw, cw);
 		draw(cw);
-		wait_for(' ');
+		wait_for(0);
 		msg("");
 		if (is_potion) 
 		    p_know[P_MFIND] = TRUE;
@@ -234,7 +234,7 @@ bool blessed;
 		waddstr(cw, morestr);
 		overlay(hw, cw);
 		draw(cw);
-		wait_for(' ');
+		wait_for(0);
 		msg("");
 		if (is_potion) 
 		    p_know[P_TFIND] = TRUE;
@@ -278,7 +278,7 @@ bool blessed;
 		    waddstr(cw, morestr);
 		    overlay(hw,cw);
 		    draw(cw);
-		    wait_for(' ');
+		    wait_for(0);
 		    msg("");
 		    break;
 		}
