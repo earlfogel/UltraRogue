@@ -14,7 +14,6 @@ struct linked_list *lvl_obj = NULL;
 struct linked_list *mlist = NULL;
 struct object *cur_weapon = NULL;
 struct real_pass rpass;			/* For protection's sake! */
-int def_array[MAXPDEF][MAXPATT];	/* Pre-def'd chars */
 int char_type = -1;			/* what type of character is player */
 int foodlev = 1;			/* the more you carry, the more food you need */
 int ntraps;				/* Number of traps on this level */

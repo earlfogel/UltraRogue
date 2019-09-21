@@ -16,8 +16,6 @@
 /*
  * Maximum number of different things
  */
-#define MAXPDEF		100
-#define MAXPATT		100
 #define	MAXROOMS	9
 #define	MAXTHINGS	9
 #define	MAXOBJ		7
@@ -957,7 +955,6 @@ extern struct real_pass rpass;		/* For protection's sake! */
 extern char *cnames[][11];		/* Character level names */
 extern char curpurch[];			/* name of item ready to buy */
 extern char PLAYER;			/* what the player looks like */
-extern int def_array[MAXPDEF][MAXPATT];	/* Pre-def'd chars */
 extern int resurrect;			/* resurrection counter */
 extern int char_type;			/* what type of character is player */
 extern int foodlev;			/* how fast he eats food */
