@@ -269,7 +269,8 @@ bool thrown;
 	    /* Merchants just disappear if hit */
 	    /* increases prices and curses objects from now on though */
 	    if (on(*tp, CANSELL)) {
-		msg("The %s disappears with his wares in a flash.",mname);
+		msg("The %s disappears with %s wares in a flash.",mname,
+		    (rnd(2)? "his": "her"));
 		killed(item, FALSE, FALSE);
 		aggravate();
 		luck++;

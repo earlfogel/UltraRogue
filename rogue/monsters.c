@@ -253,16 +253,18 @@ bool max_monster;
     if (ISWEARING(R_AGGR))
 	runto(cp, &hero);
 
-    /* see if monster is friendly */
-    i = roll(1,100);
-    if (i == 0 || (on(*tp, LOWFRIENDLY) && i < (pstats.s_charisma - 8)) ||
-	(on(*tp, MEDFRIENDLY) && i < 2 * (pstats.s_charisma - 8)) ||
-	(on(*tp, HIGHFRIENDLY) && i < 3 * (pstats.s_charisma - 8)))
-    {
-	/* turn_on(*tp, ISFRIENDLY); */
-	turn_off(*tp, ISMEAN);
-	tp->t_dest = &(tp->t_pos);
-	turn_off(*tp, ISRUN);
+    /* see if we can charm it */
+    if (type < nummonst) {  /* except friendly fiend and lucifer */
+	i = roll(1,100);
+	if (i == 0 || (on(*tp, LOWFRIENDLY) && i < (pstats.s_charisma - 8)) ||
+	    (on(*tp, MEDFRIENDLY) && i < 2 * (pstats.s_charisma - 8)) ||
+	    (on(*tp, HIGHFRIENDLY) && i < 3 * (pstats.s_charisma - 8)))
+	{
+	    /* turn_on(*tp, ISFRIENDLY); */
+	    turn_off(*tp, ISMEAN);
+	    tp->t_dest = &(tp->t_pos);
+	    turn_off(*tp, ISRUN);
+	}
     }
 
     if (on(*tp, ISDISGUISE))
@@ -903,7 +905,8 @@ struct thing *tp;
     }
 
     /* Display the goods */
-    msg("The %s shows you his wares.--More--", monsters[nummonst].m_name);
+    msg("The %s shows you %s wares.--More--", monsters[nummonst].m_name,
+	(rnd(2)? "his": "her"));
     wait_for(' ');
     msg("");
     clearok(cw, TRUE);
