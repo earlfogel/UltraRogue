@@ -612,14 +612,15 @@ bool thrown;
 		else {
 		    if (!save(VS_PETRIFICATION) && rnd(100) < 3) {
 			msg("The %s's touch petrifies you.", mname);
-			if (difficulty >= 2 || no_command) {
+			if (difficulty >= 2 && no_command) {
 			    msg("You are turned to stone !!! --More--");
 			    wait_for(' ');
 			    death(D_PETRIFY);
 			    return TRUE;
 			} else {
-			    msg("Your body begins to solidify.");
+			    msg("You almost turn to stone !!!");
 			    no_command = rnd(STONETIME) + 2;
+			    fighting = FALSE;
 			}
 		    }
 		    else {
@@ -930,10 +931,8 @@ int wplus;
 	   (10 - op_arm);
 
     /* give monsters a chance to hit well armored player and vice versa */
-    if (difficulty == 2 && need > 20)
+    if (difficulty >= 2 && need > 20)
 	need = 20 + ((need - 20)/2);
-    else if (difficulty > 2 && need > 20)
-	need = 20 + ((need - 20)/2) - 2;
 
     return (res+wplus >= need);
 }
