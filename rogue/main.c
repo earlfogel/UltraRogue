@@ -192,6 +192,8 @@ char **envp;
 	init_monsters('r');  /* random */
     } else if (argc >= 2 && strcmp(argv[1], "-ma") == 0) {
 	init_monsters('a');  /* all */
+    } else if (argc >= 2 && strcmp(argv[1], "-mm") == 0) {
+	init_monsters('m');  /* more monsters */
     } else {
 	init_monsters('+');  /* classic plus */
     }

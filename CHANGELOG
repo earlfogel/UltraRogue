@@ -1,3 +1,40 @@
+September 2019
+--------------
+
+Special abilities for gods.
+
+Can genocide shopkeeper, quartermaster and yourself, if you dare.
+
+Don't fight friendly monsters ('f' and 'F' commands).  Hitting a friendly
+monster makes them decidedly unfriendly.
+
+Don't show bag letter when adding item to purse, to avoid confusion
+with revised 'A'pply command.
+
+Protected crystalline armor may shatter in hard games.
+
+Loss of intelligence or wisdom is temporary in easy games,
+and only sometimes permanent in regular games.
+
+Applying artifacts in hard games is a bit safer.
+
+Wizard (software developer) can change difficuly level.
+
+Friendly monsters don't chase you.
+
+Skip most friendly monsters at runtime so we don't have to edit monsdata.c.
+
+New -mm command-line option to include more monsters.
+
+Make scroll of peace less powerful.
+
+Don't show score if developer/wizard mode was used.
+
+Fewer "breaks free from the hold" messages.
+
+Make the middle levels more interesting.
+
+
 August 2019
 -----------
 
@@ -161,12 +198,13 @@ t_flags and m_flags arrays from 10 and 4 to 16 each.
 This lets new monsters have new abilities and lets us
 add new flags (i.e. CLASSIC).
 
-Now includes most monsters from 1.0.3 with a command-line
-option to choose which set to use:
+Now includes most monsters from 1.0.3 with command-line options
+to choose which ones to use:
   -mc: classic monsters from 1.0.2
   -mr: a random selection of monsters
   -ma: all 300+ monsters
-The default is classic monsters plus a few random extras for variety.
+  -mm: classic monsters plus lots of random extras
+The default is classic monsters plus a few random extras.
 
 Defined a few new constants in rogue.h so array sizes aren't hard
 coded in multiple places (NT_FLAGS, NM_FLAGS, NMSGS, NFINGERS).
