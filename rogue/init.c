@@ -303,10 +303,11 @@ init_materials ()
 /*
  * init_monsters:
  *	Choose which monsters to use:
- *	c - classic monsters from v 1.0.2
- *	a - all 300+ monsters
+ *	c - classic monsters from urogue 1.0.2
  *	r - a random assortment
- *	default - classic monsters plus a random assortment
+ *	a - all 400+ monsters
+ *	m - classic monsters plus lots of random extras
+ *	default - classic monsters plus a few random extras
  */
 
 void 
@@ -346,14 +347,23 @@ init_monsters (char flag)
 	} else if (flag == 'a') {  /* Keep all monsters */
 	    /* do nothing */
 
-	} else {  /* The classic monsters plus a few extras */
+	} else {  /* The classic monsters plus random extras */
 	    bool classic = FALSE;
+	    bool friendly = FALSE;
 	    for (j=0; j<NM_FLAGS; j++) {
 		if (monsters[i].m_flags[j] == CLASSIC) {
 		    classic = TRUE;
 		}
+		if (monsters[i].m_flags[j] == ISFRIENDLY
+		 || monsters[i].m_flags[j] == HIGHFRIENDLY) {
+		    friendly = TRUE;
+		}
 	    }
-	    if (!classic && rnd(6) > 0) {
+	    if (classic) {
+		nmonst++;
+	    } else if ((friendly && rnd(12) > 0)
+		|| (flag != 'm' && rnd(6) > 0)
+		|| (flag == 'm' && rnd(3) > 0)) {
 		monsters[i].m_normal = FALSE;
 		monsters[i].m_wander = FALSE;
 		keep = FALSE;
