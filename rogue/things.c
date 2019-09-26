@@ -133,18 +133,18 @@ bool drop;
 	    if (r_know[obj->o_which] || (obj->o_flags & ISPOST))
 		sprintf(prbuf, "A%s%s ring of %s(%s)", 
 		    game_over && obj->o_flags & ISCURSED ? " cursed" : 
-		    obj->o_flags & ISOWNED ? "Claimed " :
+		    obj->o_flags & ISOWNED ? " Claimed" :
 		    obj->o_flags & CANRETURN ? " claimed" : "", ring_num(obj),
 		    r_magic[obj->o_which].mi_name, r_stones[obj->o_which]);
 	    else if (r_guess[obj->o_which])
-		sprintf(prbuf, "A %sring called %s(%s)",
-		    obj->o_flags & ISOWNED ? "Claimed " :
-		    obj->o_flags & CANRETURN ? "claimed " : "",
+		sprintf(prbuf, "A%sring called %s(%s)",
+		    obj->o_flags & ISOWNED ? " Claimed" :
+		    obj->o_flags & CANRETURN ? " claimed" : "",
 		    r_guess[obj->o_which], r_stones[obj->o_which]);
 	    else
 		sprintf(prbuf, "A%s %s ring", 
-		    obj->o_flags & ISOWNED ? "Claimed " :
-		    obj->o_flags & CANRETURN ? "claimed " : 
+		    obj->o_flags & ISOWNED ? " Claimed" :
+		    obj->o_flags & CANRETURN ? " claimed" : 
 		    vowelstr(r_stones[obj->o_which]),
 		    r_stones[obj->o_which]);
 	otherwise:
