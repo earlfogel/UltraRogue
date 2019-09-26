@@ -52,6 +52,10 @@ bool no_unique;
 	}
 	if (d < 1)
 	    d = rnd(NLEVMONS) + 1;
+	if (level > 35 && level < 70 && rnd(100) == 0) {
+	    /* make the mid-dungeon more interesting */
+	    d += 30;
+	}
 	if (d > nummonst - NUMUNIQUE - 1) {
 	    if (no_unique)
 		d = rnd(range) + (nummonst - NUMUNIQUE - 1) - (range - 1);
@@ -396,7 +400,7 @@ int x;
 	off(*tp, ISHELD) && off(*tp, ISRUN) && !is_stealth(&player) &&
 	(off(player, ISINVIS) || on(*tp, CANSEE))))
     {
-	if (off(*tp, ISFRIENDLY)) {
+	if (off(*tp, ISFRIENDLY) || levtype == POSTLEV) {
 	    tp->t_dest = &hero;
 	    turn_on(*tp, ISRUN);
 	    turn_off(*tp, ISDISGUISE);
@@ -478,14 +482,15 @@ int x;
 	    else {
 		if (!save(VS_PETRIFICATION) && rnd(100) < 3) {
 		    msg("The gaze of the %s petrifies you.", mname);
-		    if (difficulty >= 2 || no_command) {
+		    if (difficulty >= 2 && no_command) {
 			msg("You are turned to stone !!! --More--");
 			wait_for(' ');
 			death(D_PETRIFY);
 			return it;
 		    } else {
-			msg("Your body begins to solidify.");
+			msg("You almost turn to stone !!!");
 			no_command = STONETIME;
+			fighting = FALSE;
 		    }
 		}
 		else {
@@ -522,7 +527,7 @@ genocide ()
 {
     struct linked_list *ip;
     struct thing *mp;
-    int i;
+    int i, ch;
     struct linked_list *nip;
     int num_monst = nummonst-1, pres_monst=1, num_lines=2*(LINES-3);
     short which_monst;
@@ -574,7 +579,13 @@ genocide ()
 	if ((num_monst -= num_lines) > 0) {
 	    mvwaddstr(hw, LINES-1, 0, morestr);
 	    draw(hw);
-	    (void) wgetch(hw);
+	    ch = wgetch(hw);
+	    if (ch >= '1' && ch <= '9') {
+		ungetch(ch);
+		mvwaddstr(hw, 0, 0, "Which monster do you wish to wipe out? ");
+		draw(hw);
+		goto get_monst;
+	    }
 	}
 
 	else {
