@@ -477,7 +477,6 @@ aggravate ()
  * calm:
  *	calm the monsters around you
  */
-
 void 
 calm (blessed)
 bool blessed;
@@ -487,7 +486,7 @@ bool blessed;
 
     for (mi = mlist; mi != NULL; mi = next(mi)) {
 	tp = THINGPTR(mi);
-	if (roomin(&hero) == roomin(&tp->t_pos) ||
+	if ((blessed && roomin(&hero) == roomin(&tp->t_pos)) ||
 	    (abs(hero.x - tp->t_pos.x) < 10 && abs(hero.y - tp->t_pos.y) < 10)
 	) {
 	    tp->t_dest = &(tp->t_pos);
