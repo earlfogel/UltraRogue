@@ -32,7 +32,7 @@ runners (daemon_arg *arg) /*ARGSUSED*/
 	    tp->t_dest = &hero;
 	    if (tp->t_stats.s_hpt < tp->maxstats.s_hpt)
 		turn_on(*tp, ISFLEE);
-	    if (cansee(tp->t_pos.y, tp->t_pos.x))
+	    if (!fighting && cansee(tp->t_pos.y, tp->t_pos.x))
 		msg("The %s breaks free from the hold spell!!!", 
 			monsters[tp->t_index].m_name);
 	}
