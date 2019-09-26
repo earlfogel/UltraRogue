@@ -215,6 +215,12 @@ int monst;
     }
 
     /*
+     * no score for wizard/developer
+     */
+    if (waswizard)
+	return;
+
+    /*
      * Open file and read list
      */
 
@@ -253,41 +259,38 @@ int monst;
     /*
      * Insert player in list if need be
      */
-    if (!waswizard)
-    {
-	for (scp = top_ten; scp < &top_ten[10]; scp++) {
-	    if (scp->sc_game_id == game_id)
-		regame++;	/* we've seen this game before */
-	}
-	for (scp = top_ten; scp < &top_ten[10]; scp++) {
-	    if (amount > scp->sc_score)
-		break;
-	}
+    for (scp = top_ten; scp < &top_ten[10]; scp++) {
+	if (scp->sc_game_id == game_id)
+	    regame++;	/* we've seen this game before */
+    }
+    for (scp = top_ten; scp < &top_ten[10]; scp++) {
+	if (amount > scp->sc_score)
+	    break;
+    }
 
-	if (scp < &top_ten[10] && !regame) {
-	    /*
-	     * Congrats, made it into top 10
-	     */
-	    sc2 = &top_ten[9];
-	    while (sc2 > scp) {	/* make room for new entry */
-		*sc2 = sc2[-1];
-		sc2--;
-	    }
-	    scp->sc_score = amount;
-	    scp->sc_gold = purse;
-	    strcpy(scp->sc_name, whoami);
-	    sprintf(prbuf, ", Level %d %s", pstats.s_lvl, 
-			cnames[player.t_ctype][min(pstats.s_lvl,11) - 1]);
-	    strcat(scp->sc_name, prbuf);
-	    scp->sc_flags = flags;
-	    if (flags == WINNER || flags == TOTAL)
-		scp->sc_level = max_level;
-	    else
-		scp->sc_level = level;
-	    scp->sc_monster = monst;
-	    scp->sc_artifacts = picked_artifact;
-	    scp->sc_game_id = game_id;
+    if (scp < &top_ten[10] && !regame) {
+	/*
+	 * Congrats, made it into top 10
+	 */
+	sc2 = &top_ten[9];
+	while (sc2 > scp) {	/* make room for new entry */
+	    *sc2 = sc2[-1];
+	    sc2--;
 	}
+	scp->sc_score = amount;
+	scp->sc_gold = purse;
+	strcpy(scp->sc_name, whoami);
+	sprintf(prbuf, ", Level %d %s", pstats.s_lvl, 
+		    cnames[player.t_ctype][min(pstats.s_lvl,11) - 1]);
+	strcat(scp->sc_name, prbuf);
+	scp->sc_flags = flags;
+	if (flags == WINNER || flags == TOTAL)
+	    scp->sc_level = max_level;
+	else
+	    scp->sc_level = level;
+	scp->sc_monster = monst;
+	scp->sc_artifacts = picked_artifact;
+	scp->sc_game_id = game_id;
     }
     if (flags != SCOREIT) {
 	refresh();
