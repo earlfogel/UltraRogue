@@ -401,9 +401,9 @@ struct h_list helpstr[] = {
 	{'n',	"	down & right"},
 	{'<',	"CTRL><dir> run and search"},
 	{'<',	"SHIFT><dir> run til adjacent"},
-	{'m',	"<dir>	move onto without picking up"},
-	{'t',	"<dir>	throw something"},
-	{'z',	"<dir>	zap a wand or staff"},
+	{'m',	"	move onto without picking up"},
+	{'t',	"	throw something"},
+	{'z',	"	zap a wand or staff"},
 	{'>',	"	go down a staircase"},
 	{'s',	"	search for trap/secret door"},
 	{'.',	"	rest for a while"},
@@ -429,7 +429,7 @@ struct h_list helpstr[] = {
 	{'^',	"	set a trap"},
 	{'G',	"	sense gold"},
 	{'D',	"	dip something (into a pool)"},
-	{CTRL('T'),	"<dir>	take (steal) from (direction)"},
+	{CTRL('T'),	"	take (steal) from (direction)"},
 	{CTRL('R'),	"	redraw screen"},
 	{CTRL('P'),	"	back up to 10 previous messages"},
 	{ESCAPE,	"	cancel command"},
@@ -437,8 +437,8 @@ struct h_list helpstr[] = {
 	{'S',	"	save game"},
 	{'Q',	"	quit"},
 	{'=',	"	listen for monsters"},
-	{'f',	"<dir>	fight monster"},
-	{'F',	"<dir>	fight monsters"},
+	{'f',	"	fight monster"},
+	{'F',	"	fight monsters"},
 /*
  * Wizard commands.  Identified by (h_ch != 0 && h_desc == 0).
  */
