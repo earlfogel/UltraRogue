@@ -273,6 +273,8 @@ do_prayer:
 
     if ((cleric_spells[which_prayer].s_cost + pray_time) > pray_points) {
 	msg("Your prayer fails.");
+	count = 0;
+	repeat_prayer = -1;
 	return;
     }
 
@@ -506,6 +508,8 @@ do_spell:
 
     if ((spell_power + magic_spells[which_spell].s_cost) > avail_points) {
 	msg("Your attempt fails.");
+	count = 0;
+	repeat_spell = -1;
 	return;
     }
 
