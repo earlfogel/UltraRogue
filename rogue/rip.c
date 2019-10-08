@@ -217,7 +217,7 @@ int monst;
     /*
      * no score for wizard/developer
      */
-    if (waswizard)
+    if (canwizard)
 	return;
 
     /*
