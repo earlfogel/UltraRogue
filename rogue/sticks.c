@@ -261,7 +261,7 @@ bool blessed;
 	{
 	    static struct object bolt =
 	    {
-		'*' , {0, 0}, "", 0, 0, "1d4" , 0, 0, 100, 1
+		'*' , {0, 0}, 0, 0, "1d4" , 0, 0, 100, 1
 	    };
 
 	    char buf[5];
@@ -891,8 +891,10 @@ int damage;
 			    (strcmp(name,"flame")== 0 && on(*tp, NOFIRE)) ||
 			    (strcmp(name,"lightning bolt")==0 && 
 							on(*tp,NOBOLT))) {
-			    msg("The %s has no effect on the %s.", name,
-				on(player, ISBLIND) ? "monster" : mname);
+			    if (!fighting) {
+				msg("The %s has no effect on the %s.", name,
+				    on(player, ISBLIND) ? "monster" : mname);
+			    }
 			}
 
 			else if ((strcmp(name, "lightning bolt") == 0) &&
@@ -920,8 +922,10 @@ int damage;
 			}
 
 			else {
-			    msg("The %s hits the %s.", name,
-				on(player, ISBLIND) ? "monster" : mname);
+			    if (!fighting) {
+				msg("The %s hits the %s.", name,
+				    on(player, ISBLIND) ? "monster" : mname);
+			    }
 			    if (get_points) runto(&pos, &hero);
 			}
 			used = TRUE;
