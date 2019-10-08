@@ -29,7 +29,7 @@ struct matrix att_mat[5] = {
 };
 
 static bool killed_one = FALSE;
-static bool keep_fighting;
+static bool keep_fighting;  /* even if we kill something */
 
 void 
 do_fight (y, x, multiple)
@@ -210,6 +210,11 @@ bool thrown;
 		    if (item == NULL) {
 			debug("Can't find crystalline armor being worn.");
 		    }
+		    else if (cur_armor->o_flags & ISPROT) {
+			msg("Your armor vibrates uncomfortably.");
+			obj->o_flags &= ~ISPROT;
+			fighting = FALSE;
+		    }
 		    else {
 			msg("Your armor shatters from the shriek.");
 			cur_armor = NULL;
@@ -217,6 +222,7 @@ bool thrown;
 			freeletter(item);
 			discard(item);
 			inpack--;
+			fighting = FALSE;
 		    }
 		}
 	    }
@@ -405,6 +411,11 @@ bool thrown;
 		    if (item == NULL) {
 			debug("Can't find crystalline armor being worn.");
 		    }
+		    else if (cur_armor->o_flags & ISPROT) {
+			msg("Your armor vibrates uncomfortably.");
+			obj->o_flags &= ~ISPROT;
+			fighting = FALSE;
+		    }
 		    else {
 			msg("Your armor is shattered by the blow.");
 			cur_armor = NULL;
@@ -412,6 +423,7 @@ bool thrown;
 			freeletter(item);
 			discard(item);
 			inpack--;
+			fighting = FALSE;
 		    }
 		}
 		else if (rnd(mp->t_stats.s_str) > 15) {
