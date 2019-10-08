@@ -47,8 +47,8 @@ monster in reach.
 
 There are fewer interruptions when fighting, and fewer messages to
 distract you.  If you are much stronger than the monsters around
-you, this means you can press 'F' and then hold down the space bar and
-watch them all disappear.
+you, this means you can press 'F' and then press space until they
+all disappear.
 
 When choosing monsters for you, urogue does its best to avoid friendly
 monsters and monsters that divide when hit.
