@@ -485,7 +485,6 @@ int damage;
     obj->o_dplus = 0;
     obj->o_flags = 0;
     obj->o_mark[0] = '\0';
-    obj->o_text = NULL;
     obj->o_launch = 0;
     obj->o_weight = 0;
 

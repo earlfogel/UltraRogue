@@ -6,7 +6,6 @@
 #include "rogue.h"
 #include <ctype.h>
 #include <string.h>
-#define  o_tradevalue  art_stats.ar_flags
 
 /*
  * do_post:
@@ -65,7 +64,7 @@ do_post()
 		worth = 25;
 	    worth *= (level == 0 ? 1 : luck + 3);	/* slightly expensive */
 	    worth = (worth/2) + (roll(6,worth)/6);	/* and randomized */
-	    op->o_tradevalue = worth;
+	    op->o_worth = worth;
 	    mvaddch(tp.y,tp.x,op->o_type);
 	}
 	trader = 0;
@@ -105,7 +104,7 @@ price_it()
 	if ((item = find_obj(hero.y,hero.x)) == NULL)
 	    return FALSE;
 	obj = OBJPTR(item);
-	worth = obj->o_tradevalue;
+	worth = obj->o_worth;
 	if (worth < 0) {
 	    msg("That's not for sale.");
 	    return FALSE;
@@ -214,8 +213,7 @@ sell_it()
 	    }
 	} until (ch == 'y');
 	mpos = 0;
-	if (obj->o_type != ARTIFACT)
-	    obj->o_tradevalue = wo;
+	obj->o_worth = wo;
 	if (drop(item) == TRUE) {		/* drop this item */	
 	    purse += wo;			/* give player some money */
 	    ++trader;				/* another transaction */

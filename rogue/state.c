@@ -275,9 +275,6 @@ ur_write_object(FILE *savef, struct object *o)
     ur_write_long(savef,      URS_OBJECT);
     ur_write_int(savef,       o->o_type);
     ur_write_coord(savef,     o->o_pos);
-#if 0
-    ur_write_string(savef,    o->o_text);
-#endif
     ur_write_char(savef,      o->o_launch);
     ur_write_string(savef,    o->o_damage);
     ur_write_string(savef,    o->o_hurldmg);
@@ -290,6 +287,7 @@ ur_write_object(FILE *savef, struct object *o)
     ur_write_int(savef,       o->o_group);
     ur_write_int(savef,       o->o_weight);
     ur_write(savef,          &o->o_mark[0], MARKLEN);
+    ur_write_long(savef,      o->o_worth);
 
     if (o->o_type == ARTIFACT)
 	ur_write_artifact(savef, &o->art_stats);
@@ -314,9 +312,6 @@ ur_read_object(FILE *savef)
 
     o->o_type = ur_read_int(savef);
     o->o_pos  = ur_read_coord(savef);
-#if 0
-    o->o_text = ur_read_string(savef);
-#endif
     o->o_launch = ur_read_char(savef);
     o->o_damage = ur_read_string(savef);
     o->o_hurldmg = ur_read_string(savef);
@@ -329,6 +324,7 @@ ur_read_object(FILE *savef)
     o->o_group = ur_read_int(savef);
     o->o_weight = ur_read_int(savef);
     ur_read(savef, &o->o_mark[0], MARKLEN);
+    o->o_worth = ur_read_long(savef);
 
     if (o->o_type == ARTIFACT) {
 	struct artifact *a;
@@ -1118,6 +1114,7 @@ save_file(FILE *savef)
     ur_write_int(savef, levtype);
     ur_write_int(savef, purse);
     ur_write_int(savef, total);
+    ur_write_int(savef, trader);
     ur_write_int(savef, spell_power);
     ur_write_int(savef, pray_time);
     ur_write_int(savef, pack_index-pack_letters);
@@ -1329,6 +1326,7 @@ restore_file(FILE *savef)
     levtype = ur_read_int(savef);
     purse = ur_read_int(savef);
     total = ur_read_int(savef);
+    trader = ur_read_int(savef);
     spell_power = ur_read_int(savef);
     pray_time = ur_read_int(savef);
     pack_index = ur_read_int(savef) + pack_letters;

@@ -868,7 +868,6 @@ struct monster {
 struct object {
     int o_type;				/* What kind of object it is */
     coord o_pos;			/* Where it lives on the screen */
-    char *o_text;			/* What it says if you read it */
     char o_launch;			/* What you need to launch it */
     char *o_damage;			/* Damage if used like sword */
     char *o_hurldmg;			/* Damage if thrown */
@@ -881,6 +880,7 @@ struct object {
     int o_group;			/* Group number for this object */
     int o_weight;			/* weight of this object */
     char o_mark[MARKLEN];		/* Mark the specific object */
+    unsigned long o_worth;		/* value in trading post */
     struct artifact art_stats;		/* substructure for artifacts */
 };
 /*
