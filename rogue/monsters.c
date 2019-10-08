@@ -71,8 +71,7 @@ bool no_unique;
 		   : !monsters[d].m_normal);
 
     if (nasty)
-	msg("You sense the presence of a %s.", monsters[d].m_name);
-	/* msg("You feel a strange sense of unease. */
+	msg("You feel a strange sense of unease.
 
     return d;
 }
