@@ -285,6 +285,12 @@ line_two:
 	health_state = "  Limping";
     } else if (on(player, SUPEREAT) || on(player, POWEREAT)) {
 	health_state = "  Getting Hungry";
+    } else if (cur_armor == NULL && cur_weapon == NULL) {
+	health_state = "  No Armor, No Weapon";
+    } else if (cur_armor == NULL) {
+	health_state = "  No Armor";
+    } else if (cur_weapon == NULL) {
+	health_state = "  No Weapon";
     } else {
 	health_state = NULL;
     }
