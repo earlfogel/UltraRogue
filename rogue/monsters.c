@@ -22,6 +22,7 @@ bool no_unique;
 {
     int d, cur_level, range, i; 
     float nlevmons = NLEVMONS;
+    bool nasty;
 
     /* 
      * Do we want a merchant? Merchant is always in place 'nummonst' 
@@ -52,9 +53,12 @@ bool no_unique;
 	}
 	if (d < 1)
 	    d = rnd(NLEVMONS) + 1;
-	if (level > 35 && level < 70 && rnd(100) == 0) {
+	if (levtype == NORMLEV && level > 35 && level < 70 && rnd(50) == 0) {
 	    /* make the mid-dungeon more interesting */
-	    d += 30;
+	    d += nlevmons * 10;	/* a monster rises from the depths */
+	    nasty = TRUE;
+	} else {
+	    nasty = FALSE;
 	}
 	if (d > nummonst - NUMUNIQUE - 1) {
 	    if (no_unique)
@@ -65,6 +69,11 @@ bool no_unique;
     }
     while  ( wander ? !monsters[d].m_wander || !monsters[d].m_normal 
 		   : !monsters[d].m_normal);
+
+    if (nasty)
+	msg("You sense the presence of a %s.", monsters[d].m_name);
+	/* msg("You feel a strange sense of unease. */
+
     return d;
 }
 
