@@ -16,6 +16,11 @@
     See the file LICENSE.TXT for full copyright and licensing information.
  */
 
+#ifdef _WIN32
+#define _POSIX
+#define sig_t __p_sig_fn_t
+#endif
+
 #include <stdio.h>
 #include "curses.h"
 #include <fcntl.h>
@@ -50,9 +55,7 @@ char **envp;
     bool alldone,predef;
     time_t now;
 
-#ifndef _WIN32
     (void) signal(SIGQUIT, SIG_IGN); 		/* ignore quit for now */
-#endif
 
 #if 0
     mtrace();	/* glibc malloc debugging */
@@ -116,15 +119,6 @@ char **envp;
      strcpy(fd_data[1].mi_name, fruit);
 
     /*
-     * check for print-score option
-     */
-    if (argc == 2 && strcmp(argv[1], "-s") == 0) {
-	waswizard = TRUE;
-	score(0, SCOREIT, 0);
-	exit(0);
-    }
-
-    /*
      * Check to see if player is a wizard
      */
 #ifdef EARL
@@ -138,13 +132,22 @@ char **envp;
 	canwizard = TRUE;
     }
 
+    /*
+     * check for print-score option
+     */
+    if (argc >= 2 && strcmp(argv[1], "-s") == 0) {
+	waswizard = TRUE;
+	score(0, SCOREIT, 0);
+	exit(0);
+    }
+
     lowtime = (int) time(&now);
     dnum = (wizard && getenv("SEED") != NULL ?
 	atoi(getenv("SEED")) :
 	lowtime + getpid());
     seed = dnum;
     srand48(seed);
-    game_id = rnd(INT_MAX);
+    game_id = rnd(INT_MAX-1) + 1;
 
     init_things();			/* Set up probabilities of things */
     init_fd();				/* Set up food probabilities */
@@ -346,8 +349,23 @@ char *s;
  * rnd:
  *	Pick a very random number.
  *
- * Concatenate four short random numbers to make a long one.
- * This is required on Windows, where RAND_MAX is quite small.
+ * On Windows, RAND_MAX is quite small, so we concatenate four short
+ * random numbers to make a long one.
+ *
+ * I.e. here's a walk-through of the 32 bits after each pass,
+ * where the numbers 1 to 4 show which bits are set on each call to rand:
+ *
+ * start       00000000 00000000 00000000 00000000
+ * rand & 255  00000000 00000000 00000000 11111111
+ * shift 8     00000000 00000000 11111111 00000000
+ * rand & 255  00000000 00000000 11111111 22222222
+ * shift 8     00000000 11111111 22222222 00000000 
+ * rand & 255  00000000 11111111 22222222 33333333 
+ * shift 7     01111111 12222222 23333333 30000000 
+ * rand & 127  01111111 12222222 23333333 34444444 
+ *
+ * This leave a zero in the highest order (left-most) bit, so we don't
+ * generate negative numbers.
  *
  * see http://forums.codeguru.com/showthread.php?534679-Generating-big-random-numbers-in-C
  */
@@ -356,7 +374,11 @@ int
 rnd (range)
 int range;
 {
+#ifndef _WIN32
+	return (range == 0 ? 0 : (lrand48() & 0x7fffffff) % range);
+#else
     return (range == 0 ? 0 : ((((rand() & 255)<<8 | (rand() & 255))<<8 | (rand() & 255))<<7 | (rand() & 127)) % range);
+#endif
 }
 
 /*
@@ -381,18 +403,17 @@ setup ()
 {
 
 #ifndef _WIN32
-#ifdef BSD4
+#   ifdef BSD4
     void  tstop();
     signal(SIGTSTP, (sig_t)tstop);
-#endif
-#ifdef USGV5
+#   endif
+#   ifdef USGV5
     int  tstp();
     signal(SIGTSTP, tstp);
+#   endif
 #endif
-
     signal(SIGHUP, (sig_t)quit);
     signal(SIGINT, (sig_t)quit);
-#endif
 
     crmode();				/* Cbreak mode */
     noecho();				/* Echo off */
@@ -411,8 +432,17 @@ tweak_settings (bool first_time)
     struct linked_list *item;
     struct object *obj;
 
+    /* normal difficulty */
+    if (difficulty == 2) {
+	if (first_time) {
+	    if (player.t_ctype == C_THIEF || player.t_ctype == C_FIGHTER) {
+		p_know[P_TFIND] = TRUE;
+		s_know[S_IDENT] = TRUE;
+	    }
+	}
+
     /* urogue -easy */
-    if (difficulty < 2) {
+    } else if (difficulty < 2) {
 	if (LINES > maxpack + 2)
 	    maxpack += 2;  /* pack can hold 2 more items */
 
