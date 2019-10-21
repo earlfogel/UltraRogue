@@ -3,6 +3,11 @@
  *
  */
 
+#ifdef _WIN32
+#define _POSIX
+#define sig_t __p_sig_fn_t
+#endif
+
 #include "curses.h"
 #include <ctype.h>
 #include <signal.h>
@@ -122,11 +127,10 @@ command ()
 		if (ch == KEY_END)   ch = 'b';
 		if (ch == KEY_NPAGE) ch = 'n';
 		if (ch == KEY_B2)    ch = 's';
-		if (ch == 'x') {
+		if (ch == 'x')
 		    ch = '.'; /* rest - left handed */
-		} else if (ch == CTRL('f') && !wizard) {
+		if (ch == CTRL('f') && !wizard)
 		    ch = 'F'; /* a common typo */
-		}
 		if (mpos != 0 && !running)
 		    msg("");	/* Erase message if its there */
 	    }
@@ -158,7 +162,7 @@ command ()
 		    case 'Y': case 'U': case 'B': case 'N':
 		    case 'q': case 'r': case 's': case 'm':
 		    case 't': case 'c': case 'I': case '.':
-		    case 'z': case 'p':
+		    case 'z': case 'p': case 'd':
 		    case CTRL('K'): case CTRL('L'): case CTRL('H'): case CTRL('J'): 
 		    case CTRL('Y'): case CTRL('U'): case CTRL('B'): case CTRL('N'):
 			break;
@@ -364,9 +368,7 @@ command ()
 		       if(canwizard) {
 				msg("Welcome, oh mighty wizard.");
 				wizard = waswizard = TRUE;
-#ifndef _WIN32
 				(void) signal(SIGQUIT, SIG_DFL);
-#endif
 		       }
 		       else
 			    msg("Try it again.");
@@ -666,16 +668,17 @@ command ()
 void 
 quit ()
 {
+    int ch;
+
     /*
      * Reset the signal in case we got here via an interrupt
      */
-#ifndef _WIN32
     if (signal(SIGINT, (sig_t)quit) != (sig_t) quit)
-#endif
 	mpos = 0;
     msg("Really quit?");
     draw(cw);
-    if (readchar() == 'y')
+    ch = readchar();
+    if (ch == 'y')
     {
 	clear();
 	move(LINES-1, 0);
@@ -685,9 +688,7 @@ quit ()
     }
     else
     {
-#ifndef _WIN32
 	signal(SIGINT, (sig_t)quit);
-#endif
 	wmove(cw, 0, 0);
 	wclrtoeol(cw);
 	status(FALSE);
