@@ -73,8 +73,10 @@ new_level (
     addch(STAIRS);
 
     if (ltype == POSTLEV) {
-        item = new_item(sizeof (struct thing));         /* Friendly Fiend */
-        new_monster(item, nummonst+2, &stairs, TRUE);
+	if (monsters[nummonst+2].m_wander) {
+	    item = new_item(sizeof (struct thing));         /* Friendly Fiend */
+	    new_monster(item, nummonst+2, &stairs, TRUE);
+	}
     }
     else put_things(ltype);                     /* Place objects (if any) */
 
@@ -232,7 +234,7 @@ new_level (
 	bool greed = FALSE;
 	for (item = mlist; item != NULL; item = next(item)) {
 	    tp = (struct thing *) ldata(item);
-	    if (on(*tp, ISGREED)) {
+	    if (on(*tp, ISGREED) && off(*tp,ISFRIENDLY)) {
 		turn_on(*tp, ISRUN);
 		turn_on(*tp, ISMEAN);
 		tp->t_dest = &hero;
