@@ -908,12 +908,12 @@ bool thrown;
 
     /* damage greater than 1/3 of player's remaining hit points */
     damage = s_hpt - pstats.s_hpt;
-    if (damage > s_hpt/3) {
-	if (damage > 10)
-	    msg("Ouch! That hurts!");
+    if (damage > pstats.s_hpt/3) {
 	fighting = FALSE;
-    } else if (fighting && damage > s_hpt/5) {
-	msg("The %s scored an excellent hit on you!", mname);
+    }
+    if (fighting && damage > pstats.s_hpt/5) {
+	if (damage > 8)
+	    msg("The %s scored an excellent hit on you!", mname);
     }
 
     count = 0;
