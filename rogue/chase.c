@@ -387,6 +387,7 @@ bool flee;
 
     /* If we can breathe, we may do so */
     else if (on(*tp, CANBREATHE) && (shoot_dir = can_shoot(er, ee)) &&
+	     off(*tp, ISFRIENDLY) &&
 	     (rnd(100) < 67) &&
 	     (off(player, ISDISGUISE) || (rnd(tp->t_stats.s_lvl) > 6)) &&
 	     (DISTANCE(er->y, er->x, ee->y, ee->x) < BOLT_LENGTH*BOLT_LENGTH)) {
