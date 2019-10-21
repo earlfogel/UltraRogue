@@ -146,7 +146,7 @@ bool blessed;
 		msg("You are too weak to use it.");
 		return;
 	    }
-	    if (obj->o_flags & ISCURSED)
+	    if (obj != NULL && obj->o_flags & ISCURSED)
 		pstats.s_hpt /= 2;
 	    else if ((rp = roomin(&hero)) == NULL)
 		drain(hero.y-1, hero.y+1, hero.x-1, hero.x+1);
@@ -347,7 +347,7 @@ bool blessed;
 		else
 		    name = "ice";
 
-		if (which == WS_ELECT && obj->o_charges > 50)
+		if (which == WS_ELECT && obj != NULL && obj->o_charges > 50)
 		    damage = roll(6+rnd(6),6+rnd(3));
 		else
 		    damage = roll(6,6);
