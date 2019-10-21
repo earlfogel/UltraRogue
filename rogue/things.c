@@ -54,16 +54,12 @@ bool drop;
 	when FOOD:
 	    if (obj->o_count == 1)
 		sprintf(prbuf, "A%s %s", 
-			game_over && obj->o_flags & ISBLESSED ? " blessed" : 
-			game_over && obj->o_flags & ISCURSED ? " cursed" : 
 			obj->o_flags & ISOWNED ? "Claimed " :
 			obj->o_flags & CANRETURN ? " claimed" : 
 			vowelstr(fd_data[obj->o_which].mi_name), 
 			fd_data[obj->o_which].mi_name);
 	    else
 		sprintf(prbuf, "%d %s%ss", obj->o_count,
-			game_over && obj->o_flags & ISBLESSED ? "blessed " : 
-			game_over && obj->o_flags & ISCURSED ? "cursed " : 
 			obj->o_flags & ISOWNED ? "Claimed " :
 			obj->o_flags & CANRETURN ? "claimed " : "", 
 			fd_data[obj->o_which].mi_name);
@@ -132,12 +128,11 @@ bool drop;
         when RING:
 	    if (r_know[obj->o_which] || (obj->o_flags & ISPOST))
 		sprintf(prbuf, "A%s%s ring of %s(%s)", 
-		    game_over && obj->o_flags & ISCURSED ? " cursed" : 
 		    obj->o_flags & ISOWNED ? " Claimed" :
 		    obj->o_flags & CANRETURN ? " claimed" : "", ring_num(obj),
 		    r_magic[obj->o_which].mi_name, r_stones[obj->o_which]);
 	    else if (r_guess[obj->o_which])
-		sprintf(prbuf, "A%sring called %s(%s)",
+		sprintf(prbuf, "A%s ring called %s(%s)",
 		    obj->o_flags & ISOWNED ? " Claimed" :
 		    obj->o_flags & CANRETURN ? " claimed" : "",
 		    r_guess[obj->o_which], r_stones[obj->o_which]);
@@ -156,6 +151,14 @@ bool drop;
     if (obj->o_mark[0]) {
 	pb = &prbuf[strlen(prbuf)];
 	sprintf(pb, " <%s>", obj->o_mark);
+    }
+
+    /* Is it time to reveal blessed/cursed status? */
+    if (game_over && (obj->o_type == RING || obj->o_type == FOOD)) {
+	if (obj->o_flags & ISCURSED)
+	    strcat(prbuf, " (cursed)");
+	else if (obj->o_flags & ISBLESSED)
+	    strcat(prbuf, " (blessed)");
     }
 
     if (obj == cur_armor)
@@ -190,7 +193,7 @@ drop (item)
 struct linked_list *item;
 {
     char ch='.';
-    struct linked_list *obj;
+    struct linked_list *obj, *nobj;
     struct object *op;
 
     if (item == NULL) {
@@ -221,9 +224,19 @@ struct linked_list *item;
     /*
      * Take it out of the pack
      */
-    detach(pack, obj);
-    inpack--;
-    freeletter(obj);
+    if (count > 1 && op->o_count > count) {  /* drop some of them */
+        nobj = new_item(sizeof *op);
+        op->o_count -= count+1;
+        op = (struct object *) ldata(nobj);
+        *op = *((struct object *) ldata(obj));
+        op->o_count = count+1;
+        obj = nobj;
+	count = 0;
+    } else {
+	detach(pack, obj);
+	inpack--;
+	freeletter(obj);
+    }
 
     if(ch == POOL) {
 	msg("Your %s sinks out of sight.",inv_name(op,TRUE));
@@ -548,7 +561,7 @@ int nitems;
 
     start = magic;
     for (end = &magic[nitems], i = rnd(1000); magic < end; magic++) {
-	if (i <= magic->mi_prob)
+	if (i < magic->mi_prob)
 	    break;
     }
     if (magic == end) {
