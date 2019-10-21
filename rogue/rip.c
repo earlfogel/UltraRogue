@@ -5,6 +5,11 @@
  * @(#)rip.c	3.13 (Berkeley) 6/16/81
  */
 
+#ifdef _WIN32
+#define _POSIX
+#define sig_t __p_sig_fn_t
+#endif
+
 #include "curses.h"
 #include <time.h>
 #include <signal.h>
@@ -193,9 +198,7 @@ int monst;
     extern int fd_score;
 
 
-#ifndef _WIN32
     signal(SIGINT, (sig_t)byebye);
-#endif
 #ifdef USGV3
     noraw();
     nl();
@@ -215,9 +218,9 @@ int monst;
     }
 
     /*
-     * no score for wizard/developer
+     * no score at end of game for wizard/developer
      */
-    if (canwizard)
+    if (canwizard && flags != SCOREIT)
 	return;
 
     /*
@@ -337,6 +340,9 @@ int monst;
 		killer = killname(scp->sc_monster);
 		printf(" %s", killer);
 	    }
+
+	    if (canwizard)
+		printf(" (game #%d)", scp->sc_game_id);
 
 	    if (scp->sc_game_id == game_id) { /* the game we just played */
 		printf(" (just now).\n");
