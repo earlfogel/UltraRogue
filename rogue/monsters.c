@@ -22,7 +22,6 @@ bool no_unique;
 {
     int d, cur_level, range, i; 
     float nlevmons = NLEVMONS;
-    bool nasty;
 
     /* 
      * Do we want a merchant? Merchant is always in place 'nummonst' 
@@ -53,12 +52,9 @@ bool no_unique;
 	}
 	if (d < 1)
 	    d = rnd(NLEVMONS) + 1;
-	if (levtype == NORMLEV && level > 35 && level < 70 && rnd(50) == 0) {
+	if (levtype == NORMLEV && level > 35 && max_level < 70 && rnd(50) == 0) {
 	    /* make the mid-dungeon more interesting */
-	    d += nlevmons * 10;	/* a monster rises from the depths */
-	    nasty = TRUE;
-	} else {
-	    nasty = FALSE;
+	    d += nlevmons * 13;	/* a monster rises from the depths */
 	}
 	if (d > nummonst - NUMUNIQUE - 1) {
 	    if (no_unique)
@@ -69,9 +65,6 @@ bool no_unique;
     }
     while  ( wander ? !monsters[d].m_wander || !monsters[d].m_normal 
 		   : !monsters[d].m_normal);
-
-    if (nasty)
-	msg("You feel a strange sense of unease.");
 
     return d;
 }
@@ -675,7 +668,7 @@ int monster;
      * if none match, check all monsters
      */
     strcpy(buf, "");
-    for (i=1; i<nummonst+2; i++) {
+    for (i=1; i<=nummonst+2; i++) {
 	if (monsters[i].m_appear == monster) {
 	    strcat(buf, monsters[i].m_name);
 	    strcat(buf, ",");
