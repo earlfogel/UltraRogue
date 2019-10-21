@@ -530,23 +530,27 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
 		switch(lb->o_type) {
 		    case RING:
 			lb->o_ac += howmuch;
-			if (lb->o_ac > 5 && lb->o_ac < 11 && rnd(5) == 0) {
+			if (lb->o_ac > (howmuch<2?5:7) && lb->o_ac < 11
+				&& rnd(5) == 0) {
+			    int on = is_r_on(lb);
 			    msg("Your ring explodes in a cloud of smoke.");
 			    lb->o_flags &= ~ISCURSED;
 			    dropcheck(lb);
-			    switch(lb->o_which) {
-				case R_ADDSTR:
-				    chg_str(-2, TRUE, FALSE);
-				when R_ADDHIT:
-				    chg_dext(-2, TRUE, FALSE);
-				when R_ADDINTEL:
-				    pstats.s_intel -= 2;
-				    max_stats.s_intel -= 2;
-				when R_ADDWISDOM:
-				    pstats.s_wisdom -= 2;
-				    max_stats.s_wisdom -= 2;
-				default:
-				    ;
+			    if (on) {
+				switch(lb->o_which) {
+				    case R_ADDSTR:
+					chg_str(-2, TRUE, FALSE);
+				    when R_ADDHIT:
+					chg_dext(-2, TRUE, FALSE);
+				    when R_ADDINTEL:
+					pstats.s_intel -= 2;
+					max_stats.s_intel -= 2;
+				    when R_ADDWISDOM:
+					pstats.s_wisdom -= 2;
+					max_stats.s_wisdom -= 2;
+				    default:
+					;
+				}
 			    }
 			    inpack--;
 			    detach(pack, ll);
@@ -572,8 +576,8 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
 			}
 		    when ARMOR:
 			lb->o_ac -= howmuch;
-			if (armors[lb->o_which].a_class - lb->o_ac > 8
-					&& rnd(5) == 0) {
+			if (armors[lb->o_which].a_class - lb->o_ac > (howmuch<2?8:10)
+				&& rnd(5) == 0) {
 			    msg("Your %s explodes in a cloud of dust.",
 				inv_name(lb, TRUE));
 			    lb->o_flags &= ~ISCURSED;
@@ -607,7 +611,8 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
 			    lb->o_hplus += howmuch;
 			else
 			    lb->o_dplus += howmuch;
-			if (lb->o_hplus + lb->o_dplus > 15 && rnd(5) == 0) {
+			if (lb->o_hplus + lb->o_dplus > (howmuch<2?15:17)
+				&& rnd(5) == 0) {
 			    msg("Your %s explodes in a cloud of dust.",
 				inv_name(lb, TRUE));
 			    lb->o_flags &= ~ISCURSED;
