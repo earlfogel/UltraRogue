@@ -12,7 +12,7 @@
  * This are the beginning experience levels for all players
  * all further experience levels are computed by muliplying by 2
  */
-static long e_levels[4] = {
+static unsigned long e_levels[4] = {
 	113L,	/* Fighter */
 	135L,	/* Magician */
 	87L,	/* Cleric */
@@ -72,9 +72,8 @@ bool multiple;
  */
 
 int 
-fight (mp, mn, weap, thrown)
+fight (mp, weap, thrown)
 coord *mp;
-int mn;
 struct object *weap;
 bool thrown;
 {
@@ -906,12 +905,13 @@ bool thrown;
 	    miss(mname, NULL);
     }
 
-    /* damage greater than 1/3 of player's remaining hit points */
+    /* too much damage in one round */
     damage = s_hpt - pstats.s_hpt;
-    if (damage > pstats.s_hpt/3) {
+    if (damage > pstats.s_hpt/4) {
 	fighting = FALSE;
+	keep_fighting = FALSE;
     }
-    if (fighting && damage > pstats.s_hpt/5) {
+    if ((fighting || keep_fighting) && damage > pstats.s_hpt/5) {
 	if (damage > 8)
 	    msg("The %s scored an excellent hit on you!", mname);
     }
@@ -961,6 +961,16 @@ next_level()
 	exp *= 2L;
     }
     msg("You need %d more points to reach level %d.", exp - pstats.s_exp, i+1);
+#if 0
+    for (i=0; i<MAXSCROLLS; i++) {
+	if (s_know[i])
+	    addmsg("%s ", s_magic[i].mi_name);
+	else
+	    addmsg("%s ", "<unknown>");
+    }
+    msg(".");
+    wait_for(0);
+#endif
 }
 
 /*

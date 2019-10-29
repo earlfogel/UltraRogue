@@ -19,6 +19,12 @@
 #ifdef _WIN32
 #define _POSIX
 #define sig_t __p_sig_fn_t
+#include <windows.h>
+#include <wchar.h>
+#include <sys/stat.h>
+#include <direct.h>
+#undef max
+#undef min
 #endif
 
 #include <stdio.h>
@@ -43,10 +49,9 @@
 int fd_score = -1;		/* file descriptor the score file */
 
 int 
-main (argc, argv, envp)
+main (argc, argv)
 int argc;
 char **argv;
-char **envp;
 {
     char *env;
     struct linked_list *item;
@@ -61,12 +66,23 @@ char **envp;
     mtrace();	/* glibc malloc debugging */
 #endif
 
-    /*
-     * get home and options from environment
-     */
+#ifdef _WIN32
+    if ((env = getenv("APPDATA")) != NULL) {
+	struct stat sb;
+
+	/* use %APPDATA%/urogue */
+	strcpy(file_name, env);
+	strcat(file_name, "/urogue");
+	if (stat(file_name, &sb) != 0)
+	    _mkdir(file_name);
+	if (stat(file_name, &sb) == 0 && S_ISDIR(sb.st_mode))
+	    chdir(file_name);
+    }
+    strcpy(home, "./");
+    strcpy(file_name, "rogue.save");
+#else
+    /* get home from environment */
     if ((env = getenv("HOME")) != NULL)
-	strcpy(home, env);
-    else if ((env = getenv("HOMEPATH")) != NULL)  /* windows */
 	strcpy(home, env);
     else
 	strcpy(home, ".");
@@ -75,6 +91,7 @@ char **envp;
     /* Get default save file */
     strcpy(file_name, home);
     strcat(file_name, "rogue.save");
+#endif
 
     /*
      * Open score file.
@@ -101,22 +118,6 @@ char **envp;
 	    else if (getenv("USER")) 
 		strcpy(whoami, getenv("USER"));
     }
-    if (env == NULL || fruit[0] == '\0') {
-	static char *funfruit[] = {
-		"candleberry", "caprifig", "dewberry", "elderberry",
-		"gooseberry", "guanabana", "hagberry", "ilama", "imbu",
-		"jaboticaba", "jujube", "litchi", "mombin", "pitanga",
-		"prickly pear", "rambutan", "sapodilla", "soursop",
-		"sweetsop", "whortleberry"
-	};
-
-	srand48((long) (getpid()+255));
-	strcpy(fruit, funfruit[rnd(sizeof(funfruit)/sizeof(funfruit[0]))]);
-     }
-
-     /* put a copy of fruit in the right place */
-     fd_data[1].mi_name = ALLOC(LINELEN);
-     strcpy(fd_data[1].mi_name, fruit);
 
     /*
      * Check to see if player is a wizard
@@ -136,7 +137,6 @@ char **envp;
      * check for print-score option
      */
     if (argc >= 2 && strcmp(argv[1], "-s") == 0) {
-	waswizard = TRUE;
 	score(0, SCOREIT, 0);
 	exit(0);
     }
@@ -146,8 +146,23 @@ char **envp;
 	atoi(getenv("SEED")) :
 	lowtime + getpid());
     seed = dnum;
-    srand48(seed);
+    srandom(seed);
     game_id = rnd(INT_MAX-1) + 1;
+
+    if (env == NULL || fruit[0] == '\0') {
+	static char *funfruit[] = {
+		"candleberry", "caprifig", "dewberry", "elderberry",
+		"gooseberry", "guanabana", "hagberry", "ilama", "imbu",
+		"jaboticaba", "jujube", "litchi", "mombin", "pitanga",
+		"prickly pear", "rambutan", "sapodilla", "soursop",
+		"sweetsop", "whortleberry"
+	};
+
+	strcpy(fruit, funfruit[rnd(sizeof(funfruit)/sizeof(funfruit[0]))]);
+     }
+    /* put a copy of fruit in the right place */
+    fd_data[1].mi_name = ALLOC(LINELEN);
+    strcpy(fd_data[1].mi_name, fruit);
 
     init_things();			/* Set up probabilities of things */
     init_fd();				/* Set up food probabilities */
@@ -347,7 +362,7 @@ char *s;
 
 /*
  * rnd:
- *	Pick a very random number.
+ *	Pick a random number.
  *
  * On Windows, RAND_MAX is quite small, so we concatenate four short
  * random numbers to make a long one.
@@ -368,6 +383,7 @@ char *s;
  * generate negative numbers.
  *
  * see http://forums.codeguru.com/showthread.php?534679-Generating-big-random-numbers-in-C
+ * and http://c-faq.com/lib/randrange.html
  */
 
 int 
@@ -375,7 +391,7 @@ rnd (range)
 int range;
 {
 #ifndef _WIN32
-	return (range == 0 ? 0 : (lrand48() & 0x7fffffff) % range);
+	return (range == 0 ? 0 : (random() & 0x7fffffff) % range);
 #else
     return (range == 0 ? 0 : ((((rand() & 255)<<8 | (rand() & 255))<<8 | (rand() & 255))<<7 | (rand() & 127)) % range);
 #endif

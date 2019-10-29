@@ -118,15 +118,26 @@ command ()
 	    else
 	    {
 		ch = readchar();
+#if 0
+fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
+#endif
 		if (ch == KEY_LEFT)  ch = 'h';
-		if (ch == KEY_DOWN)  ch = 'j';
-		if (ch == KEY_UP)    ch = 'k';
-		if (ch == KEY_RIGHT) ch = 'l';
-		if (ch == KEY_HOME)  ch = 'y';
-		if (ch == KEY_PPAGE) ch = 'u';
-		if (ch == KEY_END)   ch = 'b';
-		if (ch == KEY_NPAGE) ch = 'n';
-		if (ch == KEY_B2)    ch = 's';
+		else if (ch == KEY_DOWN)  ch = 'j';
+		else if (ch == KEY_UP)    ch = 'k';
+		else if (ch == KEY_RIGHT) ch = 'l';
+		else if (ch == KEY_HOME)  ch = 'y';
+		else if (ch == KEY_PPAGE) ch = 'u';
+		else if (ch == KEY_END)   ch = 'b';
+		else if (ch == KEY_NPAGE) ch = 'n';
+		else if (ch == KEY_B2)    ch = 's';
+		else if (ch == KEY_SLEFT)  ch = 'H';  /* shift left arrow */
+		else if (ch == KEY_SF)     ch = 'J';  /* shift down arrow */
+		else if (ch == KEY_SR)     ch = 'K';  /* shift up arrow */
+		else if (ch == KEY_SRIGHT) ch = 'L';  /* shift right arrow */
+		else if (ch == 01051)      ch = CTRL('h');  /* ctrl left arrow */
+		else if (ch == 01023)      ch = CTRL('j');  /* ctrl down arrow */
+		else if (ch == 01076)      ch = CTRL('k');  /* ctrl up arrow */
+		else if (ch == 01070)      ch = CTRL('l');  /* ctrl right arrow */
 		if (ch == 'x')
 		    ch = '.'; /* rest - left handed */
 		if (ch == CTRL('f') && !wizard)
@@ -288,7 +299,7 @@ command ()
 		when 'q' : quaff(-1, FALSE);
 		when 'r' : read_scroll(-1, FALSE);
 		when 'e' : eat();
-		when '=' : listen();
+		when '=' : listens();
 		when 'A' : apply();
 		when 'w' : wield();
 		when 'W' : wear();
@@ -507,12 +518,18 @@ command ()
 			    updpack(TRUE);
 			}
 			otherwise :
-			    msg("Illegal command '%s'.", unctrl(ch));
+			    if (canwizard)
+				msg("Illegal command '%s' [0%o]", unctrl(ch), ch);
+			    else
+				msg("Illegal command '%s'", unctrl(ch));
 			    count = 0;
 		    }
 		    else
 		    {
-			msg("Illegal command '%s'.", unctrl(ch));
+			if (canwizard)
+			    msg("Illegal command '%s' [0%o].", unctrl(ch), ch);
+			else
+			    msg("Illegal command '%s'.", unctrl(ch));
 			count = 0;
 			after = FALSE;
 		    }
