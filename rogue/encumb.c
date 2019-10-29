@@ -130,7 +130,7 @@ totalenc ()
  */
 
 void 
-wghtchk (fuse_arg *arg) /*ARGSUSED*/
+wghtchk (fuse_arg *arg __attribute__((unused)))
 {
 	int dropchk, err = TRUE;
 	char ch;

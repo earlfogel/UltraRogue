@@ -180,14 +180,14 @@ struct init_armor armors[MAXARMORS] = {
 };
 
 struct magic_item things[NUMTHINGS] = {
-    { "potion",			250,	5 },	/* potion */
-    { "scroll",			260,   30 },	/* scroll */
-    { "food",			210,	7 },	/* food */
-    { "weapon",			 60,	0 },	/* weapon */
-    { "armor",			 90,	0 },	/* armor */
-    { "ring",			 70,	5 },	/* ring */
-    { "stick",			 60,	0 },	/* stick */
-    { "artifact",		  0,    0 },    /* special artifacts */
+    { "potion",			250,	5, 0, 0 },	/* potion */
+    { "scroll",			260,   30, 0, 0 },	/* scroll */
+    { "food",			210,	7, 0, 0 },	/* food */
+    { "weapon",			 60,	0, 0, 0 },	/* weapon */
+    { "armor",			 90,	0, 0, 0 },	/* armor */
+    { "ring",			 70,	5, 0, 0 },	/* ring */
+    { "stick",			 60,	0, 0, 0 },	/* stick */
+    { "artifact",		  0,    0, 0, 0 },    /* special artifacts */
 };
 
 struct magic_item s_magic[MAXSCROLLS] = {

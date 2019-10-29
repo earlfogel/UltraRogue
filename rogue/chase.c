@@ -17,7 +17,7 @@ coord ch_ret;				/* Where chasing takes you */
  */
 
 void 
-runners (daemon_arg *arg) /*ARGSUSED*/
+runners (daemon_arg *arg __attribute__((unused)))
 {
     struct linked_list *item, *nitem;
     struct thing *tp;

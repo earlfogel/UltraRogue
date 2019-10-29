@@ -555,7 +555,7 @@ genocide ()
 	    }
 	    sprintf(monst_name, "[%s] %s\n",
 				monst_num, monsters[pres_monst].m_name);
-	    if (strlen(monst_name) > COLS/2)
+	    if ((int)strlen(monst_name) > COLS/2)
 		monst_name[COLS/2] = '\0';	/* truncate long names */
 	    waddstr(hw, monst_name);
 	    pres_monst++;
@@ -570,7 +570,7 @@ genocide ()
 	    }
 	    sprintf(monst_name, "[%s] %s\n",
 				monst_num, monsters[pres_monst].m_name);
-	    if (strlen(monst_name) > COLS/2)
+	    if ((int)strlen(monst_name) > COLS/2)
 		monst_name[COLS/2] = '\0';	/* truncate long names */
 	    wmove(hw, i+2, COLS/2);
 	    waddstr(hw, monst_name);
@@ -674,7 +674,7 @@ int monster;
 	    strcat(buf, ",");
 	}
     }
-    if (strlen(buf) >= COLS - 5)
+    if ((int)strlen(buf) >= COLS - 5)
 	buf[COLS-5] = '\0';
     buf[strlen(buf)-1] = '\0';
     return(buf);

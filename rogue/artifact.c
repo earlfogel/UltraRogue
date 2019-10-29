@@ -1778,6 +1778,8 @@ struct linked_list *list;
 		wclear(hw);
 		waddstr(hw, inv_temp);
 		waddch(hw, '\n');
+		wprintw(hw, "%c) %s\n", list->l_letter, inv_name(obj, FALSE));
+		break;
 	    default:
 		wprintw(hw, "%c) %s\n", list->l_letter, inv_name(obj, FALSE));
 	}

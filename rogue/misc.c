@@ -626,10 +626,10 @@ int x;
 }
 
 /*
- * listen: listen for monsters less than 5 units away
+ * listens: listen for monsters less than 5 units away
  */
 void 
-listen ()
+listens ()
 {
     struct linked_list *item;
     struct thing *tp;

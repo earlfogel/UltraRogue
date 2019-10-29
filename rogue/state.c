@@ -56,7 +56,7 @@
      of a game are kept in urogue.c, monsdata.c, data.c.
 */
 
-#define _X_ { 0,0,0,0 }
+#define _X_ { 0,0,0,0,0 }
 struct delayed_action
 d_list[MAXDAEMONS] = {
 	_X_, _X_, _X_, _X_, _X_, _X_, _X_, _X_, _X_, _X_,

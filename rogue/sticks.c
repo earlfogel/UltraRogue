@@ -287,7 +287,7 @@ bool blessed;
 		    strike.o_damage = "3d8";
 		else
 		    strike.o_damage = "2d8";
-		fight(&delta, ch, &strike, FALSE);
+		fight(&delta, &strike, FALSE);
 	    }
 	}
 	case WS_SLOW_M:

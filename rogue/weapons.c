@@ -257,7 +257,7 @@ struct thing *tp;
 		if (!isalpha(mvwinch(mw, y, x))) {
 			return(FALSE) ;
 		}
-		return(fight(&mp, winat(y, x), obj, TRUE)) ;
+		return(fight(&mp, obj, TRUE)) ;
 	} else {
 		if (!ce(mp, hero)) {
 			return(FALSE) ;

@@ -335,8 +335,6 @@ int ch;
 {
     switch(ch)
     {
-	default:
-	    debug("Where did you pick that up???");
 	case GOLD:
 	case ARMOR:
 	case POTION:
@@ -347,6 +345,9 @@ int ch;
 	case RING:
 	case STICK:
 	    add_pack(NULL, FALSE);
+	    break;
+	default:
+	    debug("Where did you pick that up???");
 	    break;
     }
 }

@@ -1248,7 +1248,7 @@ void wghtchk(fuse_arg *arg);
 int hitweight(void);
 /* fight.c */
 void do_fight(int y, int x, int multiple);
-int fight(coord *mp, int mn, struct object *weap, bool thrown);
+int fight(coord *mp, struct object *weap, bool thrown);
 int attack(struct thing *mp, struct object *weapon, bool thrown);
 int swing(int class, int at_lvl, int op_arm, int wplus);
 void next_level(void);
@@ -1307,7 +1307,7 @@ void discard(struct linked_list *item);
 struct linked_list *new_item(int size);
 char *new(int size);
 /* main.c */
-int main(int argc, char **argv, char **envp);
+int main(int argc, char **argv);
 void endit(void);
 void fatal(char *s);
 int rnd(int range);
@@ -1347,7 +1347,7 @@ char *vowelstr(char *str);
 int is_current(struct object *obj);
 int get_dir(void);
 bool maze_view(int y, int x);
-void listen(void);
+void listens(void);
 /* monsdata.c */
 /* monsters.c */
 short randmonster(bool wander, bool no_unique);

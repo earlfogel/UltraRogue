@@ -181,7 +181,7 @@ bool display;
 		s_ac = 0;
     static short s_intel, s_dext, s_wisdom, s_const, s_charisma;
     static short maxs_intel, maxs_dext, maxs_wisdom, maxs_const, maxs_charisma;
-    static long s_exp = 0;
+    static unsigned long s_exp = 0;
     static int s_carry, s_pack;
     char *health_state = NULL;
     static char *s_health_state;

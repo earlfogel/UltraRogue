@@ -279,7 +279,7 @@ int dx;
 	if (off(player, CANINWALL) || !moving) {  /* move through monster? */
 	    running = FALSE;
 	    hero = old_hero;    /* Restore hero -- we'll fight instead of move */
-	    fight(&nh, ch, cur_weapon, FALSE);
+	    fight(&nh, cur_weapon, FALSE);
 	    return;
 	}
     } 

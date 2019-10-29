@@ -104,7 +104,7 @@ doctor (daemon_arg *arg)
  */
 
 void 
-swander (fuse_arg *arg) /*ARGSUSED*/
+swander (fuse_arg *arg __attribute__((unused)))
 {
     start_daemon(DAEMON_ROLLWAND, 0, BEFORE);
 }
@@ -115,7 +115,7 @@ swander (fuse_arg *arg) /*ARGSUSED*/
  */
 
 void 
-rollwand (daemon_arg *arg) /*ARGSUSED*/
+rollwand (daemon_arg *arg __attribute__((unused)))
 {
     static int between = 0;
 
@@ -139,7 +139,7 @@ rollwand (daemon_arg *arg) /*ARGSUSED*/
  */
 
 void 
-unconfuse (fuse_arg *arg) /*ARGSUSED*/
+unconfuse (fuse_arg *arg __attribute__((unused)))
 {
     turn_off(player, ISHUH);
     msg("You feel less confused now.");
@@ -152,7 +152,7 @@ unconfuse (fuse_arg *arg) /*ARGSUSED*/
  */
 
 void 
-unscent (fuse_arg *arg) /*ARGSUSED*/
+unscent (fuse_arg *arg __attribute__((unused)))
 {
     turn_off(player, CANSCENT);
     msg("The smell of monsters goes away.");
@@ -165,7 +165,7 @@ unscent (fuse_arg *arg) /*ARGSUSED*/
  */
 
 void 
-scent (fuse_arg *arg) /*ARGSUSED*/
+scent (fuse_arg *arg __attribute__((unused)))
 {
     turn_off(player, ISUNSMELL);
     msg("You begin to smell the damp dungeon air again.");
@@ -178,7 +178,7 @@ scent (fuse_arg *arg) /*ARGSUSED*/
  */
 
 void 
-unhear (fuse_arg *arg) /*ARGSUSED*/
+unhear (fuse_arg *arg __attribute__((unused)))
 {
     turn_off(player, CANHEAR);
     msg("The sounds of monsters fades away.");
@@ -191,7 +191,7 @@ unhear (fuse_arg *arg) /*ARGSUSED*/
  */
 
 void 
-hear (fuse_arg *arg) /*ARGSUSED*/
+hear (fuse_arg *arg __attribute__((unused)))
 {
     turn_off(player, ISDEAF);
     msg("You can hear again.");
@@ -204,7 +204,7 @@ hear (fuse_arg *arg) /*ARGSUSED*/
  */
 
 void 
-unsee (fuse_arg *arg) /*ARGSUSED*/
+unsee (fuse_arg *arg __attribute__((unused)))
 {
     if (!ISWEARING(R_SEEINVIS)) {
 	turn_off(player, CANSEE);
@@ -218,7 +218,7 @@ unsee (fuse_arg *arg) /*ARGSUSED*/
  */
 
 void 
-unstink (fuse_arg *arg) /*ARGSUSED*/
+unstink (fuse_arg *arg __attribute__((unused)))
 {
     turn_off(player, HASSTINK);
 }
@@ -229,7 +229,7 @@ unstink (fuse_arg *arg) /*ARGSUSED*/
  */
 
 void 
-unclrhead (fuse_arg *arg) /*ARGSUSED*/
+unclrhead (fuse_arg *arg __attribute__((unused)))
 {
     turn_off(player, ISCLEAR);
     msg("The blue aura about your head fades away.");
@@ -241,7 +241,7 @@ unclrhead (fuse_arg *arg) /*ARGSUSED*/
  */
 
 void 
-unphase (fuse_arg *arg) /*ARGSUSED*/
+unphase (fuse_arg *arg __attribute__((unused)))
 {
     turn_off(player, CANINWALL);
     msg("Your dizzy feeling leaves you.");
@@ -255,7 +255,7 @@ unphase (fuse_arg *arg) /*ARGSUSED*/
  */
 
 void 
-sight (fuse_arg *arg) /*ARGSUSED*/
+sight (fuse_arg *arg __attribute__((unused)))
 {
     if (on(player, ISBLIND))
     {
@@ -272,7 +272,7 @@ sight (fuse_arg *arg) /*ARGSUSED*/
  */
 
 void 
-res_strength (fuse_arg *arg) /*ARGSUSED*/
+res_strength (fuse_arg *arg __attribute__((unused)))
 {
 
     /* If lost_str is non-zero, restore that amount of strength,
@@ -299,7 +299,7 @@ res_strength (fuse_arg *arg) /*ARGSUSED*/
  */
 
 void 
-nohaste (fuse_arg *arg) /*ARGSUSED*/
+nohaste (fuse_arg *arg __attribute__((unused)))
 {
     turn_off(player, ISHASTE);
     msg("You feel yourself slowing down.");
@@ -311,7 +311,7 @@ nohaste (fuse_arg *arg) /*ARGSUSED*/
  */
 
 void 
-noslow (fuse_arg *arg) /*ARGSUSED*/
+noslow (fuse_arg *arg __attribute__((unused)))
 {
     turn_off(player, ISSLOW);
     msg("You feel yourself speeding up.");
@@ -323,7 +323,7 @@ noslow (fuse_arg *arg) /*ARGSUSED*/
  */
 
 void 
-suffocate (fuse_arg *arg) /*ARGSUSED*/
+suffocate (fuse_arg *arg __attribute__((unused)))
 {
     death(D_SUFFOCATION);
 }
@@ -332,7 +332,7 @@ suffocate (fuse_arg *arg) /*ARGSUSED*/
  * digest the hero's food
  */
 void 
-stomach (daemon_arg *arg) /*ARGSUSED*/
+stomach (daemon_arg *arg __attribute__((unused)))
 {
     int oldfood, old_hunger;
     int amount;
@@ -400,7 +400,7 @@ stomach (daemon_arg *arg) /*ARGSUSED*/
  * daemon for curing the diseased
  */
 void 
-cure_disease (fuse_arg *arg) /*ARGSUSED*/
+cure_disease (fuse_arg *arg __attribute__((unused)))
 {
     turn_off(player, HASDISEASE);
     if (off (player, HASINFEST))
@@ -410,7 +410,7 @@ cure_disease (fuse_arg *arg) /*ARGSUSED*/
  * daemon for curing parasitic infestations
  */
 void 
-cure_infest (fuse_arg *arg) /*ARGSUSED*/
+cure_infest (fuse_arg *arg __attribute__((unused)))
 {
     turn_off(player, HASINFEST);
     infest_dam = 0;
@@ -422,7 +422,7 @@ cure_infest (fuse_arg *arg) /*ARGSUSED*/
  * daemon for adding back dexterity
  */
 void 
-un_itch (fuse_arg *arg) /*ARGSUSED*/
+un_itch (fuse_arg *arg __attribute__((unused)))
 {
     if (lost_dext) {
 	chg_dext(lost_dext, FALSE, FALSE);
@@ -435,7 +435,7 @@ un_itch (fuse_arg *arg) /*ARGSUSED*/
  *	Become visible again
  */
 void 
-appear (fuse_arg *arg) /*ARGSUSED*/
+appear (fuse_arg *arg __attribute__((unused)))
 {
     turn_off(player, ISINVIS);
     PLAYER = VPLAYER;
@@ -448,7 +448,7 @@ appear (fuse_arg *arg) /*ARGSUSED*/
  *	armor stops shooting off sparks
  */
 void 
-unelectrify (fuse_arg *arg) /*ARGSUSED*/
+unelectrify (fuse_arg *arg __attribute__((unused)))
 {
     turn_off(player, ISELECTRIC);
     msg("The sparks and violet glow from your body fade away.");
@@ -460,7 +460,7 @@ unelectrify (fuse_arg *arg) /*ARGSUSED*/
  *	super heroism wears off, now do nasty effects
  */
 void 
-unshero (fuse_arg *arg) /*ARGSUSED*/
+unshero (fuse_arg *arg __attribute__((unused)))
 {
     msg("Your feeling of invulnerability goes away.");
     turn_off(player, SUPERHERO);
@@ -476,7 +476,7 @@ unshero (fuse_arg *arg) /*ARGSUSED*/
  *	super heroism wears off, but no bad effects
  */
 void 
-unbhero (fuse_arg *arg) /*ARGSUSED*/
+unbhero (fuse_arg *arg __attribute__((unused)))
 {
     msg("Your feeling of invincibility goes away.");
     turn_off(player, SUPERHERO);
@@ -489,7 +489,7 @@ unbhero (fuse_arg *arg) /*ARGSUSED*/
  *	x-ray vision wears off
  */
 void 
-unxray (fuse_arg *arg) /*ARGSUSED*/
+unxray (fuse_arg *arg __attribute__((unused)))
 {
 }
 
@@ -498,7 +498,7 @@ unxray (fuse_arg *arg) /*ARGSUSED*/
  *	player stops looking like a monster
  */
 void 
-undisguise (fuse_arg *arg) /*ARGSUSED*/
+undisguise (fuse_arg *arg __attribute__((unused)))
 {
     msg("Your skin feels itchy for a moment.");
     turn_off(player, ISDISGUISE);
@@ -511,7 +511,7 @@ undisguise (fuse_arg *arg) /*ARGSUSED*/
  *	restore lost abilities from cursed potion of shero
  */
 void 
-shero (fuse_arg *arg) /*ARGSUSED*/
+shero (fuse_arg *arg __attribute__((unused)))
 {
     msg("You feel normal again.");
     chg_str(2, FALSE, FALSE);
