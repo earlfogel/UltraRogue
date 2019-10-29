@@ -379,6 +379,7 @@ bool blessed;
 		for (i=0; i<lost_dext; i++)
 		    extinguish_fuse(FUSE_UNITCH);
 		lost_dext = 0;
+		turn_off(player, HASITCH);
 	    }
 	    res_dexterity();
 
