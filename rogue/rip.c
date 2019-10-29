@@ -184,10 +184,10 @@ int monst;
 	int sc_game_id;
     } top_ten[10];
     struct sc_ent *scp;
+    struct sc_ent *regame = NULL;
     struct sc_ent *sc2;
     FILE *outf;
     char *killer;
-    int regame = 0;
     static char *reason[] = {
 	"killed",
 	"quit",
@@ -221,6 +221,8 @@ int monst;
      * no score at end of game for wizard/developer
      */
     if (canwizard && flags != SCOREIT)
+	return;
+    if (amount == 0 && flags != SCOREIT)
 	return;
 
     /*
@@ -264,21 +266,25 @@ int monst;
      */
     for (scp = top_ten; scp < &top_ten[10]; scp++) {
 	if (scp->sc_game_id == game_id)
-	    regame++;	/* we've seen this game before */
+	    regame = scp;	/* we've seen this game before */
     }
     for (scp = top_ten; scp < &top_ten[10]; scp++) {
 	if (amount > scp->sc_score)
 	    break;
     }
 
-    if (scp < &top_ten[10] && !regame) {
+    if (scp < &top_ten[10] && amount > 0) {
 	/*
 	 * Congrats, made it into top 10
 	 */
-	sc2 = &top_ten[9];
-	while (sc2 > scp) {	/* make room for new entry */
-	    *sc2 = sc2[-1];
-	    sc2--;
+	if (regame) {  /* reuse the same slot */
+	    scp = regame;
+	} else {
+	    sc2 = &top_ten[9];
+	    while (sc2 > scp) {	/* make room for new entry */
+		*sc2 = sc2[-1];
+		sc2--;
+	    }
 	}
 	scp->sc_score = amount;
 	scp->sc_gold = purse;
