@@ -23,7 +23,7 @@ doctor (daemon_arg *arg)
     curp = &(tp->t_stats);
     maxp = &(tp->maxstats);
 
-    /* slowly regain magic and prayer points */
+    /* slowly regain magic, prayer points and luck */
     if (tp == &player && curp->s_hpt == maxp->s_hpt && hungry_state == F_OK) {
 	if (spell_power > 0 && rnd(1000) < 1) {
 	    spell_power--;
@@ -32,6 +32,9 @@ doctor (daemon_arg *arg)
 	if (pray_time > 0 && rnd(1000) < 1) {
 	    pray_time--;
 	    debug("You feel a bit holier.");
+	}
+	if (luck > 0 && rnd(5000) < 1) {
+	    luck--;
 	}
     }
 
