@@ -111,6 +111,13 @@ steal ()
 	if (s_item == NULL && tp->t_index == nummonst)
 	    s_item = new_thing();
 
+	/* if we have a shop keeper, get an item from the floor */
+	count = 0;
+	if (s_item == NULL && lvl_obj != NULL && tp->t_index == nummonst+2) {
+	    for (pack_ptr=lvl_obj; pack_ptr != NULL; pack_ptr=next(pack_ptr)) {
+		if (rnd(++count) == 0) s_item = pack_ptr;
+	    }
+	}
 
 	/* Find anything? */
 	if (s_item == NULL) {
@@ -118,8 +125,13 @@ steal ()
 	    return;
 	}
 
-	/* Take it from monster */
-	if (tp->t_pack) detach(tp->t_pack, s_item);
+	if (tp->t_index == nummonst+2) {
+	    /* Take it from the shop */
+	    if (lvl_obj) detach(lvl_obj, s_item);
+	} else {
+	    /* Take it from monster */
+	    if (tp->t_pack) detach(tp->t_pack, s_item);
+	}
 
 	/* Give it to player */
 	if (add_pack(s_item, FALSE) == FALSE) {
@@ -137,10 +149,16 @@ steal ()
     }
 
     else {
-	msg("Your attempt fails.");
 
 	/* Annoy monster (maybe) */
-	if (rnd(35) >= pstats.s_dext + thief_bonus) runto(&new_pos, &hero);
+	if (rnd(35) >= pstats.s_dext + thief_bonus && on(*tp, ISFRIENDLY)) {
+	    msg("Your attempt fails and the %s notices.", monsters[tp->t_index].m_name);
+	    turn_off(*tp, ISFRIENDLY);
+	    turn_on(*tp, ISMEAN);
+	    runto(&new_pos, &hero);
+	} else {
+	    msg("Your attempt fails.");
+	}
     }
 }
 
