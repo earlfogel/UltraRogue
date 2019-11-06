@@ -503,14 +503,6 @@ int x;
     }
 
     /*
-     * Hide invisible monsters and those in a wall
-     */
-    if (((on(*tp, ISINVIS) || (on(*tp, ISSHADOW) && rnd(100) < 90)) &&
-	off(player, CANSEE)) ||
-	on(*tp, ISINWALL) ||
-	on(*tp, CANSURPRISE))
-
-    /*
      * hero might be able to hear or smell monster if player can't see it
      */
     if ((rnd(player.t_ctype == C_THIEF ? 40 : 200) == 0 || on(player, CANHEAR))
@@ -658,20 +650,23 @@ int monster;
     /*
      * check monsters on current level
      */
+    strcpy(buf, "");
     for (item = mlist; item != NULL; item = next(item)) {
         tp = THINGPTR(item);
-        if (tp->t_type == monster) {
-	    return(monsters[tp->t_index].m_name);
+        if (tp->t_type == monster && strstr(buf,monsters[tp->t_index].m_name) == NULL) {
+	    strcat(buf, monsters[tp->t_index].m_name);
+	    strcat(buf, ",");
 	}
     }
     /*
      * if none match, check all monsters
      */
-    strcpy(buf, "");
-    for (i=1; i<=nummonst+2; i++) {
-	if (monsters[i].m_appear == monster) {
-	    strcat(buf, monsters[i].m_name);
-	    strcat(buf, ",");
+    if (buf[0] == '\0') {
+	for (i=1; i<=nummonst+2; i++) {
+	    if (monsters[i].m_appear == monster) {
+		strcat(buf, monsters[i].m_name);
+		strcat(buf, ",");
+	    }
 	}
     }
     if ((int)strlen(buf) >= COLS - 5)
