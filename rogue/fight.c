@@ -427,7 +427,8 @@ bool thrown;
 		}
 		else if (rnd(mp->t_stats.s_str) > 15) {
 		    msg("Your armor rings from the blow.");
-		    aggravate();
+		    if (difficulty >= 2)
+			aggravate();
 		}
 	    }
 
@@ -907,13 +908,12 @@ bool thrown;
 
     /* too much damage in one round */
     damage = s_hpt - pstats.s_hpt;
-    if (damage > pstats.s_hpt/4) {
-	fighting = FALSE;
-	keep_fighting = FALSE;
-    }
-    if ((fighting || keep_fighting) && damage > pstats.s_hpt/5) {
-	if (damage > 8)
-	    msg("The %s scored an excellent hit on you!", mname);
+    if ((fighting || keep_fighting) && damage > s_hpt/5) {
+	msg("The %s scored an excellent hit on you!", mname);
+	if (damage > s_hpt/4) {
+	    fighting = FALSE;
+	    keep_fighting = FALSE;
+	}
     }
 
     count = 0;
