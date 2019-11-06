@@ -1,3 +1,63 @@
+November 2019
+-------------
+
+More dextrous players can turn sharper corners.
+
+Bad luck fades over time.
+
+urogue.bat and urogue.sh have example of -easy option.
+
+Thieves can steal from shops.
+
+If friendly monsters notice your attempt to steal, they get angry.
+
+
+October 2019
+------------
+
+It's harder for monsters to shatter protected crystalline armor
+in hard games -- the protection is lost instead.
+
+Fix off-by-one error in pick_one().
+
+Show luck on options screen.
+
+Restore abilities prayer can restore luck.
+
+Friendly monsters don't shoot at you.
+
+Exploding rings only hurt if you're wearing them.
+
+Things don't explode as early when blessed scroll of
+enchantment is overused.
+
+Greedy monsters don't chase you if they're friendly.
+
+Drop multiple items, e.g. 10d to drop 10 food rations.
+
+Can combine -s and -w command-line options to see game IDs.
+
+Fix SIGINT handling on Windows.
+
+Fix null pointer dereference in do_zap().
+
+Fix infinite itch.
+
+Fix most gcc -Wextra issues.
+
+Fix the ancient moving invisible monster space bug.
+
+Don't show top scores unless the user actually scores some points.
+
+Support <SHIFT> and <CTRL> arrow keys where terminal makes them available.
+
+Use %APPDATA%/urogue folder on Windows.
+
+Bumping into a friendly monster doesn't start a fight.
+
+Change help for 'S' to: Save game and exit.
+
+
 September 2019
 --------------
 
@@ -33,6 +93,8 @@ Don't show score if developer/wizard mode was used.
 Fewer "breaks free from the hold" messages.
 
 Make the middle levels more interesting.
+
+Save/restore now works in trading posts.
 
 
 August 2019
