@@ -434,7 +434,7 @@ struct h_list helpstr[] = {
 	{CTRL('P'),	"	back up to 10 previous messages"},
 	{ESCAPE,	"	cancel command"},
 	{'v',	"	print program version number"},
-	{'S',	"	save game"},
+	{'S',	"	save game and exit"},
 	{'Q',	"	quit"},
 	{'=',	"	listen for monsters"},
 	{'f',	"	fight monster"},
