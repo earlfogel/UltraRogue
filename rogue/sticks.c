@@ -974,12 +974,14 @@ at_hero:
 			else if(ISWEARING(R_FIRERESIST) &&
 				(strcmp(name, "flame") == 0)) {
 				damage = 0;
-				msg("It flickers a moment and then fades.");
+				if (!fighting)
+				    msg("It flickers a moment and then fades.");
 			}
 			else if(ISWEARING(R_COLDRESIST) &&
 				(strcmp(name, "ice") == 0)) {
 				damage = 0;
-				msg("It cracks and quickly melts.");
+				if (!fighting)
+				    msg("It cracks and quickly melts.");
 			}
 			if (damage && fighting) {
 			    msg("You are hit by the %s.", name);
