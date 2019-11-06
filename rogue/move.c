@@ -276,11 +276,49 @@ int dx;
 	return;
     }
     else if (isalpha(ch)) {
-	if (off(player, CANINWALL) || !moving) {  /* move through monster? */
+	if (on(player, CANINWALL) && moving) { /* move through monster! */
+	    /* Do Nothing */
+	} else {
+	    struct linked_list  *mp;
+	    struct thing    *tp;
+	    int t;
+
 	    running = FALSE;
-	    hero = old_hero;    /* Restore hero -- we'll fight instead of move */
-	    fight(&nh, cur_weapon, FALSE);
-	    return;
+
+	    mp = find_mons(hero.y, hero.x);
+	    if (mp == NULL)
+		return;
+	    tp = THINGPTR(mp);
+
+	    if (on(*tp, ISFRIENDLY) && !fighting) {  /* exchange places */
+		mvwaddch(cw, old_hero.y, old_hero.x, ch);
+		mvwaddch(mw, old_hero.y, old_hero.x, ch);
+		mvwaddch(mw, hero.y, hero.x, (char) ' ');
+		mvwaddch(cw, hero.y, hero.x, tp->t_oldch);
+
+		(*tp).t_pos.x = old_hero.x; /* Update monster position */
+		(*tp).t_pos.y = old_hero.y;
+		(*tp).t_oldpos.x = old_hero.x;
+		(*tp).t_oldpos.y = old_hero.y;
+
+		t = (*tp).t_oldch;
+		(*tp).t_oldch = player.t_oldch;
+		player.t_oldch = t;
+
+		turn_on(*tp, ISRUN);
+
+		mvwaddch(cw, hero.y, hero.x, PLAYER);
+
+		/* make sure that the room shows OK */
+		/* light(&hero); */
+
+		wrefresh(cw);
+		return;
+	    } else {
+		hero = old_hero;    /* Restore hero -- we'll fight instead of move */
+		fight(&nh, cur_weapon, FALSE);
+		return;
+	    }
 	}
     } 
     else {
@@ -355,7 +393,7 @@ coord *cp;
 		 * now can be seen, or vice-versa, make sure that will
 		 * happen.
 		 */
-		if (isalpha(ch))
+		if (isalpha(winat(y,x)))
 		{
 		    struct thing *tp;	/* The monster */
 
@@ -365,13 +403,15 @@ coord *cp;
 		    tp = THINGPTR(item);
 
 		    /* Previously not seen -- now can see it */
-		    if (tp->t_oldch == ' ' && cansee(tp->t_pos.y, tp->t_pos.x)) 
+		    if (tp->t_oldch == ' ' && cansee(tp->t_pos.y, tp->t_pos.x)) {
 			tp->t_oldch = mvinch(y, x);
+		    }
 
 		    /* Previously seen -- now can't see it */
 		    else if (off(player, ISBLIND) && tp->t_oldch != ' ' &&
-			     !cansee(tp->t_pos.y, tp->t_pos.x))
+			     !cansee(tp->t_pos.y, tp->t_pos.x)) {
 			tp->t_oldch = ' ';
+		    }
 		}
 
 		/*
