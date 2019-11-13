@@ -53,12 +53,24 @@ save_game(void)
             return(FALSE);
         }
 
+	if (access(file_name, F_OK) != -1) {
+            msg("");
+	    msg("Save file already exists, please try another name.%s", morestr);
+	    wait_for(0);
+	    savefd = NULL;
+	    continue;
+	}
+
+#if 0
         wclear(hw);
         wmove(hw, LINES - 1, 0);
         wrefresh(hw);
-
-        if ((savefd = fopen(file_name, "wb")) == NULL)
-            msg(strerror(errno));    /* fake perror() */
+#endif
+        if ((savefd = fopen(file_name, "wb")) == NULL) {
+            msg("");
+            msg("Error: %s.%s", strerror(errno), morestr);    /* fake perror() */
+	    wait_for(0);
+	}
     }
     while (savefd == NULL);
 
@@ -72,7 +84,6 @@ int
 restore(char *file)
 {
     FILE *infd;
-    char    *sp;
 
     if (strcmp(file, "-r") == 0)
         file = file_name;
@@ -96,17 +107,16 @@ restore(char *file)
      */
 
 #ifdef _WIN32
-    fclose(infd);  /* need to close file before deleting */
+    fclose(infd);  /* need to close file before deleting on Windows */
 #endif
-    if (unlink(file) < 0)
-    {
-	endwin();
-        printf("Cannot unlink file\n");
-        return(FALSE);
-    }
 
-    if ((sp = getenv("OPTIONS")) != NULL)
-        parse_opts(sp);
+    if (access(file_name, F_OK) == -0) {
+	if (unlink(file) < 0) {
+	    endwin();
+	    printf("Cannot unlink file\n");
+	    return(FALSE);
+	}
+    }
 
     strcpy(file_name, file);
 
