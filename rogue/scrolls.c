@@ -828,7 +828,7 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
  * Creat_mons creates the specified monster -- any if 0 
  */
 
-bool 
+struct thing *
 creat_mons (person, monster, report)
 struct thing *person;
 int monster;
@@ -837,6 +837,7 @@ bool report;
     int x, y;
     bool appear = 0;
     struct thing play_copy;	/* A copy with no phasing */
+    struct thing *nmonster;
     coord mp;
 
     /* Make sure phasing is off in the copy */
@@ -876,11 +877,14 @@ bool report;
 					: monster, &mp, TRUE);
 	runto(&mp, &hero);
 	light(&hero);
-	return(TRUE);
+
+	nmonster = THINGPTR(nitem);
+	return(nmonster);
     }
     if (report) msg("You hear a faint cry of anguish in the distance.");
-    return(FALSE);
+    return((struct thing *) NULL);
 }
+
 /*
  *	This subroutine determines if an object that is a ring is
  *      being worn by the hero  by Bruce Dautrich 4/3/84

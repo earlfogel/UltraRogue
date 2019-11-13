@@ -898,12 +898,21 @@ int damage;
 			}
 
 			else if ((strcmp(name, "lightning bolt") == 0) &&
-				 on(*tp, BOLTDIVIDE)) {
-				if (creat_mons(tp, tp->t_index, FALSE))
-				    msg("The %s divides the %s.", name, mname);
-				else msg("The %s has no effect on the %s.",
-					name, on(player, ISBLIND) ? 
-					"monster" : mname);
+				on(*tp, BOLTDIVIDE)) {
+			    struct thing *mcopy;
+			    mcopy = creat_mons(tp, tp->t_index, FALSE);
+			    if (tp->t_stats.s_lvl > 1) {
+				tp->t_stats.s_lvl--;
+				if (mcopy) {
+				    tp->t_stats.s_exp /= 2;
+				    mcopy->t_stats.s_lvl = tp->t_stats.s_lvl;
+				    mcopy->t_stats.s_exp = tp->t_stats.s_exp;
+				}
+			    } else {
+				turn_off(*tp, BOLTDIVIDE);
+				if (mcopy)
+				    turn_off(*mcopy, BOLTDIVIDE);
+			    }
 			}
 
 			else if ((strcmp(name, "flame") == 0) &&

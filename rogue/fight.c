@@ -946,6 +946,15 @@ int wplus;
     if (difficulty >= 2 && need > 20)
 	need = 20 + ((need - 20)/2);
 
+    /* this monster is too weak to hurt us (or vice versa)
+     * but it's close, so give them a chance.
+     */
+    if (need > 20 + wplus && need < 25 + wplus
+	    && res == 20 && rnd(10)==0) {
+	debug("Lucky hit (have %d, normally need: %d)", res+wplus, need);
+	return (1);
+    }
+
     return (res+wplus >= need);
 }
 
@@ -1136,9 +1145,27 @@ struct object *cur_weapon;
 	    /* Check for no-damage and division */
 	    if (on(*def_er, BLOWDIVIDE) &&
 			!((weap != NULL) && (weap->o_flags & CANBURN))) {
+		struct thing *mcopy;
+		mcopy = creat_mons(def_er, def_er->t_index, FALSE);
+		if (def_er->t_stats.s_lvl > 1) {
+		    /* 
+		     * the number of times a monster can divide
+		     * is based on it's experience level
+		     */
+		    def_er->t_stats.s_lvl--;
+		    if (mcopy) {
+			def_er->t_stats.s_exp /= 2;  /* share the points */
+			mcopy->t_stats.s_lvl = def_er->t_stats.s_lvl;
+			mcopy->t_stats.s_exp = def_er->t_stats.s_exp;
+		    }
+		} else {
+		    turn_off(*def_er, BLOWDIVIDE);
+		    if (mcopy)
+			turn_off(*mcopy, BLOWDIVIDE);
+		}
 		damage = 0;
-		creat_mons(def_er, def_er->t_index, FALSE);
-		fighting = FALSE;
+		if (!keep_fighting)
+		    fighting = FALSE;
 		break;
 	    }
 

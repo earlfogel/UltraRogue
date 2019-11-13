@@ -363,7 +363,7 @@ makemon ()
     int i;
     short which_monst;
     int num_monst = nummonst+2, pres_monst=1, num_lines=2*(LINES-3);
-    char monst_name[40];
+    char monst_name[60];
 
     /* Print out the monsters */
     while (num_monst > 0) {
@@ -442,6 +442,7 @@ teleport ()
     c = hero;
     mvwaddch(cw, hero.y, hero.x, mvwinch(stdscr, hero.y, hero.x));
     if (ISWEARING(R_TELCONTROL)) {
+	curs_set(1);  /* show cursor */
 	msg("Where do you wish to teleport to? (* for help)");
 	wmove(cw, hero.y, hero.x);
 	draw(cw);
@@ -480,6 +481,7 @@ teleport ()
 	}
 	if (rand_position)
 	    msg("Your attempt fails.");
+	curs_set(0);  /* hide cursor */
     }
     if (rand_position) {
 	do {
