@@ -19,8 +19,6 @@
 #include <unistd.h>
 #include "rogue.h"
 
-bool can_fight (int x, int y);
-
 /*
  * command:
  *	Process the user commands
@@ -36,7 +34,6 @@ command ()
     static coord dta;
     static int minfight;
     static int waitcount;
-    static int searching_run = 0;
 
     if (on(player, ISHASTE)) 
 	ntimes++;
@@ -105,7 +102,11 @@ command ()
 		    }
 		}
 		if (searching_run == 1) {
-		    ch = 's';
+		    if (winat(hero.y, hero.x) == PASSAGE) {
+			ch = runch;
+		    } else {
+			ch = 's';
+		    }
 		    searching_run++;
 		} else if (searching_run == 2) {
 		    ch = runch;
@@ -140,8 +141,6 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 		else if (ch == 01070)      ch = CTRL('l');  /* ctrl right arrow */
 		if (ch == 'x')
 		    ch = '.'; /* rest - left handed */
-		if (ch == CTRL('f') && !wizard)
-		    ch = 'F'; /* a common typo */
 		if (mpos != 0 && !running)
 		    msg("");	/* Erase message if its there */
 	    }
@@ -207,7 +206,7 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 			door_stop = TRUE;
 			firstmove = TRUE;
 		    }
-		    if (winat(hero.y, hero.x) == FLOOR)
+		    if (winat(hero.y, hero.x) != PASSAGE)
 			searching_run = 1;	/* alternately search and move */
 		    break;
 	    }
@@ -242,10 +241,10 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 			break;
 		    }
 		    do_move(delta.y, delta.x);
-		when 'F' : case 'f':
+		when 'F' : case 'f': case CTRL('F'):
 		    if (!fighting) {	/* begin fighting */
 			minfight = 10;
-			if (ch == 'F') minfight += 30;
+			if (ch == 'F' || ch == CTRL('F')) minfight += 30;
 		    } else {		/* continue fighting */
 			minfight--;
 		    }
@@ -254,18 +253,19 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 		     * we were 'F'ighting is gone (moved or died).
 		     */
 		    if (!fighting ||
-		        (ch == 'F' && !can_fight(hero.x+dta.x,hero.y+dta.y))) {
+		        ((ch == 'F' || ch == CTRL('F'))
+			    && !can_fight(hero.x+dta.x,hero.y+dta.y,ch))) {
 			/*
 			 * Look for a monster to fight.
 			 * If we can't find one, ask the player.
 			 */
-			if (pick_monster((ch == 'F')) || (!fighting && get_dir())) {
+			if (pick_monster(ch) || (!fighting && get_dir())) {
 			    dta.y = delta.y;
 			    dta.x = delta.x;
 			    beast = NULL;
 			    waitcount = 2;
 			} else {
-			    if (ch == 'F' &&
+			    if ((ch == 'F' || ch == CTRL('F')) &&
 				pstats.s_hpt == max_stats.s_hpt &&
 				hungry_state == F_OK &&
 				waitcount > 0) {
@@ -284,7 +284,8 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 			    break;
 			}
 		    }
-		    do_fight(dta.y, dta.x, (ch == 'F') ? TRUE : FALSE);
+		    do_fight(dta.y, dta.x,
+			(ch == 'F' || ch == CTRL('F')) ? TRUE : FALSE);
 		    waitcount = 2;
 		when 't':
 		    if (!get_dir())
@@ -545,7 +546,7 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 	 * unless its a trading post
 	 */
 	if (take != 0 && levtype != POSTLEV) {
-	    if (!moving)
+	    if (!moving && !searching_run)
 	        pick_up(take);
 	    else
 		show_floor();
@@ -755,8 +756,10 @@ bool is_thief;
 		    tp->tr_flags |= ISFOUND;
 		    mvwaddch(cw, y, x, ch);
 		    count = 0;
-		    running = FALSE;
-		    msg(tr_name(tp->tr_type));
+		    if (x != hero.x && y != hero.y) {
+			running = FALSE;
+			msg(tr_name(tp->tr_type));
+		    }
 	    }
 	    else if (ch == SECRETDOOR) {
 		    if (rnd(100) < 30 && !is_thief) {
@@ -1068,8 +1071,8 @@ bool mark;
  * and keep going as long as there's a monster in reach.
  */
 bool
-pick_monster (multiple)
-bool multiple;
+pick_monster (ch)
+char ch;
 {
     int x, y, found_monster=0;
     coord found;
@@ -1082,7 +1085,7 @@ bool multiple;
 	for (x = hero.x - 1; x <= hero.x + 1; x++) {
 	    if (rnd(2)) {
 		for (y = hero.y - 1; y <= hero.y + 1; y++) {
-		    if (can_fight(x,y)) {
+		    if (can_fight(x,y,ch)) {
 			found_monster++;
 			found.x = x - hero.x;
 			found.y = y - hero.y;
@@ -1090,7 +1093,7 @@ bool multiple;
 		}
 	    } else {
 		for (y = hero.y + 1; y >= hero.y - 1; y--) {
-		    if (can_fight(x,y)) {
+		    if (can_fight(x,y,ch)) {
 			found_monster++;
 			found.x = x - hero.x;
 			found.y = y - hero.y;
@@ -1103,7 +1106,7 @@ bool multiple;
 	delta.y = found.y;
 	delta.x = found.x;
 	return(TRUE);
-    } else if (found_monster > 1 && multiple) {
+    } else if (found_monster > 1 && (ch == 'F' || ch == CTRL('F'))) {
 	delta.y = found.y;
 	delta.x = found.x;
 	return(TRUE);
@@ -1115,30 +1118,30 @@ bool multiple;
  * see if there's a monster we'd like to fight at the given position
  */
 bool
-can_fight (x, y)
+can_fight (x, y, ch)
 int x;
 int y;
+char ch;
 {
     int mch;
     coord tryp;
     struct linked_list *item;
     struct thing *tp;
 
-/* msg("Check at %d %d", hero.x-x, hero.y-y); */
     mch = mvwinch(cw, y, x);
     tryp.x = x;
     tryp.y = y;
     if (isalpha(mch)
-     && mch != 'q'	/* quartermaster */
      && diag_ok(&tryp, &hero, &player)
      && (item = find_mons(y, x))
      ) {
 	tp = THINGPTR(item);
-/* msg("Monster at %d %d", hero.x-x, hero.y-y); */
+	if (ch != CTRL('F') &&
+	    (tp->t_index == nummonst /* quartermaster */
+	    || on(*tp, BLOWDIVIDE) || on(*tp, ISFRIENDLY)))
+		return(FALSE);
 
-	if (!on(*tp, BLOWDIVIDE) && !on(*tp, ISFRIENDLY)) {
-	    return(TRUE);
-	}
+	return(TRUE);
     }
     return(FALSE);
 }
