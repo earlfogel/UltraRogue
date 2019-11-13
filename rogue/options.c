@@ -39,6 +39,8 @@ OPTION	optlist[] = {
 		(int *) &slow_invent,	put_bool,	get_bool	},
     {"askme",	"Ask me about unidentified things (askme): ",
 		(int *) &askme,		put_bool,	get_bool	},
+    {"cutcorners",	"Move sharply around corners (cutcorners): ",
+		(int *) &cutcorners,	put_bool,	get_bool	},
     {"name",	 "Name (name): ",
 		(int *) whoami,		put_str,	get_str		},
     {"fruit",	 "Fruit (fruit): ",
@@ -350,13 +352,14 @@ WINDOW *win;
     curs_set(0);			/* hide cursor */
     return NORM;
 }
+
 /*
  *
- * The difficulty field is read-only
+ * Change difficulty level on the fly
  */
 int
-get_diff(difficulty, win)
-int *difficulty;
+get_diff(diff, win)
+int *diff;
 WINDOW *win;
 {
     int oy, ox, ny, nx;
@@ -366,7 +369,7 @@ WINDOW *win;
     curs_set(1);			/* show cursor */
     op_bad = TRUE;
     getyx(win, oy, ox);
-    put_diff(difficulty, win);
+    put_diff(diff, win);
     getyx(win, ny, nx);
     while(op_bad)	
     {
@@ -389,17 +392,27 @@ WINDOW *win;
 		curs_set(0);
 		return MINUS;
 	    default:
-		if (wizard) {
-		    if (ch >= '1' && ch <= '3') {
-			*difficulty = ch - '0';
-			put_diff(difficulty, win);
-			getyx(win, ny, nx);
-		    } else {
-			mvwaddstr(win, ny, nx + 5, "(1, 2 or 3)");
-		    }
+		if (ch >= '1' && ch <= '3') {
+		    *diff = ch - '0';
+		    put_diff(diff, win);
+		    getyx(win, ny, nx);
+		} else if (tolower(ch) == 'e') {  /* easy */
+		    *diff = 1;
+		    put_diff(diff, win);
+		    getyx(win, ny, nx);
+		} else if (tolower(ch) == 'n') {  /* normal */
+		    *diff = 2;
+		    put_diff(diff, win);
+		    getyx(win, ny, nx);
+		} else if (tolower(ch) == 'h') {  /* hard */
+		    *diff = 3;
+		    put_diff(diff, win);
+		    getyx(win, ny, nx);
 		} else {
-		    mvwaddstr(win, ny, nx + 5, "(no change allowed)");
+		    mvwaddstr(win, ny, nx + 5, "('E'asy, 'N'ormal, 'H'ard)");
 		}
+		if (*diff < mindifficulty)
+		    mindifficulty = *diff;
 	}
     }
     wmove(win, ny, nx + 5);
@@ -470,7 +483,15 @@ char *str;
 		    strucpy(start, str, sp - str);
 
 		    /* Put the value into the option field */
-		    if (op->o_putfunc != put_abil) 
+		    if (op->o_putfunc == put_diff) {
+			if (strcasecmp(value,"hard") == 0 || atoi(value) == 3) {
+			    *op->o_opt = 3;
+			    mindifficulty = 3;
+			} else if (strcasecmp(value,"easy") == 0 || atoi(value) == 1) {
+			    *op->o_opt = 1;
+			    mindifficulty = 1;
+			}
+		    } else if (op->o_putfunc != put_abil)
 			strcpy((char *)op->o_opt, value);
 
 		    else if (*op->o_opt == -1) { /* Only init ability once */
