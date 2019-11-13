@@ -221,8 +221,10 @@ char **argv;
      */
     if (argc >= 2 && strcmp(argv[1], "-easy") == 0) {
 	difficulty--;
+	mindifficulty = difficulty;
     } else if (argc >= 2 && strcmp(argv[1], "-hard") == 0) {
 	difficulty++;
+	mindifficulty = difficulty;
     }
 
     predef = geta_player();

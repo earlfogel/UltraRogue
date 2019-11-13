@@ -220,10 +220,20 @@ int monst;
     /*
      * no score at end of game for wizard/developer
      */
-    if (canwizard && flags != SCOREIT)
+    if ((amount == 0 || canwizard) && flags != SCOREIT) {
+	refresh();
+	endwin();
 	return;
-    if (amount == 0 && flags != SCOREIT)
-	return;
+    }
+
+    /*
+     * adjust score based on difficulty level
+     */
+    if (mindifficulty < 2) {
+	amount *= 0.67;
+    } else if (mindifficulty > 2) {
+	amount *= 1.50;
+    }
 
     /*
      * Open file and read list
