@@ -1,15 +1,35 @@
 November 2019
 -------------
 
-More dextrous players can turn sharper corners.
+Option to let players (and monsters) turn sharper corners.
 
 Bad luck fades over time.
 
-urogue.bat and urogue.sh have example of -easy option.
+urogue.bat and urogue.sh have example of setting options.
 
 Thieves can steal from shops.
 
 If friendly monsters notice your attempt to steal, they get angry.
+
+Can use SROGUEOPTS environment variable to set difficulty level.
+
+Can change difficulty level on the fly.
+
+Score adjusted based on lowest difficulty level used.
+
+'S'ave won't clobber an existing file.
+
+Don't stop to pick things up in searching runs.
+
+Make swings connect sometimes when fights are uneven.
+
+Limit how many times a monster can divide.
+
+New CTRL('F') command fights monsters that are usually best to avoid.
+
+Don't pick stuff up during searching runs.
+
+Fix: show cursor when needed for teleport control.
 
 
 October 2019
@@ -31,7 +51,7 @@ Exploding rings only hurt if you're wearing them.
 Things don't explode as early when blessed scroll of
 enchantment is overused.
 
-Greedy monsters don't chase you if they're friendly.
+Greedy monsters don't chase you if they're also friendly.
 
 Drop multiple items, e.g. 10d to drop 10 food rations.
 
@@ -319,7 +339,7 @@ Enchanted armor offers some protection from magical attacks.
 Fixed calculation of how much mithril protects against magic.
 
 Create a unique ID for each game.  Users can restart saved games over and
-over (by copying the save file), but each game will only be added to the
+over (by copying the save file), but each game only appears in the
 scorefile once.
 
 Warn player each turn while suffocating.
