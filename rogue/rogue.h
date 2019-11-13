@@ -994,8 +994,10 @@ extern int msg_index;			/* pointer to current message buffer */
 extern int luck;			/* how expensive things to buy thing */
 extern int game_id;			/* unique identifier for each game */
 extern int difficulty;			/* 1 easy, 2 normal, 3 hard */
+extern int mindifficulty;		/* lowest difficulty level used in a game */
 extern int maxpack;			/* max items that fit in pack */
 extern int nummonst;			/* number of types of monsters */
+extern int searching_run;		/* alternately search and step */
 extern char take;			/* Thing the rogue is taking */
 extern char prbuf[];			/* Buffer for sprintfs */
 extern char outbuf[];			/* Output buffer for stdout */
@@ -1030,6 +1032,7 @@ extern bool playing;			/* True until he quits */
 extern bool wizard;			/* True if allows wizard commands */
 extern bool after;			/* True if we want after daemons */
 extern bool notify;			/* True if player wants to know */
+extern bool cutcorners;			/* Option for moving around corners */
 extern bool doorstop;			/* Option whether runs stop early */
 extern bool door_stop;			/* Stop running when we pass a door */
 extern bool jump;			/* Show running as series of jumps */
@@ -1106,7 +1109,8 @@ void d_level(void);
 void u_level(void);
 void shell(void);
 void call(bool mark);
-bool pick_monster (bool multiple);
+bool pick_monster (char ch);
+bool can_fight (int x, int y, char ch);
 
 /* daemon.c */
 
@@ -1453,7 +1457,7 @@ int putword(int word, FILE *file);
 int getword(int fd);
 /* scrolls.c */
 void read_scroll(int which, bool blessed);
-bool creat_mons(struct thing *person, int monster, bool report);
+struct thing *creat_mons(struct thing *person, int monster, bool report);
 int is_r_on(struct object *obj);
 /* sticks.c */
 void fix_stick(struct object *cur);

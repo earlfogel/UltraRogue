@@ -51,8 +51,10 @@ int luck = 0;
 int game_id;
 int resurrect = 0;
 int difficulty = 2;			/* 1 easy, 2 normal, 3 hard */
+int mindifficulty = 2;			/* lowest difficulty level used in a game */
 int maxpack = MAXPACK;
 int auth_or[MAXAUTH];
+int searching_run = 0;
 char curpurch[15];			/* name of item ready to buy */
 char PLAYER = VPLAYER;			/* what the player looks like */
 char take;				/* Thing the rogue is taking */
@@ -91,6 +93,7 @@ bool running = FALSE;
 bool fighting = FALSE;
 bool wizard = FALSE;
 bool notify = TRUE;
+bool cutcorners = FALSE;
 bool doorstop = TRUE;
 bool door_stop = FALSE;
 bool jump = FALSE;
@@ -439,6 +442,7 @@ struct h_list helpstr[] = {
 	{'=',	"	listen for monsters"},
 	{'f',	"	fight monster"},
 	{'F',	"	fight monsters"},
+	{CTRL('F'),	"	fight all monsters"},
 /*
  * Wizard commands.  Identified by (h_ch != 0 && h_desc == 0).
  */

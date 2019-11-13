@@ -708,7 +708,8 @@ struct thing *flgptr;
 {
     if (ep->x == sp->x || ep->y == sp->y)
 	return TRUE;
-    if (flgptr->t_stats.s_dext > 16) /* can squeeze around corners */
+    if (cutcorners && (flgptr == &player || flgptr->t_stats.s_dext > 16))
+	/* can squeeze around corners */
 	return (step_ok(ep->y, sp->x, MONSTOK, flgptr) ||
 		step_ok(sp->y, ep->x, MONSTOK, flgptr));
     else

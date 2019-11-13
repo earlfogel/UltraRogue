@@ -67,8 +67,18 @@ d_list[MAXDAEMONS] = {
 	_X_, _X_, _X_, _X_, _X_, _X_, _X_, _X_, _X_, _X_,
 };
 
-char *save_format = "UltraRogue Portable Save File Release 001e";
+char *prev_format = "UltraRogue Portable Save File Release 001e";
+char *save_format = "UltraRogue Portable Save File Release 101e";
 char *save_end    = "\nEnd of UltraRogue Game State\n";
+
+/*
+ * leave room for future growth
+ */
+int reserved5 = 0;
+int reserved4 = 0;
+int reserved3 = 0;
+int reserved2 = 0;
+int reserved1 = 0;
 
 struct linked_list  *fam_ptr = NULL;        /* A ptr to the familiar        */
 struct linked_list  *curr_mons  = NULL;     /* The mons. currently moving   */
@@ -865,6 +875,13 @@ ur_read_thing(FILE *savef)
     t->t_disguise = ur_read_char(savef);
     t->t_oldch = ur_read_char(savef);
 
+#if 0
+wprintw(stdscr, "%c pos x y %d %d dest x y = %d %d, hero x y = %d %d\n",
+(t->t_type)?t->t_type:'@',
+t->t_pos.x, t->t_pos.y, t->t_dest->x, t->t_dest->y, hero.x, hero.y);
+refresh();usleep(100000);
+#endif
+
     return(t);
 }
 
@@ -1134,6 +1151,14 @@ save_file(FILE *savef)
     ur_write_int(savef, jump);
     ur_write_int(savef, firstmove);
     ur_write_int(savef, askme);
+    ur_write_int(savef, cutcorners);
+
+    ur_write_int(savef, reserved5);
+    ur_write_int(savef, reserved4);
+    ur_write_int(savef, reserved3);
+    ur_write_int(savef, reserved2);
+    ur_write_int(savef, reserved1);  /* for future use */
+
     ur_write_int(savef, game_id);
     ur_write_string(savef,whoami);
     ur_write_string(savef,fruit);
@@ -1154,11 +1179,15 @@ restore_file(FILE *savef)
     struct trap *t;
     struct room *r;
     struct thing *p;
+    bool compatibility_mode = FALSE;
 
     str = ur_read_string(savef);
 
-    if (strcmp(str, save_format) != 0)
-    {
+    if (strcmp(str, save_format) == 0) {
+	/* good */
+    } else if (strcmp(str, prev_format) == 0) {
+	compatibility_mode = TRUE;
+    } else {
 	endwin();
         printf("Save Game Version: %s\n", str);
         printf("Real Game Version: %s\n", save_format);
@@ -1350,6 +1379,17 @@ restore_file(FILE *savef)
     jump = (bool) ur_read_int(savef);
     firstmove = (bool) ur_read_int(savef);
     askme = (bool) ur_read_int(savef);
+
+    if (!compatibility_mode) {
+	cutcorners = (bool) ur_read_int(savef);
+
+	reserved5 = (bool) ur_read_int(savef);
+	reserved4 = (bool) ur_read_int(savef);
+	reserved3 = (bool) ur_read_int(savef);
+	reserved2 = (bool) ur_read_int(savef);
+	reserved1 = (bool) ur_read_int(savef);  /* for future use */
+    }
+
     game_id = ur_read_int(savef);
     str = ur_read_string(savef);
     strcpy(whoami,str);
