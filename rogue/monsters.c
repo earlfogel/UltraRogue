@@ -131,7 +131,7 @@ bool max_monster;
     }
 
     /*
-     * just initailize others values to something reasonable for now
+     * just initialize other values to something reasonable for now
      * maybe someday will *really* put these in monster table
      */
     tp->t_stats.s_wisdom = 8 + rnd(4);
