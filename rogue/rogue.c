@@ -104,6 +104,7 @@ bool moving = FALSE;
 bool in_shell = FALSE;
 bool monst_dead = FALSE;
 bool game_over = FALSE;
+bool serious_fight = FALSE;
 coord delta;				/* Change indicated to get_dir() */
 LEVTYPE levtype;			/* type of level i'm on */
 

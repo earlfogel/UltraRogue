@@ -37,9 +37,13 @@ int y;
 int x;
 bool multiple;
 {
-    if (pstats.s_hpt < max_stats.s_hpt/3
-     || (on(player, HASDISEASE) && pstats.s_hpt < max_stats.s_hpt*2/3)
-     || (on(player, HASINFEST) && pstats.s_hpt < max_stats.s_hpt*2/3)
+    int limit = 0.33;
+    if (serious_fight)
+	limit = 0.25;
+
+    if (pstats.s_hpt < max_stats.s_hpt*limit
+     || (on(player, HASDISEASE) && pstats.s_hpt < max_stats.s_hpt*limit*2)
+     || (on(player, HASINFEST) && pstats.s_hpt < max_stats.s_hpt*limit*2)
      || hungry_state == F_FAINT) {
 	msg("That's not wise.");
 	after = fighting = FALSE;
@@ -946,12 +950,21 @@ int wplus;
     if (difficulty >= 2 && need > 20)
 	need = 20 + ((need - 20)/2);
 
-    /* this monster is too weak to hurt us (or vice versa)
-     * but it's close, so give them a chance.
+    /*
+     * If monster is too weak to hurt us (or vice versa)
+     * but it's close, then give them a chance.
+     * This makes the mid-dungeon more interesting.
      */
-    if (need > 20 + wplus && need < 25 + wplus
-	    && res == 20 && rnd(10)==0) {
-	debug("Lucky hit (have %d, normally need: %d)", res+wplus, need);
+    if (level > 35 && max_level < 70
+	&& need > 20 + wplus
+	&& need < 23 + wplus + difficulty
+	&& res == 20 && rnd(5)==0) {
+#if 0
+	if (class == C_MONSTER)
+	    msg("Lucky hit (monster has %d, normally needs: %d)", res+wplus, need);
+	else
+	    msg("Lucky hit (you have %d, normally need: %d)", res+wplus, need);
+#endif
 	return (1);
     }
 

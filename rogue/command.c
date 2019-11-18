@@ -102,14 +102,14 @@ command ()
 		    }
 		}
 		if (searching_run == 1) {
+		    ch = runch;
+		    searching_run++;
+		} else if (searching_run == 2) {
 		    if (winat(hero.y, hero.x) == PASSAGE) {
 			ch = runch;
 		    } else {
 			ch = 's';
 		    }
-		    searching_run++;
-		} else if (searching_run == 2) {
-		    ch = runch;
 		    searching_run--;
 		} else {
 		    ch = runch;
@@ -141,6 +141,12 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 		else if (ch == 01070)      ch = CTRL('l');  /* ctrl right arrow */
 		if (ch == 'x')
 		    ch = '.'; /* rest - left handed */
+		if (ch == CTRL('F') && !wizard) {
+		    ch = 'F';
+		    serious_fight = TRUE;
+		} else {
+		    serious_fight = FALSE;
+		}
 		if (mpos != 0 && !running)
 		    msg("");	/* Erase message if its there */
 	    }
@@ -241,10 +247,10 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 			break;
 		    }
 		    do_move(delta.y, delta.x);
-		when 'F' : case 'f': case CTRL('F'):
+		when 'F' : case 'f':
 		    if (!fighting) {	/* begin fighting */
 			minfight = 10;
-			if (ch == 'F' || ch == CTRL('F')) minfight += 30;
+			if (ch == 'F') minfight += 30;
 		    } else {		/* continue fighting */
 			minfight--;
 		    }
@@ -253,7 +259,7 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 		     * we were 'F'ighting is gone (moved or died).
 		     */
 		    if (!fighting ||
-		        ((ch == 'F' || ch == CTRL('F'))
+		        (ch == 'F'
 			    && !can_fight(hero.x+dta.x,hero.y+dta.y,ch))) {
 			/*
 			 * Look for a monster to fight.
@@ -264,8 +270,9 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 			    dta.x = delta.x;
 			    beast = NULL;
 			    waitcount = 2;
+			    if (serious_fight) waitcount = 4;
 			} else {
-			    if ((ch == 'F' || ch == CTRL('F')) &&
+			    if (ch == 'F' &&
 				pstats.s_hpt == max_stats.s_hpt &&
 				hungry_state == F_OK &&
 				waitcount > 0) {
@@ -285,8 +292,9 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 			}
 		    }
 		    do_fight(dta.y, dta.x,
-			(ch == 'F' || ch == CTRL('F')) ? TRUE : FALSE);
+			(ch == 'F') ? TRUE : FALSE);
 		    waitcount = 2;
+		    if (serious_fight) waitcount = 4;
 		when 't':
 		    if (!get_dir())
 			after = FALSE;
@@ -1106,7 +1114,7 @@ char ch;
 	delta.y = found.y;
 	delta.x = found.x;
 	return(TRUE);
-    } else if (found_monster > 1 && (ch == 'F' || ch == CTRL('F'))) {
+    } else if (found_monster > 1 && ch == 'F') {
 	delta.y = found.y;
 	delta.x = found.x;
 	return(TRUE);
@@ -1136,7 +1144,7 @@ char ch;
      && (item = find_mons(y, x))
      ) {
 	tp = THINGPTR(item);
-	if (ch != CTRL('F') &&
+	if (!serious_fight &&
 	    (tp->t_index == nummonst /* quartermaster */
 	    || on(*tp, BLOWDIVIDE) || on(*tp, ISFRIENDLY)))
 		return(FALSE);

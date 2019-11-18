@@ -1049,6 +1049,7 @@ extern bool ws_know[];			/* Does he know what a stick does */
 extern bool in_shell;			/* True if executing a shell */
 extern bool monst_dead;			/* Indicates if monster got killed */
 extern bool game_over;			/* Is this the end? */
+extern bool serious_fight;		/* fight longer and harder */
 extern coord oldpos;			/* Position before last look() call */
 extern coord delta;			/* Change indicated to get_dir() */
 extern char *spacemsg;
