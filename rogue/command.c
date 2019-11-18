@@ -212,8 +212,7 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 			door_stop = TRUE;
 			firstmove = TRUE;
 		    }
-		    if (winat(hero.y, hero.x) != PASSAGE)
-			searching_run = 1;	/* alternately search and move */
+		    searching_run = 1;	/* alternately search and move */
 		    break;
 	    }
 
