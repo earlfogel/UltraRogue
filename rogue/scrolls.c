@@ -380,11 +380,17 @@ bool blessed;
 		msg("The smell of fire and brimstone fills the air.");
 	    }
 	    else if (blessed) {
+		bool fixed = FALSE;
 		for (nitem = pack; nitem != NULL; nitem = next(nitem)) {
 		    nobj = OBJPTR(nitem);
+		    if (nobj->o_flags & ISCURSED)
+			fixed = TRUE;
 		    nobj->o_flags &= ~ISCURSED;
 		}
-		msg("Your pack glistens brightly.");
+		if (fixed)
+		    msg("Your pack and contents glisten brightly.");
+		else
+		    msg("Your pack glistens brightly.");
 	    }
 	    else {
 		if ((nitem = get_item("remove the curse on",0)) != NULL) {
@@ -592,6 +598,8 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
 			}
 		    when STICK:
 			lb->o_charges += howmuch + 10;
+			if (flags == ISBLESSED)
+			    lb->o_flags |= ISBLESSED;
 			if (lb->o_charges < 0)
 			    lb->o_charges = 0;
 			if (lb->o_charges > 50
@@ -814,7 +822,8 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
 	     askme &&
 	     s_guess[which] == NULL) {
 	msg("What do you want to call it? ");
-	if (get_str(buf, cw) == NORM)
+	buf[0] = '\0';
+	if (get_str(buf, cw) == NORM && strlen(buf) > 0)
 	{
 	    s_guess[which] = new(strlen(buf) + 1);
 	    strcpy(s_guess[which], buf);

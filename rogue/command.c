@@ -250,6 +250,7 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 		    if (!fighting) {	/* begin fighting */
 			minfight = 10;
 			if (ch == 'F') minfight += 30;
+			if (serious_fight) minfight += 30;
 		    } else {		/* continue fighting */
 			minfight--;
 		    }
@@ -553,7 +554,7 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 	 * unless its a trading post
 	 */
 	if (take != 0 && levtype != POSTLEV) {
-	    if (!moving && !searching_run)
+	    if (!moving && (!searching_run || take == GOLD))
 	        pick_up(take);
 	    else
 		show_floor();
@@ -1049,21 +1050,20 @@ bool mark;
 	    msg("Was marked \"%s\".", obj->o_mark);
 	}
 	msg("What do you want to mark it? ");
-	prbuf[0] = '\0';
     }
     else {
 	msg("Was called \"%s\".", elsewise);
 	msg("What do you want to call it? ");
-	if (guess[obj->o_which] != NULL)
-	    FREE(guess[obj->o_which]);
-	strcpy(prbuf, elsewise);
     }
+    prbuf[0] = '\0';
     if (get_str(prbuf, cw) == NORM) {
 	if (mark) {
 	    strncpy(obj->o_mark, prbuf, MARKLEN-1);
 	    obj->o_mark[MARKLEN-1] = '\0';
 	}
-	else {
+	else if (strlen(prbuf) > 0) {
+	    if (guess[obj->o_which] != NULL)
+		FREE(guess[obj->o_which]);
 	    guess[obj->o_which] = new((unsigned int) strlen(prbuf) + 1);
 	    strcpy(guess[obj->o_which], prbuf);
 	}
