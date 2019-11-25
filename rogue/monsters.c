@@ -52,10 +52,12 @@ bool no_unique;
 	}
 	if (d < 1)
 	    d = rnd(NLEVMONS) + 1;
+#if 0
 	if (levtype == NORMLEV && level > 35 && max_level < 70 && rnd(50) == 0) {
 	    /* make the mid-dungeon more interesting */
 	    d += nlevmons * 13;	/* a monster rises from the depths */
 	}
+#endif
 	if (d > nummonst - NUMUNIQUE - 1) {
 	    if (no_unique)
 		d = rnd(range) + (nummonst - NUMUNIQUE - 1) - (range - 1);
@@ -128,6 +130,7 @@ bool max_monster;
 	tp->t_stats.s_lvl += roll(4,(max_level-60)/8);
 	tp->t_stats.s_arm -= roll(2,(max_level-60)/8);
 	tp->t_stats.s_str += roll(2,(max_level-60)/12);
+	tp->t_stats.s_exp += roll(4, (max_level - 60) * 2) * mp->m_add_exp;
     }
 
     /*
