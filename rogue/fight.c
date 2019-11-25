@@ -918,6 +918,10 @@ bool thrown;
 	    fighting = FALSE;
 	    keep_fighting = FALSE;
 	}
+    } else if ((fighting | keep_fighting) && damage > 0
+	    && pstats.s_hpt < max_stats.s_hpt/3) {
+	msg("Ouch, that hurt!");
+	fighting = keep_fighting = FALSE;
     }
 
     count = 0;
