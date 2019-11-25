@@ -196,8 +196,8 @@ struct object *cur;
 	}
 	if (which < 0) {
 	    for(which = 0; which < MAXARTIFACT; which++)
-		/* be nice, bring back the purse if they lose it */
-		if (which==TR_PURSE &&
+		/* in easy games, lost artifacts return eventually */
+		if (difficulty < 2 &&
 		    !is_carrying(which) && arts[which].ar_level <= level)
 		    break;
 		else if (!possessed(which) && arts[which].ar_level <= level)
