@@ -247,6 +247,7 @@ bool cursed;
 	mvwaddstr(hw,LINES - 1, 0, prbuf);
 	draw(hw);
 	do {
+	    numstr[0] = '\0';
 	    ch = get_str(numstr, hw);
 	    if (ch == QUIT) {
 	        restscr(cw);
@@ -408,6 +409,7 @@ makemon ()
     }
 
     do {
+	monst_name[0] = '\0';
 	i = get_str(monst_name, hw);
 	if (i == QUIT) {
 	    restscr(cw);
