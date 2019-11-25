@@ -288,13 +288,19 @@ int monst;
 	 * Congrats, made it into top 10
 	 */
 	if (regame) {  /* reuse the same slot */
-	    scp = regame;
-	} else {
-	    sc2 = &top_ten[9];
-	    while (sc2 > scp) {	/* make room for new entry */
-		*sc2 = sc2[-1];
-		sc2--;
+	    sc2 = regame;
+	    while (sc2 < &top_ten[9]) {  /* remove old entry */
+		*sc2 = *(sc2+1);
+		sc2++;
 	    }
+	    if (scp > regame)
+		scp--;
+	}
+
+	sc2 = &top_ten[9];
+	while (sc2 > scp) {	/* make room for new entry */
+	    *sc2 = sc2[-1];
+	    sc2--;
 	}
 	scp->sc_score = amount;
 	scp->sc_gold = purse;
