@@ -100,7 +100,8 @@ ring_on ()
 	     r_guess[obj->o_which] == NULL) {
 	mpos = 0;
 	msg("What do you want to call it? ");
-	if (get_str(buf, cw) == NORM)
+	buf[0] = '\0';
+	if (get_str(buf, cw) == NORM && strlen(buf) > 0)
 	{
 	    r_guess[obj->o_which] = new((unsigned int) strlen(buf) + 1);
 	    strcpy(r_guess[obj->o_which], buf);
