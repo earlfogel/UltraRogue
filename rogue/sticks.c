@@ -153,6 +153,8 @@ bool blessed;
 	    else
 		drain(rp->r_pos.y, rp->r_pos.y+rp->r_max.y,
 		    rp->r_pos.x, rp->r_pos.x+rp->r_max.x);
+	    if (obj != NULL && blessed)
+		pstats.s_hpt *= 4/3;  /* restore some of the points used by drain() */
 	when WS_POLYMORPH:
 	case WS_TELMON:
 	case WS_CANCEL:
