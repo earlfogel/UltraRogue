@@ -175,7 +175,8 @@ bool pr;
 	    add_pack(item, TRUE);
 	    return;
 	}
-	else if (fallpos(&obj->o_pos, &fpos, obj->o_type != WEAPON)) {
+	else if (fallpos(&obj->o_pos, &fpos,
+			    obj->o_type != WEAPON && !(obj->o_flags&ISMISL))) {
 		if (obj->o_flags & CANBURN 
 			&& ntraps + 1 < MAXTRAPS + MAXTRAPS) {
 		    mvaddch(fpos.y, fpos.x, FIRETRAP);
