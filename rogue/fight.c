@@ -28,7 +28,6 @@ struct matrix att_mat[5] = {
 {   7,		25,		1,		0,		2 }
 };
 
-static bool killed_one = FALSE;
 static bool keep_fighting;  /* even if we kill something */
 
 void 
@@ -59,10 +58,6 @@ bool multiple;
     if (isalpha(winat(hero.y+y, hero.x+x))) {
 	after = fighting = TRUE;
 	do_move(y, x);
-	if (keep_fighting && killed_one) {
-	    killed_one = FALSE;
-	    fighting = TRUE;
-	}
     } else {
 	if (fighting == FALSE)
 	    msg("Nothing there.");
@@ -841,7 +836,7 @@ bool thrown;
 			obj != cur_ring[RIGHT_1] && obj != cur_ring[RIGHT_2] &&
 			obj != cur_ring[RIGHT_3] && obj != cur_ring[RIGHT_4] &&
 			!(obj->o_flags & ISPROT) && is_magic(obj) )
-			    || level > 95)
+			    || (level > 95 && difficulty >= 2))
 			&& get_worth(obj) > worth) {
 			steal = list;
 			worth = get_worth(obj);
@@ -1584,8 +1579,8 @@ bool points;
     struct thing *tp;
     struct linked_list *pitem, *nexti;
 
-    fighting = FALSE;
-    killed_one = TRUE;
+    if (!keep_fighting)
+	fighting = FALSE;
     tp = (struct thing *) ldata(item);
     if (pr)
     {

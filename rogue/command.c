@@ -79,9 +79,17 @@ command ()
 	 */
 	if (no_command)
 	{
+	    usleep(50000);
 	    if (--no_command == 0) {
 		msg("You can move again.");
-		fighting = moving = FALSE;
+		if (serious_fight
+		    && pstats.s_hpt > max_stats.s_hpt*2/3
+		    && hungry_state != F_FAINT) {
+		    ch = 'F';
+		} else {
+		    fighting = moving = FALSE;
+		    serious_fight = FALSE;
+		}
 	    }
 	}
 	if (!no_command)
@@ -1147,7 +1155,6 @@ char ch;
 	    (tp->t_index == nummonst /* quartermaster */
 	    || on(*tp, BLOWDIVIDE) || on(*tp, ISFRIENDLY)))
 		return(FALSE);
-
 	return(TRUE);
     }
     return(FALSE);

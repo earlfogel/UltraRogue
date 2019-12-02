@@ -1278,7 +1278,7 @@ struct thing *who;
 	    {
 		if (x < 0 || x >= COLS)
 		    continue;
-		if (step_ok(y, x, NOMONST, who))
+		if (step_ok(y, x, fighting? MONSTOK: NOMONST, who))
 		{
 		    dest.y = y;
 		    dest.x = x;
