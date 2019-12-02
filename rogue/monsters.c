@@ -347,7 +347,7 @@ wanderer ()
     if (on(player, CANHEAR) || (player.t_ctype == C_THIEF && rnd(40) == 0)) 
 	msg("You hear a new %s moving %s.", monsters[tp->t_index].m_name, loc);
 
-    debug("Started a wandering %s.", monsters[tp->t_index].m_name);
+    /* debug("Started a wandering %s.", monsters[tp->t_index].m_name); */
 }
 
 /*
@@ -427,11 +427,11 @@ int x;
 			msg("The %s's gaze has confused you.",mname);
 			turn_on(player, ISHUH);
 		    }
-		}
-		else if (on(player, ISINVIS))
+		} else if (on(player, ISINVIS)) {
 		    msg("The %s's gaze has no effect.", mname);
-		else 
+		} else {
 		    msg("You feel dizzy for a moment, but it quickly passes.");
+		}
 	    }
 	    else if (rnd(100) < 67)
 		turn_off(*tp, CANHUH); /* Once you save, maybe that's it */
@@ -440,11 +440,11 @@ int x;
 	/* Sleep */
 	if (on(*tp, CANSNORE) && no_command == 0 &&
 	    !save(VS_PARALYZATION)) {
- 	    if (on(player, ISINVIS))
+ 	    if (on(player, ISINVIS)) {
 		msg("The gaze of the %s has no effect.", mname);
-	    else if (ISWEARING(R_ALERT))
+	    } else if (ISWEARING(R_ALERT)) {
 		msg("You feel slightly drowsy for a moment.");
-	    else {
+	    } else {
 		msg("The %s's gaze puts you to sleep.", mname);
 		no_command = SLEEPTIME;
 		if (rnd(100) < 50) turn_off(*tp, CANSNORE);
@@ -481,9 +481,9 @@ int x;
 	    turn_off(*tp, LOOKSTONE);
 
 	    if (on(player, CANINWALL) || on(player, ISINVIS)
-	     || ISWEARING(R_SEEINVIS))
+	     || ISWEARING(R_SEEINVIS)) {
 		msg("The gaze of the %s has no effect.", mname);
-	    else {
+	    } else {
 		if (!save(VS_PETRIFICATION) && rnd(100) < 3) {
 		    msg("The gaze of the %s petrifies you.", mname);
 		    if (difficulty >= 2 && no_command) {
