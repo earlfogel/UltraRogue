@@ -291,6 +291,8 @@ line_two:
 	health_state = "  No Armor";
     } else if (cur_weapon == NULL) {
 	health_state = "  No Weapon";
+    } else if (wizard) {
+	health_state = "  Debug Mode";
     } else {
 	health_state = NULL;
     }
