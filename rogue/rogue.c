@@ -443,17 +443,21 @@ struct h_list helpstr[] = {
 	{'=',	"	listen for monsters"},
 	{'f',	"	fight monster"},
 	{'F',	"	fight monsters"},
+#ifdef _WIN32
+	{CTRL('G'),	"	fight all monsters"},
+#else
 	{CTRL('F'),	"	fight all monsters"},
+#endif
 /*
  * Wizard commands.  Identified by (h_ch != 0 && h_desc == 0).
  */
 	{'-',		0},
 	{'V',		"	print worth of object"},
 	{'@',		"	system statistics"},
+	{CTRL('A'),	"	floor map"},
 	{CTRL('C'),	"	charge item"},
 	{CTRL('D'),	"	random number check"},
 	{CTRL('E'),	"	food statistics"},
-	{CTRL('F'),	"	floor map"},
 	{CTRL('G'),	"	goto level"},
 	{CTRL('I'),	"	inventory level"},
 	{CTRL('M'),	"	see monster"},
