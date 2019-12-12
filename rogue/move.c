@@ -123,8 +123,12 @@ int dx;
     char ch;
     coord old_hero;
     char hch;
+    bool first = FALSE;
 
-    firstmove = FALSE;
+    if (firstmove) {
+	firstmove = FALSE;
+	first = TRUE;
+    }
     curprice = -1;		/* if in trading post, we've moved off obj */
     if (player.t_no_move) {
 	player.t_no_move--;
@@ -142,7 +146,6 @@ int dx;
 	nh.y = hero.y + dy;
 	nh.x = hero.x + dx;
     }
-
     /*
      * Check if player tried to move off the screen or make an illegal
      * diagonal move.
@@ -164,8 +167,9 @@ int dx;
 	    msg("You regain your composure.");
 	}
 	else if (DISTANCE(nh.y, nh.x, player.t_dest->y, player.t_dest->x) <
-		 DISTANCE(hero.y, hero.x, player.t_dest->y, player.t_dest->x))
+		 DISTANCE(hero.y, hero.x, player.t_dest->y, player.t_dest->x)) {
 			return;
+	}
     }
 
     /* Take care of hero being held */
@@ -207,7 +211,8 @@ int dx;
 	    else if (running) {
 		after = running = FALSE;
 		search(FALSE);
-		return;
+		if (!first)
+		    return;
 	    }	
 	    turn_on(player, ISINWALL);
 	    break;
@@ -1261,6 +1266,7 @@ struct thing *who;
 {
     int x, y;
     int ex, ey, nopen = 0;
+    int on_monst;
     static coord ret;  /* what we will be returning */
     static coord dest;
 
@@ -1278,7 +1284,16 @@ struct thing *who;
 	    {
 		if (x < 0 || x >= COLS)
 		    continue;
+#if 0
 		if (step_ok(y, x, NOMONST, who))
+#endif
+		if (who == &player && fighting) { /* fighting while confused */
+		    on_monst = MONSTOK;
+		} else {
+		    on_monst = NOMONST;
+		}
+
+		if (step_ok(y, x, on_monst, who))
 		{
 		    dest.y = y;
 		    dest.x = x;
