@@ -230,7 +230,13 @@ bool flee;
 
 	    detach(lvl_obj, item);
 	    mvaddch(ch_ret.y, ch_ret.x, floor);
-	    mvwaddch(cw, ch_ret.y, ch_ret.x, floor);
+#if 0
+	    if (cansee(ch_ret.y, ch_ret.x) || floor == PASSAGE)
+	    if (mvwinch(cw, ch_ret.y, ch_ret.x) != ' '
+	     || cansee(ch_ret.y, ch_ret.x))
+#endif
+	    if (mvwinch(cw, ch_ret.y, ch_ret.x) != ' ')
+		mvwaddch(cw, ch_ret.y, ch_ret.x, floor);
 	    attach(th->t_pack, item);
 	}
     }
@@ -270,6 +276,12 @@ bool flee;
 	on(player, CANSEE)) && off(*th, CANSURPRISE))
 		running = FALSE;
 
+#if 0
+    if (!cansee(ch_ret.y, ch_ret.x) && sch == FLOOR)
+	th->t_oldch = ' ';
+    else
+	th->t_oldch = sch;
+#endif
     if (rer != NULL && (rer->r_flags & ISDARK) && 
 	!(rer->r_flags & HASFIRE) && sch == FLOOR &&
 	DISTANCE(ch_ret.y, ch_ret.x, th->t_pos.y, th->t_pos.x) < see_dist &&
