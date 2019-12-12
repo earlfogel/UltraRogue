@@ -103,6 +103,7 @@ int size;
     if ((item->l_data = new(size)) == NULL)
 	msg("Ran out of memory for data after %d items", total);
     item->l_next = item->l_prev = NULL;
+    item->l_letter = '\0';
     return item;
 }
 

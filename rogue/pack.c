@@ -265,12 +265,14 @@ int type;
 	obj = (struct object *) ldata(list);
 	if (obj->o_type == GOLD)
 		continue;	/* occurs when inventorying floor as wizard */
+#if 0
 	if (type && type != obj->o_type &&
 	    !(type == MARKABLE && obj->o_type != FOOD) &&
 	    !(type == CALLABLE &&
 	     (obj->o_type == SCROLL || obj->o_type == POTION ||
 	      obj->o_type == RING || obj->o_type == STICK)))
 		continue;
+#endif
 	switch (n_objs++)
 	{
 	    /*
@@ -278,6 +280,9 @@ int type;
 	     * in case there is only one.
 	     */
 	    case 0:
+		if (list->l_letter < 'a' || list->l_letter > 'z')
+		    list->l_letter = ch;
+
 		sprintf(inv_temp, "%c) %s", list->l_letter, inv_name(obj, FALSE));
 		break;
 	    /*
@@ -297,6 +302,9 @@ int type;
 	     * Print the line for this object
 	     */
 	    default:
+		if (list->l_letter < 'a' || list->l_letter > 'z')
+		    list->l_letter = ch;
+
 		if (slow_invent)
 		    msg("%c) %s", list->l_letter, inv_name(obj, FALSE));
 		else
