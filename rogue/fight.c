@@ -173,7 +173,8 @@ bool thrown;
 
             /* metal weapons pass through NOMETAL monsters */
             if (on(*tp, NOMETAL) && (weap != NULL) &&
-                (weap->o_flags & ISMETAL)) {
+                (weap->o_flags & ISMETAL) &&
+		!(weap->o_flags & ISVORPED)) {
 		msg("The %s passes through the %s!",
 		    weaps[weap->o_which].w_name,
 		    monsters[tp->t_index].m_name);
@@ -207,8 +208,10 @@ bool thrown;
 		    }
 		    if (item == NULL) {
 			debug("Can't find crystalline armor being worn.");
-		    }
-		    else if (cur_armor->o_flags & ISPROT) {
+		    } else if (cur_armor->o_flags & IS2PROT) {
+			if (!fighting)
+			    msg("Your armor vibrates for a moment.");
+		    } else if (cur_armor->o_flags & ISPROT) {
 			msg("Your armor vibrates uncomfortably.");
 			obj->o_flags &= ~ISPROT;
 			fighting = FALSE;
@@ -408,8 +411,10 @@ bool thrown;
 		    }
 		    if (item == NULL) {
 			debug("Can't find crystalline armor being worn.");
-		    }
-		    else if (cur_armor->o_flags & ISPROT) {
+		    } else if (cur_armor->o_flags & IS2PROT) {
+			if (!fighting)
+			    msg("Your armor vibrates for a moment.");
+		    } else if (cur_armor->o_flags & ISPROT) {
 			msg("Your armor vibrates uncomfortably.");
 			obj->o_flags &= ~ISPROT;
 			fighting = FALSE;
@@ -956,7 +961,7 @@ int wplus;
      */
     if (level > 35 && max_level < 70
 	&& need > 20 + wplus
-	&& need < 23 + wplus + difficulty
+	&& need < 23 + wplus + (difficulty*3)
 	&& res == 20 && rnd(5)==0) {
 #if 0
 	if (class == C_MONSTER)
@@ -1143,7 +1148,8 @@ struct object *cur_weapon;
 
             /* Check for metal proof monsters */
             if (on(*def_er, NOMETAL) && (weap != NULL) &&
-                (weap->o_flags & ISMETAL))
+                (weap->o_flags & ISMETAL) &&
+		!(weap->o_flags & ISVORPED))
                 damage = 0;
 
 	    /* Check for poisoned weapons */
@@ -1156,7 +1162,8 @@ struct object *cur_weapon;
 
 	    /* Check for no-damage and division */
 	    if (on(*def_er, BLOWDIVIDE) &&
-			!((weap != NULL) && (weap->o_flags & CANBURN))) {
+			!((weap != NULL) && (weap->o_flags & CANBURN
+			    || weap->o_flags & ISVORPED))) {
 		struct thing *mcopy;
 		mcopy = creat_mons(def_er, def_er->t_index, FALSE);
 		if (def_er->t_stats.s_lvl > 1) {

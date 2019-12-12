@@ -486,6 +486,8 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
 	    if ((ll = get_item("protect",0)) != NULL) {
 		lb = OBJPTR(ll);
 		lb->o_flags |= ISPROT;
+		if (blessed)
+		    lb->o_flags |= IS2PROT;
 		mpos = 0;
 		msg("Protected %s.", inv_name(lb,TRUE));
 	    }
@@ -632,6 +634,10 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
 			    freeletter(ll);
 			    discard(ll);
 			    lb = NULL;
+			} else if (lb->o_hplus + lb->o_dplus > 16
+				&& !(lb->o_flags & ISVORPED)) {
+			    msg("Your %s begins to shine.", inv_name(lb, TRUE));
+			    lb->o_flags |= ISVORPED;  /* vorpal blade */
 			}
 		    when POTION:
 		    case SCROLL:
@@ -658,6 +664,10 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
 		    lb->o_hplus += rnd(3) + 1;
 		    lb->o_flags |= ISSILVER;
 		    msg("Your weapon has turned to silver!");
+		    if (lb->o_hplus + lb->o_dplus > 16 && !(lb->o_flags & ISVORPED)) {
+			msg("Your %s begins to shine.", inv_name(lb, TRUE));
+			lb->o_flags |= ISVORPED;  /* vorpal blade */
+		    }
 		}
 		else if (cursed && (lb->o_flags & ISSILVER)) {
 		    lb->o_hplus -= (rnd(3) + 1);
@@ -671,6 +681,10 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
 		    lb->o_hplus += rnd(2) + 1;
 		    lb->o_flags |= ISSILVER;
 		    msg("Your weapon has turned to silver.");
+		    if (lb->o_hplus + lb->o_dplus > 16 && !(lb->o_flags & ISVORPED)) {
+			msg("Your %s begins to shine.", inv_name(lb, TRUE));
+			lb->o_flags |= ISVORPED;  /* vorpal blade */
+		    }
 		}
 	    }
 	    s_know[S_SILVER] = TRUE;
@@ -885,7 +899,9 @@ bool report;
 	new_monster(nitem, monster == 0 ? randmonster(FALSE, FALSE)
 					: monster, &mp, TRUE);
 	runto(&mp, &hero);
+#if 1
 	light(&hero);
+#endif
 
 	nmonster = THINGPTR(nitem);
 	return(nmonster);

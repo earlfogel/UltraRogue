@@ -269,6 +269,7 @@
 #define ISMISL      	   020000
 #define ISMANY     	   040000
 #define CANBURN           0100000	/* burns monsters */
+#define IS2PROT           0200000	/* doubly protected */
 /*
  * Various flag bits
  */

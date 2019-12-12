@@ -82,6 +82,8 @@ bool drop;
 	    pb = &prbuf[strlen(prbuf)];
 	    if (obj->o_flags & ISSILVER)
 		sprintf(pb, "silver ");
+	    if (obj->o_flags & ISVORPED)
+		sprintf(pb, "vorpal ");
 	    pb = &prbuf[strlen(prbuf)];
 	    if ((obj->o_flags & ISKNOW) || (obj->o_flags & ISPOST))
 		sprintf(pb, "%s %s", num(obj->o_hplus, obj->o_dplus),
@@ -173,7 +175,9 @@ bool drop;
     else if (obj == cur_ring[RIGHT_2]) strcat(prbuf, " (on right hand)");
     else if (obj == cur_ring[RIGHT_3]) strcat(prbuf, " (on right hand)");
     else if (obj == cur_ring[RIGHT_4]) strcat(prbuf, " (on right hand)");
-    if (obj->o_flags & ISPROT)
+    if (obj->o_flags & IS2PROT)
+	strcat(prbuf, " [Protected]");
+    else if (obj->o_flags & ISPROT)
 	strcat(prbuf, " [protected]");
     if (drop && isupper(prbuf[0]))
 	prbuf[0] = tolower(prbuf[0]);

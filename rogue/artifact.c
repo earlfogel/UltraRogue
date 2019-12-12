@@ -793,8 +793,10 @@ struct object *tr;
 		    if ((obj = OBJPTR(item)) == cur_weapon)
 			break;
 		if (obj) {
-		    if (obj->o_flags & ISPROT) {
-			msg("Your %s vibrates for a moment.", inv_name(obj, TRUE));
+		    if (obj->o_flags & IS2PROT) {
+			msg("Your weapon vibrates for a moment.");
+		    } else if (obj->o_flags & ISPROT) {
+			msg("Your %s vibrates in your hand.", inv_name(obj, TRUE));
 			obj->o_flags &= ~ISPROT;
 		    } else {
 			if (obj->o_flags & ISMETAL)
@@ -823,8 +825,10 @@ struct object *tr;
 		    if ((obj = OBJPTR(item)) == cur_armor)
 			break;
 		if (obj) {
-		    if (obj->o_flags & ISPROT) {
-			msg("Your %s vibrates for a moment.", inv_name(obj, TRUE));
+		    if (obj->o_flags & IS2PROT) {
+			msg("Your armor vibrates for a moment.");
+		    } else if (obj->o_flags & ISPROT) {
+			msg("Your %s vibrates uncomfortably.", inv_name(obj, TRUE));
 			obj->o_flags &= ~ISPROT;
 		    } else {
 			msg("Your %s crumbles into small black powdery dust.",
@@ -843,8 +847,10 @@ struct object *tr;
 		    msg("Your hand glows yellow for an instant.");
 		    return;
 		}
-		if (cur_weapon->o_flags & ISPROT) {
-		    msg("Your %s vibrates for a moment.", inv_name(cur_weapon, TRUE));
+		if (cur_weapon->o_flags & IS2PROT) {
+		    msg("Your weapon vibrates for a moment.");
+		} else if (cur_weapon->o_flags & ISPROT) {
+		    msg("Your %s vibrates in your hand.", inv_name(cur_weapon, TRUE));
 		    cur_weapon->o_flags &= ~ISPROT;
 		} else {
 		    msg("Your %s glows bright red for a moment.", 
