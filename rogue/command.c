@@ -149,9 +149,14 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 		else if (ch == 01070)      ch = CTRL('l');  /* ctrl right arrow */
 		if (ch == 'x')
 		    ch = '.'; /* rest - left handed */
-		if (ch == CTRL('F') && !wizard) {
+		if (ch == CTRL('F')) {
 		    ch = 'F';
 		    serious_fight = TRUE;
+#ifdef _WIN32
+		} else if (ch == 'g' || (ch == CTRL('G') && !wizard)) {
+		    ch = 'F';
+		    serious_fight = TRUE;
+#endif
 		} else {
 		    serious_fight = FALSE;
 		}
@@ -301,8 +306,10 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 		    }
 		    do_fight(dta.y, dta.x,
 			(ch == 'F') ? TRUE : FALSE);
-		    waitcount = 2;
-		    if (serious_fight) waitcount = 4;
+		    if (ch == 'F') {
+			waitcount = 2;
+			if (serious_fight) waitcount = 4;
+		    }
 		when 't':
 		    if (!get_dir())
 			after = FALSE;
@@ -426,7 +433,7 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 			when CTRL('Z') : whatis(NULL);
 			when CTRL('D') : msg("rnd(4)%d, rnd(40)%d, rnd(100)%d",
 						rnd(4),rnd(40),rnd(100));
-			when CTRL('F') : overlay(stdscr,cw);
+			when CTRL('A') : overlay(stdscr,cw);
 			when CTRL('M') : overlay(mw,cw);
 			when CTRL('X') : teleport();
 			when CTRL('E') : msg("food left: %d\tfood level: %d", 
