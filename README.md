@@ -133,8 +133,8 @@ Here are a few other commands to get you started:
     S	save game
     Q	quit
 
-To restore a saved game, use "urogue -r" for the default save file,
-or "urogue \<filename\>" for any other.
+To restore a saved game, use "urogue \<filename\>".  There are sample
+shell and batch files in the "extras" folder that do this for you.
 
 Older UltraRogue versions (which may no longer be playable) are available
 from the roguelike archive at: https://britzl.github.io/roguearchive/
@@ -146,9 +146,9 @@ A C compiler, the ncurses library, and make.
 ## Installation
 
 This software builds on linux and windows.  Probably other unix's too,
-but I haven't tried.
+but I haven't tried any recently.
 
-To build urogue, change to the rogue directory and type make:
+To build urogue, change to the rogue sub-directory and type make:
 
     cd rogue
     make
