@@ -13,12 +13,14 @@
 
 UltraRogue is an old ascii-graphics game developed by Herb Chong in the
 1980s and 1990s.  It's one of many roguelike games inspired by Dungeons and
-Dragons and by the original unix game Rogue.
+Dragons and by the original Unix game Rogue.
 
 For this new urogue, I pulled code from several old versions,
 so it's something of a remix.  I wanted to keep the feel of the classic
 urogue, but to streamline gameplay to make the game more fun and to reduce
 the strain on aging wrists.
+
+![Screenshot](hobgoblin.png?raw=true)
 
 ## What's New?
 
