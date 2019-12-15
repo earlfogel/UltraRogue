@@ -422,8 +422,10 @@ int ch;
 	    continue;
     } else if (ch == 0) {
 	c = readchar();
-	if (c == ESCAPE)
+	if (c == ESCAPE) {
 	    fighting = FALSE;
+	    count = 0;
+	}
     } else {
         while (readchar() != ch)
 	    continue;
