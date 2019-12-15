@@ -327,7 +327,7 @@ bool blessed;
 	     * Make player disappear and reappear
 	     */
 	    if (cursed) {
-		level = level * 3 + 10 + rnd(10);
+		level += 5 + rnd(10*difficulty);
 		new_level(NORMLEV);
 		mpos = 0;
 		msg("You are banished to the lower regions.");

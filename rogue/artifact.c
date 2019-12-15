@@ -710,7 +710,7 @@ struct object *tr;
     debug("Rolled %d.", which);
     switch (which) {
 	case 0:
-		level = 5 + rnd(10);
+		level += 5 + rnd(10*difficulty);
 		new_level(NORMLEV);
 		mpos = 0;
 		msg("You are banished to the lower regions.");
