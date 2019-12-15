@@ -283,7 +283,7 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 			    dta.x = delta.x;
 			    beast = NULL;
 			    waitcount = 2;
-			    if (serious_fight) waitcount = 4;
+			    if (level>50) waitcount = 4;
 			} else {
 			    if (ch == 'F' &&
 				pstats.s_hpt == max_stats.s_hpt &&
@@ -300,6 +300,8 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 			    } else {
 				fighting = FALSE;
 				after = FALSE;
+				if (ch == 'F' && waitcount == 0)
+				    debug("You've run out of monsters to fight.");
 			    }
 			    break;
 			}
@@ -308,7 +310,7 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 			(ch == 'F') ? TRUE : FALSE);
 		    if (ch == 'F') {
 			waitcount = 2;
-			if (serious_fight) waitcount = 4;
+			if (level>50) waitcount = 4;
 		    }
 		when 't':
 		    if (!get_dir())

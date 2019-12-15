@@ -959,9 +959,9 @@ int wplus;
      * but it's close, then give them a chance.
      * This makes the mid-dungeon more interesting.
      */
-    if (level > 35 && max_level < 70
+    if (level > 35 && max_level < 75
 	&& need > 20 + wplus
-	&& need < 23 + wplus + (difficulty*3)
+	&& need < 23 + wplus + (difficulty*4)
 	&& res == 20 && rnd(5)==0) {
 #if 0
 	if (class == C_MONSTER)
