@@ -289,7 +289,7 @@ line_two:
 	sprintf(buf2, " %d", no_command);
 	health_state = buf2;
 #endif
-#ifdef EARL
+#if 0
     } else if (isalpha(mvwinch(stdscr, hero.y, hero.x))) {
 	health_state = "  There are monsters here!";
     } else if (on(player, CANINWALL) && p_know[P_PHASE]) {

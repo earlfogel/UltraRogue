@@ -182,11 +182,7 @@ char **argv;
     keypad(cw,TRUE);		/* for arrow keys */
     keypad(hw,TRUE);		/* for arrow keys */
 
-    if (argc >= 2 && argv[1][0] != '-'
-#ifndef EARL
-      && !wizard
-#endif
-      ) {
+    if (argc >= 2 && argv[1][0] != '-') {
 	if (!restore(argv[1])) { /* Note: restore returns on error only */
 	    exit(1);
 	}
