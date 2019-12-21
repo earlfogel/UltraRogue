@@ -2485,7 +2485,7 @@ struct monster monsters[] = {
 {"valkyrie",
         0,  TRUE,   FALSE,  'v',    "14-16",
         {CANFLY, CANSHOOT, CANWIELD, CANFRIGHTEN, MAGICHIT, ISFLOCK},
-        0, 0,
+        "greater god (Odin, All Father)", 1,
         50,
         {21,    27000,  25, -2, HPT("0d8+100"), "3d6+3"}
 },

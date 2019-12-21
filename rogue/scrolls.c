@@ -636,7 +636,7 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
 			    lb = NULL;
 			} else if (lb->o_hplus + lb->o_dplus > 16
 				&& !(lb->o_flags & ISVORPED)) {
-			    msg("Your %s begins to shine.", inv_name(lb, TRUE));
+			    msg("Your weapon begins to shine.");
 			    lb->o_flags |= ISVORPED;  /* vorpal blade */
 			}
 		    when POTION:
@@ -663,10 +663,11 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
 		if (blessed && !(lb->o_flags & ISSILVER)) {
 		    lb->o_hplus += rnd(3) + 1;
 		    lb->o_flags |= ISSILVER;
-		    msg("Your weapon has turned to silver!");
 		    if (lb->o_hplus + lb->o_dplus > 16 && !(lb->o_flags & ISVORPED)) {
-			msg("Your %s begins to shine.", inv_name(lb, TRUE));
+			msg("Your weapon has turned to silver and begins to shine!");
 			lb->o_flags |= ISVORPED;  /* vorpal blade */
+		    } else {
+			msg("Your weapon has turned to silver!");
 		    }
 		}
 		else if (cursed && (lb->o_flags & ISSILVER)) {
@@ -681,10 +682,6 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
 		    lb->o_hplus += rnd(2) + 1;
 		    lb->o_flags |= ISSILVER;
 		    msg("Your weapon has turned to silver.");
-		    if (lb->o_hplus + lb->o_dplus > 16 && !(lb->o_flags & ISVORPED)) {
-			msg("Your %s begins to shine.", inv_name(lb, TRUE));
-			lb->o_flags |= ISVORPED;  /* vorpal blade */
-		    }
 		}
 	    }
 	    s_know[S_SILVER] = TRUE;

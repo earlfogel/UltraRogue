@@ -172,6 +172,17 @@ bool max_monster;
 	turn_on(*tp, BMAGICHIT);
     }
 
+    /* make some monsters even nastier in difficult games */
+    if (difficulty > 2) {
+	if (strcmp(mp->m_name,"viltrak") == 0) {
+	    turn_on(*tp, ISMEAN);
+	} else if (strcmp(mp->m_name,"valkyrie") == 0 && rnd(4) == 0) {
+	    turn_on(*tp, CANSUMMON);
+	} else if (strcmp(mp->m_name,"time elemental") == 0 && rnd(2) == 0) {
+	    turn_on(*tp, CANSUMMON);
+	}
+    }
+
     tp->t_turn = TRUE;
     tp->t_pack = NULL;
 
@@ -427,7 +438,8 @@ int x;
 			msg("The %s's gaze has confused you.",mname);
 			turn_on(player, ISHUH);
 		    }
-		} else if (on(player, ISINVIS)) {
+		} else if (on(player, ISINVIS)
+		 || (cur_armor != NULL && cur_armor->o_flags & IS2PROT)) {
 		    msg("The %s's gaze has no effect.", mname);
 		} else {
 		    msg("You feel dizzy for a moment, but it quickly passes.");
@@ -440,7 +452,8 @@ int x;
 	/* Sleep */
 	if (on(*tp, CANSNORE) && no_command == 0 &&
 	    !save(VS_PARALYZATION)) {
- 	    if (on(player, ISINVIS)) {
+ 	    if (on(player, ISINVIS)
+	     || (cur_armor != NULL && cur_armor->o_flags & IS2PROT)) {
 		msg("The gaze of the %s has no effect.", mname);
 	    } else if (ISWEARING(R_ALERT)) {
 		msg("You feel slightly drowsy for a moment.");
@@ -467,13 +480,17 @@ int x;
 	}
 
 	/* blinding creatures */
-	if (on(*tp, CANBLIND) && off(player, ISBLIND) && !ISWEARING(R_SEEINVIS)
+	if (on(*tp, CANBLIND) && off(player, ISBLIND)
 		&& off(player, ISINVIS)
 		&& !save(VS_WAND)) {
-	    msg("The gaze of the %s blinds you.", mname);
-	    turn_on(player, ISBLIND);
-	    light_fuse(FUSE_SIGHT, 0, rnd(30)+20, AFTER);
-	    look(FALSE);
+	    if (cur_armor != NULL && cur_armor->o_flags & IS2PROT) {
+		msg("The gaze of the %s is averted by your shiny armor.", mname);
+	    } else {
+		msg("The gaze of the %s blinds you.", mname);
+		turn_on(player, ISBLIND);
+		light_fuse(FUSE_SIGHT, 0, rnd(30)+20, AFTER);
+		look(FALSE);
+	    }
 	}
 
 	/* Turning to stone */
@@ -481,8 +498,11 @@ int x;
 	    turn_off(*tp, LOOKSTONE);
 
 	    if (on(player, CANINWALL) || on(player, ISINVIS)
-	     || ISWEARING(R_SEEINVIS)) {
+	     || ISWEARING(R_SEEINVIS)
+	     ) {
 		msg("The gaze of the %s has no effect.", mname);
+	    } else if (cur_armor != NULL && cur_armor->o_flags & IS2PROT) {
+		msg("The gaze of the %s is averted by your shiny armor.", mname);
 	    } else {
 		if (!save(VS_PETRIFICATION) && rnd(100) < 3) {
 		    msg("The gaze of the %s petrifies you.", mname);
