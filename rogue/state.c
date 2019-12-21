@@ -1271,7 +1271,7 @@ restore_file(FILE *savef)
     i = ur_read_int(savef);
     if (i != nummonst) {
 	endwin();
-	printf("Saved game has %d monsters, expected %d.\n", i, nummonst);
+	printf("Saved game has %d monsters, expected %d.\n", i+2, nummonst+2);
 	return(FALSE);
     }
     for(i = 0; i < nummonst+2; i++) {

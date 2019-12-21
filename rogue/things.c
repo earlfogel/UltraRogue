@@ -82,6 +82,7 @@ bool drop;
 	    pb = &prbuf[strlen(prbuf)];
 	    if (obj->o_flags & ISSILVER)
 		sprintf(pb, "silver ");
+	    pb = &prbuf[strlen(prbuf)];
 	    if (obj->o_flags & ISVORPED)
 		sprintf(pb, "vorpal ");
 	    pb = &prbuf[strlen(prbuf)];
