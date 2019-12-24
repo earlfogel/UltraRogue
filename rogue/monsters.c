@@ -52,8 +52,9 @@ bool no_unique;
 	}
 	if (d < 1)
 	    d = rnd(NLEVMONS) + 1;
-#if 0
-	if (levtype == NORMLEV && level > 35 && max_level < 70 && rnd(50) == 0) {
+#if 1
+	if (levtype == NORMLEV && level > 35 && max_level < 70 && rnd(50) == 0
+	    && difficulty > 2) {
 	    /* make the mid-dungeon more interesting */
 	    d += nlevmons * 13;	/* a monster rises from the depths */
 	}
@@ -174,11 +175,22 @@ bool max_monster;
 
     /* make some monsters even nastier in difficult games */
     if (difficulty > 2) {
-	if (strcmp(mp->m_name,"viltrak") == 0) {
+	if (strcmp(mp->m_name,"vilstrak") == 0) {
 	    turn_on(*tp, ISMEAN);
-	} else if (strcmp(mp->m_name,"valkyrie") == 0 && rnd(4) == 0) {
+	} else if (off(*tp, ISMEAN) && off(*tp, LOWFRIENDLY)
+		&& off(*tp, MEDFRIENDLY) && off(*tp, HIGHFRIENDLY)
+		&& strcmp(mp->m_name,"quartermaster") != 0
+		&& strcmp(mp->m_name,"valkyrie") != 0
+		&& rnd(3) == 0) {  /* make some neutral monsters mean */
+	    turn_on(*tp, ISMEAN);
+#if 0
+	    msg("My what a mean %s!", mp->m_name);
+#endif
+#if 0
+	} else if (strcmp(mp->m_name,"valkyrie") == 0) {
 	    turn_on(*tp, CANSUMMON);
-	} else if (strcmp(mp->m_name,"time elemental") == 0 && rnd(2) == 0) {
+#endif
+	} else if (strcmp(mp->m_name,"time elemental") == 0 && rnd(3) > 0) {
 	    turn_on(*tp, CANSUMMON);
 	}
     }
