@@ -1341,7 +1341,11 @@ restore_file(FILE *savef)
     inwhgt = (bool) ur_read_int(savef);
     after = (bool) ur_read_int(savef);
     waswizard = (bool) ur_read_int(savef);
-    canwizard = (bool) ur_read_int(savef);
+    if (!canwizard) {
+	canwizard = (bool) ur_read_int(savef);
+    } else {
+	(void) ur_read_int(savef);
+    }
     playing = (bool) ur_read_int(savef);
     running = (bool) ur_read_int(savef);
     fighting = (bool) ur_read_int(savef);
