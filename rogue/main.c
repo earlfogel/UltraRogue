@@ -224,7 +224,6 @@ char **argv;
     }
 
     predef = geta_player();
-    waswizard = wizard;
 re_roll:
     if(!predef)
 	init_player();			/* Roll up the rogue */

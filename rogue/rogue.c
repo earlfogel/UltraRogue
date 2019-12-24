@@ -82,8 +82,8 @@ WINDOW *mw;				/* Used to store mosnters */
 bool pool_teleport = FALSE;		/* just teleported from a pool */
 bool inwhgt = FALSE;			/* true if from wghtchk() */
 bool after;				/* True if we want after daemons */
-bool waswizard;				/* Was a wizard sometime */
-bool canwizard;				/* Will be permitted to do this */
+bool waswizard = FALSE;			/* Not used */
+bool canwizard = FALSE;			/* Will be permitted to do this */
 bool s_know[MAXSCROLLS];		/* Do you know what a scroll does */
 bool p_know[MAXPOTIONS];		/* Do you know what a potion does */
 bool r_know[MAXRINGS];			/* Do you know what a ring does */
