@@ -232,7 +232,8 @@ bool thrown;
 	    if (on(*tp, CANSURPRISE)) turn_off(*tp, CANSURPRISE);
 
 	    /* If the player hit something that can summon, it will try to */
-	    if (on(*tp, CANSUMMON) && rnd(40) < tp->t_stats.s_lvl) {
+	    if (on(*tp, CANSUMMON) && rnd(40) < tp->t_stats.s_lvl
+		    && tp->t_stats.s_hpt > 0 ) {
 	        char *helpname;
 	        int which, i;
 
@@ -918,7 +919,7 @@ bool thrown;
 	    fighting = FALSE;
 	    keep_fighting = FALSE;
 	}
-    } else if ((fighting | keep_fighting) && damage > 0
+    } else if ((fighting | keep_fighting) && damage > 4
 	    && pstats.s_hpt < max_stats.s_hpt/3) {
 	msg("Ouch, that hurt!");
 	fighting = keep_fighting = FALSE;
@@ -962,7 +963,7 @@ int wplus;
     if (level > 35 && max_level < 75
 	&& need > 20 + wplus
 	&& need < 23 + wplus + (difficulty*4)
-	&& res == 20 && rnd(5)==0) {
+	&& res == 20 && rnd(5-difficulty)==0) {
 #if 0
 	if (class == C_MONSTER)
 	    msg("Lucky hit (monster has %d, normally needs: %d)", res+wplus, need);
