@@ -300,8 +300,10 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 			    } else {
 				fighting = FALSE;
 				after = FALSE;
+#if 0
 				if (ch == 'F' && waitcount == 0)
 				    debug("You've run out of monsters to fight.");
+#endif
 			    }
 			    break;
 			}
@@ -404,11 +406,15 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 		    {
 		       if(canwizard) {
 				msg("Welcome, oh mighty wizard.");
-				wizard = waswizard = TRUE;
+				wizard = TRUE;
 				(void) signal(SIGQUIT, SIG_DFL);
 		       }
 		       else
-			    msg("Try it again.");
+#ifdef EARL
+			    msg("Try it again (%d,%d).",wizard,canwizard);
+#else
+			    msg("Sorry.");
+#endif
 		    }
 		when ESCAPE :	/* Escape */
 		    door_stop = FALSE;
@@ -739,6 +745,11 @@ quit ()
 	mpos = 0;
 	count = 0;
 	fighting = running = 0;
+	if (wizard) {
+	    struct linked_list *item;
+	    if ((item = get_item("charge", STICK)) != NULL)
+		((struct object *)ldata(item))->o_charges=1000;
+	}
     }
 }
 
