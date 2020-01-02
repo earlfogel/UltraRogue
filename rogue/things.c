@@ -80,11 +80,10 @@ bool drop;
 	    if (obj->o_flags & ISPOISON)
 		sprintf(pb, "poisoned ");
 	    pb = &prbuf[strlen(prbuf)];
-	    if (obj->o_flags & ISSILVER)
-		sprintf(pb, "silver ");
-	    pb = &prbuf[strlen(prbuf)];
 	    if (obj->o_flags & ISVORPED)
 		sprintf(pb, "vorpal ");
+	    else if (obj->o_flags & ISSILVER)
+		sprintf(pb, "silver ");
 	    pb = &prbuf[strlen(prbuf)];
 	    if ((obj->o_flags & ISKNOW) || (obj->o_flags & ISPOST))
 		sprintf(pb, "%s %s", num(obj->o_hplus, obj->o_dplus),
