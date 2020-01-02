@@ -655,6 +655,7 @@ bool thrown;
 		if (on(*mp, DOUBLEDRAIN)) 
 		    lower_level(mp->t_index);
 		turn_on(*mp, DIDDRAIN);  
+		fighting = FALSE;
 	    }
 
             /* drain a wisdom point */
@@ -963,10 +964,11 @@ int wplus;
     if (level > 35 && max_level < 75
 	&& need > 20 + wplus
 	&& need < 23 + wplus + (difficulty*4)
-	&& res == 20 && rnd(5-difficulty)==0) {
+	&& res == 20 && rnd(4-difficulty)==0
+	) {
 #if 0
 	if (class == C_MONSTER)
-	    msg("Lucky hit (monster has %d, normally needs: %d)", res+wplus, need);
+	    msg("Lucky hit (%d+%d < %d)", res, wplus, need);
 	else
 	    msg("Lucky hit (you have %d, normally need: %d)", res+wplus, need);
 #endif
@@ -1036,6 +1038,7 @@ check_level ()
 	    cnames[player.t_ctype][min(i-1, 10)], i);
 	pray_time = 0;	/* A new round of prayers */
 	spell_power = 0; /* A new round of spells */
+	fighting = FALSE;
     }
     pstats.s_lvl = i;
 }
