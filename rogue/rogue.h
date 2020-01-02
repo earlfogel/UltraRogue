@@ -1039,7 +1039,7 @@ extern bool door_stop;			/* Stop running when we pass a door */
 extern bool jump;			/* Show running as series of jumps */
 extern bool slow_invent;		/* Inventory one line at a time */
 extern bool firstmove;			/* First move after setting door_stop */
-extern bool waswizard;			/* Was a wizard sometime */
+extern bool showcursor;			/* Option to show cursor */
 extern bool canwizard;			/* Will be permitted to do this */
 extern bool askme;			/* Ask about unidentified things */
 extern bool moving;			/* move using 'm' command */
