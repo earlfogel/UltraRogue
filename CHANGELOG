@@ -1,3 +1,40 @@
+December 2019
+-------------
+
+Vorpal blades affect NOMETAL monsters.
+
+Blessed protection scrolls are better than normal.
+
+Can press <ESCAPE> to interrupt fights or repeat commands.
+
+Fix: random dots in dark rooms when scavenger picks stuff up.
+
+Fix: level inventory in debug mode.
+
+Change debug mode 'floor map' command from ^F to ^A
+to avoid conflict with ^F 'serious fight' command.
+
+While phasing, the first step of a run can move you into a wall.
+
+Blessed protection makes armor shiny.
+
+Shiny armor deflects the gaze of gazing monsters.
+
+Player heals more slowly in difficult games.
+
+Fix ^C wizard mode command, which conflicted with SIGINT.
+
+Fix: save/restore of canwizard.
+
+Enchanting stuff is riskier in hard games.
+
+Option to show cursor while playing (showcursor).
+
+Blessed 'magic hitting' improved.
+
+Stop fighting when you change experience levels.
+
+
 November 2019
 -------------
 
@@ -30,6 +67,25 @@ New CTRL('F') command fights monsters that are usually best to avoid.
 Don't pick stuff up during searching runs.
 
 Fix: show cursor when needed for teleport control.
+
+Using a blessed enchantment scroll on a stick/wand adds charges
+and blesses it.
+
+Using a blessed wand of drain life is less draining.
+
+Status line shows when Debug Mode is on.
+
+Fix: initialize buffer before calling get_str()
+(fixes bugs in Call command and scroll of acquirement)
+
+Since monsters get a boost once you make it past level 80,
+you now get more experience for killing them.
+
+Fix: scoreboard ordering of repeat games.
+
+Fix: <return> is harmless when guessing what things are.
+
+Serious fights continue even if you're asleep or confused.
 
 
 October 2019
@@ -186,7 +242,7 @@ include monsters summoned by other monsters we include.
 Workaround: doctor daemon still dies sometimes, so restore will
 recreate it.
 
-Fix: ring of sustain ability (etc.) shouldn't blow up when enchanted
+Fix: ring of sustain ability (etc.) don't blow up when enchanted.
 
 Can enter wizard mode when restoring a game (for debugging).
 
