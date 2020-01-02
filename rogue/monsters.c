@@ -181,15 +181,13 @@ bool max_monster;
 		&& off(*tp, MEDFRIENDLY) && off(*tp, HIGHFRIENDLY)
 		&& strcmp(mp->m_name,"quartermaster") != 0
 		&& strcmp(mp->m_name,"valkyrie") != 0
-		&& rnd(3) == 0) {  /* make some neutral monsters mean */
+		&& rnd(3) == 0) {  /* some neutral monsters turn mean */
 	    turn_on(*tp, ISMEAN);
 #if 0
 	    msg("My what a mean %s!", mp->m_name);
 #endif
-#if 0
-	} else if (strcmp(mp->m_name,"valkyrie") == 0) {
+	} else if (strcmp(mp->m_name,"valkyrie") == 0 && rnd(2) > 0) {
 	    turn_on(*tp, CANSUMMON);
-#endif
 	} else if (strcmp(mp->m_name,"time elemental") == 0 && rnd(3) > 0) {
 	    turn_on(*tp, CANSUMMON);
 	}
