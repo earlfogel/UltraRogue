@@ -1120,7 +1120,7 @@ save_file(FILE *savef)
     ur_write_int(savef,  pool_teleport);
     ur_write_int(savef, inwhgt);
     ur_write_int(savef, after);
-    ur_write_int(savef, waswizard);
+    ur_write_int(savef, showcursor);
     ur_write_int(savef, canwizard);
     ur_write_int(savef, playing);
     ur_write_int(savef, running);
@@ -1340,7 +1340,11 @@ restore_file(FILE *savef)
     pool_teleport = (bool) ur_read_int(savef);
     inwhgt = (bool) ur_read_int(savef);
     after = (bool) ur_read_int(savef);
-    waswizard = (bool) ur_read_int(savef);
+    showcursor = (bool) ur_read_int(savef);
+    if (showcursor)
+	curs_set(1);	/* show cursor */
+    else
+	curs_set(0);	/* hide cursor */
     if (!canwizard) {
 	canwizard = (bool) ur_read_int(savef);
     } else {

@@ -431,7 +431,10 @@ setup ()
     crmode();				/* Cbreak mode */
     noecho();				/* Echo off */
     nonl();
-    curs_set(0);			/* hide cursor */
+    if (showcursor)
+	curs_set(1);	/* show cursor */
+    else
+	curs_set(0);	/* hide cursor */
 }
 
 /*
@@ -446,7 +449,11 @@ tweak_settings (bool first_time)
     struct object *obj;
 
     /* normal difficulty */
-    if (difficulty == 2) {
+    if (difficulty == 2
+#ifdef EARL
+	|| difficulty > 2
+#endif
+    ) {
 	if (first_time) {
 	    if (player.t_ctype == C_THIEF || player.t_ctype == C_FIGHTER) {
 		p_know[P_TFIND] = TRUE;

@@ -41,6 +41,8 @@ OPTION	optlist[] = {
 		(int *) &askme,		put_bool,	get_bool	},
     {"cutcorners",	"Move sharply around corners (cutcorners): ",
 		(int *) &cutcorners,	put_bool,	get_bool	},
+    {"showcursor",	"Show cursor while playing (showcursor): ",
+		(int *) &showcursor,	put_bool,	get_bool	},
     {"name",	 "Name (name): ",
 		(int *) whoami,		put_str,	get_str		},
     {"fruit",	 "Fruit (fruit): ",
@@ -97,6 +99,7 @@ option ()
 	    }
 	}
     }
+    if (showcursor) curs_set(1);
     /*
      * Switch back to original screen
      */
@@ -215,11 +218,11 @@ WINDOW *win;
 		break;
 	    case '\033':
 	    case '\007':
-		curs_set(0);
+		if (!showcursor) curs_set(0);
 		return QUIT;
 	    case '-':
 	    case KEY_UP:
-		curs_set(0);
+		if (!showcursor) curs_set(0);
 		return MINUS;
 	    default:
 		mvwaddstr(win, oy, ox + 10, "(T or F)");
@@ -229,7 +232,7 @@ WINDOW *win;
     wclrtoeol(win);
     waddstr(win, *bp ? "True" : "False");
     waddch(win, '\n');
-    curs_set(0);			/* hide cursor */
+    if (!showcursor) curs_set(0);			/* hide cursor */
     return NORM;
 }
 
@@ -296,7 +299,7 @@ WINDOW *win;
     draw(win);
     if (win == cw)
 	mpos += sp - buf;
-    curs_set(0);			/* hide cursor */
+    if (!showcursor) curs_set(0);			/* hide cursor */
 
     if (c == '-')
 	return MINUS;
@@ -335,11 +338,11 @@ WINDOW *win;
 		break;
 	    case '\033':
 	    case '\007':
-		curs_set(0);
+		if (!showcursor) curs_set(0);
 		return QUIT;
 	    case '-':
 	    case KEY_UP:
-		curs_set(0);
+		if (!showcursor) curs_set(0);
 		return MINUS;
 	    default:
 		mvwaddstr(win, ny, nx + 5, "(no change allowed)");
@@ -349,7 +352,7 @@ WINDOW *win;
     wclrtoeol(win);
     wmove(win, ny, nx);
     waddch(win, '\n');
-    curs_set(0);			/* hide cursor */
+    if (!showcursor) curs_set(0);			/* hide cursor */
     return NORM;
 }
 
@@ -385,11 +388,11 @@ WINDOW *win;
 		break;
 	    case '\033':
 	    case '\007':
-		curs_set(0);
+		if (!showcursor) curs_set(0);
 		return QUIT;
 	    case '-':
 	    case KEY_UP:
-		curs_set(0);
+		if (!showcursor) curs_set(0);
 		return MINUS;
 	    default:
 		if (ch >= '1' && ch <= '3') {
@@ -419,7 +422,7 @@ WINDOW *win;
     wclrtoeol(win);
     wmove(win, ny, nx);
     waddch(win, '\n');
-    curs_set(0);			/* hide cursor */
+    if (!showcursor) curs_set(0);			/* hide cursor */
     return NORM;
 }
 
