@@ -483,7 +483,7 @@ teleport ()
 	}
 	if (rand_position)
 	    msg("Your attempt fails.");
-	curs_set(0);  /* hide cursor */
+	if (!showcursor) curs_set(0);  /* hide cursor */
     }
     if (rand_position) {
 	do {
