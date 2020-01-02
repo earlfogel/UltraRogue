@@ -20,6 +20,7 @@ bool blessed;
     char ch, nch;
     bool cursed, is_scroll;
     char buf[LINELEN];
+    int limit;
 
     cursed = FALSE;
     is_scroll = FALSE;
@@ -538,7 +539,10 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
 		switch(lb->o_type) {
 		    case RING:
 			lb->o_ac += howmuch;
-			if (lb->o_ac > (howmuch<2?5:7) && lb->o_ac < 11
+			limit = 5;
+			if (blessed && difficulty <= 2)
+			    limit = 7;
+			if (lb->o_ac > limit && lb->o_ac < 11
 				&& rnd(5) == 0) {
 			    int on = is_r_on(lb);
 			    msg("Your ring explodes in a cloud of smoke.");
@@ -584,7 +588,10 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
 			}
 		    when ARMOR:
 			lb->o_ac -= howmuch;
-			if (armors[lb->o_which].a_class - lb->o_ac > (howmuch<2?8:10)
+			limit = 8;
+			if (blessed && difficulty <= 2)
+			    limit = 10;
+			if (armors[lb->o_which].a_class - lb->o_ac > limit
 				&& rnd(5) == 0) {
 			    msg("Your %s explodes in a cloud of dust.",
 				inv_name(lb, TRUE));
@@ -621,7 +628,10 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
 			    lb->o_hplus += howmuch;
 			else
 			    lb->o_dplus += howmuch;
-			if (lb->o_hplus + lb->o_dplus > (howmuch<2?15:17)
+			limit = 15;
+			if (blessed && difficulty <= 2)
+			    limit = 17;
+			if (lb->o_hplus + lb->o_dplus > limit
 				&& rnd(5) == 0) {
 			    msg("Your %s explodes in a cloud of dust.",
 				inv_name(lb, TRUE));
@@ -635,6 +645,7 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
 			    discard(ll);
 			    lb = NULL;
 			} else if (lb->o_hplus + lb->o_dplus > 16
+				&& (lb->o_flags & ISSILVER)
 				&& !(lb->o_flags & ISVORPED)) {
 			    msg("Your weapon begins to shine.");
 			    lb->o_flags |= ISVORPED;  /* vorpal blade */
@@ -661,7 +672,7 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
 	    if ((ll = get_item("annoint",WEAPON)) != NULL) {
 		lb = OBJPTR(ll);
 		if (blessed && !(lb->o_flags & ISSILVER)) {
-		    lb->o_hplus += rnd(3) + 1;
+		    lb->o_hplus += rnd(2) + 2;
 		    lb->o_flags |= ISSILVER;
 		    if (lb->o_hplus + lb->o_dplus > 16 && !(lb->o_flags & ISVORPED)) {
 			msg("Your weapon has turned to silver and begins to shine!");
