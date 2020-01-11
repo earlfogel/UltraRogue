@@ -126,7 +126,12 @@ command ()
 	    else if (count) ch = countch;
 	    else
 	    {
-		ch = readchar();
+		if (save_ch > 0) {
+		    ch = save_ch;
+		    save_ch = 0;
+		} else {
+		    ch = readchar();
+		}
 #if 0
 fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 #endif
@@ -699,7 +704,7 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 	    else if (difficulty == 2)
 		rare = 200000;
 	    else if (difficulty > 2)
-		rare = 100000;
+		rare = 150000;
 
 	    if (rnd(rare) == 0) {
 		new_level(THRONE);

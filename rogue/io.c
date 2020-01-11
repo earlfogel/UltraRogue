@@ -415,7 +415,9 @@ void
 wait_for (ch)
 int ch;
 {
-    char c;
+    int c;
+
+    save_ch = 0;
 
     if (ch == '\n') {
         while ((c = readchar()) != '\n' && c != '\r')
@@ -425,6 +427,8 @@ int ch;
 	if (c == ESCAPE) {
 	    fighting = FALSE;
 	    count = 0;
+	} else if (c != '\n' && c != ' ' && c != '\0') {
+	    save_ch = c;  /* save to use as next command */
 	}
     } else {
         while (readchar() != ch)

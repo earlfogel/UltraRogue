@@ -55,6 +55,7 @@ int mindifficulty = 2;			/* lowest difficulty level used in a game */
 int maxpack = MAXPACK;
 int auth_or[MAXAUTH];
 int searching_run = 0;
+int save_ch = 0;
 char curpurch[15];			/* name of item ready to buy */
 char PLAYER = VPLAYER;			/* what the player looks like */
 char take;				/* Thing the rogue is taking */
