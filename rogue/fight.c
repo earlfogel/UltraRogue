@@ -29,6 +29,7 @@ struct matrix att_mat[5] = {
 };
 
 static bool keep_fighting;  /* even if we kill something */
+static int save_hpt;  /* your hit points at start of fight */
 
 void 
 do_fight (y, x, multiple)
@@ -51,8 +52,11 @@ bool multiple;
 
     if (multiple) {
 	keep_fighting = TRUE;
+	if (!save_hpt)
+	    save_hpt = pstats.s_hpt;  /* so we can calculate damage later  */
     } else {
 	keep_fighting = FALSE;
+	save_hpt = 0;
     }
 
     if (isalpha(winat(hero.y+y, hero.x+x))) {
@@ -261,10 +265,27 @@ bool thrown;
 			turn_off(*tp, ISSLOW);
 		     else
 			turn_on(*tp, ISHASTE);
+		} else {
+		    bool summon_ok = TRUE;
+
+		    /* can't summon a unique that already exists */
+		    if (monsters[which].m_flags[0] & ISUNIQUE) {
+			struct linked_list *nitem;
+			struct thing *ntp;
+			for (nitem = mlist; nitem != NULL; nitem = next(nitem)) {
+			    ntp = THINGPTR(nitem);
+			    if (ntp->t_index == which) {
+				msg("The %s becomes rather annoyed at you!", mname);
+				summon_ok = FALSE;
+			    }
+			}
+		    }
+
+		    if (summon_ok) {
+			for (i=0; i<monsters[tp->t_index].m_numsum; i++)
+			    creat_mons(&player, which, FALSE);
+		    }
 		}
-		else
-	             for (i=0; i<monsters[tp->t_index].m_numsum; i++)
-			creat_mons(&player, which, FALSE);
 	    }
 
 	    /* Can the player confuse? */
@@ -617,6 +638,7 @@ bool thrown;
 		turn_on(*mp, DIDSUFFOCATE);
 		msg("The %s is beginning to suffocate you.", mname);
 		light_fuse(FUSE_SUFFOCATE, 0, roll(4,2), AFTER);
+		fighting = FALSE;
 	    }
 
 	    /*
@@ -912,18 +934,22 @@ bool thrown;
 	    miss(mname, NULL);
     }
 
-    /* too much damage in one round */
     damage = s_hpt - pstats.s_hpt;
-    if ((fighting || keep_fighting) && damage > s_hpt/5) {
-	msg("The %s scored an excellent hit on you!", mname);
-	if (damage > s_hpt/4) {
-	    fighting = FALSE;
-	    keep_fighting = FALSE;
+    if (damage > 4 && (fighting || keep_fighting)) {
+	int limit = 0.33;
+	if (serious_fight)
+	    limit = 0.25;
+
+	/* too much damage in one round */
+	if (damage > s_hpt/5) {
+	    msg("The %s scored an excellent hit on you!", mname);
+	    fighting = keep_fighting = FALSE;
+	/* too much damage in one fight */
+	} else if (save_hpt-pstats.s_hpt > pstats.s_hpt/2
+		|| pstats.s_hpt < max_stats.s_hpt*limit) {
+	    msg("Ouch, that hurt.");
+	    fighting = keep_fighting = FALSE;
 	}
-    } else if ((fighting | keep_fighting) && damage > 4
-	    && pstats.s_hpt < max_stats.s_hpt/3) {
-	msg("Ouch, that hurt!");
-	fighting = keep_fighting = FALSE;
     }
 
     count = 0;
@@ -951,9 +977,10 @@ int wplus;
 	   ((min(at_lvl, att_mat[class].max_lvl) -
 	    att_mat[class].offset)/att_mat[class].range) +
 	   (10 - op_arm);
+    if (need > 20 && need <= 25) need = 20;
 
-    /* give monsters a chance to hit well armored player and vice versa */
-    if (difficulty >= 2 && need > 20)
+    /* give monsters a chance to hit well armored player */
+    if (difficulty >= 2 && need > 20 && class == C_MONSTER)
 	need = 20 + ((need - 20)/2);
 
     /*
@@ -961,9 +988,9 @@ int wplus;
      * but it's close, then give them a chance.
      * This makes the mid-dungeon more interesting.
      */
-    if (level > 35 && max_level < 75
+    if (level > 35 && max_level < 80
 	&& need > 20 + wplus
-	&& need < 23 + wplus + (difficulty*4)
+	&& need < 30 + wplus
 	&& res == 20 && rnd(4-difficulty)==0
 	) {
 #if 0
@@ -1327,6 +1354,12 @@ save_throw(int which, struct thing *tp)
             armor_bonus += (armors[cur_armor->o_which].a_class
                     - cur_armor->o_ac);
         }
+#if 1
+	if (difficulty > 2 && level > 35 && max_level < 80) {
+	    if (ring_bonus > 2) ring_bonus /= 2;
+	    if (armor_bonus > 2) armor_bonus /= 2;
+	}
+#endif
     }
 
     need = 14 + which - tp->t_stats.s_lvl / 2 - ring_bonus -
