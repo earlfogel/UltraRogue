@@ -200,6 +200,10 @@ struct object *cur;
 		if (difficulty < 2 &&
 		    !is_carrying(which) && arts[which].ar_level <= level)
 		    break;
+		/* the purse comes back, eventually */
+		else if (which == TR_PURSE &&
+		    !is_carrying(which) && arts[which].ar_level <= level)
+		    break;
 		else if (!possessed(which) && arts[which].ar_level <= level)
 		    break;
 	}
