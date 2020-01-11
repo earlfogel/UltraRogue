@@ -888,7 +888,7 @@ struct monster monsters[] = {
 },
 {"yeti",
         30, TRUE,   TRUE,   'Y',    "8-10",
-        {ISMEAN, CANPARALYZE,CANHUG, NOCOLD, CANSURPRISE, ISLARGE, LOWFRIENDLY, CLASSIC},
+        {ISMEAN, CANPARALYZE, CANHUG, NOCOLD, CANSURPRISE, ISLARGE, LOWFRIENDLY, CLASSIC},
         "winter wolf", 2,
         12,
         {13,    500,    6,  6,  HPT("4d8+4"), "1d6/1d6"}
@@ -1448,14 +1448,14 @@ struct monster monsters[] = {
 },
 {"spectre",
         0,  TRUE,   TRUE,   'S',    "13-14",
-        {ISMEAN, CANSUMMON, DOUBLEDRAIN, ISUNDEAD, ISSHADOW},
+        {ISMEAN, CANSUMMON, DOUBLEDRAIN, ISUNDEAD, ISSHADOW, CLASSIC},
         "shadow", 2,
         10,
         {10,    1650,   7,  2,  HPT("7d8+3"), "1d8"}
 },
 {"neotyugh",
         0,  TRUE,   TRUE,   'n',    "10-12",
-        {ISMEAN, CANDISEASE, ISLARGE},
+        {ISMEAN, CANDISEASE, ISLARGE, CLASSIC},
         0, 0,
         10,
         {12,    1500,   10, 0,  HPT("12d8"), "1d8/1d8/2d3"}
@@ -2629,6 +2629,13 @@ struct monster monsters[] = {
         0,
         {22,    65000L, 35, -6, HPT("0d8+180"), "3d6+6/1d10"}
 },
+{"demi-god (Vaprak \"The Destroyer\")",
+        0,  TRUE,   TRUE,   'v',    "18",
+        {ISMEAN, ISUNIQUE, ISREGEN, CANSUMMON, ISGOD, CLASSIC},
+        "troll", 5,
+        0,
+        {16,    56000L, 26, 0,  HPT("0d8+198"), "2d10/2d10/1d12"}
+},
 {"lesser god (Olidammara the Laughing Rogue)",  /* Dragon #70 */
         100,    TRUE,   TRUE,   'O',    "18",
         {ISUNIQUE, CANINWALL, CANSUMMON, ISGOD, LOWFRIENDLY},
@@ -2638,7 +2645,7 @@ struct monster monsters[] = {
 },
 {"devil Asmodeus",
         100,    TRUE,   FALSE,  'A',    "19-20",
-        {ISMEAN, ISUNIQUE, ISSHADOW, CANHOLD, CANHUH, CANCHILL, CANSUMMON, ISGOD},
+        {ISMEAN, ISUNIQUE, ISSHADOW, CANHOLD, CANHUH, CANCHILL, CANSUMMON, ISGOD, CLASSIC},
         "pit fiend", 3,
         0,
         {10,    80965L, 45, -7, HPT("0d8+199"), "4d10/4d10"}
@@ -2848,7 +2855,7 @@ struct monster monsters[] = {
 },
 {"Lord of All Darkness (Lucifer)",
         100, TRUE, TRUE, 'L', "40-60",
-        {ISMEAN, ISUNIQUE, CANSUMMON, ISGOD},
+        {ISMEAN, ISUNIQUE, CANSUMMON, ISGOD, CLASSIC},
         "evil sorcerer", 15,
         225,
         {45,    1465000L,   100,    -13,    HPT("18d60+700"), "3d8/3d8/3d8"}
