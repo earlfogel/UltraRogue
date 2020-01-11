@@ -318,7 +318,7 @@ init_monsters (char flag)
     char *summoned[nummonst+1];
     bool keep;
 
-    for (i=1; i<nummonst-1; i++) {
+    for (i=1; i<nummonst; i++) {
 	keep = TRUE;
 	if (flag == 'r') {  /* Select monsters at random */
 	    /* keep at least one monster for the first level */
@@ -360,15 +360,13 @@ init_monsters (char flag)
 		}
 	    }
 	    if (classic) {
-		nmonst++;
+		/* do nothing */
 	    } else if ((friendly && rnd(12) > 0)
 		|| (flag != 'm' && rnd(6) > 0)
 		|| (flag == 'm' && rnd(3) > 0)) {
 		monsters[i].m_normal = FALSE;
 		monsters[i].m_wander = FALSE;
 		keep = FALSE;
-	    } else {
-		nmonst++;
 	    }
 	}
 	/* keep track of summoned monsters */
@@ -382,15 +380,14 @@ init_monsters (char flag)
 	}
     }
 
-    /* put back any summoned monsters we still need */
-    for (i=nummonst-1; i>1; i--) {
+    for (i=nummonst; i>0; i--) {
+	/* put back any summoned monsters we still need */
 	if (monsters[i].m_normal==FALSE && monsters[i].m_wander==FALSE) {
 	    for (j=0; j<nsummoned; j++) {
 		if (strcmp(monsters[i].m_name, summoned[j]) == 0) {
 		    monsters[i].m_normal = TRUE;
 		    monsters[i].m_wander = TRUE;
 		    monsters[i].m_flags[NM_FLAGS-1] = 0L;
-		    nmonst++;
 		    /* in case it summons something too */
 		    if (monsters[i].m_numsum > 0) {
 			for (k=0; k<nsummoned; k++) {
@@ -407,8 +404,23 @@ init_monsters (char flag)
 		    }
 		}
 	    }
+	} else {
+#if 0
+fprintf(stderr,"%s\n", monsters[i].m_name);
+#endif
+	    nmonst++;
 	}
     }
+
+    if (flag == 'c') {
+	/* no shopkeeper */
+	monsters[nummonst+2].m_normal = FALSE;
+	monsters[nummonst+2].m_wander = FALSE;
+	nmonst += 1; /* Lucifer */
+    } else {
+	nmonst += 2; /* shopkeeper and Lucifer */
+    }
+
     if (wizard) {
 	printf("\r\nSelecting %d monsters...\r\n", nmonst);
 	fflush(stdout);
