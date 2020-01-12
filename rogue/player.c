@@ -185,11 +185,8 @@ pray ()
     else 
 	num_prayers = 0;
 
-    if (player.t_ctype == C_CLERIC) {
+    if (player.t_ctype == C_CLERIC)
 	num_prayers += pstats.s_lvl;
-	if (difficulty > 2 && num_prayers > 1)
-	    num_prayers *= 2.0/3.0;
-    }
 
     if (player.t_ctype != C_MAGICIAN && player.t_ctype != C_CLERIC
  		&& ISWEARING(R_WIZARD))
@@ -201,6 +198,13 @@ pray ()
     pray_points = pstats.s_wisdom * pstats.s_lvl;
     if(ISWEARING(R_WIZARD))
 	pray_points *= 2;
+
+    if (difficulty > 2) {
+	if (player.t_ctype == C_CLERIC && num_prayers > 1)
+	    num_prayers *= 2.0/3.0;
+	if (pray_points > 20)
+	    pray_points = 20 + (pray_points-20) * 3.0/4.0;
+    }
 
     if (repeat_prayer >= 0) {
         which_prayer = repeat_prayer;
@@ -420,11 +424,8 @@ cast ()
     else 
 	num_spells = 0;
 
-    if (player.t_ctype == C_MAGICIAN) {
+    if (player.t_ctype == C_MAGICIAN)
 	num_spells += pstats.s_lvl;
-	if (difficulty > 2 && num_spells > 1)
-	    num_spells *= 3.0/4.0;
-    }
 
     if (player.t_ctype != C_MAGICIAN && player.t_ctype != C_CLERIC
  		&& ISWEARING(R_WIZARD))
@@ -436,6 +437,13 @@ cast ()
     avail_points = pstats.s_intel * pstats.s_lvl;
     if (ISWEARING(R_WIZARD))
 	avail_points *= 2;
+
+    if (difficulty > 2) {
+	if (player.t_ctype == C_MAGICIAN && num_spells > 1)
+	    num_spells *= 2.0/3.0;
+	if (avail_points > 20)
+	    avail_points = 20 + (avail_points-20) * 3.0/4.0;
+    }
 
     if (repeat_spell >= 0) {
 	which_spell = repeat_spell;
