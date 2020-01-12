@@ -113,7 +113,7 @@ command ()
 		    ch = runch;
 		    searching_run++;
 		} else if (searching_run == 2) {
-		    if (winat(hero.y, hero.x) == PASSAGE) {
+		    if (winat(hero.y, hero.x) == PASSAGE || levtype != NORMLEV) {
 			ch = runch;
 		    } else {
 			ch = 's';
