@@ -935,7 +935,7 @@ bool thrown;
     }
 
     damage = s_hpt - pstats.s_hpt;
-    if (damage > 4 && (fighting || keep_fighting)) {
+    if (damage && (fighting || keep_fighting)) {
 	int limit = 0.33;
 	if (serious_fight)
 	    limit = 0.25;
