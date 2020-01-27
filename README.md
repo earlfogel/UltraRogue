@@ -73,13 +73,14 @@ game, -easy and -hard.
 
 In easy games, your pack can hold more items and you start out with
 more stuff.  There are fewer traps and fewer cursed items, and you are
-less likely to be summoned to a throne room.  Also, highly enchanted armor
+less likely to be summoned to a throne room.  Also, enchanted armor
 is more effective.
 
 In hard games, there are fewer blessed items, artifacts are more
-dangerous, and highly enchanted armor is less effective.  You can't
-start a hard game with mithril or crystalline armor, but you might find
-some later.
+dangerous, and enchanted armor is less effective.  You are also
+more vulnerable to magical attacks and your ability to do magic is
+reduced.  You can't start a hard game with mithril or crystalline armor,
+but you might find some later.
 
 ## Getting Started
 
