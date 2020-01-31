@@ -198,6 +198,43 @@ int dx;
     hch = winat(hero.y, hero.x); /* Where hero was */
     old_hero = hero;	/* Save hero's old position */
 
+    /*
+     * the hero can:
+     *  - 'm'ove through a monster when phasing
+     *  - squeeze by a friendly monster
+     *    (but not friendly monsters who are guarding gold)
+     */
+    if (isalpha(ch)) {
+	struct linked_list *mp = find_mons(nh.y, nh.x);
+	struct thing *tp = THINGPTR(mp);
+	int t;
+	int ch2 = mvwinch(stdscr, nh.y, nh.x);
+
+	/* swap places with a monster */
+	if ((on(player, CANINWALL) && (moving||searching_run))
+	 || (on(*tp, ISFRIENDLY) && ch2 != GOLD && !fighting)) {
+                mvwaddch(cw, hero.y, hero.x, ch);
+                mvwaddch(mw, hero.y, hero.x, ch);
+                mvwaddch(mw, nh.y, nh.x, (char) ' ');
+                /* mvwaddch(cw, nh.y, nh.x, tp->t_oldch); */
+                mvwaddch(cw, nh.y, nh.x, PLAYER);
+                (*tp).t_pos.x = hero.x; /* Update monster position */
+                (*tp).t_pos.y = hero.y;
+                (*tp).t_oldpos.x = hero.x;
+                (*tp).t_oldpos.y = hero.y;
+
+                t = (*tp).t_oldch;
+                (*tp).t_oldch = player.t_oldch;
+                player.t_oldch = t;
+		ch = t;
+
+                turn_on(*tp, ISRUN);  /* wake it up */
+		if (ch != PASSAGE && ch != FLOOR)
+		    moving = TRUE;  /* so we don't pick things up */
+	 }
+    }
+
+
     switch(ch) {
 	case ' ':
 	case '|':
@@ -281,50 +318,10 @@ int dx;
 	return;
     }
     else if (isalpha(ch)) {
-	if (on(player, CANINWALL) && moving) { /* move through monster! */
-	    /* Do Nothing */
-	} else {
-	    struct linked_list  *mp;
-	    struct thing    *tp;
-	    int t;
-
-	    running = FALSE;
-
-	    mp = find_mons(hero.y, hero.x);
-	    if (mp == NULL)
-		return;
-	    tp = THINGPTR(mp);
-
-	    if (on(*tp, ISFRIENDLY) && !fighting) {  /* exchange places */
-		mvwaddch(cw, old_hero.y, old_hero.x, ch);
-		mvwaddch(mw, old_hero.y, old_hero.x, ch);
-		mvwaddch(mw, hero.y, hero.x, (char) ' ');
-		mvwaddch(cw, hero.y, hero.x, tp->t_oldch);
-
-		(*tp).t_pos.x = old_hero.x; /* Update monster position */
-		(*tp).t_pos.y = old_hero.y;
-		(*tp).t_oldpos.x = old_hero.x;
-		(*tp).t_oldpos.y = old_hero.y;
-
-		t = (*tp).t_oldch;
-		(*tp).t_oldch = player.t_oldch;
-		player.t_oldch = t;
-
-		turn_on(*tp, ISRUN);
-
-		mvwaddch(cw, hero.y, hero.x, PLAYER);
-
-		/* make sure that the room shows OK */
-		/* light(&hero); */
-
-		wrefresh(cw);
-		return;
-	    } else {
-		hero = old_hero;    /* Restore hero -- we'll fight instead of move */
-		fight(&nh, cur_weapon, FALSE);
-		return;
-	    }
-	}
+	running = FALSE;
+	hero = old_hero;    /* Restore hero -- we'll fight instead of move */
+	fight(&nh, cur_weapon, FALSE);
+	return;
     } 
     else {
 	fighting = FALSE;
