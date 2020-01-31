@@ -870,7 +870,7 @@ bool report;
     int x, y;
     bool appear = 0;
     struct thing play_copy;	/* A copy with no phasing */
-    struct thing *nmonster;
+    struct thing *tp;
     coord mp;
 
     /* Make sure phasing is off in the copy */
@@ -909,12 +909,15 @@ bool report;
 	new_monster(nitem, monster == 0 ? randmonster(FALSE, FALSE)
 					: monster, &mp, TRUE);
 	runto(&mp, &hero);
-#if 1
-	light(&hero);
-#endif
+	tp = THINGPTR(nitem);
+	(void) wake_monster(tp->t_pos.y, tp->t_pos.x);
 
-	nmonster = THINGPTR(nitem);
-	return(nmonster);
+	/* Previously not seen -- now can see it */
+	if (tp->t_oldch == ' ' && cansee(tp->t_pos.y, tp->t_pos.x)) {
+	    tp->t_oldch = mvinch(y, x);
+	}
+
+	return(tp);
     }
     if (report) msg("You hear a faint cry of anguish in the distance.");
     return((struct thing *) NULL);
