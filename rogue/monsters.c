@@ -52,13 +52,6 @@ bool no_unique;
 	}
 	if (d < 1)
 	    d = rnd(NLEVMONS) + 1;
-#if 1
-	if (levtype == NORMLEV && level > 35 && max_level < 70 && rnd(50) == 0
-	    && difficulty > 2) {
-	    /* make the mid-dungeon more interesting */
-	    d += nlevmons * 13;	/* a monster rises from the depths */
-	}
-#endif
 	if (d > nummonst - NUMUNIQUE - 1) {
 	    if (no_unique)
 		d = rnd(range) + (nummonst - NUMUNIQUE - 1) - (range - 1);
@@ -186,7 +179,7 @@ bool max_monster;
 #if 0
 	    msg("My what a mean %s!", mp->m_name);
 #endif
-	} else if (strcmp(mp->m_name,"valkyrie") == 0 && rnd(2) > 0) {
+	} else if (strcmp(mp->m_name,"valkyrie") == 0 && rnd(3) > 0) {
 	    turn_on(*tp, CANSUMMON);
 	} else if (strcmp(mp->m_name,"time elemental") == 0 && rnd(3) > 0) {
 	    turn_on(*tp, CANSUMMON);
@@ -464,7 +457,7 @@ int x;
 	    !save(VS_PARALYZATION)) {
  	    if (on(player, ISINVIS)
 	     || (cur_armor != NULL && cur_armor->o_flags & IS2PROT)) {
-		msg("The gaze of the %s has no effect.", mname);
+		msg("The gaze of the %s is deflected by your shiny armor.", mname);
 	    } else if (ISWEARING(R_ALERT)) {
 		msg("You feel slightly drowsy for a moment.");
 	    } else {
@@ -494,7 +487,7 @@ int x;
 		&& off(player, ISINVIS)
 		&& !save(VS_WAND)) {
 	    if (cur_armor != NULL && cur_armor->o_flags & IS2PROT) {
-		msg("The gaze of the %s is averted by your shiny armor.", mname);
+		msg("The gaze of the %s is deflected by your shiny armor.", mname);
 	    } else {
 		msg("The gaze of the %s blinds you.", mname);
 		turn_on(player, ISBLIND);
@@ -512,7 +505,7 @@ int x;
 	     ) {
 		msg("The gaze of the %s has no effect.", mname);
 	    } else if (cur_armor != NULL && cur_armor->o_flags & IS2PROT) {
-		msg("The gaze of the %s is averted by your shiny armor.", mname);
+		msg("The gaze of the %s is deflected by your shiny armor.", mname);
 	    } else {
 		if (!save(VS_PETRIFICATION) && rnd(100) < 3) {
 		    msg("The gaze of the %s petrifies you.", mname);
