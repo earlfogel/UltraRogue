@@ -37,9 +37,11 @@ int y;
 int x;
 bool multiple;
 {
-    int limit = 0.33;
+    float limit = 0.33;
     if (serious_fight)
-	limit = 0.25;
+	limit *= 0.7;
+    if (max_stats.s_hpt > 450)
+	limit *= 0.8;
 
     if (pstats.s_hpt < max_stats.s_hpt*limit
      || (on(player, HASDISEASE) && pstats.s_hpt < max_stats.s_hpt*limit*2)
@@ -51,9 +53,9 @@ bool multiple;
     }
 
     if (multiple) {
-	keep_fighting = TRUE;
-	if (!save_hpt)
+	if (!save_hpt || !keep_fighting)
 	    save_hpt = pstats.s_hpt;  /* so we can calculate damage later  */
+	keep_fighting = TRUE;
     } else {
 	keep_fighting = FALSE;
 	save_hpt = 0;
@@ -936,9 +938,11 @@ bool thrown;
 
     damage = s_hpt - pstats.s_hpt;
     if (damage && (fighting || keep_fighting)) {
-	int limit = 0.33;
-	if (serious_fight)
+#if 0
+	float limit = 0.33;
+	if (serious_fight || max_stats.s_hpt > 500)
 	    limit = 0.25;
+#endif
 
 	/* too much damage in one round */
 	if (damage > s_hpt/5) {
@@ -946,7 +950,10 @@ bool thrown;
 	    fighting = keep_fighting = FALSE;
 	/* too much damage in one fight */
 	} else if (save_hpt-pstats.s_hpt > pstats.s_hpt/2
-		|| pstats.s_hpt < max_stats.s_hpt*limit) {
+#if 0
+		|| pstats.s_hpt < max_stats.s_hpt*limit
+#endif
+		) {
 	    msg("Ouch, that hurt.");
 	    fighting = keep_fighting = FALSE;
 	}
@@ -980,8 +987,14 @@ int wplus;
     if (need > 20 && need <= 25) need = 20;
 
     /* give monsters a chance to hit well armored player */
-    if (difficulty >= 2 && need > 20 && class == C_MONSTER)
+    if (difficulty > 2 && need > 20 && class == C_MONSTER)
 	need = 20 + ((need - 20)/2);
+    else if (difficulty > 2 && need > 15 && class == C_MONSTER) {
+	if (level < 90)
+	    need = 15 + ((need - 15)/2);
+	else
+	    need = 18 + ((need - 18)/2);
+    }
 
     /*
      * If monster is too weak to hurt us (or vice versa)
