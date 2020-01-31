@@ -1353,6 +1353,7 @@ void calm(bool blessed);
 char *vowelstr(char *str);
 int is_current(struct object *obj);
 int get_dir(void);
+int unarrow(int ch);
 bool maze_view(int y, int x);
 void listens(void);
 /* monsdata.c */
