@@ -544,18 +544,22 @@ struct object *obj;
 int 
 get_dir ()
 {
-    msg("Which direction? ");
+    int ch;
 
-    switch (readchar())
+    msg("Which direction? ");
+    ch = readchar();
+    ch = unarrow(ch);  /* translate arrow keys */
+
+    switch (ch)
     {
-	case 'h': case'H': delta.y =  0; delta.x = -1;
-	when 'j': case'J': delta.y =  1; delta.x =  0;
-	when 'k': case'K': delta.y = -1; delta.x =  0;
-	when 'l': case'L': delta.y =  0; delta.x =  1;
-	when 'y': case'Y': delta.y = -1; delta.x = -1;
-	when 'u': case'U': delta.y = -1; delta.x =  1;
-	when 'b': case'B': delta.y =  1; delta.x = -1;
-	when 'n': case'N': delta.y =  1; delta.x =  1;
+	case 'h': case'H': case CTRL('h'): delta.y =  0; delta.x = -1;
+	when 'j': case'J': case CTRL('j'): delta.y =  1; delta.x =  0;
+	when 'k': case'K': case CTRL('k'): delta.y = -1; delta.x =  0;
+	when 'l': case'L': case CTRL('l'): delta.y =  0; delta.x =  1;
+	when 'y': case'Y': case CTRL('y'): delta.y = -1; delta.x = -1;
+	when 'u': case'U': case CTRL('u'): delta.y = -1; delta.x =  1;
+	when 'b': case'B': case CTRL('b'): delta.y =  1; delta.x = -1;
+	when 'n': case'N': case CTRL('n'): delta.y =  1; delta.x =  1;
 	otherwise: return FALSE;
     }
     msg("");
@@ -570,6 +574,39 @@ get_dir ()
     return TRUE;
 }
 
+int
+unarrow(int ch)
+{
+    if (ch >= KEY_MIN) {
+	if (ch == KEY_LEFT)        ch = 'h';
+	else if (ch == KEY_DOWN)   ch = 'j';
+	else if (ch == KEY_UP)     ch = 'k';
+	else if (ch == KEY_RIGHT)  ch = 'l';
+	else if (ch == KEY_HOME)   ch = 'y';
+	else if (ch == KEY_PPAGE)  ch = 'u';
+	else if (ch == KEY_END)    ch = 'b';
+	else if (ch == KEY_NPAGE)  ch = 'n';
+	else if (ch == KEY_B2)     ch = 's';
+	else if (ch == KEY_SLEFT)  ch = 'H';  /* shift left arrow */
+	else if (ch == KEY_SF)     ch = 'J';  /* shift down arrow */
+	else if (ch == KEY_SR)     ch = 'K';  /* shift up arrow */
+	else if (ch == KEY_SRIGHT) ch = 'L';  /* shift right arrow */
+#if 0
+	else if (ch == 01051)      ch = CTRL('h');  /* ctrl left arrow */
+	else if (ch == 01023)      ch = CTRL('j');  /* ctrl down arrow */
+	else if (ch == 01076)      ch = CTRL('k');  /* ctrl up arrow */
+	else if (ch == 01070)      ch = CTRL('l');  /* ctrl right arrow */
+#endif
+#ifdef EARL
+	else if (ch == 01042)      ch = CTRL('h');  /* ctrl left arrow */
+	else if (ch == 01016)      ch = CTRL('j');  /* ctrl down arrow */
+	else if (ch == 01067)      ch = CTRL('k');  /* ctrl up arrow */
+	else if (ch == 01061)      ch = CTRL('l');  /* ctrl right arrow */
+#endif
+    }
+	
+    return ch;
+}
 
 /*
  * Maze_view:

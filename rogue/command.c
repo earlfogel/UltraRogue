@@ -126,32 +126,18 @@ command ()
 	    else if (count) ch = countch;
 	    else
 	    {
-		if (save_ch > 0) {
+		if (save_ch != '\0') {
 		    ch = save_ch;
-		    save_ch = 0;
+		    save_ch = '\0';
 		} else {
 		    ch = readchar();
 		}
 #if 0
+if (ch >= KEY_MIN)
 fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 #endif
-		if (ch == KEY_LEFT)  ch = 'h';
-		else if (ch == KEY_DOWN)  ch = 'j';
-		else if (ch == KEY_UP)    ch = 'k';
-		else if (ch == KEY_RIGHT) ch = 'l';
-		else if (ch == KEY_HOME)  ch = 'y';
-		else if (ch == KEY_PPAGE) ch = 'u';
-		else if (ch == KEY_END)   ch = 'b';
-		else if (ch == KEY_NPAGE) ch = 'n';
-		else if (ch == KEY_B2)    ch = 's';
-		else if (ch == KEY_SLEFT)  ch = 'H';  /* shift left arrow */
-		else if (ch == KEY_SF)     ch = 'J';  /* shift down arrow */
-		else if (ch == KEY_SR)     ch = 'K';  /* shift up arrow */
-		else if (ch == KEY_SRIGHT) ch = 'L';  /* shift right arrow */
-		else if (ch == 01051)      ch = CTRL('h');  /* ctrl left arrow */
-		else if (ch == 01023)      ch = CTRL('j');  /* ctrl down arrow */
-		else if (ch == 01076)      ch = CTRL('k');  /* ctrl up arrow */
-		else if (ch == 01070)      ch = CTRL('l');  /* ctrl right arrow */
+		ch = unarrow(ch);  /* translate arrow keys */
+
 		if (ch == 'x')
 		    ch = '.'; /* rest - left handed */
 		if (ch == CTRL('F')) {
@@ -287,20 +273,29 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 			    dta.y = delta.y;
 			    dta.x = delta.x;
 			    beast = NULL;
-			    waitcount = 2;
-			    if (level>50) waitcount = 4;
+			    if (ch == 'F') {
+				waitcount = 1;
+				if (serious_fight)
+				    waitcount++;
+			    } else {
+				waitcount = 0;
+			    }
 			} else {
 			    if (ch == 'F' &&
-				pstats.s_hpt == max_stats.s_hpt &&
-				hungry_state == F_OK &&
+				pstats.s_hpt > max_stats.s_hpt/3 &&
+				hungry_state != F_FAINT &&
 				waitcount > 0) {
 				/*
 				 * wait a bit,
 				 * in case a monster moves into range
 				 */
+				    waitcount--;
+#if 0
 				    fighting = TRUE;
 				    after = TRUE;
-				    waitcount--;
+				    if (waitcount > 0)
+					usleep(50000);
+#endif
 				    /* break; */
 			    } else {
 				fighting = FALSE;
@@ -315,10 +310,12 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 		    }
 		    do_fight(dta.y, dta.x,
 			(ch == 'F') ? TRUE : FALSE);
+#if 0
 		    if (ch == 'F') {
 			waitcount = 2;
-			if (level>50) waitcount = 4;
+			if (level>50 && winat(hero.y, hero.x) != FLOOR) waitcount = 4;
 		    }
+#endif
 		when 't':
 		    if (!get_dir())
 			after = FALSE;
