@@ -42,6 +42,8 @@ msg (char * fmt,...)
     va_start(ap,fmt);
     vsprintf(&mbuf[newpos],fmt,ap);
     va_end(ap);
+    if (strlen(mbuf) > COLS)
+	mbuf[COLS] = '\0';  /* stop overruns */
     newpos = strlen(mbuf);
     endmsg();
 }
@@ -273,13 +275,23 @@ line_two:
     } else if (on(player, HASITCH)) {
 	health_state = "  Itchy";
     } else if (on(player, HASSTINK)) {
-	health_state = "  Weakened";
+	health_state = "  Sickened";
     } else if (on(player, ISBLIND)) {
 	health_state = "  Blind";
     } else if (on(player, ISDEAF)) {
 	health_state = "  Deaf";
     } else if (on(player, ISSLOW)) {
 	health_state = "  Slow";
+    } else if (stat_ptr->s_intel < 8) {
+	health_state = "  Dim-witted";
+    } else if (stat_ptr->s_str < 8) {
+	health_state = "  Feeble";
+    } else if (stat_ptr->s_wisdom < 8) {
+	health_state = "  Clueless";
+    } else if (stat_ptr->s_dext < 8) {
+	health_state = "  Bumbling";
+    } else if (stat_ptr->s_const < 8) {
+	health_state = "  Frail";
 #if 0
     } else if (on(player, ISHUH) && fighting) {
 	health_state = "  Confused fight";
@@ -417,7 +429,7 @@ int ch;
 {
     int c;
 
-    save_ch = 0;
+    save_ch = '\0';
 
     if (ch == '\n') {
         while ((c = readchar()) != '\n' && c != '\r')
