@@ -449,11 +449,7 @@ tweak_settings (bool first_time)
     struct object *obj;
 
     /* normal difficulty */
-    if (difficulty == 2
-#ifdef EARL
-	|| difficulty > 2
-#endif
-    ) {
+    if (difficulty == 2) {
 	if (first_time) {
 	    if (player.t_ctype == C_THIEF || player.t_ctype == C_FIGHTER) {
 		p_know[P_TFIND] = TRUE;
@@ -511,6 +507,14 @@ tweak_settings (bool first_time)
 
     /* urogue -hard */
     } else if (difficulty > 2) {
+#ifdef EARL
+	if (first_time) {
+	    if (player.t_ctype == C_THIEF || player.t_ctype == C_FIGHTER) {
+		p_know[P_TFIND] = TRUE;
+		s_know[S_IDENT] = TRUE;
+	    }
+	}
+#endif
 	for(i=0; i < MAXSCROLLS; i++) {
 	    if (s_magic[i].mi_bless > 5)
 		s_magic[i].mi_bless -= 5;  /* less chance of blessed scrolls */
