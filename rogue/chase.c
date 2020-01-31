@@ -276,17 +276,8 @@ bool flee;
 	on(player, CANSEE)) && off(*th, CANSURPRISE))
 		running = FALSE;
 
-#if 0
     if (!cansee(ch_ret.y, ch_ret.x) && sch == FLOOR)
 	th->t_oldch = ' ';
-    else
-	th->t_oldch = sch;
-#endif
-    if (rer != NULL && (rer->r_flags & ISDARK) && 
-	!(rer->r_flags & HASFIRE) && sch == FLOOR &&
-	DISTANCE(ch_ret.y, ch_ret.x, th->t_pos.y, th->t_pos.x) < see_dist &&
-	off(player, ISBLIND))
-	    th->t_oldch = ' ';
     else
 	th->t_oldch = sch;
 
