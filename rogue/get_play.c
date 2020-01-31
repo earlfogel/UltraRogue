@@ -119,14 +119,20 @@ geta_player ()
 	    }
 	mvwaddstr(hw,0,0,"Do you wish to select a character? ");
 	draw(hw);
-	if (getchar() != 'y')	return(FALSE);
+	i = getchar();
+	if (i < '1' && i > 9 && i != 'y')
+	    return(FALSE);
 again:
 	wmove(hw, LINES - 1, 0);
 	wclrtoeol(hw);
 	mvwaddstr(hw,0,0,"Enter the number of a pre-defined character:");
 	wclrtoeol(hw);
 	draw(hw);
-	i = (wgetch(hw) - '0') - 1;
+	if (i == 'y') {
+	    i = (wgetch(hw) - '0') - 1;
+	} else {
+	    i = (i - '0') - 1;
+	}
 	while(i < 0 || i > MAXPDEF-1) {
 	    mvwaddstr(hw,0,0,"Use the range 1 to");
 	    wprintw(hw," %d!",MAXPDEF);
