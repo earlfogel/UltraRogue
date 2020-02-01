@@ -41,30 +41,34 @@ want, you can use command line options to change this:
 ### Fighting
 
 Use the 'f' command to fight a single monster.  If there is more than one
-monster in reach, urogue asks which one you want to fight.
+monster in reach, urogue asks which you want to fight.
 
-Use the 'F' command to fight a group of monsters. I.e., when the monster you're
-fighting dies, urogue picks another and keeps fighting as long as there's a
-monster in reach.
+Use the 'F' command to fight a group of monsters. I.e., when the monster
+you are fighting dies, urogue picks another and keeps going.  Fights end
+when there are no more monsters in reach, or when you are too weak or
+injured to continue.
 
 There are fewer interruptions when fighting, and fewer messages to
 distract you.  If you are much stronger than the monsters around
 you, this means you can press 'F' and then press space until they
 all disappear.
 
-When choosing monsters for you, urogue does its best to avoid friendly
+With the 'F' command, urogue tries to avoid friendly
 monsters and monsters that divide when hit.
+
+\<CTRL\>-F (serious fight) is like 'F' but fights last longer and
+include friendly and dividing monsters.
 
 ### Running Around
 
 Pressing \<SHIFT\> and a direction key runs until you reach something
-interesting.  There is an option (door_stop) that makes you run until
-you run into something (as in classic rogue).
+interesting.  There is an option (nodoorstop) that lets you run into things
+(as in classic rogue).
 
-Pressing \<CTRL\> and a direction key does a searching run -- where you
-stop and search after every step.  This is particularly useful when
-searching for secret doors, but it does mean that any monsters that are
-chasing you quickly catch up.
+Pressing \<CTRL\> and a direction key does a controlled run -- where you
+stop and search after every step and don't pick things up when you step on
+them.  This is particularly useful in treasure chambers, but it does mean
+that any monsters that are chasing you quickly catch up.
 
 ### Level of Difficulty
 
@@ -73,14 +77,13 @@ game, -easy and -hard.
 
 In easy games, your pack can hold more items and you start out with
 more stuff.  There are fewer traps and fewer cursed items, and you are
-less likely to be summoned to a throne room.  Also, enchanted armor
-is more effective.
+less likely to be summoned to a throne room.  Also, armor is more
+effective.
 
-In hard games, there are fewer blessed items, artifacts are more
-dangerous, and enchanted armor is less effective.  You are also
-more vulnerable to magical attacks and your ability to do magic is
-reduced.  You can't start a hard game with mithril or crystalline armor,
-but you might find some later.
+In hard games, there are fewer blessed items, artifacts are more dangerous,
+and armor is less effective.  You are also more vulnerable to magical
+attacks and your ability to do magic is reduced.  You can't start a hard
+game with mithril or crystalline armor, but you may find some later.
 
 ## Getting Started
 
@@ -142,7 +145,7 @@ from the roguelike archive at: https://britzl.github.io/roguearchive/
 
 ## Prerequisites
 
-A C compiler, the ncurses library, and make.
+A C compiler, a curses library, and make.
 
 ## Installation
 
