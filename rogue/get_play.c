@@ -120,7 +120,7 @@ geta_player ()
 	mvwaddstr(hw,0,0,"Do you wish to select a character? ");
 	draw(hw);
 	i = getchar();
-	if (i < '1' && i > 9 && i != 'y')
+	if ((i < '1' || i > '9') && i != 'y')
 	    return(FALSE);
 again:
 	wmove(hw, LINES - 1, 0);
