@@ -41,8 +41,12 @@ bool no_unique;
     {
 	if (i++ > range*10) { /* just in case all have be genocided */
 	    i = 0;
-	    if (--cur_level <= 0)
-		fatal("Rogue could not find a monster to make");
+	    if (--cur_level <= 0) {
+		if (wander)
+		    fatal("Rogue could not make a new wandering monster");
+		else
+		    fatal("Rogue could not find a monster to make");
+	    }
 	}
 	if (cur_level <= 4) {
 	    d = NLEVMONS*(cur_level - 1) + (rnd(range) - (range - 1 - NLEVMONS));
