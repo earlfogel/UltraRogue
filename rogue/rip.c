@@ -223,8 +223,8 @@ int monst;
     if ((amount == 0 || canwizard) && flags != SCOREIT) {
 	refresh();
 	endwin();
-	if (canwizard)
-	    printf("\nDebugging is it's own reward, no score for you.\n");
+	if (amount > 0 && canwizard)
+	    printf("\nDebugging is its own reward, no score for you.\n");
 	return;
     }
 
