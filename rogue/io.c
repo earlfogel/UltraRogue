@@ -282,6 +282,8 @@ line_two:
 	health_state = "  Deaf";
     } else if (on(player, ISSLOW)) {
 	health_state = "  Slow";
+    } else if (on(player, ISFLEE)) {
+	health_state = "  Frightened";
     } else if (stat_ptr->s_intel < 8) {
 	health_state = "  Dim-witted";
     } else if (stat_ptr->s_str < 8) {
