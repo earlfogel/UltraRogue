@@ -368,6 +368,7 @@ WINDOW *win;
     int oy, ox, ny, nx;
     bool op_bad;
     int ch;
+    int old_diff = difficulty;
 
     curs_set(1);			/* show cursor */
     op_bad = TRUE;
@@ -414,8 +415,12 @@ WINDOW *win;
 		} else {
 		    mvwaddstr(win, ny, nx + 5, "('E'asy, 'N'ormal, 'H'ard)");
 		}
-		if (*diff < mindifficulty)
-		    mindifficulty = *diff;
+		if (*diff != old_diff) {
+		    if (*diff < mindifficulty)
+			mindifficulty = *diff;
+		    tweak_settings(FALSE, old_diff);
+		    old_diff = *diff;
+		}
 	}
     }
     wmove(win, ny, nx + 5);
