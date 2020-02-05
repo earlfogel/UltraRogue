@@ -223,18 +223,20 @@ bool flee;
 
     /* If we have a scavenger, it can pick something up */
     if (on(*th, ISSCAVENGE)) {
-	struct linked_list *item;
+	struct linked_list *item, *pitem;
+	int nitems = 0;
 
-	if ((item = find_obj(ch_ret.y, ch_ret.x)) != NULL) {
+	/* can the monster carry anything more? */
+	for (pitem=th->t_pack; pitem; pitem=next(pitem)) {
+	    nitems++;
+	}
+
+	if ((item = find_obj(ch_ret.y, ch_ret.x)) != NULL
+		&& nitems < th->t_stats.s_lvl) {
 	    char floor = (roomin(&ch_ret) == NULL) ? PASSAGE : FLOOR;
 
 	    detach(lvl_obj, item);
 	    mvaddch(ch_ret.y, ch_ret.x, floor);
-#if 0
-	    if (cansee(ch_ret.y, ch_ret.x) || floor == PASSAGE)
-	    if (mvwinch(cw, ch_ret.y, ch_ret.x) != ' '
-	     || cansee(ch_ret.y, ch_ret.x))
-#endif
 	    if (mvwinch(cw, ch_ret.y, ch_ret.x) != ' ')
 		mvwaddch(cw, ch_ret.y, ch_ret.x, floor);
 	    attach(th->t_pack, item);
