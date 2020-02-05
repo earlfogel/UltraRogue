@@ -1426,7 +1426,7 @@ restore_file(FILE *savef)
     }
     ur_free(str);
 
-    tweak_settings(FALSE);  /* put things back the way they were */
+    tweak_settings(FALSE, 2);  /* put things back the way they were */
 
     /*
      * Shouldn't happen
