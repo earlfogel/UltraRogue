@@ -49,15 +49,14 @@
 int fd_score = -1;		/* file descriptor the score file */
 
 int 
-main (argc, argv)
-int argc;
-char **argv;
+main (int argc, char **argv)
 {
     char *env;
     struct linked_list *item;
     struct object *obj;
     int lowtime, wpt=0, i, j, hpadd, dmadd;
     bool alldone,predef;
+    char monster_flag = '+';
     time_t now;
 
     (void) signal(SIGQUIT, SIG_IGN); 		/* ignore quit for now */
@@ -120,26 +119,34 @@ char **argv;
     }
 
     /*
-     * Check to see if player is a wizard
+     * Parse command-line options
+     * Anything remaining after this should be the path to a saved game.
      */
-#ifdef EARL
-    if ((argc >= 2 && strcmp(argv[argc-1], "-w") == 0)) {
-	wizard = TRUE;
-	canwizard = TRUE;
+    while (--argc > 0 && (*++argv)[0] == '-') {
+	switch (argv[0][1]) {
+	case 'd':  /* -debug: debug mode */
+	    wizard = canwizard = TRUE;
+	    break;
+	case 's':   /* -score: print score and exit */
+	    score(0, SCOREIT, 0);
+	    exit(0);
+	case 'm':   /* -mc, -mr, -ma: choose classic, random or all monsters */
+	    monster_flag = (char) argv[0][2];
+	    break;
+	case 'e':   /* -easy */
+	    difficulty--;
+	    mindifficulty = difficulty;
+	    break;
+	case 'h':   /* -hard */
+	    difficulty++;
+	    mindifficulty = difficulty;
+	    break;
+	}
     }
+#if 0
+printf("wizard=%d, monster_flag=%c, difficulty=%d\n", wizard, monster_flag, difficulty);
+exit(0);
 #endif
-    if (argc >= 2 && argv[argc-1][0] == '\0') {
-	wizard = TRUE;
-	canwizard = TRUE;
-    }
-
-    /*
-     * check for print-score option
-     */
-    if (argc >= 2 && strcmp(argv[1], "-s") == 0) {
-	score(0, SCOREIT, 0);
-	exit(0);
-    }
 
     lowtime = (int) time(&now);
     dnum = (wizard && getenv("SEED") != NULL ?
@@ -182,8 +189,11 @@ char **argv;
     keypad(cw,TRUE);		/* for arrow keys */
     keypad(hw,TRUE);		/* for arrow keys */
 
-    if (argc >= 2 && argv[1][0] != '-') {
-	if (!restore(argv[1])) { /* Note: restore returns on error only */
+    /*
+     * Restore saved game
+     */
+    if (argc > 0) {
+	if (!restore(argv[0])) { /* Note: restore returns on error only */
 	    exit(1);
 	}
     }
@@ -197,31 +207,7 @@ char **argv;
     if (wizard)
 	usleep(250000);
 
-    /*
-     * choose which monsters may appear
-     */
-    if (argc >= 2 && strcmp(argv[1], "-mc") == 0) {
-	init_monsters('c');  /* classic */
-    } else if (argc >= 2 && strcmp(argv[1], "-mr") == 0) {
-	init_monsters('r');  /* random */
-    } else if (argc >= 2 && strcmp(argv[1], "-ma") == 0) {
-	init_monsters('a');  /* all */
-    } else if (argc >= 2 && strcmp(argv[1], "-mm") == 0) {
-	init_monsters('m');  /* more monsters */
-    } else {
-	init_monsters('+');  /* classic plus */
-    }
-
-    /*
-     * choose level of difficulty
-     */
-    if (argc >= 2 && strcmp(argv[1], "-easy") == 0) {
-	difficulty--;
-	mindifficulty = difficulty;
-    } else if (argc >= 2 && strcmp(argv[1], "-hard") == 0) {
-	difficulty++;
-	mindifficulty = difficulty;
-    }
+    init_monsters(monster_flag);
 
     predef = geta_player();
 re_roll:
@@ -312,8 +298,8 @@ get_food:
     resurrect = pstats.s_const;
     new_level(FALSE);			/* Draw current level */
 
-    /* more tweaks based on difficulty level */
-    tweak_settings(TRUE);
+    /* tweaks based on difficulty level */
+    tweak_settings(TRUE, 2);
 
     /*
      * Start up daemons and fuses
@@ -441,12 +427,62 @@ setup ()
  * make some adjustments based on difficulty level
  */
 void
-tweak_settings (bool first_time)
+tweak_settings (bool first_time, int old_difficulty)
 {
     int i;
     int potion, scroll;
     struct linked_list *item;
     struct object *obj;
+
+#if 0
+if (!first_time) {
+if (difficulty < 2)
+msg("Switching to easy settings");
+else if (difficulty == 2)
+msg("Switching back to normal");
+else
+msg("Switching to hard settings");
+}
+#endif
+
+    /*
+     * set things back to normal, at least temporarily
+     */
+    if (old_difficulty < 2) {	      /* from easy to normal */
+	for(i=0; i < MAXSCROLLS; i++) {
+	    if (s_magic[i].mi_curse > 0 && s_magic[i].mi_curse < 100)
+		s_magic[i].mi_curse += 10;
+	}
+	for(i=0; i < MAXPOTIONS; i++) {
+	    if (p_magic[i].mi_curse > 0 && p_magic[i].mi_curse < 100)
+		p_magic[i].mi_curse += 10;
+	}
+	for(i=0; i < MAXRINGS; i++) {
+	    if (r_magic[i].mi_curse > 0 && r_magic[i].mi_curse < 100)
+		r_magic[i].mi_curse += 10;
+	}
+	for(i=0; i < MAXSTICKS; i++) {
+	    if (ws_magic[i].mi_curse > 0 && ws_magic[i].mi_curse < 100)
+		ws_magic[i].mi_curse += 10;
+	}
+    } else if (old_difficulty > 2) {  /* from hard to normal */
+	for(i=0; i < MAXSCROLLS; i++) {
+	    if (s_magic[i].mi_bless > 0 && s_magic[i].mi_bless < 100)
+		s_magic[i].mi_bless += 5;
+	}
+	for(i=0; i < MAXPOTIONS; i++) {
+	    if (p_magic[i].mi_bless > 0 && p_magic[i].mi_bless < 100)
+		p_magic[i].mi_bless += 5;
+	}
+	for(i=0; i < MAXRINGS; i++) {
+	    if (r_magic[i].mi_bless > 0 && r_magic[i].mi_bless < 100)
+		r_magic[i].mi_bless += 5;
+	}
+	for(i=0; i < MAXSTICKS; i++) {
+	    if (ws_magic[i].mi_bless > 0 && ws_magic[i].mi_bless < 100)
+		ws_magic[i].mi_bless += 5;
+	}
+    }
 
     /* normal difficulty */
     if (difficulty == 2) {
@@ -489,11 +525,11 @@ tweak_settings (bool first_time)
 	}
 
 	for(i=0; i < MAXSCROLLS; i++) {
-	    if (s_magic[i].mi_curse > 10)
+	    if (s_magic[i].mi_curse > 10 && s_magic[i].mi_curse < 100)
 		s_magic[i].mi_curse -= 10;  /* less chance of cursed scrolls */
 	}
 	for(i=0; i < MAXPOTIONS; i++) {
-	    if (p_magic[i].mi_curse > 10)
+	    if (p_magic[i].mi_curse > 10 && p_magic[i].mi_curse < 100)
 		p_magic[i].mi_curse -= 10;  /* less chance of cursed potions */
 	}
 	for(i=0; i < MAXRINGS; i++) {
@@ -501,7 +537,7 @@ tweak_settings (bool first_time)
 		r_magic[i].mi_curse -= 10;  /* less chance of cursed rings */
 	}
 	for(i=0; i < MAXSTICKS; i++) {
-	    if (ws_magic[i].mi_curse > 10)
+	    if (ws_magic[i].mi_curse > 10 && ws_magic[i].mi_curse < 100)
 		ws_magic[i].mi_curse -= 10;  /* less chance of cursed wands */
 	}
 
@@ -516,19 +552,19 @@ tweak_settings (bool first_time)
 	}
 #endif
 	for(i=0; i < MAXSCROLLS; i++) {
-	    if (s_magic[i].mi_bless > 5)
+	    if (s_magic[i].mi_bless > 5 && s_magic[i].mi_bless < 100)
 		s_magic[i].mi_bless -= 5;  /* less chance of blessed scrolls */
 	}
 	for(i=0; i < MAXPOTIONS; i++) {
-	    if (p_magic[i].mi_bless > 5)
+	    if (p_magic[i].mi_bless > 5 && p_magic[i].mi_bless < 100)
 		p_magic[i].mi_bless -= 5;  /* less chance of blessed potions */
 	}
 	for(i=0; i < MAXRINGS; i++) {
-	    if (r_magic[i].mi_bless > 5)
+	    if (r_magic[i].mi_bless > 5 && r_magic[i].mi_bless < 100)
 		r_magic[i].mi_bless -= 5;  /* less chance of blessed rings */
 	}
 	for(i=0; i < MAXSTICKS; i++) {
-	    if (ws_magic[i].mi_bless > 5)
+	    if (ws_magic[i].mi_bless > 5 && ws_magic[i].mi_bless < 100)
 		ws_magic[i].mi_bless -= 5;  /* less chance of blessed wands */
 	}
     }
