@@ -1330,7 +1330,7 @@ void chmsg(char *fmt, int arg);
 void loadav(double *avg);
 int holiday(void);
 int ucount(void);
-void tweak_settings(bool first_time);
+void tweak_settings(bool first_time, int old_difficulty);
 /* maze.c */
 void do_maze(void);
 void draw_maze(void);
