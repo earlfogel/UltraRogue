@@ -306,7 +306,6 @@ init_materials ()
  *	c - classic monsters from urogue 1.0.2
  *	r - a random assortment
  *	a - all 400+ monsters
- *	m - classic monsters plus lots of random extras
  *	default - classic monsters plus a few random extras
  */
 
@@ -321,11 +320,24 @@ init_monsters (char flag)
     for (i=1; i<nummonst; i++) {
 	keep = TRUE;
 	if (flag == 'r') {  /* Select monsters at random */
-	    /* keep at least one monster for the first level */
+	    bool friendly = FALSE;
+	    for (j=0; j<NM_FLAGS; j++) {
+		if (monsters[i].m_flags[j] == ISFRIENDLY
+		 || monsters[i].m_flags[j] == HIGHFRIENDLY) {
+		    friendly = TRUE;
+		}
+	    }
 	    if (i==3 && monsters[1].m_normal == FALSE
 	      && monsters[2].m_normal == FALSE) {
-	        /* do nothing */
-	    } else if (rnd(2) == 0) {  /* remove half the rest */
+		/* keep at least one normal monster for the first level */
+	    } else if (i==3 && monsters[1].m_wander == FALSE
+	      && monsters[2].m_wander == FALSE) {
+		/* keep at least one wandering monster for the first level */
+	    } else if (friendly && rnd(12) > 0) {  /* remove most friendlies */
+		monsters[i].m_normal = FALSE;
+		monsters[i].m_wander = FALSE;
+		keep = FALSE;
+	    } else if (rnd(2) > 0) {  /* remove half the rest */
 		monsters[i].m_normal = FALSE;
 		monsters[i].m_wander = FALSE;
 		keep = FALSE;
@@ -362,8 +374,7 @@ init_monsters (char flag)
 	    if (classic) {
 		/* do nothing */
 	    } else if ((friendly && rnd(12) > 0)
-		|| (flag != 'm' && rnd(6) > 0)
-		|| (flag == 'm' && rnd(3) > 0)) {
+		|| (rnd(6) > 0)) {
 		monsters[i].m_normal = FALSE;
 		monsters[i].m_wander = FALSE;
 		keep = FALSE;
