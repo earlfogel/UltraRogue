@@ -448,7 +448,7 @@ teleport ()
 	msg("Where do you wish to teleport to? (* for help)");
 	wmove(cw, hero.y, hero.x);
 	draw(cw);
-	which = getchar();
+	which = readchar();
 	while (which != ESCAPE 
 		&& which != LINEFEED
 		&& which != CARRIAGE_RETURN) {
@@ -470,7 +470,7 @@ teleport ()
 	    c.x = min(c.x, COLS - 1);
 	    wmove(cw, c.y, c.x);
 	    draw(cw);
-	    which = getchar();
+	    which = readchar();
 	} 
 	which = winat(c.y, c.x);
 	if ((which == FLOOR || which == PASSAGE || which == DOOR) &&

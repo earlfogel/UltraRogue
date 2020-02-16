@@ -98,11 +98,11 @@ init_player ()
 	mvwaddstr(hw,2,0,"[1] Fighter\n[2] Magician\n[3] Cleric\n[4] Thief") ;
 	mvwaddstr(hw, 0, 0, "What character class do you desire? ") ;
 	draw(hw) ;
-	char_type = getchar() - '0' ;
+	char_type = wgetch(hw) - '0' ;
 	while (char_type < 1 || char_type > 4) {
 	    mvwaddstr(hw,0,0,"Please enter a character type between 1 and 4: ");
 	    draw(hw) ;
-	    char_type = getchar() - '0';
+	    char_type = wgetch(hw) - '0';
 	}
 	char_type-- ;
     }

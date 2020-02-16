@@ -886,7 +886,7 @@ do_phial ()
     /* Prompt for action */
     msg("How do you wish to apply the Phial of Galadriel? (* for list): ");
 
-    which = getchar() - 'a';
+    which = readchar() - 'a';
     if (which == ESCAPE - 'a') {
 	after = FALSE;
 	return;
@@ -903,7 +903,7 @@ do_phial ()
 	wmove(hw, 0, 0);
 	wprintw(hw, "Which power do you wish to use?");
 	draw(hw);
-	which = getchar() - 'a';
+	which = wgetch(hw) - 'a';
 	while (which < 0 || which > 1) {
 	    if (which == ESCAPE - 'a') {
 		after = FALSE;
@@ -914,7 +914,7 @@ do_phial ()
 	    wclrtoeol(hw);
 	    waddstr(hw, "Please enter one of the listed powers. ");
 	    draw(hw);
-	    which = getchar() - 'a';
+	    which = wgetch(hw) - 'a';
 	}
 	mvwaddstr(hw, 0, 0, "Your attempt is successful.--More--");
 	wclrtoeol(hw);
@@ -950,7 +950,7 @@ do_palantir ()
     if (is_carrying(TR_CROWN))
 	limit += 1;
 
-    which = getchar() - 'a';
+    which = readchar() - 'a';
     if (which == ESCAPE - 'a') {
 	after = FALSE;
 	return;
@@ -973,7 +973,7 @@ do_palantir ()
 	wmove(hw, 0, 0);
 	wprintw(hw, "Which power do you wish to use?");
 	draw(hw);
-	which = getchar() - 'a';
+	which = wgetch(hw) - 'a';
 	while (which < 0 || which > limit) {
 	    if (which == ESCAPE - 'a') {
 		after = FALSE;
@@ -984,7 +984,7 @@ do_palantir ()
 	    wclrtoeol(hw);
 	    waddstr(hw, "Please enter one of the listed powers. ");
 	    draw(hw);
-	    which = getchar() - 'a';
+	    which = wgetch(hw) - 'a';
 	}
 	mvwaddstr(hw, 0, 0, "Your attempt is successful.--More--");
 	wclrtoeol(hw);
@@ -1016,7 +1016,7 @@ do_silmaril ()
     /* Prompt for action */
     msg("How do you wish to apply the Silmaril of Ea? (* for list): ");
 
-    which = getchar() - 'a';
+    which = readchar() - 'a';
     if (which == ESCAPE - 'a') {
 	after = FALSE;
 	return;
@@ -1034,7 +1034,7 @@ do_silmaril ()
 	wmove(hw, 0, 0);
 	wprintw(hw, "Which power do you wish to use?");
 	draw(hw);
-	which = getchar() - 'a';
+	which = wgetch(hw) - 'a';
 	while (which < 0 || which > 2) {
 	    if (which == ESCAPE - 'a') {
 		after = FALSE;
@@ -1045,7 +1045,7 @@ do_silmaril ()
 	    wclrtoeol(hw);
 	    waddstr(hw, "Please enter one of the listed powers. ");
 	    draw(hw);
-	    which = getchar() - 'a';
+	    which = wgetch(hw) - 'a';
 	}
 	mvwaddstr(hw, 0, 0, "Your attempt is successful.--More--");
 	wclrtoeol(hw);
@@ -1080,7 +1080,7 @@ do_amulet ()
     limit = 0;
     if (is_carrying(TR_PURSE))
 	limit += 1;
-    which = getchar() - 'a';
+    which = readchar() - 'a';
     if (which == ESCAPE - 'a') {
 	after = FALSE;
 	return;
@@ -1098,7 +1098,7 @@ do_amulet ()
 	wmove(hw, 0, 0);
 	wprintw(hw, "Which power do you wish to use?");
 	draw(hw);
-	which = getchar() - 'a';
+	which = wgetch(hw) - 'a';
 	while (which < 0 || which > limit) {
 	    if (which == ESCAPE - 'a') {
 		after = FALSE;
@@ -1109,7 +1109,7 @@ do_amulet ()
 	    wclrtoeol(hw);
 	    waddstr(hw, "Please enter one of the listed powers. ");
 	    draw(hw);
-	    which = getchar() - 'a';
+	    which = wgetch(hw) - 'a';
 	}
 	mvwaddstr(hw, 0, 0, "Your attempt is successful.--More--");
 	wclrtoeol(hw);
@@ -1265,7 +1265,7 @@ do_sceptre ()
     /* Prompt for action */
     msg("How do you wish to apply the Sceptre of Might? (* for list): ");
 
-    which = getchar() - 'a';
+    which = readchar() - 'a';
     if (which == ESCAPE - 'a') {
 	after = FALSE;
 	return;
@@ -1297,7 +1297,7 @@ do_sceptre ()
 	wmove(hw, 0, 0);
 	wprintw(hw, "Which power do you wish to use?");
 	draw(hw);
-	which = getchar() - 'a';
+	which = wgetch(hw) - 'a';
 	while (which < 0 || which > limit) {
 	    if (which == ESCAPE - 'a') {
 		after = FALSE;
@@ -1308,7 +1308,7 @@ do_sceptre ()
 	    wclrtoeol(hw);
 	    waddstr(hw, "Please enter one of the listed powers. ");
 	    draw(hw);
-	    which = getchar() - 'a';
+	    which = wgetch(hw) - 'a';
 	}
 	mvwaddstr(hw, 0, 0, "Your attempt is successful.--More--");
 	wclrtoeol(hw);
@@ -1366,7 +1366,7 @@ do_wand ()
     /* Prompt for action */
     msg("How do you wish to apply the Wand of Orcus? (* for list): ");
 
-    which = getchar() - 'a';
+    which = readchar() - 'a';
     if (which == ESCAPE - 'a') {
 	after = FALSE;
 	return;
@@ -1386,7 +1386,7 @@ do_wand ()
 	wmove(hw, 0, 0);
 	wprintw(hw, "Which power do you wish to use?");
 	draw(hw);
-	which = getchar() - 'a';
+	which = wgetch(hw) - 'a';
 	while (which < 0 || which >= MAXSTICKS) {
 	    if (which == ESCAPE - 'a') {
 		after = FALSE;
@@ -1397,7 +1397,7 @@ do_wand ()
 	    wclrtoeol(hw);
 	    waddstr(hw, "Please enter one of the listed powers. ");
 	    draw(hw);
-	    which = getchar() - 'a';
+	    which = wgetch(hw) - 'a';
 	}
 	mvwaddstr(hw, 0, 0, "Your attempt is successful.--More--");
 	wclrtoeol(hw);
@@ -1438,7 +1438,7 @@ do_crown ()
     /* Prompt for action */
     msg("How do you wish to apply the Crown of Might? (* for list): ");
 
-    which = getchar() - 'a';
+    which = readchar() - 'a';
     if (which == ESCAPE - 'a') {
 	after = FALSE;
 	return;
@@ -1474,7 +1474,7 @@ do_crown ()
 	wmove(hw, 0, 0);
 	wprintw(hw, "Which power do you wish to use?");
 	draw(hw);
-	which = getchar() - 'a';
+	which = wgetch(hw) - 'a';
 	while (which < 0 || which > limit) {
 	    if (which == ESCAPE - 'a') {
 		after = FALSE;
@@ -1485,7 +1485,7 @@ do_crown ()
 	    wclrtoeol(hw);
 	    waddstr(hw, "Please enter one of the listed powers. ");
 	    draw(hw);
-	    which = getchar() - 'a';
+	    which = wgetch(hw) - 'a';
 	}
 	mvwaddstr(hw, 0, 0, "Your attempt is successful.--More--");
 	wclrtoeol(hw);
