@@ -67,8 +67,8 @@ d_list[MAXDAEMONS] = {
 	_X_, _X_, _X_, _X_, _X_, _X_, _X_, _X_, _X_, _X_,
 };
 
-char *prev_format = "UltraRogue Portable Save File Release 001e";
-char *save_format = "UltraRogue Portable Save File Release 101e";
+char *prev_format = "UltraRogue Portable Save File Release 101e";
+char *save_format = "UltraRogue Portable Save File Release 102e";
 char *save_end    = "\nEnd of UltraRogue Game State\n";
 
 /*
@@ -213,7 +213,7 @@ ur_read_string(FILE *savef)
     if (len == 0)
         return(NULL);
 
-    buf = ur_alloc(len);
+    buf = ALLOC(len);
 
     if (buf == NULL)     /* Should flag a global error condition... */
         return(NULL);
@@ -263,7 +263,7 @@ ur_read_room(FILE *savef)
     struct room *r;
     int i;
 
-    r = ur_alloc( sizeof(struct room) );
+    r = ALLOC( sizeof(struct room) );
 
     r->r_pos = ur_read_coord(savef);
     r->r_max = ur_read_coord(savef);
@@ -309,7 +309,7 @@ ur_read_object(FILE *savef)
     struct object *o;
     long id;
 
-    o = ur_alloc(sizeof(struct object));
+    o = ALLOC(sizeof(struct object));
 
     if (o == NULL)
         return(NULL);
@@ -345,7 +345,7 @@ ur_read_object(FILE *savef)
 	o->art_stats.ar_scrolls = a->ar_scrolls;
 	o->art_stats.ar_wands = a->ar_wands;
 	o->art_stats.t_art = a->t_art;
-	ur_free(a);
+	FREE(a);
     }
 
     return(o);
@@ -615,7 +615,7 @@ ur_read_monster_stats(FILE *savef)
 
     assert(id == URS_MONSTERSTATS);
 
-    m = ur_alloc( sizeof(struct mstats) );
+    m = ALLOC( sizeof(struct mstats) );
 
     m->s_str = ur_read_short(savef);
     m->s_exp = ur_read_long(savef);
@@ -655,7 +655,7 @@ ur_read_monster(FILE *savef)
     struct monster *m;
     struct mstats *mstats;
 
-    m = ur_alloc( sizeof(struct monster) );
+    m = ALLOC( sizeof(struct monster) );
 
     m->m_name = ur_read_string(savef);
     m->m_carry = ur_read_short(savef);
@@ -671,7 +671,7 @@ ur_read_monster(FILE *savef)
     mstats = ur_read_monster_stats(savef);
 
     m->m_stats = *mstats;
-    ur_free(mstats);
+    FREE(mstats);
 
     return(m);
 }
@@ -696,7 +696,7 @@ ur_read_trap(FILE *savef)
 
     assert(id == URS_TRAP);
 
-    t = ur_alloc( sizeof(struct trap));
+    t = ALLOC( sizeof(struct trap));
 
     t->tr_pos = ur_read_coord(savef);
     t->tr_flags = ur_read_long(savef);
@@ -728,7 +728,7 @@ ur_read_artifact(FILE *savef)
 
     assert(id == URS_ARTIFACT);
 
-    a = ur_alloc( sizeof(struct artifact));
+    a = ALLOC( sizeof(struct artifact));
 
     a->ar_flags = ur_read_long(savef);
     a->ar_rings = ur_read_long(savef);
@@ -769,7 +769,7 @@ ur_read_stats(FILE *savef)
 
     assert(id == URS_STATS);
 
-    s = ur_alloc(sizeof(struct stats));
+    s = ALLOC(sizeof(struct stats));
 
     s->s_dmg = ur_read_string(savef);
     s->s_exp = ur_read_long(savef);
@@ -838,17 +838,17 @@ ur_read_thing(FILE *savef)
 
     assert(id == URS_THING);
 
-    t = ur_alloc( sizeof(struct thing) );
+    t = ALLOC( sizeof(struct thing) );
 
     t->t_pack = ur_read_bag(1, savef);
 
     s = ur_read_stats(savef);
     t->t_stats = *s;
-    ur_free(s);
+    FREE(s);
 
     s = ur_read_stats(savef);
     t->maxstats = *s;
-    ur_free(s);
+    FREE(s);
 
     t->t_pos = ur_read_coord(savef);
     t->t_oldpos = ur_read_coord(savef);
@@ -1002,24 +1002,40 @@ save_file(FILE *savef)
     for(i = 0; i < MAXSCROLLS; i++) {
         ur_write_string(savef,s_names[i]);
         ur_write_short(savef,(short) s_know[i]);
+	if (s_guess[i] == NULL)
+	    ur_write_string(savef,"");
+	else
+	    ur_write_string(savef,s_guess[i]);
     }
 
     ur_write_string(savef,"\nPotions\n");
     for(i = 0; i < MAXPOTIONS; i++) {
         ur_write_string(savef,p_colors[i]);
         ur_write_short(savef,(short) p_know[i]);
+	if (p_guess[i] == NULL)
+	    ur_write_string(savef,"");
+	else
+	    ur_write_string(savef,p_guess[i]);
     }
 
     ur_write_string(savef,"\nRings\n");
     for(i = 0; i < MAXRINGS; i++) {
         ur_write_string(savef,r_stones[i]);
         ur_write_short(savef,(short) r_know[i]);
+	if (r_guess[i] == NULL)
+	    ur_write_string(savef,"");
+	else
+	    ur_write_string(savef,r_guess[i]);
     }
 
     ur_write_string(savef,"\nSticks\n");
     for(i = 0; i < MAXSTICKS; i++) {
         ur_write_string(savef,ws_made[i]);
         ur_write_short(savef,(short) ws_know[i]);
+	if (ws_guess[i] == NULL)
+	    ur_write_string(savef,"");
+	else
+	    ur_write_string(savef,ws_guess[i]);
     }
 
     ur_write_string(savef,"\nStick types\n");
@@ -1169,7 +1185,7 @@ save_file(FILE *savef)
     ur_write_string(savef,save_end);	/* to verify end of file */
 }
 
-#define DUMPSTRING { str = ur_read_string(savef); /*printf("%s",str);fflush(stdout);*/ ur_free(str); }
+#define DUMPSTRING { str = ur_read_string(savef); /*printf("%s",str);fflush(stdout);*/ FREE(str); }
 
 int
 restore_file(FILE *savef)
@@ -1194,13 +1210,20 @@ restore_file(FILE *savef)
         printf("Sorry, versions don't match.\n");
         return(FALSE);
     }
-    ur_free(str);
+    FREE(str);
 
     DUMPSTRING
     for(i=0; i < MAXSCROLLS; i++) {
 	if (s_names[i] != NULL) FREE(s_names[i]);
         s_names[i] = ur_read_string(savef);
         s_know[i] = (bool) ur_read_short(savef);
+	if (!compatibility_mode) {
+	    str = ur_read_string(savef);
+	    if (*str == '\0')
+		FREE(str);
+	    else
+		s_guess[i] = str;
+	}
     }
 
     DUMPSTRING
@@ -1208,18 +1231,39 @@ restore_file(FILE *savef)
 	if (p_colors[i] != NULL) FREE(p_colors[i]);
         p_colors[i] = ur_read_string(savef);
         p_know[i] = (bool) ur_read_short(savef);
+	if (!compatibility_mode) {
+	    str = ur_read_string(savef);
+	    if (*str == '\0')
+		FREE(str);
+	    else
+		p_guess[i] = str;
+	}
     }
 
     DUMPSTRING
     for(i=0; i < MAXRINGS; i++) {
         r_stones[i] = ur_read_string(savef);
         r_know[i] = (bool) ur_read_short(savef);
+	if (!compatibility_mode) {
+	    str = ur_read_string(savef);
+	    if (*str == '\0')
+		FREE(str);
+	    else
+		r_guess[i] = str;
+	}
     }
 
     DUMPSTRING
     for(i=0; i < MAXSTICKS; i++) {
         ws_made[i] = ur_read_string(savef);
         ws_know[i] = (bool) ur_read_short(savef);
+	if (!compatibility_mode) {
+	    str = ur_read_string(savef);
+	    if (*str == '\0')
+		FREE(str);
+	    else
+		ws_guess[i] = str;
+	}
     }
 
     DUMPSTRING
@@ -1234,7 +1278,7 @@ restore_file(FILE *savef)
     {
         t = ur_read_trap(savef);
         traps[i] = *t;
-        ur_free(t);
+        FREE(t);
     }
 
     DUMPSTRING
@@ -1245,7 +1289,7 @@ restore_file(FILE *savef)
     {
         r = ur_read_room(savef);
         rooms[i] = *r;
-        ur_free(r);
+        FREE(r);
     }
     i = ur_read_int(savef);
     oldrp = &rooms[i];
@@ -1253,7 +1297,7 @@ restore_file(FILE *savef)
     DUMPSTRING
     p = ur_read_thing(savef);
     player = *p;
-    ur_free(p);
+    FREE(p);
 
     DUMPSTRING
     lvl_obj = ur_read_bag(0, savef);
@@ -1303,8 +1347,8 @@ restore_file(FILE *savef)
     {
         str = ur_read_string(savef);
 	if (str != NULL)
-        strcpy(&msgbuf[i][0],str);
-        ur_free(str);
+	    strcpy(&msgbuf[i][0],str);
+        FREE(str);
     }
 
     msg_index = ur_read_int(savef);
@@ -1370,10 +1414,10 @@ restore_file(FILE *savef)
     bag_index = ur_read_int(savef) + bag_letters;
     str = ur_read_string(savef);
     strcpy(pack_letters,str);
-    ur_free(str);
+    FREE(str);
     str = ur_read_string(savef);
     strcpy(bag_letters,str);
-    ur_free(str);
+    FREE(str);
 
     DUMPSTRING
     ur_read_window(savef, cw);
@@ -1387,32 +1431,29 @@ restore_file(FILE *savef)
     jump = (bool) ur_read_int(savef);
     firstmove = (bool) ur_read_int(savef);
     askme = (bool) ur_read_int(savef);
+    cutcorners = (bool) ur_read_int(savef);
 
-    if (!compatibility_mode) {
-	cutcorners = (bool) ur_read_int(savef);
-
-	reserved5 = (bool) ur_read_int(savef);
-	reserved4 = (bool) ur_read_int(savef);
-	reserved3 = (bool) ur_read_int(savef);
-	reserved2 = (bool) ur_read_int(savef);
-	reserved1 = (bool) ur_read_int(savef);  /* for future use */
-    }
+    reserved5 = (bool) ur_read_int(savef);
+    reserved4 = (bool) ur_read_int(savef);
+    reserved3 = (bool) ur_read_int(savef);
+    reserved2 = (bool) ur_read_int(savef);
+    reserved1 = (bool) ur_read_int(savef);  /* for future use */
 
     game_id = ur_read_int(savef);
     str = ur_read_string(savef);
     strcpy(whoami,str);
-    ur_free(str);
+    FREE(str);
     str = ur_read_string(savef);
     strcpy(fruit,str);
-    ur_free(str);
+    FREE(str);
     fd_data[1].mi_name = fruit; /* put fruit in the right place */
 
     str = ur_read_string(savef);
     strcpy(file_name,str);
-    ur_free(str);
+    FREE(str);
     str = ur_read_string(savef);
     strcpy(score_file,str);
-    ur_free(str);
+    FREE(str);
 
     DUMPSTRING
     str = ur_read_string(savef);
@@ -1424,7 +1465,7 @@ restore_file(FILE *savef)
         printf("Expecting: '%s'\n", save_end);
         return(FALSE);
     }
-    ur_free(str);
+    FREE(str);
 
     tweak_settings(FALSE, 2);  /* put things back the way they were */
 
@@ -1462,36 +1503,3 @@ restore_file(FILE *savef)
     return(TRUE);
 }
 
-
-/*
-    ur_alloc()
-    ur_free()
-
-    These are just calls to the system alloc and free, and they also adjust
-    the totals. The buffer is cleared out because idents need to be zero
-    before going into the pack, or they will be used as indices!
-*/
-
-void *
-ur_alloc(unsigned int size)
-{
-    char *buf_p;
-
-    total++;
-
-    buf_p = malloc(size);
-
-    if (buf_p == NULL)
-        return(NULL);
-
-    memset(buf_p,0,size);
-
-    return(buf_p);
-}
-
-void
-ur_free(void *buf_p)
-{
-    free(buf_p);
-    total--;
-}

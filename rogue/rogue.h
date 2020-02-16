@@ -1453,7 +1453,6 @@ void rnd_pos(struct room *rp, coord *cp);
 /* save.c */
 int save_game(void);
 void auto_save(int sig);
-void save_file(FILE *savef);
 extern int restore(char *file);
 void encwrite(char *start, int size, FILE *outf);
 int encread(char *start, int size, int infd);
