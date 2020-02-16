@@ -21,8 +21,8 @@ CRLIB=	 -lncurses
 
 # Installation variables.
 # install srogue here
-BIN=	/u/herbie/bin
-UMASK=	4711
+BIN=	/home/earl/bin
+UMASK=	0755
 CHMOD=	chmod
 CP=	cp
 RM=	rm -f
@@ -33,13 +33,13 @@ PROGRAM=	urogue
 TEST=		tidy
 OPROGRAM=	urogue.bak
 
-LDFLAGS= # -fsanitize=address -fsanitize=undefined
+#LDFLAGS= -fsanitize=address -fsanitize=undefined
+#CFLAGS= -O0 -g -DBSD4=1 -DEARL -Wall -fsanitize=address -fsanitize=undefined
 
 # VERY IMPORTANT -----
 # BSD4 is defined if the system you are on is a 4.x BSD system
 #CFLAGS= -O -DBSD4=1
 #CFLAGS= -O0 -g -DBSD4=1 -Wall # -fwritable-strings # -traditional
-#CFLAGS= -O0 -g -DBSD4=1 -Wall # -fsanitize=address -fsanitize=undefined
 # USGV3 is defined if the system you are on is a System 3 system
 # CFLAGS= -O -DUSGV3=1
 #CFLAGS= -O0 -g -DBSD4=1 -DEARL -Wall
@@ -56,17 +56,12 @@ test:		$(PROGRAM)
 		$(CHMOD) $(UMASK) $(BIN)/$(TEST)
 
 install:	
-		$(CP) $(BIN)/$(PROGRAM) $(BIN)/$(OPROGRAM)
-		$(CHMOD) $(UMASK) $(BIN)/$(OPROGRAM)
-		$(CP) $(BIN)/$(TEST) $(BIN)/$(PROGRAM)
-		$(RM) $(BIN)/$(TEST)
+		/bin/mv $(BIN)/$(PROGRAM) $(BIN)/$(OPROGRAM)
+		$(CP) $(TEST) $(BIN)/$(PROGRAM)
 		$(CHMOD) $(UMASK) $(BIN)/$(PROGRAM)
 
 tags:
 		$(CTAGS) $(HDRS) $(CFILES)
-
-lint:
-		lint -hxbc $(CFILES) -lncurses > linterrs
 
 clean:
 		rm -f $(OBJS) $(PROGRAM) core 
