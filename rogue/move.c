@@ -1221,7 +1221,7 @@ int x;
 	mvwaddstr(hw, 0, 0, "Which kind of trap do you wish to set? ");
 	draw(hw);
 
-	selection = getchar() - '0';
+	selection = wgetch(hw) - '0';
 	while (selection < 1 || selection > 7) {
 	    if (selection == ESCAPE - '0') {
 		after = FALSE;
@@ -1229,7 +1229,7 @@ int x;
 	    }
 	    mvwaddstr(hw, 0, 0, "Please enter a selection between 1 and 7:  ");
 	    draw(hw);
-	    selection = getchar() - '0';
+	    selection = wgetch(hw) - '0';
 	}
     }
 
