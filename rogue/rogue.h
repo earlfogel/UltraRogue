@@ -939,6 +939,7 @@ extern struct room *oldrp;		/* Roomin(&oldpos) */
 extern struct linked_list *mlist;	/* List of monsters on the level */
 extern struct thing player;		/* The rogue */
 extern struct thing *beast;		/* The last monster attacking */
+extern struct thing *foe;		/* The last monster we attacked */
 extern struct monster monsters[];	/* The initial monster states */
 extern struct linked_list *lvl_obj;	/* List of objects on this level */
 extern struct object *cur_weapon;	/* Which weapon he is weilding */

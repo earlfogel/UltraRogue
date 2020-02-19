@@ -94,6 +94,8 @@ bool thrown;
 	return 0;
     }
     tp = (struct thing *) ldata(item);
+    foe = tp;
+
     /*
      * Since we are fighting, things are not quiet so no healing takes
      * place.
@@ -1216,19 +1218,22 @@ struct object *cur_weapon;
 		     * is based on it's experience level
 		     */
 		    def_er->t_stats.s_lvl--;
-		    if (mcopy) {
-			def_er->t_stats.s_exp /= 2;  /* share the points */
-			mcopy->t_stats.s_lvl = def_er->t_stats.s_lvl;
-			mcopy->t_stats.s_exp = def_er->t_stats.s_exp;
-		    }
 		} else {
 		    turn_off(*def_er, BLOWDIVIDE);
 		    if (mcopy)
 			turn_off(*mcopy, BLOWDIVIDE);
 		}
+		if (mcopy) {
+		    if (def_er->t_stats.s_exp > 2)
+			def_er->t_stats.s_exp /= 2;  /* share the points */
+		    mcopy->t_stats.s_lvl = def_er->t_stats.s_lvl;
+		    mcopy->t_stats.s_exp = def_er->t_stats.s_exp;
+		    debug("The %s divided!", monsters[def_er->t_index].m_name);
+		    if (!serious_fight)
+			fighting = FALSE;
+		}
 		damage = 0;
-		if (!keep_fighting)
-		    fighting = FALSE;
+		did_hit = TRUE;
 		break;
 	    }
 
@@ -1239,11 +1244,12 @@ struct object *cur_weapon;
 		}
 	    }
 
+#if 0
 	    if (def_er == &player && damage > pstats.s_hpt/3) {
 		/* msg("Ouch! That hurt!"); */
 		fighting = FALSE;
 	    }
-
+#endif
 	    damage = max(0, damage);
 	    def->s_hpt -= damage;	/* Do the damage */
 

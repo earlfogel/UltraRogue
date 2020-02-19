@@ -8,6 +8,7 @@ struct room rooms[MAXROOMS];		/* One for each room -- A level */
 struct room *oldrp;			/* Roomin(&player.t_oldpos) */
 struct thing player;			/* The rogue */
 struct thing *beast;			/* The last beast that attacked us */
+struct thing *foe = NULL;		/* The last beast that we attacked */
 struct object *cur_armor;		/* What a well dresssed rogue wears */
 struct object *cur_ring[NFINGERS];	/* Which rings are being worn */
 struct linked_list *lvl_obj = NULL;

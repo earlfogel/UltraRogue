@@ -255,6 +255,7 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 			minfight = 10;
 			if (ch == 'F') minfight += 30;
 			if (serious_fight) minfight += 30;
+			foe = NULL;
 		    } else {		/* continue fighting */
 			minfight--;
 		    }
@@ -1096,6 +1097,10 @@ bool mark;
 		FREE(guess[obj->o_which]);
 	    guess[obj->o_which] = new((unsigned int) strlen(prbuf) + 1);
 	    strcpy(guess[obj->o_which], prbuf);
+	} else {
+	    if (guess[obj->o_which] != NULL)
+		FREE(guess[obj->o_which]);
+	    guess[obj->o_which] = NULL;
 	}
     }
 }
@@ -1173,6 +1178,8 @@ char ch;
      && (item = find_mons(y, x))
      ) {
 	tp = THINGPTR(item);
+	if (tp == foe)  /* same monster as last time */
+	    return(TRUE);
 	if (!serious_fight &&
 	    (tp->t_index == nummonst /* quartermaster */
 	    || on(*tp, BLOWDIVIDE) || on(*tp, ISFRIENDLY)))
