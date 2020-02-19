@@ -85,9 +85,6 @@ restore(char *file)
 {
     FILE *infd;
 
-    if (strcmp(file, "-r") == 0)
-        file = file_name;
-
     if ((infd = fopen(file, "rb")) == NULL)
     {
 	endwin();
@@ -110,7 +107,7 @@ restore(char *file)
     fclose(infd);  /* need to close file before deleting on Windows */
 #endif
 
-    if (access(file_name, F_OK) == -0) {
+    if (access(file, F_OK) == -0) {
 	if (unlink(file) < 0) {
 	    endwin();
 	    printf("Cannot unlink file\n");
