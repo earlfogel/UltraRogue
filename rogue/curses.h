@@ -8,7 +8,8 @@
 
 
 #ifdef _WIN32
-#include <ncurses/curses.h>
+#define PDC_WIDE 1
+#include <pdcurses.h>
 #else
 #include <curses.h>
 #endif

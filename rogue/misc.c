@@ -578,6 +578,13 @@ int
 unarrow(int ch)
 {
     if (ch >= KEY_MIN) {
+#if 0
+if (wizard) {
+addmsg("KEY_MIN=%x KEY_OFFSET=%x KEY_SLEFT=%x ", KEY_MIN, KEY_OFFSET, KEY_SLEFT);
+msg("ch: [0x%x] --more--", ch);
+wait_for(0);
+}
+#endif
 	if (ch == KEY_LEFT)        ch = 'h';
 	else if (ch == KEY_DOWN)   ch = 'j';
 	else if (ch == KEY_UP)     ch = 'k';
@@ -591,11 +598,23 @@ unarrow(int ch)
 	else if (ch == KEY_SF)     ch = 'J';  /* shift down arrow */
 	else if (ch == KEY_SR)     ch = 'K';  /* shift up arrow */
 	else if (ch == KEY_SRIGHT) ch = 'L';  /* shift right arrow */
-#if 0
-	else if (ch == 01051)      ch = CTRL('h');  /* ctrl left arrow */
-	else if (ch == 01023)      ch = CTRL('j');  /* ctrl down arrow */
-	else if (ch == 01076)      ch = CTRL('k');  /* ctrl up arrow */
-	else if (ch == 01070)      ch = CTRL('l');  /* ctrl right arrow */
+#ifdef PDCURSES
+	else if (ch == KEY_B1)     ch = 'h';
+	else if (ch == KEY_C2)     ch = 'j';
+	else if (ch == KEY_A2)     ch = 'k';
+	else if (ch == KEY_B3)     ch = 'l';
+	else if (ch == KEY_SDOWN)  ch = 'J';  /* shift down arrow */
+	else if (ch == KEY_SUP)    ch = 'K';  /* shift up arrow */
+	else if (ch == CTL_LEFT)   ch = CTRL('h');  /* ctrl left arrow */
+	else if (ch == CTL_DOWN)   ch = CTRL('j');  /* ctrl down arrow */
+	else if (ch == CTL_UP)     ch = CTRL('k');  /* ctrl up arrow */
+	else if (ch == CTL_RIGHT)  ch = CTRL('l');  /* ctrl right arrow */
+	else if (ch == CTL_PAD4)   ch = CTRL('h');  /* ctrl keypad left */
+	else if (ch == CTL_PAD2)   ch = CTRL('j');  /* ctrl keypad down */
+	else if (ch == CTL_PAD8)   ch = CTRL('k');  /* ctrl keypad up */
+	else if (ch == CTL_PAD6)   ch = CTRL('l');  /* ctrl keypad right */
+	else if (ch == CTL_PGDN)   ch = CTRL('j');  /* ctrl down arrow */
+	else if (ch == CTL_PGUP)   ch = CTRL('k');  /* ctrl up arrow */
 #endif
 #ifdef EARL
 	else if (ch == 01042)      ch = CTRL('h');  /* ctrl left arrow */
@@ -635,6 +654,7 @@ int x;
 	start = hero.x;
 	goal = x;
 	row = TRUE;
+	xcheck = start;
 	ycheck = hero.y;
     }
     else {			/* Go along column */
@@ -642,6 +662,7 @@ int x;
 	goal = y;
 	row = FALSE;
 	xcheck = hero.x;
+	ycheck = start;
     }
     if (start <= goal) delta = 1;
     else delta = -1;

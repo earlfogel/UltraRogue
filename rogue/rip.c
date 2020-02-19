@@ -329,7 +329,7 @@ int monst;
     printf("\nTop Ten Adventurers:\nRank  Score    Gold\tName\n");
     for (scp = top_ten; scp < &top_ten[10]; scp++) {
 
-	if (scp->sc_score) {
+	if (scp->sc_score > 0) {
 	    printf("%-2d    %-8ld %-8ld\t%s:\n", (int) (scp - top_ten + 1),
 		scp->sc_score, scp->sc_gold, scp->sc_name);
 	    if (scp->sc_artifacts) {
@@ -581,10 +581,12 @@ char *howso;
 void 
 byebye ()
 {
-    clear();
-    move(LINES-1, 0);
-    draw(stdscr);
-    endwin();
+    if (!isendwin()) {
+	clear();
+	move(LINES-1, 0);
+	draw(stdscr);
+	endwin();
+    }
     printf("\n");
     exit(0);
 }

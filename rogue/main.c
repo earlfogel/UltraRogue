@@ -58,6 +58,7 @@ main (int argc, char **argv)
     bool alldone,predef;
     char monster_flag = '+';
     time_t now;
+    char *restore_file = NULL;
 
     (void) signal(SIGQUIT, SIG_IGN); 		/* ignore quit for now */
 
@@ -66,19 +67,19 @@ main (int argc, char **argv)
 #endif
 
 #ifdef _WIN32
+    /* use %APPDATA%/urogue */
+    struct stat sb;
     if ((env = getenv("APPDATA")) != NULL) {
-	struct stat sb;
-
-	/* use %APPDATA%/urogue */
 	strcpy(file_name, env);
 	strcat(file_name, "/urogue");
 	if (stat(file_name, &sb) != 0)
 	    _mkdir(file_name);
-	if (stat(file_name, &sb) == 0 && S_ISDIR(sb.st_mode))
-	    chdir(file_name);
     }
-    strcpy(home, "./");
-    strcpy(file_name, "rogue.save");
+    if (stat(file_name, &sb) == 0 && S_ISDIR(sb.st_mode))
+	strcpy(home, file_name);
+    else
+	strcpy(home, ".");
+    strcat(home, "/");
 #else
     /* get home from environment */
     if ((env = getenv("HOME")) != NULL)
@@ -86,11 +87,11 @@ main (int argc, char **argv)
     else
 	strcpy(home, ".");
     strcat(home, "/");
+#endif
 
     /* Get default save file */
     strcpy(file_name, home);
     strcat(file_name, "rogue.save");
-#endif
 
     /*
      * Open score file.
@@ -101,10 +102,11 @@ main (int argc, char **argv)
     fd_score = open(score_file, O_RDWR);
     if (fd_score < 0) {
 	strcpy(score_file, home);
-	strcat(score_file, ".rog_score");
 #ifdef _WIN32
+	strcat(score_file, "rogue.score");
 	fd_score = open(score_file, O_RDWR|O_CREAT);
 #else
+	strcat(score_file, ".rog_score");
 	fd_score = open(score_file, O_RDWR|O_CREAT, S_IRUSR|S_IWUSR);
 #endif
     }
@@ -141,8 +143,13 @@ main (int argc, char **argv)
 	    difficulty++;
 	    mindifficulty = difficulty;
 	    break;
+	case 'r':   /* restore a saved game */
+	    restore_file = file_name;
+	    break;
 	}
     }
+    if (argc>0)
+	restore_file = argv[0];
 #if 0
 printf("wizard=%d, monster_flag=%c, difficulty=%d\n", wizard, monster_flag, difficulty);
 exit(0);
@@ -176,8 +183,29 @@ exit(0);
     init_colors();			/* Set up colors of potions */
     init_stones();			/* Set up stone settings of rings */
     init_materials();			/* Set up materials of wands */
-    initscr();				/* Start up cursor package */
     init_names();			/* Set up names of scrolls */
+
+    initscr();				/* Start up cursor package */
+
+#ifdef PDCURSES
+    {
+	int pdc_lines = LINES;
+       	int pdc_cols = COLS;
+
+	if ((env = getenv("PDC_LINES")) != NULL)
+	    pdc_lines = atoi(env);
+	if ((env = getenv("PDC_COLS")) != NULL)
+	    pdc_cols = atoi(env);
+	if (pdc_lines != LINES || pdc_cols != COLS) {
+	    resize_term(pdc_lines,pdc_cols);
+if (wizard) {
+printf("LINES=%d COLS=%d Curses version: %s\n", LINES, COLS, curses_version());
+fflush(stdout);
+}
+	}
+    }
+#endif
+
     setup();
 
     /*
@@ -192,10 +220,9 @@ exit(0);
     /*
      * Restore saved game
      */
-    if (argc > 0) {
-	if (!restore(argv[0])) { /* Note: restore returns on error only */
+    if (restore_file) {
+	if (!restore(restore_file)) /* Note: restore returns on error only */
 	    exit(1);
-	}
     }
 
    if (wizard)
