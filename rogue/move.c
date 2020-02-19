@@ -423,6 +423,7 @@ coord *cp;
 		 * A dark room or not in line-of-sight in a maze.
 		 */
 		if (((rp->r_flags & ISDARK) && !(rp->r_flags & HASFIRE)) ||
+		    rp != roomin(&hero) ||
 		    (levtype == MAZELEV &&
 		     !maze_view(y, x))) {
 		    rch = mvwinch(cw, y, x);
@@ -1241,6 +1242,7 @@ int x;
 	when 5: ch = TELTRAP;
 	when 6: ch = DARTTRAP;
 	when 7: ch = FIRETRAP;
+	default: ch = POOL;  /* shouldn't happen */
     }
 
     mvaddch(y, x, ch);

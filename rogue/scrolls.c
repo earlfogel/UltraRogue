@@ -913,8 +913,16 @@ bool report;
 	(void) wake_monster(tp->t_pos.y, tp->t_pos.x);
 
 	/* Previously not seen -- now can see it */
-	if (tp->t_oldch == ' ' && cansee(tp->t_pos.y, tp->t_pos.x)) {
-	    tp->t_oldch = mvinch(y, x);
+	if (cansee(tp->t_pos.y, tp->t_pos.x)) {
+	    char ch = show(tp->t_pos.y, tp->t_pos.x);
+	    if (on(*tp, HASFIRE))
+		light(&hero);
+	    else
+		mvwaddch(cw, tp->t_pos.y, tp->t_pos.x, ch);
+#if 0
+	    if (tp->t_oldch == ' ')
+		tp->t_oldch = mvinch(y, x);
+#endif
 	}
 
 	return(tp);
