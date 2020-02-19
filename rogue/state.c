@@ -916,10 +916,19 @@ ur_read_window(FILE *savef, WINDOW *win)
 
     if (win->_maxy != maxy || win->_maxx != maxx) {
 	char oops[200];
+	endwin();
+#ifdef PDCURSES
+	sprintf(oops, "Terminal dimensions (%dx%d) do not match saved game (%dx%d).",
+		win->_maxx,win->_maxy,maxx,maxy);
+	printf("%s\nPlease set window size and try again.\n", oops);
+	printf("I.e.:\n");
+	printf("   set PDC_LINES=%d\n", maxy);
+	printf("   set PDC_COLS=%d\n", maxx);
+#else
 	sprintf(oops, "Terminal dimensions (%dx%d) do not match saved game (%dx%d).",
 		win->_maxx+1,win->_maxy+1,maxx+1,maxy+1);
-	endwin();
 	printf("%s\nPlease resize window and try again.\n", oops);
+#endif
 	exit(1);
     }
 
