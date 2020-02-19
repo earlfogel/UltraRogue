@@ -905,15 +905,17 @@ int damage;
 			    mcopy = creat_mons(tp, tp->t_index, FALSE);
 			    if (tp->t_stats.s_lvl > 1) {
 				tp->t_stats.s_lvl--;
-				if (mcopy) {
-				    tp->t_stats.s_exp /= 2;
-				    mcopy->t_stats.s_lvl = tp->t_stats.s_lvl;
-				    mcopy->t_stats.s_exp = tp->t_stats.s_exp;
-				}
 			    } else {
 				turn_off(*tp, BOLTDIVIDE);
 				if (mcopy)
 				    turn_off(*mcopy, BOLTDIVIDE);
+			    }
+			    if (mcopy) {
+				if (tp->t_stats.s_exp > 2)
+				    tp->t_stats.s_exp /= 2;  /* share the points */
+				mcopy->t_stats.s_lvl = tp->t_stats.s_lvl;
+				mcopy->t_stats.s_exp = tp->t_stats.s_exp;
+				debug("The %s divided!", monsters[tp->t_index].m_name);
 			    }
 			}
 
