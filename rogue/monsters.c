@@ -449,7 +449,8 @@ int x;
 		 || (cur_armor != NULL && cur_armor->o_flags & IS2PROT)) {
 		    msg("The %s's gaze has no effect.", mname);
 		} else {
-		    msg("You feel dizzy for a moment, but it quickly passes.");
+		    if (!fighting)
+			msg("You feel dizzy for a moment, but it quickly passes.");
 		}
 	    }
 	    else if (rnd(100) < 67)
