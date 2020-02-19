@@ -451,9 +451,14 @@ do_throne ()
 	draw_room(rp);				/* draw the only room */
 
 	save_level = level;			/* save current level */
-	level = max(2*level, level + roll(4,6));
+	if (max_level < 35)
+	    level = min(2*level, level + roll(4,6));  /* weaker monsters */
+	else
+	    level = max(2*level, level + roll(4,6));
 
 	for (i = roll(4,10); i >= 0; i--) {
+	    if (max_level < 35 && rnd(2))  /* fewer monsters */
+		continue;
 	    item = new_item(sizeof *tp);
 	    tp = THINGPTR(item);
 	    do
