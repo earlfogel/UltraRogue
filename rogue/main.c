@@ -21,7 +21,6 @@
 #define sig_t __p_sig_fn_t
 #include <windows.h>
 #include <wchar.h>
-#include <sys/stat.h>
 #include <direct.h>
 #undef max
 #undef min
@@ -33,8 +32,9 @@
 #include <signal.h>
 #include <string.h>
 #include <time.h>
-#include <sys/time.h>
 #include <stdio.h>
+#include <sys/stat.h>
+#include <sys/time.h>
 #include <sys/types.h>
 #include <unistd.h>
 #include <limits.h>
@@ -59,6 +59,7 @@ main (int argc, char **argv)
     char monster_flag = '+';
     time_t now;
     char *restore_file = NULL;
+    struct stat sb;
 
     (void) signal(SIGQUIT, SIG_IGN); 		/* ignore quit for now */
 
@@ -68,7 +69,6 @@ main (int argc, char **argv)
 
 #ifdef _WIN32
     /* use %APPDATA%/urogue */
-    struct stat sb;
     if ((env = getenv("APPDATA")) != NULL) {
 	strcpy(file_name, env);
 	strcat(file_name, "/urogue");
