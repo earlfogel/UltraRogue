@@ -416,9 +416,6 @@ init_monsters (char flag)
 		}
 	    }
 	} else {
-#if 0
-fprintf(stderr,"%s\n", monsters[i].m_name);
-#endif
 	    nmonst++;
 	}
     }

@@ -919,10 +919,6 @@ bool report;
 		light(&hero);
 	    else
 		mvwaddch(cw, tp->t_pos.y, tp->t_pos.x, ch);
-#if 0
-	    if (tp->t_oldch == ' ')
-		tp->t_oldch = mvinch(y, x);
-#endif
 	}
 
 	return(tp);

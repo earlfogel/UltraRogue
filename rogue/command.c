@@ -291,13 +291,6 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 				 * in case a monster moves into range
 				 */
 				    waitcount--;
-#if 0
-				    fighting = TRUE;
-				    after = TRUE;
-				    if (waitcount > 0)
-					usleep(50000);
-#endif
-				    /* break; */
 			    } else {
 				fighting = FALSE;
 				after = FALSE;
@@ -311,12 +304,6 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 		    }
 		    do_fight(dta.y, dta.x,
 			(ch == 'F') ? TRUE : FALSE);
-#if 0
-		    if (ch == 'F') {
-			waitcount = 2;
-			if (level>50 && winat(hero.y, hero.x) != FLOOR) waitcount = 4;
-		    }
-#endif
 		when 't':
 		    if (!get_dir())
 			after = FALSE;
@@ -413,11 +400,7 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 				(void) signal(SIGQUIT, SIG_DFL);
 		       }
 		       else
-#ifdef EARL
-			    msg("Try it again (%d,%d).",wizard,canwizard);
-#else
 			    msg("Sorry.");
-#endif
 		    }
 		when ESCAPE :	/* Escape */
 		    door_stop = FALSE;

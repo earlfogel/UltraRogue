@@ -461,17 +461,6 @@ tweak_settings (bool first_time, int old_difficulty)
     struct linked_list *item;
     struct object *obj;
 
-#if 0
-if (!first_time) {
-if (difficulty < 2)
-msg("Switching to easy settings");
-else if (difficulty == 2)
-msg("Switching back to normal");
-else
-msg("Switching to hard settings");
-}
-#endif
-
     /*
      * set things back to normal, at least temporarily
      */

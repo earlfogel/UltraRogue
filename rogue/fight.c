@@ -940,11 +940,6 @@ bool thrown;
 
     damage = s_hpt - pstats.s_hpt;
     if (damage && (fighting || keep_fighting)) {
-#if 0
-	float limit = 0.33;
-	if (serious_fight || max_stats.s_hpt > 500)
-	    limit = 0.25;
-#endif
 
 	/* too much damage in one round */
 	if (damage > s_hpt/5) {
@@ -1032,16 +1027,6 @@ next_level()
 	exp *= 2L;
     }
     msg("You need %d more points to reach level %d.", exp - pstats.s_exp, i+1);
-#if 0
-    for (i=0; i<MAXSCROLLS; i++) {
-	if (s_know[i])
-	    addmsg("%s ", s_magic[i].mi_name);
-	else
-	    addmsg("%s ", "<unknown>");
-    }
-    msg(".");
-    wait_for(0);
-#endif
 }
 
 /*
@@ -1244,12 +1229,6 @@ struct object *cur_weapon;
 		}
 	    }
 
-#if 0
-	    if (def_er == &player && damage > pstats.s_hpt/3) {
-		/* msg("Ouch! That hurt!"); */
-		fighting = FALSE;
-	    }
-#endif
 	    damage = max(0, damage);
 	    def->s_hpt -= damage;	/* Do the damage */
 
@@ -1373,12 +1352,11 @@ save_throw(int which, struct thing *tp)
             armor_bonus += (armors[cur_armor->o_which].a_class
                     - cur_armor->o_ac);
         }
-#if 1
+
 	if (difficulty > 2 && level > 35 && max_level < 80) {
 	    if (ring_bonus > 2) ring_bonus /= 2;
 	    if (armor_bonus > 2) armor_bonus /= 2;
 	}
-#endif
     }
 
     need = 14 + which - tp->t_stats.s_lvl / 2 - ring_bonus -

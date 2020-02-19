@@ -178,9 +178,6 @@ bool display;
     int oy, ox, temp;
     char *pb;
     static char buf[LINELEN];
-#if 0
-    static char buf2[LINELEN];
-#endif
     static int hpwidth = 0, s_hungry = -1;
     static int s_lvl = -1, s_pur, s_hp = -1, s_str, maxs_str, 
 		s_ac = 0;
@@ -299,13 +296,6 @@ line_two:
 	health_state = "  Confused fight";
     } else if (fighting && serious_fight) {
 	health_state = "  Fighting";
-    } else if (no_command) {
-	sprintf(buf2, " %d", no_command);
-	health_state = buf2;
-#endif
-#if 0
-    } else if (isalpha(mvwinch(stdscr, hero.y, hero.x))) {
-	health_state = "  There are monsters here!";
     } else if (on(player, CANINWALL) && p_know[P_PHASE]) {
 	health_state = "  Phasing";
 #endif

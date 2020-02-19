@@ -1283,10 +1283,9 @@ struct thing *who;
 	    {
 		if (x < 0 || x >= COLS)
 		    continue;
-#if 0
-		if (step_ok(y, x, NOMONST, who))
-#endif
-		if (who == &player && fighting) { /* fighting while confused */
+
+		/* fighting while confused */
+		if (who == &player && fighting && rnd(2)) {
 		    on_monst = MONSTOK;
 		} else {
 		    on_monst = NOMONST;
