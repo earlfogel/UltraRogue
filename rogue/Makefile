@@ -34,7 +34,7 @@ TEST=		tidy
 OPROGRAM=	urogue.bak
 
 #LDFLAGS= -fsanitize=address -fsanitize=undefined
-#CFLAGS= -O0 -g -DBSD4=1 -DEARL -Wall -fsanitize=address -fsanitize=undefined
+#CFLAGS= -O0 -g -DBSD4=1 -Wall -fsanitize=address -fsanitize=undefined
 
 # VERY IMPORTANT -----
 # BSD4 is defined if the system you are on is a 4.x BSD system
@@ -42,7 +42,7 @@ OPROGRAM=	urogue.bak
 #CFLAGS= -O0 -g -DBSD4=1 -Wall # -fwritable-strings # -traditional
 # USGV3 is defined if the system you are on is a System 3 system
 # CFLAGS= -O -DUSGV3=1
-#CFLAGS= -O0 -g -DBSD4=1 -DEARL -Wall
+#CFLAGS= -O0 -g -DBSD4=1 -Wall
 CFLAGS= -O -DBSD4=1 -Wall
 
 
