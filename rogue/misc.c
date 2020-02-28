@@ -549,6 +549,7 @@ get_dir ()
     msg("Which direction? ");
     ch = readchar();
     ch = unarrow(ch);  /* translate arrow keys */
+    msg("");
 
     switch (ch)
     {
@@ -562,7 +563,6 @@ get_dir ()
 	when 'n': case'N': case CTRL('n'): delta.y =  1; delta.x =  1;
 	otherwise: return FALSE;
     }
-    msg("");
 
     if (on(player, ISHUH) && rnd(100) > 80)
 	do
