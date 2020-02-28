@@ -399,7 +399,6 @@ find_list_index(struct linked_list *l, struct object *item)
 
     while(l != NULL)
     {
-/* printf("Checking item %c\n", l->l_letter); */
         if (item == (struct object *) l->l_data)
             return(cnt+1);
 
@@ -421,11 +420,8 @@ find_object(struct linked_list *list, int num)
 
     num--;
 
-/* printf("Looking for object %d\n", num); */
     for(cnt = 0; cnt < num; cnt++)
     {
-/* printf("Checking object %d\n", cnt+1); */
-fflush(stdout);
         if ( l == NULL )
             return(NULL);
 
@@ -506,7 +502,6 @@ ur_read_bag(int isbag, FILE *savef)
 
     cnt = ur_read_int(savef);
 
-/* printf("Reading %d items from bag/pack/list\n", cnt); */
     for(i = 0; i < cnt; i++)
     {
         l         = (struct linked_list *) new(sizeof(struct linked_list));
@@ -874,13 +869,6 @@ ur_read_thing(FILE *savef)
     t->t_type = ur_read_char(savef);
     t->t_disguise = ur_read_char(savef);
     t->t_oldch = ur_read_char(savef);
-
-#if 0
-wprintw(stdscr, "%c pos x y %d %d dest x y = %d %d, hero x y = %d %d\n",
-(t->t_type)?t->t_type:'@',
-t->t_pos.x, t->t_pos.y, t->t_dest->x, t->t_dest->y, hero.x, hero.y);
-refresh();usleep(100000);
-#endif
 
     return(t);
 }

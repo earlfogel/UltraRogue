@@ -61,11 +61,6 @@ save_game(void)
 	    continue;
 	}
 
-#if 0
-        wclear(hw);
-        wmove(hw, LINES - 1, 0);
-        wrefresh(hw);
-#endif
         if ((savefd = fopen(file_name, "wb")) == NULL) {
             msg("");
             msg("Error: %s.%s", strerror(errno), morestr);    /* fake perror() */
@@ -74,7 +69,7 @@ save_game(void)
     }
     while (savefd == NULL);
 
-    /* write out [compressed?] file */
+    /* write out file */
 
     save_file(savefd);
     return(TRUE);
