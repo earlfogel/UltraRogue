@@ -39,9 +39,9 @@ char **argv;
      * try the user's home directory instead.
      */
 #ifdef _WIN32
-    if (getenv("HOMEPATH") != NULL) {
-	strcpy(buf, getenv("HOMEPATH"));
-	strcat(buf, "/.rog_score");
+    if (getenv("APPDATA") != NULL) {
+	strcpy(buf, getenv("APPDATA"));
+	strcat(buf, "/urogue/rogue.score");
 	scorefile = buf;
     }
 #else
@@ -54,9 +54,7 @@ char **argv;
     }
 #endif
 
-    if (argc > 2 || argc < 2
-     || (argc > 1 && (argv[1][0] < '0' || argv[1][0] > '9'))
-     ) {
+    if (argc > 2 || (argc > 1 && (argv[1][0] < '0' || argv[1][0] > '9'))) {
 	fprintf(stderr, "Usage: %s [n]\n", *argv);
 	fprintf(stderr, " E.g. 'scorefile 3' delete 3rd entry in scorefile\n");
 	exit(1);
@@ -103,7 +101,7 @@ char **argv;
 	}
     }
 
-    if (num < 1 || num > 10)
+    if (argc < 2 || num < 1 || num > 10)
 	exit(0);
 
     /*
@@ -119,8 +117,10 @@ char **argv;
 		    *sc2 = sc2[+1];
 		    sc2++;
 		}
+		sc2 == &top_ten[9];
 		sc2->sc_score = 0L;
 		sc2->sc_name[0] = '\0';
+		break;
 	    }
 	}
 	i++;
