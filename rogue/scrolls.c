@@ -913,12 +913,11 @@ bool report;
 	(void) wake_monster(tp->t_pos.y, tp->t_pos.x);
 
 	/* Previously not seen -- now can see it */
-	if (cansee(tp->t_pos.y, tp->t_pos.x)) {
+	if (on(*tp, HASFIRE) && roomin(&tp->t_pos) == roomin(&hero)) {
+	    light(&hero);
+	} else if (cansee(tp->t_pos.y, tp->t_pos.x)) {
 	    char ch = show(tp->t_pos.y, tp->t_pos.x);
-	    if (on(*tp, HASFIRE))
-		light(&hero);
-	    else
-		mvwaddch(cw, tp->t_pos.y, tp->t_pos.x, ch);
+	    mvwaddch(cw, tp->t_pos.y, tp->t_pos.x, ch);
 	}
 
 	return(tp);
