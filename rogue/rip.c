@@ -250,6 +250,10 @@ int monst;
     }
 
     outf = fdopen(fd_score, "w");
+    if (outf == NULL) {
+	printf("Unable to fdopen %s\n", score_file);
+	return;
+    }
 
     for (scp = top_ten; scp < &top_ten[10]; scp++)
     {
