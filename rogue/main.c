@@ -481,6 +481,7 @@ tweak_settings (bool first_time, int old_difficulty)
 	    if (ws_magic[i].mi_curse > 0 && ws_magic[i].mi_curse < 100)
 		ws_magic[i].mi_curse += 10;
 	}
+	maxpack = MAXPACK;
     } else if (old_difficulty > 2) {  /* from hard to normal */
 	for(i=0; i < MAXSCROLLS; i++) {
 	    if (s_magic[i].mi_bless > 0 && s_magic[i].mi_bless < 100)
