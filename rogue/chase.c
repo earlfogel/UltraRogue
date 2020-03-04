@@ -256,7 +256,7 @@ bool flee;
 	if (old_room != new_room && new_room != NULL) {
 	    new_room->r_flags |= HASFIRE;
 	    new_room->r_fires++;
-	    if (cansee(ch_ret.y, ch_ret.x) && new_room->r_fires == 1)
+	    if (cansee(ch_ret.y, ch_ret.x) /* && new_room->r_fires == 1 */ )
 		light(&hero);
 	}
 
