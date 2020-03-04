@@ -346,7 +346,7 @@ bool extended;
 	/*
 	 * look for an empty spot near the given position
 	 */
-	    if (y == hero.y && x == hero.x) {
+	    if (y == hero.y && x == hero.x && !extended) {
 		continue;
 	    }
 	    if (((ch = winat(y, x)) == FLOOR ||
@@ -364,9 +364,6 @@ bool extended;
 	 */
 	for (y = pos->y - 1 ; y <= pos->y + 1 ; y++) {
 		for (x = pos->x - 1 ; x <= pos->x + 1 ; x++) {
-			if (y == hero.y && x == hero.x) {
-			    continue;
-			}
 			ch = winat(y, x);
 			if (ch != ' ' && ch != '|' && ch != '-') {
 			    coord trypos;
