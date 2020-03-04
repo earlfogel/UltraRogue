@@ -35,6 +35,7 @@ To install additional packages:
 
   pacman -S vim
   pacman -S diffutils file grep make mingw-w64-x86_64-toolchain
+  pacman -S mingw-w64-x86_64-pdcurses
 
 Now run a MinGW 64-bit shell (from Start Menu).
 
@@ -45,11 +46,13 @@ Build urogue and copy it to Windows along with any required DLLs:
   mkdir /c/urogue
   cp urogue.exe /c/urogue
   cp /mingw64/bin/libwinpthread-1.dll /c/urogue
+  cp /mingw64/bin/libpdcurses.dll /c/urogue
 
-Run it in a Windows command window:
+Run it:
 
   cmd
   c:
   cd \urogue
-  urogue
+  urogue.bat
 
+Edit urogue.bat to set options or change the window size.

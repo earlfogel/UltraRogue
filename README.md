@@ -137,7 +137,8 @@ Here are a few other commands to get you started:
     S	save game
     Q	quit
 
-To restore a saved game, use "urogue \<filename\>".  There are sample
+To restore a saved game from the default location, use "urogue -r".
+To restore a different saved game, use "urogue \<filename\>".  There are sample
 shell and batch files in the "extras" folder that do this for you.
 
 Older UltraRogue versions (which may no longer be playable) are available
@@ -158,6 +159,8 @@ To build urogue, change to the rogue sub-directory and type make:
     make
 
 Then run 'urogue' in an 80x24 or larger terminal window.
+
+See the INSTALL file if you'd like to build for Windows.
 
 ## Authors
 
