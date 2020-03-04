@@ -445,11 +445,7 @@ struct h_list helpstr[] = {
 	{'=',	"	listen for monsters"},
 	{'f',	"	fight monster"},
 	{'F',	"	fight monsters"},
-#ifdef _WIN32
-	{CTRL('G'),	"	fight all monsters"},
-#else
 	{CTRL('F'),	"	fight all monsters"},
-#endif
 /*
  * Wizard commands.  Identified by (h_ch != 0 && h_desc == 0).
  */

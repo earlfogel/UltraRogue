@@ -143,11 +143,6 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 		if (ch == CTRL('F')) {
 		    ch = 'F';
 		    serious_fight = TRUE;
-#ifdef _WIN32
-		} else if (ch == 'g' || (ch == CTRL('G') && !wizard)) {
-		    ch = 'F';
-		    serious_fight = TRUE;
-#endif
 		} else {
 		    serious_fight = FALSE;
 		}
