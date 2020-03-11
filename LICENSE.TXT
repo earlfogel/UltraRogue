@@ -6,6 +6,8 @@ Portions Copyright (C) 1981 Michael Toy, Ken Arnold and Glenn Wichman
 Portions Copyright (C) 1993, 1995  Nicholas J. Kisseberth
 All rights reserved.
 
+Recent code (2018+) by Earl Fogel, no rights reserved.
+
 ===========================================================================
 
 UltaRogue: The Ultimate Adventure in the Dungeons of Doom
