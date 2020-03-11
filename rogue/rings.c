@@ -16,6 +16,7 @@ ring_on ()
     char buf[LINELEN];
 
     item = get_item("put on", RING);
+    msg("");
     /*
      * Make certain that it is somethings that we want to wear
      */
