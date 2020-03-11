@@ -74,7 +74,7 @@ struct thing *tp;
 		msg("BOOOM!");
 		aggravate();
 		if (ntraps + 1 < MAXTRAPS + MAXTRAPS && 
-				fallpos(&obj->o_pos, &fpos, FALSE)) {
+				fallpos(&obj->o_pos, &fpos, FALSE, FALSE)) {
 		    mvaddch(fpos.y, fpos.x, TRAPDOOR);
 		    traps[ntraps].tr_type = TRAPDOOR;
 		    traps[ntraps].tr_flags = ISFOUND;
@@ -176,7 +176,7 @@ bool pr;
 	    return;
 	}
 	else if (fallpos(&obj->o_pos, &fpos,
-			    obj->o_type != WEAPON && !(obj->o_flags&ISMISL))) {
+			obj->o_type != WEAPON && !(obj->o_flags&ISMISL), FALSE)) {
 		if (obj->o_flags & CANBURN 
 			&& ntraps + 1 < MAXTRAPS + MAXTRAPS) {
 		    mvaddch(fpos.y, fpos.x, FIRETRAP);
@@ -332,10 +332,11 @@ wield ()
  * pick a random position around the give (y, x) coordinates
  */
 int 
-fallpos (pos, newpos, extended)
+fallpos (pos, newpos, extended, under)
 coord *pos;
 coord *newpos;
-bool extended;
+bool extended;  /* stuff may scatter further */
+bool under;     /* even under the player */
 {
     int y, x, cnt, ch ;
 
@@ -346,11 +347,11 @@ bool extended;
 	/*
 	 * look for an empty spot near the given position
 	 */
-	    if (y == hero.y && x == hero.x && !extended) {
+	    if (y == hero.y && x == hero.x && !under) {
 		continue;
 	    }
 	    if (((ch = winat(y, x)) == FLOOR ||
-		(ch == PASSAGE)) &&
+		(extended && ch == PASSAGE)) &&
 		rnd(++cnt) == 0) {
 		    newpos->y = y ;
 		    newpos->x = x ;
@@ -369,7 +370,7 @@ bool extended;
 			    coord trypos;
 			    trypos.x = x;
 			    trypos.y = y;
-			    if (fallpos(&trypos, newpos, FALSE)) {
+			    if (fallpos(&trypos, newpos, FALSE, TRUE)) {
 				return(TRUE);
 			    }
 			}

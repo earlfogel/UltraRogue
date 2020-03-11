@@ -293,7 +293,7 @@ struct object *tr;
 		    msg("You feel something very hot nearby.");
 		rp = roomin(&hero);
 		if (ntraps + 1 < MAXTRAPS + MAXTRAPS && 
-				fallpos(&hero, &fpos, FALSE)) {
+				fallpos(&hero, &fpos, FALSE, FALSE)) {
 			mvaddch(fpos.y, fpos.x, FIRETRAP);
 			traps[ntraps].tr_type = FIRETRAP;
 			traps[ntraps].tr_flags = ISFOUND;
@@ -402,24 +402,20 @@ struct object *tr;
 		    msg("A flower grows on the floor next to you.");
 	when 41:
 		msg("You are stunned by a psionic blast.");
-		if (off(player, ISCLEAR) && rnd(4) < 3) {
-		    if (on(player, ISHUH))
-			lengthen_fuse(FUSE_UNCONFUSE, rnd(40)+(HUHDURATION*3));
-		    else {
-			light_fuse(FUSE_UNCONFUSE, 0, rnd(40)+(HUHDURATION*3), AFTER);
-			turn_on(player, ISHUH);
-		    }
-		} else msg("You feel dizzy for a moment, but it quickly passes.");
+		if (on(player, ISHUH))
+		    lengthen_fuse(FUSE_UNCONFUSE, rnd(40)+(HUHDURATION*3));
+		else {
+		    light_fuse(FUSE_UNCONFUSE, 0, rnd(40)+(HUHDURATION*3), AFTER);
+		    turn_on(player, ISHUH);
+		}
 	when 42:
 		msg("You are confused by thousands of voices in your head.");
-		if (off(player, ISCLEAR) && rnd(4) < 3) {
-		    if (on(player, ISHUH))
-			lengthen_fuse(FUSE_UNCONFUSE, rnd(10)+(HUHDURATION*2));
-		    else {
-			light_fuse(FUSE_UNCONFUSE, 0, rnd(10)+(HUHDURATION*2), AFTER);
-			turn_on(player, ISHUH);
-		    }
-		} else msg("You feel dizzy for a moment, but it quickly passes.");
+		if (on(player, ISHUH))
+		    lengthen_fuse(FUSE_UNCONFUSE, rnd(10)+(HUHDURATION*2));
+		else {
+		    light_fuse(FUSE_UNCONFUSE, 0, rnd(10)+(HUHDURATION*2), AFTER);
+		    turn_on(player, ISHUH);
+		}
 	when 43:
 		if (off(player, ISDEAF))
 		    msg("You hear voices in the distance.");
@@ -630,7 +626,7 @@ struct object *tr;
 
 		msg("You suddenly feel a chill run up and down your spine.");
 		turn_on(player, ISFLEE);
-		fallpos(&hero, &fear, TRUE);
+		fallpos(&hero, &fear, FALSE, FALSE);
 		player.t_dest = &fear;
 	}
 	when 89:
@@ -773,7 +769,7 @@ struct object *tr;
 		    return;
 		}
 		for (; ntraps < MAXTRAPS + MAXTRAPS; ntraps++) {
-		    if (!fallpos(&hero, &fires, TRUE))
+		    if (!fallpos(&hero, &fires, FALSE, FALSE))
 		        break;
 		    mvaddch(fires.y, fires.x, FIRETRAP);
 		    traps[ntraps].tr_type = FIRETRAP;

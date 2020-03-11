@@ -1499,7 +1499,7 @@ void init_weapon(struct object *weap, int type);
 int hit_monster(int y, int x, struct object *obj, struct thing *tp);
 char *num(int n1, int n2);
 void wield(void);
-int fallpos(coord *pos, coord *newpos, bool extended);
+int fallpos(coord *pos, coord *newpos, bool extended, bool under);
 /* wizard.c */
 void whatis(struct linked_list *what);
 void create_obj(int which_item, int which_type, bool cursed);
