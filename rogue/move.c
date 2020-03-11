@@ -5,6 +5,7 @@
 
 #include "curses.h"
 #include <ctype.h>
+#include <string.h>
 #include "rogue.h"
 
 /*
@@ -410,8 +411,9 @@ coord *cp;
 		    }
 
 		    /* Previously seen -- now can't see it */
-		    else if (off(player, ISBLIND) && tp->t_oldch != ' ' &&
-			     !cansee(tp->t_pos.y, tp->t_pos.x)) {
+		    else if (off(player, ISBLIND)
+			     && strchr("+%^(;<>{}~`\"\\[", tp->t_oldch) == NULL
+			     && !cansee(tp->t_pos.y, tp->t_pos.x)) {
 			tp->t_oldch = ' ';
 		    }
 		}
