@@ -1,3 +1,91 @@
+March 2020
+----------
+
+Ignore special keys when waiting for "any character".
+Otherwise attempts to scroll at the end of a game
+cause it to end suddenly.
+
+Falling items may scatter a bit further.
+Falling items may (rarely) land under the rogue.
+
+Reset maxpack when difficulty level changes.
+
+Fix: sometimes rooms don't light up when fire monsters appear or enter.
+
+Fix the ancient disappearing door bug.
+
+Fix the ancient long messages mess up the dungeon bug.
+
+
+February 2020
+-------------
+
+Updated handling of command-line arguments.
+
+Fix: change odds of cursed/blessed items when difficulty level changes.
+
+Fix: make sure at least one wandering monster is available on level 1.
+
+Fix: fighting monsters that divide when hit.
+
+Fix: fiery monsters only light rooms if we're in them.
+
+Limit how many items scavengers can carry (based on their experience level).
+
+Save/restore *_guess arrays.
+
+In 'C'all command, press <return> to erase previous guess.
+
+Code cleanup in state.c: switch from ur_alloc/ur_free to ALLOC/FREE
+
+Throne rooms less dangerous early in the game.
+
+Fix: use curses input routines instead of getchar()
+
+Fix: sometimes light room when new monsters appear.
+
+Fix: integer arithmetic bug healing in difficult games
+
+Fix: at some ability levels ring of regeneration would slow healing
+
+
+January 2020
+------------
+
+Monsters can't summon a unique if it's already there.
+
+Add a few monsters to list of classic monsters (-mc)
+and removed Friendly Fiend.
+
+You'd better stop fighting if you start suffocating.
+
+You are move vulnerable to magical attacks in hard games.
+
+Save key pressed in wait_for() to use as next command.
+
+Player gains spells/prayers more slowly in hard games.
+
+Better tracking of injuries sustained in long fights.
+
+Tweak to chose character screen.
+
+Health state shows when player stats are low.
+
+Fix: don't fight when HP too low (change int to float).
+
+Fix: waiting for new monster in long fights.
+
+Support for CTRL and ARROW keys in get_dir().
+
+Fix multiple glitches when swapping places with friendly monsters.
+
+Moving into a monster while phasing now swaps places with it.
+
+Fix: don't light room when new monsters appear.
+
+Friendly monsters still guard their treasure.
+
+
 December 2019
 -------------
 
