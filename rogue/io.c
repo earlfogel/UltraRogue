@@ -42,8 +42,6 @@ msg (char * fmt,...)
     va_start(ap,fmt);
     vsprintf(&mbuf[newpos],fmt,ap);
     va_end(ap);
-    if (strlen(mbuf) > COLS)
-	mbuf[COLS] = '\0';  /* stop overruns */
     newpos = strlen(mbuf);
     endmsg();
 }
@@ -69,13 +67,15 @@ addmsg (char *fmt,...)
 void 
 endmsg ()
 {
+    if (strlen(mbuf) > COLS)
+	mbuf[COLS] = '\0';  /* stop overruns */
     strcpy(msgbuf[msg_index], mbuf);
     ++msg_index;
     msg_index = msg_index % 10;
     if (mpos)
     {
 	wmove(cw, 0, mpos);
-	waddstr(cw, morestr);
+	waddnstr(cw, morestr, COLS - mpos);
 	draw(cw);
 	wait_for(0);
     }
@@ -427,7 +427,8 @@ int ch;
         while ((c = readchar()) != '\n' && c != '\r')
 	    continue;
     } else if (ch == 0) {
-	c = readchar();
+	while ((c = readchar()) >= KEY_MIN)  /* ignore arrow keys */
+	    continue;
 	if (c == ESCAPE) {
 	    fighting = FALSE;
 	    count = 0;
