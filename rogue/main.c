@@ -144,7 +144,8 @@ main (int argc, char **argv)
 	    mindifficulty = difficulty;
 	    break;
 	case 'r':   /* restore a saved game */
-	    restore_file = file_name;
+	    if (stat(file_name, &sb) == 0 && S_ISREG(sb.st_mode))
+		restore_file = file_name;
 	    break;
 	}
     }
