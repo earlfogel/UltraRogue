@@ -428,6 +428,7 @@ int type;
 		    opb = OBJPTR(savepit);
 		    msg("%s what (* for the item)?",purpose);
 		    och = readchar();
+		    save_ch = '\0';  /* no type-ahead */
 		    if (isupper(och))
 			och = tolower(och);
 		    if (och == '*') {
@@ -461,6 +462,7 @@ int type;
 	for (;;) {
 	    msg("%s what? (* for list): ",purpose);
 	    ch = readchar();
+	    save_ch = '\0';  /* no type-ahead */
 	    mpos = 0;
 	    if (ch == ESCAPE) {		/* abort if escape hit */
 		after = FALSE;
@@ -515,7 +517,7 @@ int type;
 		if((type==WEAPON || type==0 || type==MARKABLE || type==CALLABLE)
 			|| (type==STICK && opb->o_type==STICK)
 			|| (type==STICK && opb->o_type==WEAPON)
-			|| (type == opb->o_type)) 
+			|| (type == opb->o_type))
 			return obj;
 		else {
 			mpos = 0;
