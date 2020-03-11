@@ -348,6 +348,11 @@ wanderer ()
 
     tp->t_pos = cp;	/* Assign the position to the monster */
 
+    if (on(*tp, HASFIRE)) {
+	rooms[i].r_flags |= HASFIRE;
+	rooms[i].r_fires++;
+    }
+
     i = DISTANCE(cp.x, cp.y, hero.x, hero.y);
 
     if (i < 20)
@@ -361,13 +366,6 @@ wanderer ()
 	msg("You smell a new %s %s.", monsters[tp->t_index].m_name, loc);
     if (on(player, CANHEAR) || (player.t_ctype == C_THIEF && rnd(40) == 0)) 
 	msg("You hear a new %s moving %s.", monsters[tp->t_index].m_name, loc);
-
-    if (on(*tp, HASFIRE)) {
-	rooms[i].r_flags |= HASFIRE;
-	rooms[i].r_fires++;
-	if (&rooms[i] == roomin(&hero))
-	    light(&hero);
-    }
 
     /* debug("Started a wandering %s.", monsters[tp->t_index].m_name); */
 }
