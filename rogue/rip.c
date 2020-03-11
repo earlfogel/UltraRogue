@@ -211,9 +211,11 @@ int monst;
 	    packend = "at your untimely demise";
 	noecho();
 	nl();
-	mvaddstr(LINES - 1, 0, spacemsg);
-	refresh();
-	wait_for(' ');
+	if (flags == KILLED) {
+	    mvaddstr(LINES - 1, 0, spacemsg);
+	    refresh();
+	    wait_for(' ');
+	}
 	showpack(packend);
     }
 
@@ -224,7 +226,7 @@ int monst;
 	refresh();
 	endwin();
 	if (amount > 0 && canwizard)
-	    printf("\nDebugging is its own reward, no score for you.\n");
+	    printf("Debugging is its own reward, no score for this game.\n");
 	return;
     }
 
