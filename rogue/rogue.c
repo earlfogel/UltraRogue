@@ -319,7 +319,7 @@ struct init_artifact arts[MAXARTIFACT] = {
 /*
  * these are the spells that a magic user can cast
  */
-struct spells magic_spells[MAXSPELLS] = {
+struct spells magic_spells[] = {
 	{ P_TFIND,		3,	TYP_POTION,	FALSE },
 	{ S_IDENT,		5,	TYP_SCROLL,	FALSE },
 	{ P_MFIND,		7,	TYP_POTION,	FALSE },
@@ -342,17 +342,20 @@ struct spells magic_spells[MAXSPELLS] = {
 	{ S_PETRIFY,		50,	TYP_SCROLL,	FALSE },
 	{ S_ALLENCH,		75,	TYP_SCROLL,	FALSE },
 };
+int maxspells = sizeof magic_spells / sizeof (struct spells);
 
 /*
  * these are the spells that a cleric can cast
  */
-struct spells cleric_spells[MAXPRAYERS] = {
+struct spells cleric_spells[] = {
 	{ P_MFIND,		3,	TYP_POTION,	FALSE },
 	{ P_TFIND,		7,	TYP_POTION,	FALSE },
 	{ S_IDENT,		15,	TYP_SCROLL,	FALSE },
 	{ S_REMOVE,		20,	TYP_SCROLL,	FALSE },
 	{ P_HEALING,		30,	TYP_POTION,	FALSE },
+#if 0
 	{ S_LIGHT,		15,	TYP_SCROLL,	TRUE  },
+#endif
 	{ S_CURING,		35,	TYP_SCROLL,	FALSE },
 	{ P_HASTE,		35,	TYP_POTION,	FALSE },
 	{ P_CLEAR,		35,	TYP_POTION,	FALSE },
@@ -362,6 +365,7 @@ struct spells cleric_spells[MAXPRAYERS] = {
 	{ S_TELEP,		40,	TYP_SCROLL,	FALSE },
 	{ S_PEACE,		60,	TYP_SCROLL,	FALSE },
 };
+int maxprayers = sizeof cleric_spells / sizeof (struct spells);
 
 char *cnames[4][11] = {
 {	"Veteran",		"Warrior",	

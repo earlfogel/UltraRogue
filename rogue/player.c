@@ -207,8 +207,8 @@ pray ()
 	}
     }
 
-    if (num_prayers > MAXPRAYERS) 
-	num_prayers = MAXPRAYERS;
+    if (num_prayers > maxprayers) 
+	num_prayers = maxprayers;
 
     if (repeat_prayer >= 0) {
         which_prayer = repeat_prayer;
@@ -450,8 +450,8 @@ cast ()
 	}
     }
 
-    if (num_spells > MAXSPELLS) 
-	num_spells = MAXSPELLS;
+    if (num_spells > maxspells) 
+	num_spells = maxspells;
 
     if (repeat_spell >= 0) {
 	which_spell = repeat_spell;
