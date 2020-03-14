@@ -3,7 +3,7 @@
     Copyright (C) 1985, 1986, 1992, 1993, 1995 Herb Chong
     All rights reserved.
 
-    More recent code by Earl Fogel, all rights released.
+    More recent code by Earl Fogel, no rights reserved.
 
     Based on "Advanced Rogue"
     Copyright (C) 1984, 1985 Michael Morgan, Ken Dalka
@@ -147,6 +147,9 @@ main (int argc, char **argv)
 	    if (stat(file_name, &sb) == 0 && S_ISREG(sb.st_mode))
 		restore_file = file_name;
 	    break;
+	default:
+	    usage();
+	    exit(1);
 	}
     }
     if (argc>0)
@@ -611,3 +614,20 @@ playit ()
     endit();
 }
 
+
+void
+usage ()
+{
+    char *usage =
+	"urogue [options] [saved_game]\n"
+	"\n"
+	"Options:\n"
+	"    -easy   make the game easier\n"
+	"    -hard   make the game harder\n"
+	"    -mc     use the classic monsters from urogue 1.0.2\n"
+	"    -mr     use a random selection of monsters\n"
+	"    -ma     use all 400+ monsters\n"
+	"    -s      print top scores and exit\n"
+	"    -d      debug mode\n";
+    printf(usage);
+}
