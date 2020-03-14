@@ -305,6 +305,10 @@ line_two:
 	health_state = "  Unscented";
     } else if (on(player, STUMBLER)) {
 	health_state = "  Limping";
+    } else if (on(player, SUPERHERO)) {
+	health_state = "  Super";
+    } else if (on(player, ISUNHERO)) {
+	health_state = "  Vulnerable";
     } else if (on(player, SUPEREAT) || on(player, POWEREAT)) {
 	health_state = "  Getting Hungry";
     } else if (cur_armor == NULL && cur_weapon == NULL) {
