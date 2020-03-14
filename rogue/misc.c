@@ -580,8 +580,7 @@ unarrow(int ch)
     if (ch >= KEY_MIN) {
 #if 0
 if (wizard) {
-addmsg("KEY_MIN=%x KEY_OFFSET=%x KEY_SLEFT=%x ", KEY_MIN, KEY_OFFSET, KEY_SLEFT);
-msg("ch: [0x%x] --more--", ch);
+msg("KEY_MIN=%x ch: [0x%x] --more--", KEY_MIN, ch);
 wait_for(0);
 }
 #endif

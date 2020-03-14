@@ -223,6 +223,11 @@ int monst;
      * no score at end of game for wizard/developer
      */
     if ((amount == 0 || canwizard) && flags != SCOREIT) {
+	if (amount > 0 && canwizard) {
+	    mvaddstr(LINES - 1, 0, morestr);
+	    refresh();
+	    wait_for(0);
+	}
 	refresh();
 	endwin();
 	if (amount > 0 && canwizard)
