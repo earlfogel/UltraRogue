@@ -136,17 +136,30 @@ main (int argc, char **argv)
 	    monster_flag = (char) argv[0][2];
 	    break;
 	case 'e':   /* -easy */
-	    difficulty--;
-	    mindifficulty = difficulty;
+	    if (strcmp(argv[0], "-easy") == 0) {
+		difficulty--;
+		mindifficulty = difficulty;
+	    } else {
+		usage();
+		exit(1);
+	    }
 	    break;
 	case 'h':   /* -hard */
-	    difficulty++;
-	    mindifficulty = difficulty;
+	    if (strcmp(argv[0], "-hard") == 0) {
+		difficulty++;
+		mindifficulty = difficulty;
+	    } else {
+		usage();
+		exit(1);
+	    }
 	    break;
 	case 'r':   /* restore a saved game */
 	    if (stat(file_name, &sb) == 0 && S_ISREG(sb.st_mode))
 		restore_file = file_name;
 	    break;
+	case 'v':
+	   printf("UltraRogue version %s\n", release);
+	   exit(0);
 	default:
 	    usage();
 	    exit(1);
@@ -628,6 +641,7 @@ usage ()
 	"    -mr     use a random selection of monsters\n"
 	"    -ma     use all 400+ monsters\n"
 	"    -s      print top scores and exit\n"
+	"    -v      print version string and exit\n"
 	"    -d      debug mode\n";
     printf(usage);
 }
