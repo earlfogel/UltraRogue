@@ -15,10 +15,13 @@ UltraRogue is an old ascii-graphics game developed by Herb Chong in the
 1980s and 1990s.  It's one of many roguelike games inspired by Dungeons and
 Dragons and by the original Unix game Rogue.
 
-For this new urogue, I pulled code from several old versions,
-so it's something of a remix.  I wanted to keep the feel of the classic
-urogue, but to streamline gameplay to make the game more fun and to reduce
-the strain on aging wrists.
+I fell in love with urogue 1.0.2 in the mid-1980s.  Later versions added
+more features and monsters, but the game also became more cumbersome
+to play.
+
+This new urogue feels like urogue 1.0.2, but with all the monsters from 1.0.7,
+along with working save/restore code.  I also streamlined gameplay to
+reduce typing and to reduce the strain on aging wrists.
 
 ![Screenshot](hobgoblin.png?raw=true)
 
@@ -27,16 +30,31 @@ the strain on aging wrists.
 A variety of bug fixes and tweaks, most of which are detailed in the
 CHANGELOG.  Also, ...
 
+### Difficulty Levels
+
+There are two command line options to adjust the level of difficulty of the
+game, -easy and -hard.
+
+In easy games, your pack can hold more items and you start out with
+more stuff.  There are fewer traps and fewer cursed items, and you are
+less likely to be summoned to a throne room.  Also, armor is more
+effective.
+
+In hard games, there are fewer blessed items, artifacts are more dangerous,
+and armor is less effective.  You are more vulnerable to magical
+attacks and your ability to do magic is reduced.  You can't start a hard
+game with mithril or crystalline armor, but you may find some later.
+
 ### Monsters
 
 To keep things interesting, urogue chooses a random selection of monsters
-to use each time you play.  By default, each game includes the classic
-monsters from urogue 1.0.2 plus a random assortment of others.  If you
-want, you can use command line options to change this:
+each time you play.  By default, that includes the classic monsters from
+urogue 1.0.2 plus a random assortment of others.  If you want, you can use
+command line options to change this:
 
-    * -mc: use the classic monsters from 1.0.2
+    * -mc: use only the classic monsters from urogue 1.0.2
     * -mr: use a random selection of monsters
-    * -ma: use all 300+ monsters
+    * -ma: use all 400+ monsters
 
 ### Fighting
 
@@ -45,8 +63,8 @@ monster in reach, urogue asks which you want to fight.
 
 Use the 'F' command to fight a group of monsters. I.e., when the monster
 you are fighting dies, urogue picks another and keeps going.  Fights end
-when there are no more monsters in reach, or when you are too weak or
-injured to continue.
+when there are no more monsters in reach, or when you are too weak, sick,
+hungry or injured to continue.
 
 There are fewer interruptions when fighting, and fewer messages to
 distract you.  If you are much stronger than the monsters around
@@ -69,21 +87,6 @@ Pressing \<CTRL\> and a direction key does a controlled run -- where you
 stop and search after every step and don't pick things up when you step on
 them.  This is particularly useful in treasure chambers, but it does mean
 that any monsters that are chasing you quickly catch up.
-
-### Level of Difficulty
-
-There are two command line options to adjust the level of difficulty of the
-game, -easy and -hard.
-
-In easy games, your pack can hold more items and you start out with
-more stuff.  There are fewer traps and fewer cursed items, and you are
-less likely to be summoned to a throne room.  Also, armor is more
-effective.
-
-In hard games, there are fewer blessed items, artifacts are more dangerous,
-and armor is less effective.  You are also more vulnerable to magical
-attacks and your ability to do magic is reduced.  You can't start a hard
-game with mithril or crystalline armor, but you may find some later.
 
 ## Getting Started
 
