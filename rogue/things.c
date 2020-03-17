@@ -564,6 +564,13 @@ int nitems;
     int i;
     struct magic_item *start;
 
+    /*
+     * more magic detection when it is most needed
+     */
+    if (pstats.s_intel < 16 && pstats.s_wisdom < 18
+     && magic == p_magic && rnd(14) == 0)
+	return P_TFIND;
+
     start = magic;
     for (end = &magic[nitems], i = rnd(1000); magic < end; magic++) {
 	if (i < magic->mi_prob)
