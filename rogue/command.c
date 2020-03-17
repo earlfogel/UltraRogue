@@ -137,9 +137,10 @@ if (ch >= KEY_MIN)
 fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 #endif
 		ch = unarrow(ch);  /* translate arrow keys */
-
+#ifdef EARL
 		if (ch == 'x')
 		    ch = '.'; /* rest - left handed */
+#endif
 		if (ch == CTRL('F')) {
 		    ch = 'F';
 		    serious_fight = TRUE;
