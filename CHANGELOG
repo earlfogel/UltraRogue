@@ -6,6 +6,7 @@ Otherwise attempts to scroll at the end of a game
 cause it to end suddenly.
 
 Falling items may scatter a bit further.
+
 Falling items may (rarely) land under the rogue.
 
 Reset maxpack when difficulty level changes.
@@ -15,6 +16,10 @@ Fix: sometimes rooms don't light up when fire monsters appear or enter.
 Fix the ancient disappearing door bug.
 
 Fix the ancient long messages mess up the dungeon bug.
+
+Clear "which item" prompt after putting on rings.
+
+Display usage message if invalid command-line option is used.
 
 
 February 2020
