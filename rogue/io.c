@@ -3,7 +3,6 @@
  */
 
 #include "curses.h"
-#include "mach_dep.h"
 #include <ctype.h>
 #include <unistd.h>
 #include <stdarg.h>
