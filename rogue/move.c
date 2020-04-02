@@ -612,6 +612,7 @@ coord *tc;
 	if (moving)
 	    msg("Your attempt fails.");
     }
+    save_ch = '\0';  /* no type-ahead */
     tp->tr_flags |= ISFOUND;
     switch (ch) {
 	case TRAPDOOR:
