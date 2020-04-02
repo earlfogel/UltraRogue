@@ -263,7 +263,9 @@ line_two:
     /*
      * work out current health
      */
-    if (find_slot(FUSE, FUSE_SUFFOCATE) != NULL) {
+    if (pstats.s_hpt <= 0) {  /* dead */
+	health_state = NULL;
+    } else if (find_slot(FUSE, FUSE_SUFFOCATE) != NULL) {
 	health_state = "  Suffocating";
     } else if (on(player, HASINFEST)) {
 	health_state = "  Ill";
