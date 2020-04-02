@@ -129,7 +129,7 @@ bool wakeup;
 		    tp->t_oldch = (trp->tr_flags & ISFOUND) ? tp->t_oldch
 							    : trp->tr_show;
 		}
-		if (tp->t_oldch == FLOOR && (rp->r_flags & ISDARK)
+		if (tp->t_oldch == FLOOR && rp && (rp->r_flags & ISDARK)
 		    && !(rp->r_flags & HASFIRE) && off(player, ISBLIND))
 			tp->t_oldch = ' ';
 	    }
