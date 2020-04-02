@@ -184,7 +184,7 @@ int monst;
 	int sc_game_id;
     } top_ten[10];
     struct sc_ent *scp;
-    struct sc_ent *regame = NULL;
+    struct sc_ent *remove_slot = NULL;
     struct sc_ent *sc2;
     FILE *outf;
     char *killer;
@@ -196,6 +196,7 @@ int monst;
     };
     char *packend;
     extern int fd_score;
+    bool write_it = FALSE;
 
 
     signal(SIGINT, (sig_t)byebye);
@@ -287,53 +288,61 @@ int monst;
     /*
      * Insert player in list if need be
      */
-    for (scp = top_ten; scp < &top_ten[10]; scp++) {
-	if (scp->sc_game_id == game_id)
-	    regame = scp;	/* we've seen this game before */
-    }
-    for (scp = top_ten; scp < &top_ten[10]; scp++) {
-	if (amount > scp->sc_score)
-	    break;
-    }
+    if (amount > 0) {
+	for (scp = top_ten; scp < &top_ten[10]; scp++) {
+	    if (scp->sc_game_id == game_id)  /* we've seen this game before */
+		remove_slot = scp;
+	    if (scp->sc_score < 0)  /* shouldn't happen */
+		remove_slot = scp;
+	    if (remove_slot)
+		break;
+	}
+	for (scp = top_ten; scp < &top_ten[10]; scp++) {
+	    if (amount > scp->sc_score)
+		break;
+	}
 
-    if (scp < &top_ten[10] && amount > 0) {
 	/*
 	 * Congrats, made it into top 10
 	 */
-	if (regame) {  /* reuse the same slot */
-	    sc2 = regame;
-	    while (sc2 < &top_ten[9]) {  /* remove old entry */
-		*sc2 = *(sc2+1);
-		sc2++;
+	if (scp < &top_ten[10]) {
+	    if (remove_slot) {
+		sc2 = remove_slot;
+		while (sc2 < &top_ten[9]) {  /* remove old entry */
+		    *sc2 = *(sc2+1);
+		    sc2++;
+		}
+		if (scp > remove_slot)
+		    scp--;
 	    }
-	    if (scp > regame)
-		scp--;
-	}
 
-	sc2 = &top_ten[9];
-	while (sc2 > scp) {	/* make room for new entry */
-	    *sc2 = sc2[-1];
-	    sc2--;
+	    sc2 = &top_ten[9];
+	    while (sc2 > scp) {	/* make room for new entry */
+		*sc2 = sc2[-1];
+		sc2--;
+	    }
+	    scp->sc_score = amount;
+	    scp->sc_gold = purse;
+	    strcpy(scp->sc_name, whoami);
+	    sprintf(prbuf, ", Level %d %s", pstats.s_lvl, 
+			cnames[player.t_ctype][min(pstats.s_lvl,11) - 1]);
+	    strcat(scp->sc_name, prbuf);
+	    scp->sc_flags = flags;
+	    if (flags == WINNER || flags == TOTAL)
+		scp->sc_level = max_level;
+	    else
+		scp->sc_level = level;
+	    scp->sc_monster = monst;
+	    scp->sc_artifacts = picked_artifact;
+	    scp->sc_game_id = game_id;
+	    write_it = TRUE;
 	}
-	scp->sc_score = amount;
-	scp->sc_gold = purse;
-	strcpy(scp->sc_name, whoami);
-	sprintf(prbuf, ", Level %d %s", pstats.s_lvl, 
-		    cnames[player.t_ctype][min(pstats.s_lvl,11) - 1]);
-	strcat(scp->sc_name, prbuf);
-	scp->sc_flags = flags;
-	if (flags == WINNER || flags == TOTAL)
-	    scp->sc_level = max_level;
-	else
-	    scp->sc_level = level;
-	scp->sc_monster = monst;
-	scp->sc_artifacts = picked_artifact;
-	scp->sc_game_id = game_id;
     }
     if (flags != SCOREIT) {
 	refresh();
 	endwin();
     }
+
     /*
      * Print the list
      */
@@ -368,6 +377,19 @@ int monst;
 		    printf("\t\t\t%s,", things);
 		putchar('\n');
 	    }
+	    /* sanity check */
+	    if (scp->sc_flags < 0 || scp->sc_flags > 3
+	     || scp->sc_level < 1 || scp->sc_level > 300
+	     || scp->sc_monster < -12 || scp->sc_monster > nummonst+3) {
+#ifdef EARL
+		printf("Parse error in score file\n");
+		printf("sc_flags=%d level=%d killer=%d\n",
+		    scp->sc_flags, scp->sc_level, scp->sc_monster);
+#endif
+		scp->sc_score = -1;  /* flag bad entry */
+		write_it = TRUE;    /* and rewrite score file */
+		break;
+	    }
 	    printf("\t\t\t%s on level %d", 
 		reason[scp->sc_flags], scp->sc_level);
 	    if (scp->sc_flags == 0) {
@@ -385,12 +407,15 @@ int monst;
 		printf(".\n");
 	    }
 	}
+	fflush(stdout);
     }
-    fseek(outf, 0L, 0);
     /*
      * Update the list file
      */
-    write(fileno(outf), (char *) top_ten, sizeof top_ten);
+    if (write_it) {
+	fseek(outf, 0L, 0);
+	write(fileno(outf), (char *) top_ten, sizeof top_ten);
+    }
     fclose(outf);
 }
 
