@@ -5,7 +5,6 @@
 #include <stdio.h>
 #include "curses.h"
 #include "rogue.h"
-#include "mach_dep.h"
 #ifdef BSD4
 #include <signal.h>
 #endif

@@ -38,7 +38,6 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <limits.h>
-#include "mach_dep.h"
 #include "rogue.h"
 
 #if 0

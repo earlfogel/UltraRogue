@@ -17,7 +17,6 @@
 #include <ctype.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include "mach_dep.h"
 #include "rogue.h"
 
 static char *rip[] = {

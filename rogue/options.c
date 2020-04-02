@@ -5,7 +5,6 @@
  *
  */
 
-#include "mach_dep.h"
 #include "curses.h"
 #include <ctype.h>
 #include <string.h>

@@ -7,7 +7,6 @@
 #include "rogue.h"
 #include <ctype.h>
 #include <string.h>
-#include "mach_dep.h"
 
 /*
  * randmonster:
