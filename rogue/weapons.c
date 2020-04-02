@@ -336,7 +336,7 @@ fallpos (pos, newpos, extended, under)
 coord *pos;
 coord *newpos;
 bool extended;  /* stuff may scatter further */
-bool under;     /* even under the player */
+bool under;     /* even under the player or a monster */
 {
     int y, x, cnt, ch ;
 
@@ -351,7 +351,8 @@ bool under;     /* even under the player */
 		continue;
 	    }
 	    if (((ch = winat(y, x)) == FLOOR ||
-		(extended && ch == PASSAGE)) &&
+		(extended && ch == PASSAGE)  ||
+		(under && isalpha(ch))) &&
 		rnd(++cnt) == 0) {
 		    newpos->y = y ;
 		    newpos->x = x ;
