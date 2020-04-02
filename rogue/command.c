@@ -251,6 +251,7 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 			minfight = 10;
 			if (ch == 'F') minfight += 30;
 			if (serious_fight) minfight += 30;
+			if (max_level > 80) minfight += 20;
 			foe = NULL;
 		    } else {		/* continue fighting */
 			minfight--;
