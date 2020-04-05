@@ -206,8 +206,8 @@ int dx;
      *    (but not friendly monsters who are guarding gold)
      */
     if (isalpha(ch)) {
-	struct linked_list *mp = find_mons(nh.y, nh.x);
-	struct thing *tp = THINGPTR(mp);
+	struct linked_list *item = find_mons(nh.y, nh.x);
+	struct thing *tp = THINGPTR(item);
 	int t;
 	int ch2 = mvwinch(stdscr, nh.y, nh.x);
 
@@ -532,7 +532,7 @@ int y;
 int x;
 {
     char ch = winat(y, x);
-    struct linked_list *it;
+    struct linked_list *item;
     struct thing *tp;
 
     if (isatrap(ch)) {
@@ -541,11 +541,11 @@ int x;
 	return (trp->tr_flags & ISFOUND) ? ch : trp->tr_show;
     }
     else if (isalpha(ch)) {
-	if ((it = find_mons(y, x)) == NULL) {
+	if ((item = find_mons(y, x)) == NULL) {
 	    debug("Can't find monster in show.");
 	    return ' ';
 	}
-	tp = (struct thing *) ldata(it);
+	tp = (struct thing *) ldata(item);
 
 	if (on(*tp, ISDISGUISE)) ch = tp->t_disguise; /* As a mimic */
 	else if (on(*tp, ISINVIS) || (on(*tp, ISSHADOW) && rnd(100) < 90) ||
