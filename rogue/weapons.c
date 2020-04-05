@@ -177,6 +177,19 @@ bool pr;
 	}
 	else if (fallpos(&obj->o_pos, &fpos,
 			obj->o_type != WEAPON && !(obj->o_flags&ISMISL), FALSE)) {
+#ifdef EARL
+		/*
+		 * did it land on/under a monster?
+		 */
+		if (isalpha(winat(fpos.y, fpos.x))) {
+		    struct linked_list *item;
+		    struct thing *tp;
+		    if ((item = find_mons(fpos.y, fpos.x))) {
+			tp = (struct thing *) ldata(item);
+			tp->t_oldch = obj->o_type;
+		    }
+		}
+#endif
 		if (obj->o_flags & CANBURN 
 			&& ntraps + 1 < MAXTRAPS + MAXTRAPS) {
 		    mvaddch(fpos.y, fpos.x, FIRETRAP);
@@ -350,10 +363,14 @@ bool under;     /* even under the player or a monster */
 	    if (y == hero.y && x == hero.x && !under) {
 		continue;
 	    }
-	    if (((ch = winat(y, x)) == FLOOR ||
-		(extended && ch == PASSAGE)  ||
-		(under && isalpha(ch))) &&
-		rnd(++cnt) == 0) {
+	    if (((ch = winat(y, x)) == FLOOR
+	      || (extended && ch == PASSAGE)
+#ifdef EARL
+	      || (under && isalpha(ch) &&
+		  (mvwinch(stdscr, y, x) == FLOOR || mvwinch(stdscr, y, x) == PASSAGE)
+		 )
+#endif
+	        ) && rnd(++cnt) == 0) {
 		    newpos->y = y ;
 		    newpos->x = x ;
 	    }
