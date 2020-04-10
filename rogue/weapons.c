@@ -177,7 +177,7 @@ bool pr;
 	}
 	else if (fallpos(&obj->o_pos, &fpos,
 			obj->o_type != WEAPON && !(obj->o_flags&ISMISL), FALSE)) {
-#ifdef EARL
+
 		/*
 		 * did it land on/under a monster?
 		 */
@@ -189,7 +189,7 @@ bool pr;
 			tp->t_oldch = obj->o_type;
 		    }
 		}
-#endif
+
 		if (obj->o_flags & CANBURN 
 			&& ntraps + 1 < MAXTRAPS + MAXTRAPS) {
 		    mvaddch(fpos.y, fpos.x, FIRETRAP);
@@ -365,11 +365,9 @@ bool under;     /* even under the player or a monster */
 	    }
 	    if (((ch = winat(y, x)) == FLOOR
 	      || (extended && ch == PASSAGE)
-#ifdef EARL
 	      || (under && isalpha(ch) &&
 		  (mvwinch(stdscr, y, x) == FLOOR || mvwinch(stdscr, y, x) == PASSAGE)
 		 )
-#endif
 	        ) && rnd(++cnt) == 0) {
 		    newpos->y = y ;
 		    newpos->x = x ;
