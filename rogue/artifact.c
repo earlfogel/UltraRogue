@@ -327,7 +327,7 @@ struct object *tr;
 	when 17: {
 		int change;
 
-		change =  18 - pstats.s_str;
+		change =  18 - max_stats.s_str;
 		chg_str(change, TRUE, FALSE);
 		chg_dext(-change, TRUE, FALSE);
 		if (change > 0)
