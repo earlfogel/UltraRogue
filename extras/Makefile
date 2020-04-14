@@ -1,5 +1,5 @@
 
-CFLAGS = -g -O0 -I../rogue
+CFLAGS = -Wall -I../rogue
 LIB = rogue/libsrogue.o
 DISTRIB = charfile scorefile sizeof
 SOURCES = Makefile charfile.c scorefile.c sizeof.c

@@ -30,7 +30,7 @@
 #define C_THIEF         3
 #define C_MONSTER       4
 
-void
+int
 main(argc, argv)
 int argc;
 char **argv;
@@ -102,7 +102,7 @@ char **argv;
 		case C_THIEF:
 		    class = "thief";
 		    break;
-		otherwise:
+		default:
 		    class = "";
 		    break;
 	    }

@@ -10,7 +10,7 @@
 
 #define SCOREFILE "/usr/local/lib/urogue/LIB/scorefile";
 
-void
+int
 main(argc, argv)
 int argc;
 char **argv;
@@ -26,7 +26,7 @@ char **argv;
         int sc_game_id;
     } top_ten[10];
     struct sc_ent *scp;
-    int i, j;
+    int i;
     struct sc_ent *sc2;
     FILE *inf, *outf;
 
@@ -117,7 +117,6 @@ char **argv;
 		    *sc2 = sc2[+1];
 		    sc2++;
 		}
-		sc2 == &top_ten[9];
 		sc2->sc_score = 0L;
 		sc2->sc_name[0] = '\0';
 		break;
