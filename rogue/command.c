@@ -54,14 +54,6 @@ command ()
     while (ntimes--)
     {
 	moving = FALSE;
-	/* If player is infested, take off a hit point */
-	if (on(player, HASINFEST) && !ISWEARING(R_HEALTH)) {
-	    if ((pstats.s_hpt -= infest_dam) <= 0) {
-		death(D_INFESTATION);
-		return;
-	    }
-	}
-
 	look(after);
 	if (!running) {
 	    door_stop = FALSE;
@@ -147,7 +139,7 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 		} else {
 		    serious_fight = FALSE;
 		}
-		if (mpos != 0 && !running)
+		if (mpos != 0 && !running && ch != ' ')
 		    msg("");	/* Erase message if its there */
 	    }
 	}
@@ -611,6 +603,13 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 	    msg("You become tired of this nonsense.");
 	    fighting = after = FALSE;
 	}
+	/* If player is infested, take off a hit point */
+	if (on(player, HASINFEST) && !ISWEARING(R_HEALTH)) {
+	    if ((pstats.s_hpt -= infest_dam) <= 0) {
+		death(D_INFESTATION);
+		return;
+	    }
+	}
 	if (on(player, ISELECTRIC)) {
 	    int lvl;
 	    struct linked_list *item;
@@ -728,7 +727,8 @@ quit ()
 	mpos = 0;
 	count = 0;
 	fighting = running = 0;
-	if (wizard) {
+	/* this is a hack, because ^C is both quit and wizard mode charge item */
+	if (wizard && after) {
 	    struct linked_list *item;
 	    if ((item = get_item("charge", STICK)) != NULL)
 		((struct object *)ldata(item))->o_charges=1000;
