@@ -17,6 +17,7 @@
 #include <ctype.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <fcntl.h>
 #include "rogue.h"
 
 static char *rip[] = {
@@ -185,7 +186,6 @@ int monst;
     struct sc_ent *scp;
     struct sc_ent *remove_slot = NULL;
     struct sc_ent *sc2;
-    FILE *outf;
     char *killer;
     static char *reason[] = {
 	"killed",
@@ -194,7 +194,7 @@ int monst;
 	"a total winner"
     };
     char *packend;
-    extern int fd_score;
+    FILE *fd_score = NULL;	/* file descriptor for the score file */
     bool write_it = FALSE;
 
 
@@ -244,24 +244,6 @@ int monst;
 	amount *= 1.50;
     }
 
-    /*
-     * Open file and read list
-     */
-
-    if (fd_score < 0) {
-	if (flags != SCOREIT)
-	    endwin();
-	else
-	    printf("Unable to open %s\n", score_file);
-	return;
-    }
-
-    outf = fdopen(fd_score, "w");
-    if (outf == NULL) {
-	printf("Unable to fdopen %s\n", score_file);
-	return;
-    }
-
     for (scp = top_ten; scp < &top_ten[10]; scp++)
     {
 	scp->sc_score = 0L;
@@ -282,7 +264,18 @@ int monst;
 	fflush(stdout);
 	wait_for(0);
     }
-    read(fd_score, (char *) top_ten, sizeof top_ten);
+
+    /*
+     * Open file and read list of top scores
+     */
+    fd_score = fopen(score_file, "rb");
+    if (fd_score != NULL) {
+#if 0
+	fseek(fd_score, 0L, SEEK_SET);
+#endif
+	fread(top_ten, sizeof(top_ten), 1, fd_score);
+	fclose(fd_score);
+    }
 
     /*
      * Insert player in list if need be
@@ -311,6 +304,8 @@ int monst;
 		    *sc2 = *(sc2+1);
 		    sc2++;
 		}
+                sc2->sc_score = 0L;
+                sc2->sc_name[0] = '\0';
 		if (scp > remove_slot)
 		    scp--;
 	    }
@@ -412,10 +407,18 @@ int monst;
      * Update the list file
      */
     if (write_it) {
-	fseek(outf, 0L, 0);
-	write(fileno(outf), (char *) top_ten, sizeof top_ten);
+	fd_score = fopen(score_file, "wb");
+	if (fd_score != NULL) {
+#if 0
+	    fseek(fd_score, 0L, SEEK_SET);
+#endif
+	    fwrite(top_ten, sizeof(top_ten), 1, fd_score);
+	    fclose(fd_score);
+	} else {
+	    printf("Unable to write %s\n", score_file);
+	    return;
+	}
     }
-    fclose(outf);
 }
 
 void 

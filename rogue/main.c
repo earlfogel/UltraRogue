@@ -45,8 +45,6 @@
 #endif
 
 
-int fd_score = -1;		/* file descriptor the score file */
-
 int 
 main (int argc, char **argv)
 {
@@ -93,20 +91,15 @@ main (int argc, char **argv)
     strcat(file_name, "rogue.save");
 
     /*
-     * Open score file.
-     * If we can't access a central score file,
-     * use the home directory instead.
+     * Score file
      */
     strcpy(score_file, SCOREDIR);
-    fd_score = open(score_file, O_RDWR);
-    if (fd_score < 0) {
+    if (access(score_file, R_OK | W_OK) != 0) {
 	strcpy(score_file, home);
 #ifdef _WIN32
 	strcat(score_file, "rogue.score");
-	fd_score = open(score_file, O_RDWR|O_CREAT);
 #else
 	strcat(score_file, ".rog_score");
-	fd_score = open(score_file, O_RDWR|O_CREAT, S_IRUSR|S_IWUSR);
 #endif
     }
 

@@ -37,7 +37,7 @@ geta_player ()
 	struct linked_list *item;
 	struct object *obj;
 	char char_file[LINELEN];	/* Where the file should be! */
-	int	fd;
+	FILE	*fp;
 	int	arm,wpt,hpadd,dmadd;
 	char	pbuf[LINELEN];
 	short    cnt,i;
@@ -45,15 +45,15 @@ geta_player ()
 	strcpy(char_file, home);
 	strcat(char_file, ROGDEFS);
 
-	if ((fd = open(char_file, 0)) < 0) {
+	if ((fp = fopen(char_file, "rb")) == NULL) {
 	    return(FALSE);
 	}
 
 	/*
 	 * It's OK.  Get the info!
 	 */
-	read(fd, (char *) def_array, sizeof def_array);
-	close(fd);
+	fread(def_array, sizeof def_array, 1, fp);
+	fclose(fp);
  
 	wclear(hw);
 	touchwin(hw);
@@ -210,7 +210,6 @@ int dmadd;
 
 	char char_file[LINELEN];	/* Where the file should be! */
 	FILE	*fp;
-	int	fd;
 	char	pbuf[200];
 	char	*class;
 	int   i;
@@ -334,7 +333,7 @@ int dmadd;
 	def_array[i][I_CHAR] = player.t_ctype;
 
 	/* OK. Now let's write this stuff out! */
-	if ((fp = fopen(char_file, "w+")) == NULL)
+	if ((fp = fopen(char_file, "wb")) == NULL)
 	{
 	    no_write = TRUE;
 	    sprintf(pbuf,"I can't seem to open/create %s", char_file);
@@ -345,8 +344,7 @@ int dmadd;
 	    (void) wgetch(hw);
 	    return(TRUE);
 	}
-	fd = fileno(fp);
-	write(fd, (char *) def_array, sizeof def_array);
+	fwrite(def_array, sizeof def_array, 1, fp);
 	fclose(fp);
 	return(TRUE);
 }
