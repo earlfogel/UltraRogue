@@ -321,7 +321,7 @@ bool max_monster;
 void 
 wanderer ()
 {
-    int i;
+    int i, cnt=0;
     struct room *hr = roomin(&hero);
     struct linked_list *item;
     struct thing *tp;
@@ -331,6 +331,8 @@ wanderer ()
     /* Find a place for it -- avoid the player's room */
     do {
 	do {
+	    if (cnt++ > 5000)
+		return;
 	    i = rnd_room();
 	} until(hr != &rooms[i] || levtype == MAZELEV || levtype == THRONE);
 	rnd_pos(&rooms[i], &cp);
