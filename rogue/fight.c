@@ -173,6 +173,22 @@ bool thrown;
 		killed(item, TRUE, TRUE);
 	    }
 
+	    /* spores explode and may infest hero */
+	    if (on(*tp, CANSPORE)) {
+		msg("The %s explodes in a cloud of dust.",
+		    monsters[tp->t_index].m_name);
+		if (ISWEARING(R_HEALTH) || rnd(20) > 0) {
+		    if (!fighting)
+			msg("The dust makes it hard to breath.");
+		} else {
+		    msg("You have contracted a parasitic infestation!");
+		    infest_dam++;
+		    turn_on(player, HASINFEST);
+		    light_fuse(FUSE_CURE_INFEST, 0, roll(8,4) * SICKTIME, AFTER);
+		    fighting = FALSE;
+		}
+	    }
+
 	    /* fireproof monsters laugh at you when burning weapon hits */
 	    if ( thrown && on(*tp, NOFIRE) && (weap->o_flags & CANBURN)) 
 		msg("The %s laughs as the %s bounces.", 
@@ -998,9 +1014,10 @@ int wplus;
      * but it's close, then give them a chance.
      * This makes the mid-dungeon more interesting.
      */
-    if (level > 35 && max_level < 80
+    if (level > 35
+	&& (max_level < 80 || (max_level < 90 && rnd(10)==0 && difficulty > 2))
 	&& need > 20 + wplus
-	&& need < 30 + wplus
+	&& need < 25 + wplus
 	&& res == 20 && rnd(4-difficulty)==0
 	) {
 #if 0
@@ -1640,10 +1657,10 @@ bool points;
         struct object *obj;
 
         levtype = NORMLEV;              /* hero can take objects now */
-        trader = 4 * MAXPURCH;
-        luck += 4;
 	if (rnd(3) == 0) {
 	    msg("The gods become very angry at you.");
+	    levtype = THRONE;  /* wandering monsters may appear */
+	    luck += 4;
 	    for (list = pack; list != NULL; list = next(list)) {
 		obj = OBJPTR(list);
 		if (rnd(3) == 0 && !(obj->o_flags & ISPROT)) {
