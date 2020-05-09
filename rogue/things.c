@@ -24,7 +24,6 @@ bool drop;
     switch(obj->o_type) {
 	case SCROLL:
 	    sprintf(prbuf, "A %s%sscroll ", 
-		    obj->o_flags & ISOWNED ? "Claimed " :
 		    obj->o_flags & CANRETURN ? "claimed " : "", 
 		    blesscurse(obj->o_flags));
 	    pb = &prbuf[strlen(prbuf)];
@@ -36,7 +35,6 @@ bool drop;
 		sprintf(pb, "titled '%s'", s_names[obj->o_which]);
         when POTION:
 	    sprintf(prbuf, "A %s%spotion ", 
-		    obj->o_flags & ISOWNED ? "Claimed " :
 		    obj->o_flags & CANRETURN ? "claimed " : "", 
 		    blesscurse(obj->o_flags));
 	    pb = &prbuf[strlen(prbuf)];
@@ -54,13 +52,11 @@ bool drop;
 	when FOOD:
 	    if (obj->o_count == 1)
 		sprintf(prbuf, "A%s %s", 
-			obj->o_flags & ISOWNED ? "Claimed " :
 			obj->o_flags & CANRETURN ? " claimed" : 
 			vowelstr(fd_data[obj->o_which].mi_name), 
 			fd_data[obj->o_which].mi_name);
 	    else
 		sprintf(prbuf, "%d %s%ss", obj->o_count,
-			obj->o_flags & ISOWNED ? "Claimed " :
 			obj->o_flags & CANRETURN ? "claimed " : "", 
 			fd_data[obj->o_which].mi_name);
 	when WEAPON:
@@ -72,9 +68,7 @@ bool drop;
 	    if ((obj->o_flags & ISKNOW) && (obj->o_flags & ISZAPPED))
 		sprintf(pb, "charged%s ", charge_str(obj));
 	    pb = &prbuf[strlen(prbuf)];
-	    if (obj->o_flags & ISOWNED)
-		sprintf(pb, "Claimed ");
-	    else if (obj->o_flags & CANRETURN)
+	    if (obj->o_flags & CANRETURN)
 		sprintf(pb, "claimed ");
 	    pb = &prbuf[strlen(prbuf)];
 	    if (obj->o_flags & ISPOISON)
@@ -95,24 +89,19 @@ bool drop;
 	when ARMOR:
 	    if ((obj->o_flags & ISKNOW) || (obj->o_flags & ISPOST))
 		sprintf(prbuf, "%s%s %s",
-		    obj->o_flags & ISOWNED ? "Claimed " :
 		    obj->o_flags & CANRETURN ? "claimed " : "", 
 		    num(armors[obj->o_which].a_class - obj->o_ac, 0),
 		    armors[obj->o_which].a_name);
 	    else
 		sprintf(prbuf, "%s%s", 
-		    obj->o_flags & ISOWNED ? "Claimed " :
 		    obj->o_flags & CANRETURN ? "claimed " : "", 
 		    armors[obj->o_which].a_name);
 	when ARTIFACT:
 	    sprintf(prbuf, "the %s", arts[obj->o_which].ar_name);
-	    if (obj->o_flags & ISOWNED)
-		strcat(prbuf, " (Claimed)");
-	    else if (obj->o_flags & CANRETURN)
+	    if (obj->o_flags & CANRETURN)
 		strcat(prbuf, " (claimed)");
 	when STICK:
 	    sprintf(prbuf, "A %s%s%s ", 
-		obj->o_flags & ISOWNED ? "Claimed " :
 		obj->o_flags & CANRETURN ? "claimed " : "", 
 		blesscurse(obj->o_flags), ws_type[obj->o_which]);
 	    pb = &prbuf[strlen(prbuf)];
@@ -130,17 +119,14 @@ bool drop;
         when RING:
 	    if (r_know[obj->o_which] || (obj->o_flags & ISPOST))
 		sprintf(prbuf, "A%s%s ring of %s(%s)", 
-		    obj->o_flags & ISOWNED ? " Claimed" :
 		    obj->o_flags & CANRETURN ? " claimed" : "", ring_num(obj),
 		    r_magic[obj->o_which].mi_name, r_stones[obj->o_which]);
 	    else if (r_guess[obj->o_which])
 		sprintf(prbuf, "A%s ring called %s(%s)",
-		    obj->o_flags & ISOWNED ? " Claimed" :
 		    obj->o_flags & CANRETURN ? " claimed" : "",
 		    r_guess[obj->o_which], r_stones[obj->o_which]);
 	    else
 		sprintf(prbuf, "A%s %s ring", 
-		    obj->o_flags & ISOWNED ? " Claimed" :
 		    obj->o_flags & CANRETURN ? " claimed" : 
 		    vowelstr(r_stones[obj->o_which]),
 		    r_stones[obj->o_which]);
@@ -153,6 +139,13 @@ bool drop;
     if (obj->o_mark[0]) {
 	pb = &prbuf[strlen(prbuf)];
 	sprintf(pb, " <%s>", obj->o_mark);
+    }
+
+    /* Is it owned? */
+    if (obj->o_flags & ISOWNED) {
+        char *c = strstr(prbuf, "claimed");
+        if (c)
+            *c = 'C';  /* change 'claimed' to 'Claimed' */
     }
 
     /* Is it time to reveal blessed/cursed status? */
