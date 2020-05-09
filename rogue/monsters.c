@@ -449,7 +449,8 @@ int x;
 			turn_on(player, ISHUH);
 		    }
 		} else if (on(player, ISINVIS)
-		 || (cur_armor != NULL && cur_armor->o_flags & IS2PROT)) {
+		 || (cur_armor != NULL && cur_armor->o_flags & IS2PROT
+			&& cur_armor->o_ac < -7)) {
 		    msg("The %s's gaze has no effect.", mname);
 		} else {
 		    if (!fighting)
@@ -464,7 +465,8 @@ int x;
 	if (on(*tp, CANSNORE) && no_command == 0 &&
 	    !save(VS_PARALYZATION)) {
  	    if (on(player, ISINVIS)
-	     || (cur_armor != NULL && cur_armor->o_flags & IS2PROT)) {
+	     || (cur_armor != NULL && cur_armor->o_flags & IS2PROT
+		    && cur_armor->o_ac < -7)) {
 		msg("The gaze of the %s is deflected by your shiny armor.", mname);
 	    } else if (ISWEARING(R_ALERT)) {
 		msg("You feel slightly drowsy for a moment.");
@@ -494,7 +496,8 @@ int x;
 	if (on(*tp, CANBLIND) && off(player, ISBLIND)
 		&& off(player, ISINVIS)
 		&& !save(VS_WAND)) {
-	    if (cur_armor != NULL && cur_armor->o_flags & IS2PROT) {
+	    if (cur_armor != NULL && cur_armor->o_flags & IS2PROT
+		    && cur_armor->o_ac < -7) {
 		msg("The gaze of the %s is deflected by your shiny armor.", mname);
 	    } else {
 		msg("The gaze of the %s blinds you.", mname);
@@ -512,7 +515,8 @@ int x;
 	     || ISWEARING(R_SEEINVIS)
 	     ) {
 		msg("The gaze of the %s has no effect.", mname);
-	    } else if (cur_armor != NULL && cur_armor->o_flags & IS2PROT) {
+	    } else if (cur_armor != NULL && cur_armor->o_flags & IS2PROT
+		    && cur_armor->o_ac < -7) {
 		msg("The gaze of the %s is deflected by your shiny armor.", mname);
 	    } else {
 		if (!save(VS_PETRIFICATION) && rnd(100) < 3) {

@@ -604,7 +604,8 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
 			    freeletter(ll);
 			    discard(ll);
 			    lb = NULL;
-			} else if (lb->o_ac > limit && lb->o_flags & IS2PROT) {
+			} else if (armors[lb->o_which].a_class - lb->o_ac >= limit
+				&& lb->o_flags & IS2PROT) {
 			    msg("Your armor shines brightly.");
 			}
 		    when STICK:
