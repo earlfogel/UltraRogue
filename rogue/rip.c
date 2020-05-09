@@ -270,9 +270,6 @@ int monst;
      */
     fd_score = fopen(score_file, "rb");
     if (fd_score != NULL) {
-#if 0
-	fseek(fd_score, 0L, SEEK_SET);
-#endif
 	fread(top_ten, sizeof(top_ten), 1, fd_score);
 	fclose(fd_score);
     }
@@ -284,8 +281,10 @@ int monst;
 	for (scp = top_ten; scp < &top_ten[10]; scp++) {
 	    if (scp->sc_game_id == game_id)  /* we've seen this game before */
 		remove_slot = scp;
+#if 0
 	    if (scp->sc_score < 0)  /* shouldn't happen */
 		remove_slot = scp;
+#endif
 	    if (remove_slot)
 		break;
 	}
@@ -371,6 +370,7 @@ int monst;
 		    printf("\t\t\t%s,", things);
 		putchar('\n');
 	    }
+#if 0
 	    /* sanity check */
 	    if (scp->sc_flags < 0 || scp->sc_flags > 3
 	     || scp->sc_level < 1 || scp->sc_level > 300
@@ -384,6 +384,7 @@ int monst;
 		write_it = TRUE;    /* and rewrite score file */
 		break;
 	    }
+#endif
 	    printf("\t\t\t%s on level %d", 
 		reason[scp->sc_flags], scp->sc_level);
 	    if (scp->sc_flags == 0) {
@@ -409,9 +410,6 @@ int monst;
     if (write_it) {
 	fd_score = fopen(score_file, "wb");
 	if (fd_score != NULL) {
-#if 0
-	    fseek(fd_score, 0L, SEEK_SET);
-#endif
 	    fwrite(top_ten, sizeof(top_ten), 1, fd_score);
 	    fclose(fd_score);
 	} else {
