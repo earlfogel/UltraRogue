@@ -715,7 +715,7 @@ bool cursed;
 
     /* Adjust the maximum */
     if (max_stats.s_intel < pstats.s_intel)
-	    max_stats.s_intel = pstats.s_intel;
+	max_stats.s_intel = pstats.s_intel;
 
     /* Now put back the ring changes */
     pstats.s_intel += ring_str;
