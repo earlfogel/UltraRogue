@@ -296,10 +296,10 @@ re_roll:
     j = 0;
     while (armors[j].a_prob < i)
 	j++;
-    if (difficulty >= 2 && j == CRYSTAL_ARMOR)
-	j = j - 2;
-    if (difficulty > 2 && j == MITHRIL)
-	j = j - 2;
+    if (difficulty == 2 && j >= MITHRIL)
+	j -= 2;
+    if (difficulty > 2 && j >= PLATE_MAIL)
+	j -= 4;
     /*
      * See if this rogue is acceptable to the player.
      */
