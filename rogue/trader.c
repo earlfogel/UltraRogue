@@ -125,7 +125,7 @@ price_it()
 void
 buy_it()
 {
-	register int wh;
+	int wh;
 
 	if (purse <= 0) {
 	    msg("You have no money.");
@@ -229,7 +229,7 @@ sell_it()
 int
 open_market()
 {
-	register int maxtrans;
+	int maxtrans;
 
 	maxtrans = ISWEARING(R_ADORNMENT) ? MAXPURCH + 4 : MAXPURCH;
 	if (wizard || trader < maxtrans || (level == 0 && purse > 0))

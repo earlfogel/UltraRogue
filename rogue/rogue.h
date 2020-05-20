@@ -9,7 +9,6 @@
  * Stuff earl added
  */
 #define remove(a,b) my_remove(a,b)
-#define reg
 #undef NULL
 #define NULL 0
 

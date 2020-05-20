@@ -1000,12 +1000,10 @@ int wplus;
     if (need > 20 && need <= 25) need = 20;
 
     /* give monsters a chance to hit well armored player */
-    if (difficulty > 2 && need > 20 && class == C_MONSTER)
-	need = 20 + ((need - 20)/2);
-    else if (difficulty > 2 && need > 15 && class == C_MONSTER) {
-	if (level < 90)
+    if (class == C_MONSTER && need > 15) {
+	if (difficulty > 2 && level < 90)
 	    need = 15 + ((need - 15)/2);
-	else
+	else if (difficulty >= 2 && need > 18)
 	    need = 18 + ((need - 18)/2);
     }
 
@@ -1014,19 +1012,20 @@ int wplus;
      * but it's close, then give them a chance.
      * This makes the mid-dungeon more interesting.
      */
-    if (level > 35
-	&& (max_level < 80 || (max_level < 90 && rnd(10)==0 && difficulty > 2))
+    if (level > 35 && max_level < 90
 	&& need > 20 + wplus
 	&& need < 25 + wplus
-	&& res == 20 && rnd(4-difficulty)==0
+	&& res == 20 && rnd(4-difficulty) == 0
 	) {
+	if (level < 80 || (difficulty > 2 && rnd(5) == 0)) {
 #if 0
-	if (class == C_MONSTER)
-	    msg("Lucky hit (%d+%d < %d)", res, wplus, need);
-	else
-	    msg("Lucky hit (you have %d, normally need: %d)", res+wplus, need);
+	    if (class == C_MONSTER)
+		msg("Lucky hit (%d+%d < %d)", res, wplus, need);
+	    else
+		msg("Lucky hit (you have %d, normally need: %d)", res+wplus, need);
 #endif
-	return (1);
+	    return (1);
+	}
     }
 
     return (res+wplus >= need);
