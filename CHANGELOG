@@ -1,3 +1,30 @@
+May 2020
+--------
+
+Player heals more slowly in difficult games.
+
+Fix: infinite loop in wanderer() after killing friendly fiend.
+
+Can't start normal games with mithril or hard games with plate armor.
+
+Fix: can't pick up items in trading posts while Friendly Fiend is there.
+
+
+April 2020
+----------
+
+Fix: dropped items can't land on doors under monsters
+
+do_minor() #17 excludes ring/POWERSTR bonus
+
+rogue should be more careful when injured
+
+Fix: use fopen() in binary mode for score file and saved character file
+to prevent file corruption issues on Windows.
+
+Implement CANSPORE
+
+
 March 2020
 ----------
 
@@ -20,6 +47,14 @@ Fix the ancient long messages mess up the dungeon bug.
 Clear "which item" prompt after putting on rings.
 
 Display usage message if invalid command-line option is used.
+
+Don't rewrite score file unless it changes.
+
+Stepping on a trap clears the type-ahead buffer (save_ch).
+
+Fights last longer deep in the dungeon (min_fight).
+
+Fix null pointer dereference in look().
 
 
 February 2020
