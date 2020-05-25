@@ -25,6 +25,8 @@ bool silent;
 	from_floor = TRUE;
 	if ((item = find_obj(hero.y, hero.x)) == NULL)
 	    return(FALSE);
+	if (levtype == POSTLEV)
+	    return(FALSE);
     }
     else
 	from_floor = FALSE;
