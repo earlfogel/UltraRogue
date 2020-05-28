@@ -1656,7 +1656,7 @@ bool points;
         struct object *obj;
 
         levtype = NORMLEV;              /* hero can take objects now */
-	if (rnd(3) == 0) {
+	if (difficulty >= 2) {
 	    msg("The gods become very angry at you.");
 	    levtype = THRONE;  /* wandering monsters may appear */
 	    luck += 4;
