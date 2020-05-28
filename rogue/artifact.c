@@ -1648,7 +1648,7 @@ struct linked_list **bag;
     }
 
     if ((ip == NULL || !exact || !ISMULT(obj->o_type))
-	&& inbag == maxpack - 1) {
+	&& inbag >= maxpack - 1) {
 	    msg("Your bag has no more room.");
 	    return;
     }
@@ -1672,6 +1672,7 @@ struct linked_list **bag;
     else {
 	if (exact && ISMULT(obj->o_type)) {
 	    op->o_count += obj->o_count;
+	    inbag--;			/* adjust for previous addition */
 	    discard(item);
 	    delbagletter(item);
 	    item = ip;
