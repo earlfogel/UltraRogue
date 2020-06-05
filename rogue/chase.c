@@ -299,7 +299,7 @@ bool flee;
     /* If the monster is on a trap, trap it */
     sch = mvinch(ch_ret.y, ch_ret.x);
     if (isatrap(sch)) {
-	debug("Monster trapped by %c.", sch);
+	/* debug("Monster trapped by %c.", sch); */
 	if (cansee(ch_ret.y, ch_ret.x)) th->t_oldch = sch;
 	be_trapped(th, &ch_ret);
     }

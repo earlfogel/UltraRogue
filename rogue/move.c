@@ -587,7 +587,7 @@ coord *tc;
              (ch == BEARTRAP || ch == MAZETRAP || ch == TRAPDOOR
               || ch == ARROWTRAP || ch == DARTTRAP)))
         {
-            debug("%s avoided trap.", mname);
+            /* debug("%s avoided trap.", mname); */
             return(ch);
         }
     }
