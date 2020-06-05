@@ -861,7 +861,7 @@ bool thrown;
 	    }
 
 	    if (on(*mp, STEALMAGIC)) {
-		struct linked_list *list, *steal;
+		struct linked_list *item, *steal;
 		struct object *obj;
 		int worth = 0;
 
@@ -870,8 +870,8 @@ bool thrown;
 		 * and pick out one we like.
 		 */
 		steal = NULL;
-		for (list = pack; list != NULL; list = next(list)) {
-		    obj = (struct object *) ldata(list);
+		for (item = pack; item != NULL; item = next(item)) {
+		    obj = (struct object *) ldata(item);
 		    if (rnd(33) == 0 && !(obj->o_flags & ISPROT)) {
 			if (obj->o_flags & ISBLESSED)
 			    obj->o_flags &= ~ISBLESSED;
@@ -887,9 +887,8 @@ bool thrown;
 			!(obj->o_flags & ISPROT) && is_magic(obj) )
 			    || (level > 95 && difficulty >= 2))
 			&& get_worth(obj) > worth) {
-			steal = list;
+			steal = item;
 			worth = get_worth(obj);
-			fighting = FALSE;
 		    }
 		}
 		if (steal != NULL) {
@@ -930,6 +929,7 @@ bool thrown;
 			    turn_on(*mp, ISFLEE);
 			turn_on(*mp, ISINVIS);
 			updpack(FALSE);
+			fighting = FALSE;
 		    }
 		}
 	    }
@@ -1652,7 +1652,7 @@ bool points;
 
     if (tp->t_index == nummonst+2) {
                         /* killed Friendly Fiend */
-        struct linked_list *list;
+        struct linked_list *item;
         struct object *obj;
 
         levtype = NORMLEV;              /* hero can take objects now */
@@ -1660,8 +1660,8 @@ bool points;
 	    msg("The gods become very angry at you.");
 	    levtype = THRONE;  /* wandering monsters may appear */
 	    luck += 4;
-	    for (list = pack; list != NULL; list = next(list)) {
-		obj = OBJPTR(list);
+	    for (item = pack; item != NULL; item = next(item)) {
+		obj = OBJPTR(item);
 		if (rnd(3) == 0 && !(obj->o_flags & ISPROT)) {
 		    if (obj->o_flags & ISBLESSED)
 			obj->o_flags &= ~ISBLESSED;
