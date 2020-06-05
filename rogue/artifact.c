@@ -4,6 +4,7 @@
 
 #include "curses.h"
 #include <ctype.h>
+#include <string.h>
 #include "rogue.h"
 
 #define SIZE(array)	(sizeof (array) / sizeof (*(array)))
@@ -170,12 +171,28 @@ bool
 make_artifact ()
 {
 	int i;
+	char had[LINELEN] = "";
+	char has[LINELEN] = "";
+
+	if (wizard) {
+	    for (i=0; i<MAXARTIFACT; i++) {
+		if (possessed(i))
+		    strcat(had,"1");
+		else
+		    strcat(had,"0");
+		if (is_carrying(i))
+		    strcat(has,"1");
+		else
+		    strcat(has,"0");
+	    }
+	}
 
         mpos = 0;
 	for(i = 0; i < MAXARTIFACT; i++) {
-	   if (!possessed(i) && arts[i].ar_level <= level) {
-		debug("Artifact possession and picked flags : %x %x.", 
-		    has_artifact, picked_artifact);
+	   if ((!possessed(i) && arts[i].ar_level <= level)
+	    || (!is_carrying(i) && level > 100 && level%10 == 0)) {
+		debug("Artifact possession and picked flags : %s %s.", 
+		    has, had);
 		return TRUE;
 	    }
 	}
@@ -196,15 +213,7 @@ struct object *cur;
 	}
 	if (which < 0) {
 	    for(which = 0; which < MAXARTIFACT; which++)
-		/* in easy games, lost artifacts return eventually */
-		if (difficulty < 2 &&
-		    !is_carrying(which) && arts[which].ar_level <= level)
-		    break;
-		/* the purse comes back, eventually */
-		else if (which == TR_PURSE &&
-		    !is_carrying(which) && arts[which].ar_level <= level)
-		    break;
-		else if (!possessed(which) && arts[which].ar_level <= level)
+		if (!is_carrying(which) && arts[which].ar_level <= level)
 		    break;
 	}
 	debug("Artifact number: %d.", which);
