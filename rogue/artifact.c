@@ -190,7 +190,7 @@ make_artifact ()
         mpos = 0;
 	for(i = 0; i < MAXARTIFACT; i++) {
 	   if ((!possessed(i) && arts[i].ar_level <= level)
-	    || (!is_carrying(i) && level > 100 && level%10 == 0)) {
+	    || (!is_carrying(i) && level > 100 && level%5 == 0)) {
 		debug("Artifact possession and picked flags : %s %s.", 
 		    has, had);
 		return TRUE;
