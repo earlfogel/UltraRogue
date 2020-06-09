@@ -620,6 +620,7 @@ wait_for(0);
 	else if (ch == 01016)      ch = CTRL('j');  /* ctrl down arrow */
 	else if (ch == 01067)      ch = CTRL('k');  /* ctrl up arrow */
 	else if (ch == 01061)      ch = CTRL('l');  /* ctrl right arrow */
+	else if (ch == 01076)      ch = '.';  /* rest */
 #endif
     }
 	
