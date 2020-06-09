@@ -387,6 +387,12 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 				msg("Welcome, oh mighty wizard.");
 				wizard = TRUE;
 				(void) signal(SIGQUIT, SIG_DFL);
+#ifdef EARL
+				pstats.s_hpt = max_stats.s_hpt;
+				quaff(P_RESTORE, FALSE);
+				spell_power = 0;
+				pray_time = 0;
+#endif
 		       }
 		       else
 			    msg("Sorry.");
@@ -608,6 +614,8 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 	    if ((pstats.s_hpt -= infest_dam) <= 0) {
 		death(D_INFESTATION);
 		return;
+	    } else if (pstats.s_hpt < max_stats.s_hpt * 0.33) {
+		running = FALSE;
 	    }
 	}
 	if (on(player, ISELECTRIC)) {
