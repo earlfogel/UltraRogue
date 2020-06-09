@@ -40,6 +40,8 @@ bool no_unique;
     {
 	if (i++ > range*10) { /* just in case all have be genocided */
 	    i = 0;
+	    if (cur_level > 90)
+		cur_level -= 5;  /* so we don't get the same monster each time */
 	    if (--cur_level <= 0) {
 		if (wander)
 		    fatal("Rogue could not make a new wandering monster");
