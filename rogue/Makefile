@@ -105,6 +105,7 @@ list.o:		curses.h rogue.h
 main.o:		curses.h mach_dep.h rogue.h tunable.h
 maze.o:		curses.h rogue.h
 misc.o:		curses.h rogue.h
+monsdata.o:	curses.h rogue.h
 monsters.o:	curses.h rogue.h mach_dep.h
 move.o:		curses.h rogue.h
 new_level.o:	curses.h rogue.h
