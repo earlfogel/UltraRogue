@@ -23,7 +23,7 @@
 #define	MAXTRAPS	30	/* max traps per level */
 #define	MAXTRPTRY	16	/* attempts/level allowed for setting traps */
 #define	MAXDOORS	4	/* Maximum doors to a room */
-#define NUMUNIQUE	39      /* Number of UNIQUE creatures */
+#define NUMUNIQUE	48      /* Number of UNIQUE creatures */
 #define NLEVMONS	3       /* Number of new monsters per level */
 #define NT_FLAGS	16	/* Number of struct thing flags */
 #define NM_FLAGS	16	/* Number of struct monster flags */
