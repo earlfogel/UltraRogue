@@ -471,7 +471,7 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
 	    wait_for(' ');
 	    msg("");
 	    genocide();
-	    if (difficulty < 2 && blessed) {
+	    if (difficulty <= 2 && blessed) {
 		msg("You have been granted the boon of genocide!--More--");
 		wait_for(' ');
 		msg("");
