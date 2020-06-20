@@ -18,14 +18,14 @@ Building on Windows
 
 To build on Windows, I use msys2 and mingw.
 
-Download msys2 from www.msys2.org.
+Download msys2 from www.msys2.org and run the installer.
 
 Run msys2 (from Start Menu). This gives you a unix-like shell window.
 
 Now update msys2:
 
   $ pacman -Syu
-  If needed, close msys2 window and run it again.
+  If needed, close the msys2 window and run it again.
 
 Now update the packages included with msys2:
 
@@ -34,21 +34,31 @@ Now update the packages included with msys2:
 To install additional packages:
 
   pacman -S vim
+  pacman -S unzip
   pacman -S diffutils file grep make mingw-w64-x86_64-toolchain
   pacman -S mingw-w64-x86_64-pdcurses
 
 Now run a MinGW 64-bit shell (from Start Menu).
 
-Build urogue and copy it to Windows along with any required DLLs:
+Build urogue:
 
+  cd UltraRogue-master
   cd rogue
   make -f Makefile.win
+
+If all goes well, you can now run urogue:
+
+  ./urogue.exe
+
+Optional: copy urogue.exe to Windows along with any required DLLs:
+
   mkdir /c/urogue
   cp urogue.exe /c/urogue
+  cp ../extras/urogue.bat /c/urogue
   cp /mingw64/bin/libwinpthread-1.dll /c/urogue
   cp /mingw64/bin/libpdcurses.dll /c/urogue
 
-Run it:
+Run it from a Windows command window:
 
   cmd
   c:
