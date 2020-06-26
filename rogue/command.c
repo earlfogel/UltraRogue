@@ -371,7 +371,11 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 			exit(0);
 		    }
 		when '.' : ;			/* Rest command */
-		when ',' : if (levtype != POSTLEV) add_pack(NULL, FALSE);
+		when ',' :
+		    if (levtype == POSTLEV)
+			buy_it();
+		    else
+			add_pack(NULL, FALSE);
 		when ' ' : after = FALSE;	/* Do Nothing */
 		when CTRL('W') :
 		    after = FALSE;
