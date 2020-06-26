@@ -10,7 +10,7 @@
 void 
 do_rooms ()
 {
-    int i;
+    int i, j, cnt=0;
     struct room *rp;
     struct linked_list *item;
     struct thing *tp;
@@ -144,6 +144,22 @@ do_rooms ()
 		attach(tp->t_pack, item);
 	    }
 
+	    /* swarms and flocks of monsters */
+	    if (difficulty > 2 && off(*tp, ISFRIENDLY)) {
+		cnt = 0;
+		j = rnd(7);
+		if (on(*tp, ISSWARM) && j < 2)
+		    cnt = roll(2, 4);
+		else if (on(*tp, ISFLOCK) && j < 2)
+		    cnt = roll(1, 4);
+		if (level < 5) cnt /= 2;
+		for (j = 1; j <= cnt; j++) {
+		    struct thing  *mp = creat_mons(tp, tp->t_index, FALSE);
+		    if (mp != NULL) {
+			turn_off(*mp, ISFRIENDLY);
+		    }
+		}
+	    }
 	}
     }
 }

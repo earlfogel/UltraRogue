@@ -323,7 +323,7 @@ bool max_monster;
 void 
 wanderer ()
 {
-    int i, cnt=0;
+    int i, j, cnt=0;
     struct room *hr = roomin(&hero);
     struct linked_list *item;
     struct thing *tp;
@@ -350,6 +350,23 @@ wanderer ()
 	tp->t_dest = &hero;
 
     tp->t_pos = cp;	/* Assign the position to the monster */
+
+    /* swarms and flocks of monsters */
+    if (difficulty > 2 && off(*tp, ISFRIENDLY)) {
+	cnt = 0;
+	j = rnd(7);
+	if (on(*tp, ISSWARM) && j < 2)
+	    cnt = roll(2, 4);
+	else if (on(*tp, ISFLOCK) && j < 2)
+	    cnt = roll(1, 4);
+	if (level < 5) cnt /= 2;
+	for (j = 1; j <= cnt; j++) {
+	    struct thing  *mp = creat_mons(tp, tp->t_index, FALSE);
+	    if (mp != NULL) {
+		turn_off(*mp, ISFRIENDLY);
+	    }
+	}
+    }
 
     if (on(*tp, HASFIRE)) {
 	rooms[i].r_flags |= HASFIRE;
