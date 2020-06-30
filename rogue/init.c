@@ -420,13 +420,12 @@ init_monsters (char flag)
 	}
     }
 
-    if (flag == 'c') {
-	/* no shopkeeper */
+    nmonst += 2; /* shopkeeper and Lucifer */
+
+    if (flag == 'c' || (flag == 'r' && rnd(2))) {
 	monsters[nummonst+2].m_normal = FALSE;
 	monsters[nummonst+2].m_wander = FALSE;
-	nmonst += 1; /* Lucifer */
-    } else {
-	nmonst += 2; /* shopkeeper and Lucifer */
+	nmonst -= 1; /* remove shopkeeper */
     }
 
     if (wizard) {
