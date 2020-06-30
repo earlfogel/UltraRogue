@@ -63,22 +63,30 @@ int monst;
 	else if (!save_resurrect(ring_value(R_RESURRECT)))
 	    msg("Your attempt to return from the grave fails.");
 	else {
-	    struct linked_list *item;
+	    struct linked_list *item, *next_item;
 	    struct object *obj;
 	    int rm, flags;
 	    coord pos;
 
 	    die = FALSE;
 	    msg("You feel sudden warmth and then nothingness.");
+	    debug("You have %d lives left.", resurrect);
 	    teleport();
-	    if (ring_value(R_RESURRECT) > 1 && rnd(10)) {
+	    if ((ring_value(R_RESURRECT) > 1 && rnd(10)) || difficulty < 2) {
 		pstats.s_hpt = 2 * pstats.s_const;
 		pstats.s_const = max(pstats.s_const - 1, 3);
 	    }
 	    else {
 		item = pack;
 		while (item != NULL) {
+		    next_item = next(item);
 		    obj = OBJPTR(item);
+
+		    if (obj->o_flags & ISOWNED || obj->o_flags & ISPROT) {
+			item = next_item;
+			continue;
+		    }
+
 		    flags = obj->o_flags;
 		    obj->o_flags &= ~ISCURSED;
 		    dropcheck(obj);
@@ -95,7 +103,7 @@ int monst;
 		    } until (winat(pos.y, pos.x) == FLOOR);
 		    mvaddch(pos.y, pos.x, obj->o_type);
 		    obj->o_pos = pos;
-		    item = pack;
+		    item = next_item;
 		}
 		pstats.s_hpt = pstats.s_const;
 		pstats.s_const = max(pstats.s_const - roll(2,2), 3);
@@ -270,11 +278,11 @@ int monst;
      */
     strcpy(score_file, SCOREDIR);
     if (access(score_file, R_OK | W_OK) != 0) {
-        strcpy(score_file, home);
+	strcpy(score_file, home);
 #ifdef _WIN32
-        strcat(score_file, "rogue.score");
+	strcat(score_file, "rogue.score");
 #else
-        strcat(score_file, ".rog_score");
+	strcat(score_file, ".rog_score");
 #endif
     }
 
