@@ -1176,7 +1176,7 @@ save_file(FILE *savef)
     ur_write_string(savef,whoami);
     ur_write_string(savef,fruit);
     ur_write_string(savef,file_name);
-    ur_write_string(savef,score_file);
+    ur_write_string(savef,"");       /* not used */
 
     ur_write_string(savef,save_end);	/* for DUMPSTRING */
     ur_write_string(savef,save_end);	/* to verify end of file */
@@ -1449,7 +1449,7 @@ restore_file(FILE *savef)
     strcpy(file_name,str);
     FREE(str);
     str = ur_read_string(savef);
-    strcpy(score_file,str);
+    /* strcpy(unused_str,str); */
     FREE(str);
 
     DUMPSTRING

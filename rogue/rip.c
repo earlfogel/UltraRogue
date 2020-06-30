@@ -78,7 +78,7 @@ int monst;
 	    else {
 		item = pack;
 		while (item != NULL) {
-		    obj = (struct object *) ldata(item);
+		    obj = OBJPTR(item);
 		    flags = obj->o_flags;
 		    obj->o_flags &= ~ISCURSED;
 		    dropcheck(obj);
@@ -263,6 +263,19 @@ int monst;
 	refresh();
 	fflush(stdout);
 	wait_for(0);
+    }
+
+    /*
+     * Score file
+     */
+    strcpy(score_file, SCOREDIR);
+    if (access(score_file, R_OK | W_OK) != 0) {
+        strcpy(score_file, home);
+#ifdef _WIN32
+        strcat(score_file, "rogue.score");
+#else
+        strcat(score_file, ".rog_score");
+#endif
     }
 
     /*
@@ -465,7 +478,7 @@ total_winner ()
     oldpurse = purse;
     mvaddstr(0, 0, "   Worth  Item");
     for (c = 'a', item = pack; item != NULL; c++, item = next(item)) {
-	obj = (struct object *) ldata(item);
+	obj = OBJPTR(item);
 	worth = get_worth(obj);
 	purse += worth;
 	if (obj->o_type == ARTIFACT && obj->o_which == TR_PURSE) 

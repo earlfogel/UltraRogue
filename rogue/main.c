@@ -90,19 +90,6 @@ main (int argc, char **argv)
     strcpy(file_name, home);
     strcat(file_name, "rogue.save");
 
-    /*
-     * Score file
-     */
-    strcpy(score_file, SCOREDIR);
-    if (access(score_file, R_OK | W_OK) != 0) {
-	strcpy(score_file, home);
-#ifdef _WIN32
-	strcat(score_file, "rogue.score");
-#else
-	strcat(score_file, ".rog_score");
-#endif
-    }
-
     if ((env = getenv("SROGUEOPTS")) != NULL)
 	parse_opts(env);
     if (env == NULL || whoami[0] == '\0') {
