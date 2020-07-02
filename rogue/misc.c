@@ -620,6 +620,10 @@ wait_for(0);
 	else if (ch == 01016)      ch = CTRL('j');  /* ctrl down arrow */
 	else if (ch == 01067)      ch = CTRL('k');  /* ctrl up arrow */
 	else if (ch == 01061)      ch = CTRL('l');  /* ctrl right arrow */
+	else if (ch == 01030)      ch = CTRL('y');  /* ctrl keypad up/left */
+	else if (ch == 01054)      ch = CTRL('u');  /* ctrl keypad up/right */
+	else if (ch == 01023)      ch = CTRL('b');  /* ctrl keypad down/left */
+	else if (ch == 01047)      ch = CTRL('n');  /* ctrl keypad down/right */
 	else if (ch == 01076)      ch = '.';  /* rest */
 #endif
     }
