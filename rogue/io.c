@@ -66,7 +66,7 @@ addmsg (char *fmt,...)
 void 
 endmsg ()
 {
-    if (strlen(mbuf) > COLS)
+    if ((int) strlen(mbuf) > COLS)
 	mbuf[COLS] = '\0';  /* stop overruns */
     strcpy(msgbuf[msg_index], mbuf);
     ++msg_index;

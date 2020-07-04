@@ -940,6 +940,7 @@ struct thing *tp;
 		case R_DIGEST:
 		    if (selection[i].plus1 > 2) selection[i].plus1 = 2;
 		    else if (selection[i].plus1 < 1) selection[i].plus1 = 1;
+		    __attribute__ ((fallthrough));
 		/* fall thru here to other cases */
 		case R_ADDSTR:
 		case R_ADDDAM:

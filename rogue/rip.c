@@ -291,7 +291,7 @@ int monst;
      */
     fd_score = fopen(score_file, "rb");
     if (fd_score != NULL) {
-	fread(top_ten, sizeof(top_ten), 1, fd_score);
+	(void) fread(top_ten, sizeof(top_ten), 1, fd_score);
 	fclose(fd_score);
     }
 

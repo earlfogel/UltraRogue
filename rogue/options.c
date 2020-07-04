@@ -169,11 +169,11 @@ put_diff(diff, win)
 int *diff;
 WINDOW *win;
 {
-    if (difficulty < 2)
+    if (*diff < 2)
 	waddstr(win, "Easy");
-    else if (difficulty == 2)
+    else if (*diff == 2)
 	waddstr(win, "Normal");
-    else if (difficulty > 2)
+    else if (*diff > 2)
 	waddstr(win, "Hard");
     wclrtoeol(win);
 }

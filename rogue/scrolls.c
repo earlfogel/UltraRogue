@@ -447,6 +447,7 @@ bool blessed;
 			    }
 			}
 		    }
+		    __attribute__ ((fallthrough));
 			    
 		case FLOOR:
 		case PASSAGE:

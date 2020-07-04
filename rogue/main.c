@@ -622,5 +622,5 @@ usage ()
 	"    -s      print top scores and exit\n"
 	"    -v      print version string and exit\n"
 	"    -d      debug mode\n";
-    printf(usage);
+    printf("%s", usage);
 }

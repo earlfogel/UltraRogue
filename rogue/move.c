@@ -1245,6 +1245,7 @@ int x;
 	when 5: ch = TELTRAP;
 	when 6: ch = DARTTRAP;
 	when 7: ch = FIRETRAP;
+	    break;
 	default: ch = POOL;  /* shouldn't happen */
     }
 

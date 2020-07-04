@@ -52,7 +52,8 @@ geta_player ()
 	/*
 	 * It's OK.  Get the info!
 	 */
-	fread(def_array, sizeof def_array, 1, fp);
+	if (fread(def_array, sizeof def_array, 1, fp) != 1)
+	    return(FALSE);
 	fclose(fp);
  
 	wclear(hw);

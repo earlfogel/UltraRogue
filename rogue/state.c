@@ -123,7 +123,7 @@ ur_read(FILE *savef, void *ptr, int size)
     if (size == 0)
         return;
 
-    fread(ptr,size,1,savef);
+    (void) fread(ptr,size,1,savef);
 }
 
 void
@@ -872,6 +872,16 @@ ur_read_thing(FILE *savef)
 
     return(t);
 }
+
+/*
+ * Note that there's an off-by-one error in these two routines on Linux,
+ * so we don't read/write the last row and column of the window.
+ *
+ * Fixing this would break backwards compatibility with old save files.
+ *
+ * Also note that win->_maxx and win->_maxy differ in ncurses and pdcurses,
+ * so we shouldn't use them, but that also breaks backwards compatibility.
+ */
 
 void
 ur_write_window(FILE *savef, WINDOW *win)

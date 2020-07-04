@@ -264,6 +264,7 @@ bool blessed;
 	    static struct object bolt =
 	    {
 		'*' , {0, 0}, 0, 0, "1d4" , 0, 0, 100, 1
+		, 0, 0, 0, 0, "", 0, {0, 0, 0, 0, 0, 0}
 	    };
 
 	    char buf[5];
@@ -292,7 +293,7 @@ bool blessed;
 		fight(&delta, &strike, FALSE);
 	    }
 	}
-	case WS_SLOW_M:
+	when WS_SLOW_M:
 	    y = hero.y;
 	    x = hero.x;
 	    while (shoot_ok(winat(y, x)))

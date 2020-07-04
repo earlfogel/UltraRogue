@@ -254,7 +254,7 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 		     */
 		    if (!fighting ||
 		        (ch == 'F'
-			    && !can_fight(hero.x+dta.x,hero.y+dta.y,ch))) {
+			    && !can_fight(hero.x+dta.x,hero.y+dta.y))) {
 			/*
 			 * Look for a monster to fight.
 			 * If we can't find one, ask the player.
@@ -1119,7 +1119,7 @@ char ch;
 	for (x = hero.x - 1; x <= hero.x + 1; x++) {
 	    if (rnd(2)) {
 		for (y = hero.y - 1; y <= hero.y + 1; y++) {
-		    if (can_fight(x,y,ch)) {
+		    if (can_fight(x,y)) {
 			found_monster++;
 			found.x = x - hero.x;
 			found.y = y - hero.y;
@@ -1127,7 +1127,7 @@ char ch;
 		}
 	    } else {
 		for (y = hero.y + 1; y >= hero.y - 1; y--) {
-		    if (can_fight(x,y,ch)) {
+		    if (can_fight(x,y)) {
 			found_monster++;
 			found.x = x - hero.x;
 			found.y = y - hero.y;
@@ -1152,10 +1152,9 @@ char ch;
  * see if there's a monster we'd like to fight at the given position
  */
 bool
-can_fight (x, y, ch)
+can_fight (x, y)
 int x;
 int y;
-char ch;
 {
     int mch;
     coord tryp;
