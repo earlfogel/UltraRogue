@@ -423,7 +423,7 @@ struct h_list helpstr[] = {
 	{'q',	"	quaff potion"},
 	{'r',	"	read paper"},
 	{'e',	"	eat food"},
-	{'w',	"	wield a weapon"},
+	{'w',	"	wield a weapon (w- to unwield)"},
 	{'W',	"	wear armor"},
 	{'T',	"	take armor off"},
 	{'P',	"	put on ring"},

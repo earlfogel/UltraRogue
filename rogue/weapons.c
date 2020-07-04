@@ -321,10 +321,6 @@ wield ()
 	}
 	cur_weapon = oweapon ;
 	if ((item = get_item("wield", WEAPON)) == NULL) {
-		if (cur_weapon != NULL) {
-		    cur_weapon = NULL;
-		    msg("You are no longer wielding %s.", inv_name(oweapon, TRUE));
-		}
 		after = FALSE ;
 		return ;
 	}
@@ -333,7 +329,7 @@ wield ()
 	    msg ("You can't wield that!");
 	    return;
 	}
-	if (is_current(obj)) {
+	if (obj != cur_weapon && is_current(obj)) {
 		after = FALSE ;
 		return ;
 	}

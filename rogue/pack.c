@@ -1,5 +1,6 @@
 #include "curses.h"
 #include <ctype.h>
+#include <string.h>
 #include "rogue.h"
 
 /*
@@ -291,6 +292,7 @@ int type;
 		    waddstr(hw, inv_temp);
 		    waddch(hw, '\n');
 		}
+		__attribute__ ((fallthrough));
 	    /*
 	     * Print the line for this object
 	     */
@@ -399,7 +401,7 @@ int type;
     struct linked_list *obj, *pit, *savepit=NULL;
     struct object *pob;
     char ch, och, anr;
-    int cnt;
+    int cnt, itemcount;
 
     if (pack == NULL)
 	msg("You aren't carrying anything.");
@@ -407,56 +409,20 @@ int type;
 	/* see if we have any of the type requested */
 	if(type != 0 && type != CALLABLE && type != MARKABLE) {
 	    pit = pack;
-	    anr = 0;
+	    itemcount = 0;
 	    for(ch = 'a' ; pit != NULL ; pit = next(pit), ch++) {
 		pob = OBJPTR(pit);
 		if ((type == pob->o_type) || 
 			(type == STICK && pob->o_type == WEAPON && 
 			((pob->o_flags & ISZAPPED) != 0))) {
-		    ++anr;
+		    ++itemcount;
 		    savepit = pit;	/* save in case of only 1 */
 		}
 	    }
-	    if (anr == 0 && type != WEAPON) {
+	    if (itemcount == 0 && type != WEAPON) {
 		msg("You have nothing to %s.",purpose);
 		after = FALSE;
 		return NULL;
-	    }
-	    else if (anr == 1) {	/* only found one of 'em */
-		do {
-		    struct object *opb;
-		    opb = OBJPTR(savepit);
-		    msg("%s what (* for the item)?",purpose);
-		    och = readchar();
-		    save_ch = '\0';  /* no type-ahead */
-		    if (isupper(och))
-			och = tolower(och);
-		    if (och == '*') {
-	    		if (type == STICK && opb->o_type == WEAPON) {
-				msg("You seem to have nothing to %s.",purpose);
-				after = FALSE;
-				return NULL;
-	    		}
-			mpos = 0;
-			msg("%c) %s",savepit->l_letter,inv_name(opb,FALSE));
-			continue;
-		    }
-		    if (och == ESCAPE) {
-			msg("");
-			after = FALSE;
-			return NULL;
-		    }
-		    if (type != WEAPON) {
-			if(isalpha(och) && och != savepit->l_letter) {
-			    mpos = 0;
-			    msg("You can't %s that.",purpose);
-			    after = FALSE;
-			    return NULL;
-			}
-		    }
-		} while(!isalpha(och));
-		mpos = 0;
-		return savepit;		/* return this item */
 	    }
 	}
 	for (;;) {
@@ -468,33 +434,51 @@ int type;
 		after = FALSE;
 		msg("");		/* clear display */
 		return NULL;
+	    } else if (ch == '-' && cur_weapon != NULL
+		    && strcmp(purpose, "wield") == 0) {
+		msg("You are no longer wielding %s.", inv_name(cur_weapon, TRUE));
+		cur_weapon = NULL;
+		return(NULL);
 	    }
 	    if (ch == '*') {
-		wclear(hw);
-		pit = pack;		/* point to pack */
-		cnt = 0;
-		for(ch = 'a'; pit != NULL ; pit = next(pit), ch++) {
-		    pob = OBJPTR(pit);
-		    if(type==0          || type==CALLABLE || 
-		       type == MARKABLE || type==pob->o_type) {
-		      wprintw(hw,"%c) %s\n\r",pit->l_letter,inv_name(pob,FALSE));
-		      if (++cnt >= LINES - 2 && next(pit) != NULL) {
-			cnt = 0;
-			dbotline(hw, spacemsg);
-			wclear(hw);
-		      }
+		if (itemcount == 1) {
+		    struct object *opb = OBJPTR(savepit);
+		    mpos = 0;
+		    msg("%c) %s",savepit->l_letter,inv_name(opb,FALSE));
+		    continue;
+		} else {
+		    wclear(hw);
+		    pit = pack;		/* point to pack */
+		    cnt = 0;
+		    for(ch = 'a'; pit != NULL ; pit = next(pit), ch++) {
+			pob = OBJPTR(pit);
+			if(type==0          || type==CALLABLE || 
+			   type == MARKABLE || type==pob->o_type) {
+			  wprintw(hw,"%c) %s\n\r",pit->l_letter,inv_name(pob,FALSE));
+			  if (++cnt >= LINES - 2 && next(pit) != NULL) {
+			    cnt = 0;
+			    dbotline(hw, spacemsg);
+			    wclear(hw);
+			  }
+			}
 		    }
+		    wmove(hw, LINES - 1,0);
+		    wprintw(hw,"%s what? ",purpose);
+		    draw(hw);		/* write screen */
+		    anr = FALSE;
 		}
-		wmove(hw, LINES - 1,0);
-		wprintw(hw,"%s what? ",purpose);
-		draw(hw);		/* write screen */
-		anr = FALSE;
 		do {
 		    ch = wgetch(hw);
 		    if (isupper(ch))
 			ch = tolower(ch);
-		    if (isalpha(ch) || ch == ESCAPE)
+		    if (isalpha(ch) || ch == ESCAPE) {
 			anr = TRUE; 
+		    } else if (ch == '-' && cur_weapon != NULL
+			    && strcmp(purpose, "wield") == 0) {
+			msg("You are no longer wielding %s.", inv_name(cur_weapon, TRUE));
+			cur_weapon = NULL;
+			return(NULL);
+		    }
 		} while(!anr);		/* do till we got it right */
 		restscr(cw);		/* redraw orig screen */
 		if(ch == ESCAPE) {
