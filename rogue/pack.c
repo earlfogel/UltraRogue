@@ -401,7 +401,7 @@ int type;
     struct linked_list *obj, *pit, *savepit=NULL;
     struct object *pob;
     char ch, och, anr;
-    int cnt, itemcount;
+    int cnt, itemcount = 0;
 
     if (pack == NULL)
 	msg("You aren't carrying anything.");
@@ -409,7 +409,6 @@ int type;
 	/* see if we have any of the type requested */
 	if(type != 0 && type != CALLABLE && type != MARKABLE) {
 	    pit = pack;
-	    itemcount = 0;
 	    for(ch = 'a' ; pit != NULL ; pit = next(pit), ch++) {
 		pob = OBJPTR(pit);
 		if ((type == pob->o_type) || 
