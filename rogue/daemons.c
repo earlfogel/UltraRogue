@@ -72,7 +72,7 @@ doctor (daemon_arg *arg)
 	    /* player heals more slowly in difficult games */
 	    if (difficulty > 2 && tp == &player) {
 		if (new_points > 10)
-		    new_points = max(10, new_points * 0.75);
+		    new_points = max(10, new_points * 0.67);
 		if (tp->t_quiet >= 5)
 		    curp->s_hpt += rnd(new_points)+1;
 	    } else {
