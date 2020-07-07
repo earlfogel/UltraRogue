@@ -1,3 +1,30 @@
+July 2020
+---------
+
+Support CTRL arrow keys on xterm(ish) terminals.
+
+You can now unwield a weapon by pressing "w-".
+
+Fix gcc -Wextra and -Wformat=2 warnings.
+
+
+June 2020
+---------
+
+Fix: artifacts lost below level 99 could never return.
+
+Fix: more varieties of monster appear deep in the dungeon.
+
+You don't lose protected/owned items when resurrected.
+In easy games, you don't lose any items when resurrected.
+
+Implement ISSWARM and ISFLOCK in difficult games.
+
+Make shopkeeper optional when using -mr option.
+
+Player heals even more slowly in difficult games.
+
+
 May 2020
 --------
 
@@ -9,20 +36,26 @@ Can't start normal games with mithril or hard games with plate armor.
 
 Fix: can't pick up items in trading posts while Friendly Fiend is there.
 
+Fix: bugs tracking the number of items in purse.
+
+Killing Friendly Fiend is safer in easy games, more dangerous in others.
+
+Friendly Fiend only appears in some "-mr" games.
+
 
 April 2020
 ----------
 
-Fix: dropped items can't land on doors under monsters
+Fix: dropped items can't land on doors under monsters.
 
 do_minor() #17 excludes ring/POWERSTR bonus
 
-rogue should be more careful when injured
+Rogue should be more careful when injured.
 
 Fix: use fopen() in binary mode for score file and saved character file
 to prevent file corruption issues on Windows.
 
-Implement CANSPORE
+Implement CANSPORE.
 
 
 March 2020
