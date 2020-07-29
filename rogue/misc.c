@@ -304,7 +304,8 @@ eat ()
     switch (obj->o_which) {
 	case FD_RATION:
 	    amount = HUNGERTIME + rnd(400) - 200;
-	    if (rnd(100) > 70 && !(obj->o_flags & ISBLESSED)) {
+	    if ((rnd(100) > 70 && !(obj->o_flags & ISBLESSED))
+		    || obj->o_flags & ISCURSED) {
 		msg("Yuk, this food tastes awful.");
 		pstats.s_exp++;
 		check_level();
