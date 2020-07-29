@@ -1000,31 +1000,31 @@ int wplus;
     if (need > 20 && need <= 25) need = 20;
 
     /* give monsters a chance to hit well armored player */
-    if (class == C_MONSTER && need > 15) {
-	if (difficulty > 2 && level < 90)
-	    need = 15 + ((need - 15)/2);
-	else if (difficulty >= 2 && need > 18)
-	    need = 18 + ((need - 18)/2);
-    }
-
-    /*
-     * If monster is too weak to hurt us (or vice versa)
-     * but it's close, then give them a chance.
-     * This makes the mid-dungeon more interesting.
-     */
-    if (level > 35 && max_level < 90
-	&& need > 20 + wplus
-	&& need < 25 + wplus
-	&& res == 20 && rnd(4-difficulty) == 0
-	) {
-	if (level < 80 || (difficulty > 2 && rnd(5) == 0)) {
-#if 0
-	    if (class == C_MONSTER)
-		msg("Lucky hit (%d+%d < %d)", res, wplus, need);
+    if (difficulty >= 2) {
+	if (class == C_MONSTER && need > 15) {
+	    if (difficulty > 2 && level < 90)
+		need = 15 + ((need - 15) * 0.5);
 	    else
-		msg("Lucky hit (you have %d, normally need: %d)", res+wplus, need);
+		need = 15 + ((need - 15) * 0.67);
+	}
+
+	/*
+	 * If monster is too weak to hurt us (or vice versa)
+	 * but it's close, give them a chance.
+	 * This makes the mid-dungeon more interesting.
+	 */
+	if (level > 35 && level < 85
+	    && need > 20 + wplus
+	    && (need < 25 + wplus || difficulty > 2)
+	    && res == 20 && rnd(5-difficulty) == 0
+	    ) {
+#if 0
+		if (class == C_MONSTER)
+		    msg("Lucky hit (%d+%d < %d)", res, wplus, need);
+		else
+		    msg("Lucky hit (you have %d, normally need: %d)", res+wplus, need);
 #endif
-	    return (1);
+		return (1);
 	}
     }
 
@@ -1354,7 +1354,6 @@ save_throw(int which, struct thing *tp)
     int need;
     int ring_bonus = 0;
     int armor_bonus = 0;
-    int class_bonus = 0;
 
     if (tp == &player)
     {
@@ -1369,16 +1368,22 @@ save_throw(int which, struct thing *tp)
                     - cur_armor->o_ac);
         }
 
-	if (difficulty > 2 && level > 35 && max_level < 80) {
-	    if (ring_bonus > 2) ring_bonus /= 2;
-	    if (armor_bonus > 2) armor_bonus /= 2;
+	if (difficulty < 2) {
+	    /* do nothing */
+	} else if (difficulty == 2 || level > 90) {
+	    if (ring_bonus > 1) ring_bonus /= 2;
+	    if (armor_bonus > 1) armor_bonus /= 2;
+	} else if (difficulty > 2) {
+	    if (ring_bonus > 1) 
+		ring_bonus = max(1, ring_bonus / 3);
+	    if (armor_bonus > 1)
+		armor_bonus = max(1, armor_bonus / 3);
 	}
     }
 
-    need = 14 + which - tp->t_stats.s_lvl / 2 - ring_bonus -
-        armor_bonus - class_bonus;
+    need = 14 + which - tp->t_stats.s_lvl / 2 - ring_bonus - armor_bonus;
 
-    /* Roll of 1 always fails; 20 always saves */
+    /* Roll of 20 always saves */
 
     if (need < 1)
         need = 1;
