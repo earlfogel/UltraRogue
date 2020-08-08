@@ -42,6 +42,8 @@ OPTION	optlist[] = {
 		(int *) &cutcorners,	put_bool,	get_bool	},
     {"showcursor",	"Show cursor while playing (showcursor): ",
 		(int *) &showcursor,	put_bool,	get_bool	},
+    {"autopickup",	"Pick up things you step on (autopickup): ",
+		(int *) &autopickup,	put_bool,	get_bool	},
     {"name",	 "Name (name): ",
 		(int *) whoami,		put_str,	get_str		},
     {"fruit",	 "Fruit (fruit): ",

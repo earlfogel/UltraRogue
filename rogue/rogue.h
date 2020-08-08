@@ -1039,6 +1039,7 @@ extern bool jump;			/* Show running as series of jumps */
 extern bool slow_invent;		/* Inventory one line at a time */
 extern bool firstmove;			/* First move after setting door_stop */
 extern bool showcursor;			/* Option to show cursor */
+extern bool autopickup;			/* Option to pick up stuff you step on */
 extern bool canwizard;			/* Will be permitted to do this */
 extern bool askme;			/* Ask about unidentified things */
 extern bool moving;			/* move using 'm' command */

@@ -279,6 +279,7 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 				 * wait a bit,
 				 * in case a monster moves into range
 				 */
+				if (!can_fight(hero.x+dta.x,hero.y+dta.y))
 				    waitcount--;
 			    } else {
 				fighting = FALSE;
@@ -562,7 +563,7 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 	 * unless its a trading post
 	 */
 	if (take != 0 && levtype != POSTLEV) {
-	    if (!moving && (!searching_run || take == GOLD))
+	    if (autopickup && !moving && (!searching_run || take == GOLD))
 	        pick_up(take);
 	    else
 		show_floor();
