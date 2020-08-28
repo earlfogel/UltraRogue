@@ -402,6 +402,13 @@ int x;
     struct linked_list *it;
     struct room *trp;
     char *mname;
+    int aplus; /* extent to which armor is blessed/cursed */
+
+    if (cur_armor == NULL)
+	aplus = 0;
+    else
+	aplus = cur_armor->o_ac - armors[cur_armor->o_which].a_class;
+
 
     if ((it = find_mons(y, x)) == NULL) {
 	debug("Can't find monster in show.");
@@ -469,7 +476,7 @@ int x;
 		    }
 		} else if (on(player, ISINVIS)
 		 || (cur_armor != NULL && cur_armor->o_flags & IS2PROT
-			&& cur_armor->o_ac < -7)) {
+			&& (aplus < -7 || difficulty < 2))) {
 		    msg("The %s's gaze has no effect.", mname);
 		} else {
 		    if (!fighting)
@@ -485,7 +492,7 @@ int x;
 	    !save(VS_PARALYZATION)) {
  	    if (on(player, ISINVIS)
 	     || (cur_armor != NULL && cur_armor->o_flags & IS2PROT
-		    && (cur_armor->o_ac < -7 || difficulty < 2))) {
+		    && (aplus < -7 || difficulty < 2))) {
 		msg("The gaze of the %s is deflected by your shiny armor.", mname);
 	    } else if (ISWEARING(R_ALERT)) {
 		msg("You feel slightly drowsy for a moment.");
@@ -516,7 +523,7 @@ int x;
 		&& off(player, ISINVIS)
 		&& !save(VS_WAND)) {
 	    if (cur_armor != NULL && cur_armor->o_flags & IS2PROT
-		    && (cur_armor->o_ac < -7 || difficulty < 2)) {
+		    && (aplus < -7 || difficulty < 2)) {
 		msg("The gaze of the %s is deflected by your shiny armor.", mname);
 	    } else {
 		msg("The gaze of the %s blinds you.", mname);
@@ -531,11 +538,10 @@ int x;
 	    turn_off(*tp, LOOKSTONE);
 
 	    if (on(player, CANINWALL) || on(player, ISINVIS)
-	     || ISWEARING(R_SEEINVIS)
 	     ) {
 		msg("The gaze of the %s has no effect.", mname);
 	    } else if (cur_armor != NULL && cur_armor->o_flags & IS2PROT
-		    && (cur_armor->o_ac < -7 || difficulty < 2)) {
+		    && (aplus < -7 || difficulty < 2)) {
 		msg("The gaze of the %s is deflected by your shiny armor.", mname);
 	    } else {
 		if (!save(VS_PETRIFICATION) && rnd(100) < 3) {
