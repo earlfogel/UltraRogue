@@ -69,6 +69,7 @@ struct linked_list **ptr;
 	*ptr = next(item);
 	discard(item);
     }
+    *ptr = NULL;
 }
 
 /*
