@@ -19,6 +19,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include "rogue.h"
+#include "state.h"
 
 static char *rip[] = {
 "                       __________",
@@ -54,6 +55,7 @@ int monst;
     char buf[80];
     struct tm *localtime();
     int i;
+    char ch;
 
     if (ISWEARING(R_RESURRECT)) {
 	int die = TRUE;
@@ -131,7 +133,43 @@ int monst;
     msg("Oh no, you died.");
     mvwaddstr(cw, 0, 18, retstr);
     draw(cw);
-    wait_for('\n');
+    /* wait_for('\n'); */
+
+    while ((ch=readchar()) == CTRL('P')) {
+	mpos = 0;
+	msg_index = (msg_index + 9) % 10;
+	msg_index = (msg_index + 9) % 10;
+	if (msg_index < 0) msg_index = 9;
+	msg(msgbuf[msg_index]);
+	mvwaddstr(cw, 0, mpos+1, retstr);
+	draw(cw);
+    }
+
+    if (autosave == TRUE) {
+	char fname[200];
+	FILE *infd;
+
+	strcpy(fname, home);
+        strcat(fname, "rogue.asave");
+
+	if ((infd = fopen(fname, "rb")) != NULL) {
+	    msg("");
+	    msg("Would you like to back up a bit and try again? (Y/n)");
+	    ch = readchar();
+	    if (ch != 'n' && ch != 'N') {
+		msg("");
+		cleanup_old_level();
+		monst_dead = TRUE;  /* all of them! this ends the current turn */
+		if (restore_file(infd) == TRUE) {
+		    msg("Restarting level %d...", level);
+		    light(&hero);
+		    draw(cw);
+		    fclose(infd);
+		    return;
+		}
+	    }
+	}
+    }
 
     time(&date);
     lt = localtime(&date);
@@ -438,6 +476,19 @@ int monst;
 	    return;
 	}
     }
+
+    /*
+     * delete old autosave file when we win or quit
+     */
+    if (autosave == TRUE && flags != SCOREIT) {
+	char fname[200];
+
+        strcpy(fname, home);
+        strcat(fname, "rogue.asave");
+	if (access(fname, F_OK) == -0)
+	    unlink(fname);
+    }
+
 }
 
 void 

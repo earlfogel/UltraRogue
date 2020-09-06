@@ -1006,7 +1006,10 @@ at_hero:
 			}
 			if ((pstats.s_hpt -= damage) <= 0) {  /* apply damage */
 			    death(reason);
-			    return 0;
+			    if (monst_dead == TRUE)	/* autosave? */
+				return TRUE;
+			    else
+				return FALSE;
 			}
 			used = TRUE;
 

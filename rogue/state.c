@@ -74,8 +74,6 @@ char *save_end    = "\nEnd of UltraRogue Game State\n";
 /*
  * leave room for future growth
  */
-int reserved5 = 0;
-int reserved4 = 0;
 int reserved3 = 0;
 int reserved2 = 0;
 int reserved1 = 0;
@@ -1176,8 +1174,8 @@ save_file(FILE *savef)
     ur_write_int(savef, askme);
     ur_write_int(savef, cutcorners);
 
-    ur_write_int(savef, reserved5);
-    ur_write_int(savef, reserved4);
+    ur_write_int(savef, autopickup);
+    ur_write_int(savef, autosave);
     ur_write_int(savef, reserved3);
     ur_write_int(savef, reserved2);
     ur_write_int(savef, reserved1);  /* for future use */
@@ -1440,8 +1438,8 @@ restore_file(FILE *savef)
     askme = (bool) ur_read_int(savef);
     cutcorners = (bool) ur_read_int(savef);
 
-    reserved5 = (bool) ur_read_int(savef);
-    reserved4 = (bool) ur_read_int(savef);
+    autopickup = (bool) ur_read_int(savef);
+    autosave = (bool) ur_read_int(savef);
     reserved3 = (bool) ur_read_int(savef);
     reserved2 = (bool) ur_read_int(savef);
     reserved1 = (bool) ur_read_int(savef);  /* for future use */

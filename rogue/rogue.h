@@ -1044,6 +1044,7 @@ extern bool slow_invent;		/* Inventory one line at a time */
 extern bool firstmove;			/* First move after setting door_stop */
 extern bool showcursor;			/* Option to show cursor */
 extern bool autopickup;			/* Option to pick up stuff you step on */
+extern bool autosave;			/* Option to save game automatically */
 extern bool canwizard;			/* Will be permitted to do this */
 extern bool askme;			/* Ask about unidentified things */
 extern bool moving;			/* move using 'm' command */
@@ -1388,6 +1389,7 @@ void new_level(LEVTYPE ltype);
 int rnd_room(void);
 void put_things(LEVTYPE ltype);
 void do_throne(void);
+void cleanup_old_level(void);
 /* options.c */
 void option(void);
 void put_bool(bool *b, WINDOW *win);

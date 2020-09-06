@@ -44,6 +44,8 @@ OPTION	optlist[] = {
 		(int *) &showcursor,	put_bool,	get_bool	},
     {"autopickup",	"Pick up things you step on (autopickup): ",
 		(int *) &autopickup,	put_bool,	get_bool	},
+    {"autosave",	"Save game automatically (autosave): ",
+		(int *) &autosave,	put_bool,	get_bool	},
     {"name",	 "Name (name): ",
 		(int *) whoami,		put_str,	get_str		},
     {"fruit",	 "Fruit (fruit): ",

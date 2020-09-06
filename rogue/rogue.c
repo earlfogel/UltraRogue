@@ -86,6 +86,7 @@ bool inwhgt = FALSE;			/* true if from wghtchk() */
 bool after;				/* True if we want after daemons */
 bool showcursor = FALSE;		/* Option to show cursor */
 bool autopickup = TRUE;			/* Option to pick up things you step on */
+bool autosave = FALSE;			/* Option to save game automatically */
 bool canwizard = FALSE;			/* Will be permitted to do this */
 bool s_know[MAXSCROLLS];		/* Do you know what a scroll does */
 bool p_know[MAXPOTIONS];		/* Do you know what a potion does */

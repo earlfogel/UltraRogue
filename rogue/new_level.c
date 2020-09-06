@@ -1,5 +1,8 @@
+#include <errno.h>
+#include <string.h>
 #include "curses.h"
 #include "rogue.h"
+#include "state.h"
 
 /*
  * new_level:
@@ -18,33 +21,14 @@ new_level (
     struct thing *tp;
     coord stairs;
 
-    /* Start player off right */
-    turn_off(player, ISHELD);
-    turn_off(player, ISFLEE);
-    extinguish_fuse(FUSE_SUFFOCATE);
-    hold_count = 0;
-    trap_tries = 0;
+    /*
+     * reset windows, player, monsters, objects
+     */
+    cleanup_old_level();
 
     if (level > max_level)
 	max_level = level;
-    wclear(cw);
-    wclear(mw);
-    clear();
-    /*
-     * check to see if we missed a UNIQUE, If so, then put it back
-     * in the monster table for next time
-     */
-    for (item = mlist; item != NULL; item = next(item)) {
-	tp = THINGPTR(item);
-	if (on(*tp, ISUNIQUE)) 
-	    monsters[tp->t_index].m_normal = TRUE;
-	free_list(tp->t_pack);	/* empty monster's pack */
-    }
-    /*
-     * Free up the monsters on the last level
-     */
-    free_list(mlist);
-    free_list(lvl_obj);			/* Free up previous objects (if any) */
+
     levtype = ltype;
     if (ltype == THRONE) {
 	do_throne();			/* do monster throne stuff */
@@ -260,6 +244,27 @@ new_level (
     wmove(cw, hero.y, hero.x);
     waddch(cw, PLAYER);
     status(TRUE);
+
+    if (autosave == TRUE
+	&& levtype == NORMLEV
+	&& hungry_state < F_FAINT
+	&& pstats.s_hpt > max_stats.s_hpt / 2
+	&& off(player, HASINFEST)
+	&& off(player, HASDISEASE)) {
+	char fname[200];
+	FILE *savefd;
+
+	strcpy(fname, home);
+	strcat(fname, "rogue.asave");
+        if ((savefd = fopen(fname, "wb")) == NULL) {
+            msg("");
+            msg("Autosave error: %s.%s", strerror(errno));    /* fake perror() */
+        } else {
+	    save_file(savefd);
+	    fclose(savefd);
+        }
+
+    }
 }
 
 /*
@@ -489,4 +494,39 @@ do_throne ()
 	tp->t_stats.s_arm -= roll(2,3);
 	msg("You have been summoned by a %s.", monsters[i].m_name);
 	aggravate();
+}
+
+void
+cleanup_old_level() {
+    struct linked_list *item;
+    struct thing *tp;
+
+    /* Start player off right */
+    turn_off(player, ISHELD);
+    turn_off(player, ISFLEE);
+    extinguish_fuse(FUSE_SUFFOCATE);
+    hold_count = 0;
+    trap_tries = 0;
+
+    /* clear windows */
+    wclear(cw);
+    wclear(mw);
+    clear();
+
+    /*
+     * If we missed a UNIQUE, put it back in the monster table for next time.
+     * Also empty any monsters' packs.
+     */
+    for (item = mlist; item != NULL; item = next(item)) {
+	tp = THINGPTR(item);
+	if (on(*tp, ISUNIQUE)) 
+	    monsters[tp->t_index].m_normal = TRUE;
+	free_list(tp->t_pack);	/* empty monster's pack */
+    }
+
+    /*
+     * Free up the monsters and objects on the last level
+     */
+    free_list(mlist);
+    free_list(lvl_obj);
 }
