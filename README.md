@@ -47,7 +47,15 @@ effective.
 In hard games, there are fewer blessed items, artifacts are more dangerous,
 and armor is less effective.  You are more vulnerable to magical
 attacks and your ability to do magic is reduced.  You can't start a hard
-game with mithril or crystalline armor, but you may find some later.
+game with plate, mithril or crystalline armor, but you may find some later.
+
+### Autosave and Autopickup
+
+If you turn on Autosave, urogue will save the game periodically
+and let you roll back to the most recent save point when you die.
+
+If you turn Autopickup off (i.e. noautopickup) then your character
+won't pick things up automatically when you step on them.
 
 ### Monsters
 
