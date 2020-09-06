@@ -95,8 +95,12 @@
 /*
  * All the fun defines
  */
+#if 0
 #define next(ptr) (*ptr).l_next
 #define prev(ptr) (*ptr).l_prev
+#endif
+#define next(ptr) ((ptr)?(ptr->l_next):NULL)
+#define prev(ptr) ((ptr)?(ptr->l_prev):NULL)
 #define ldata(ptr) (*ptr).l_data
 #define inroom(rp, cp) (\
     (cp)->x <= (rp)->r_pos.x + ((rp)->r_max.x - 1) && (rp)->r_pos.x <= (cp)->x \
