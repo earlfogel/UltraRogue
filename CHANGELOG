@@ -1,3 +1,29 @@
+September 2020
+--------------
+
+Don't autosave after falling through a trap.
+
+Dividing monsters are more vulnerable to vorpal weapons.
+
+Petrifying monsters are more dangerous.
+
+Fix spurious "Illegal command" messages due to saved commands.
+
+Vorpal blades are easier to create.
+
+Blessed genocide not affected by difficulty level.
+
+
+August 2020
+-----------
+
+New option: autosave
+
+Fix: rare crash in do_move when you run into a monster that doesn't exist.
+
+Fix: shiny armor protection against gazing monsters.
+
+
 July 2020
 ---------
 
@@ -6,6 +32,11 @@ Support CTRL arrow keys on xterm(ish) terminals.
 You can now unwield a weapon by pressing "w-".
 
 Fix gcc -Wextra and -Wformat=2 warnings.
+
+Hidden feature: can cast blessed spells and prayers (at extra cost)
+by typing upper-case letters.
+
+New option: noautopickup
 
 
 June 2020
@@ -509,10 +540,6 @@ Defined a few new constants in rogue.h so array sizes aren't hard
 coded in multiple places (NT_FLAGS, NM_FLAGS, NMSGS, NFINGERS).
 
 Show blind/diseased/infest etc. state in status bar.
-
-Ring of extra sight protects from monsters that can
-turn you to stone when you see them.  If you don't
-have one of those, enchanted armor helps too.
 
 Implement
 ISLARGE, ISSMALL, ISFAST, CANFLY, CANTRAMPLE, CANSWIM, DRAINBRAIN, DRAINWISDOM, NOMETAL
