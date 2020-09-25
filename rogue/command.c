@@ -118,9 +118,9 @@ command ()
 	    else if (count) ch = countch;
 	    else
 	    {
-		if (save_ch != '\0') {
+		if (save_ch != ' ') {
 		    ch = save_ch;
-		    save_ch = '\0';
+		    save_ch = ' ';
 		} else {
 		    ch = readchar();
 		}
@@ -377,7 +377,8 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 			buy_it();
 		    else
 			add_pack(NULL, FALSE);
-		when ' ' : after = FALSE;	/* Do Nothing */
+		when ' ' : case '\0' :
+		    after = FALSE;	/* Do Nothing */
 		when CTRL('W') :
 		    after = FALSE;
 		    if (wizard)
@@ -536,7 +537,7 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 			    updpack(TRUE);
 			}
 			otherwise :
-			    if (canwizard)
+			    if (ch < ' ' || ch > '~')
 				msg("Illegal command '%s' [0%o]", unctrl(ch), ch);
 			    else
 				msg("Illegal command '%s'", unctrl(ch));
@@ -544,7 +545,7 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 		    }
 		    else
 		    {
-			if (canwizard)
+			if (ch < ' ' || ch > '~')
 			    msg("Illegal command '%s' [0%o].", unctrl(ch), ch);
 			else
 			    msg("Illegal command '%s'.", unctrl(ch));

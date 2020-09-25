@@ -437,7 +437,7 @@ int ch;
 {
     int c;
 
-    save_ch = '\0';
+    save_ch = ' ';
 
     if (ch == '\n') {
         while ((c = readchar()) != '\n' && c != '\r')

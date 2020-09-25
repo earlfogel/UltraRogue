@@ -427,7 +427,7 @@ int type;
 	for (;;) {
 	    msg("%s what? (* for list): ",purpose);
 	    ch = readchar();
-	    save_ch = '\0';  /* no type-ahead */
+	    save_ch = ' ';  /* no type-ahead */
 	    mpos = 0;
 	    if (ch == ESCAPE) {		/* abort if escape hit */
 		after = FALSE;
