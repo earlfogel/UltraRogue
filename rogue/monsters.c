@@ -187,6 +187,11 @@ bool max_monster;
 	    turn_on(*tp, CANSUMMON);
 	}
     }
+    /* vorpal blades are awesome */
+    if (cur_weapon != NULL && cur_weapon->o_flags & ISVORPED
+	    && on(*tp, CANSUMMON) && rnd(difficulty) == 0) {
+	turn_off(*tp, CANSUMMON);
+    }
 
     tp->t_turn = TRUE;
     tp->t_pack = NULL;
@@ -546,13 +551,12 @@ int x;
 	    } else {
 		if (!save(VS_PETRIFICATION) && rnd(100) < 3) {
 		    msg("The gaze of the %s petrifies you.", mname);
-		    if (difficulty >= 2 && no_command) {
+		    if (difficulty >= 2) {
 			msg("You are turned to stone !!! --More--");
 			wait_for(' ');
 			death(D_PETRIFY);
 			return it;
 		    } else {
-			msg("You almost turn to stone !!!");
 			no_command = STONETIME;
 			fighting = FALSE;
 		    }

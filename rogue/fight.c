@@ -122,7 +122,7 @@ bool thrown;
 	char *mname;
 
 	did_hit = FALSE;
-	mname = (on(player, ISBLIND)) ? "it" : monsters[tp->t_index].m_name;
+	mname = (on(player, ISBLIND)) ? "monster" : monsters[tp->t_index].m_name;
 	if (!can_blink(tp) &&
 	    (off(*tp, MAGICHIT) || (weap != NULL && (weap->o_hplus > 0 || weap->o_dplus > 0))) &&
 	    (off(*tp, BMAGICHIT) || (weap != NULL && (weap->o_hplus > 1 || weap->o_dplus > 1))) &&
@@ -670,14 +670,13 @@ bool thrown;
 			msg("The %s's touch has no effect.", mname);
 		else {
 		    if (!save(VS_PETRIFICATION) && rnd(100) < 3) {
-			msg("The %s's touch petrifies you.", mname);
-			if (difficulty >= 2 && no_command) {
+			msg("The touch of the %s petrifies you.", mname);
+			if (difficulty >= 2) {
 			    msg("You are turned to stone !!! --More--");
 			    wait_for(' ');
 			    death(D_PETRIFY);
 			    return TRUE;
 			} else {
-			    msg("You almost turn to stone !!!");
 			    no_command = rnd(STONETIME) + 2;
 			    fighting = FALSE;
 			}
