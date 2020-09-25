@@ -472,7 +472,7 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
 	    wait_for(' ');
 	    msg("");
 	    genocide();
-	    if (difficulty <= 2 && blessed) {
+	    if (blessed) {
 		msg("You have been granted the boon of genocide!--More--");
 		wait_for(' ');
 		msg("");
@@ -650,7 +650,7 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
 			    freeletter(ll);
 			    discard(ll);
 			    lb = NULL;
-			} else if (lb->o_hplus + lb->o_dplus > 16
+			} else if (lb->o_hplus + lb->o_dplus > 15
 				&& (lb->o_flags & ISSILVER)
 				&& !(lb->o_flags & ISVORPED)) {
 			    msg("Your weapon begins to shine.");
@@ -682,7 +682,7 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
 		if (blessed && !(lb->o_flags & ISSILVER)) {
 		    lb->o_hplus += rnd(2) + 2;
 		    lb->o_flags |= ISSILVER;
-		    if (lb->o_hplus + lb->o_dplus > 16 && !(lb->o_flags & ISVORPED)) {
+		    if (lb->o_hplus + lb->o_dplus > 15 && !(lb->o_flags & ISVORPED)) {
 			msg("Your weapon has turned to silver and begins to shine!");
 			lb->o_flags |= ISVORPED;  /* vorpal blade */
 		    } else {
