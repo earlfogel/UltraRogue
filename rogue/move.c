@@ -207,6 +207,11 @@ int dx;
      */
     if (isalpha(ch)) {
 	struct linked_list *item = find_mons(nh.y, nh.x);
+	if (item == NULL) {
+	    msg("Debug: missing monster '%c'", ch);
+	    after = fighting = running = FALSE;
+	    return;
+	}
 	struct thing *tp = THINGPTR(item);
 	int t;
 	int ch2 = mvwinch(stdscr, nh.y, nh.x);
@@ -612,7 +617,7 @@ coord *tc;
 	if (moving)
 	    msg("Your attempt fails.");
     }
-    save_ch = '\0';  /* no type-ahead */
+    save_ch = ' ';  /* no type-ahead */
     tp->tr_flags |= ISFOUND;
     switch (ch) {
 	case TRAPDOOR:
