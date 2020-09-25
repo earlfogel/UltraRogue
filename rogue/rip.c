@@ -133,7 +133,6 @@ int monst;
     msg("Oh no, you died.");
     mvwaddstr(cw, 0, 18, retstr);
     draw(cw);
-    /* wait_for('\n'); */
 
     while ((ch=readchar()) == CTRL('P')) {
 	mpos = 0;
@@ -144,6 +143,8 @@ int monst;
 	mvwaddstr(cw, 0, mpos+1, retstr);
 	draw(cw);
     }
+    if (ch != '\n' && ch != '\r')
+	wait_for('\n');
 
     if (autosave == TRUE) {
 	char fname[200];
