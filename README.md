@@ -74,7 +74,7 @@ Use the 'f' command to fight a single monster.  If there is more than one
 monster in reach, urogue asks which you want to fight.
 
 Use the 'F' command to fight a group of monsters. I.e., when the monster
-you are fighting dies, urogue picks another and keeps going.  Fights end
+you are fighting moves or dies, urogue picks another and keeps going.  Fights end
 when there are no more monsters in reach, or when you are too weak, sick,
 hungry or injured to continue.
 
@@ -102,7 +102,7 @@ that any monsters that are chasing you quickly catch up.
 
 ## Getting Started
 
-As in other early roguelike games, in urogue you use keyboard
+As in other early roguelikes, in urogue you use keyboard
 commands to wander through a dungeon fighting monsters and collecting
 treasure.  The dungeon, monsters and treasure are all displayed on screen
 as text characters.  For example, you are an '@' sign, and monsters are
