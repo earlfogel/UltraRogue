@@ -173,7 +173,7 @@ pray ()
     short i, num_prayers, which_prayer, pray_points;
     bool nohw = FALSE;
     int c, prayer_cost;
-    bool blessed = FALSE;
+    bool boost = FALSE, blessed = FALSE;
     static int repeat_prayer = -1;
     int min_wisdom = 17;
 
@@ -234,6 +234,10 @@ pray ()
 	count = 0;
 	return;
     }
+    if (isupper(c)) {
+	boost = TRUE;
+	c = tolower(c);
+    }
     which_prayer = (short) (c - 'a');
     if (which_prayer >= 0 && which_prayer < num_prayers) nohw = TRUE;
 
@@ -292,6 +296,10 @@ pray ()
 
     if (!nohw) {
 	c = wgetch(hw);
+	if (isupper(c)) {
+	    boost = TRUE;
+	    c = tolower(c);
+	}
 	which_prayer = (short) (c - 'a');
 	while (which_prayer < 0 || which_prayer >= num_prayers) {
 	    if (c == ESCAPE) {
@@ -303,6 +311,10 @@ pray ()
 	    waddstr(hw, "Please enter one of the listed prayers. ");
 	    draw(hw);
 	    c = wgetch(hw);
+	    if (isupper(c)) {
+		boost = TRUE;
+		c = tolower(c);
+	    }
 	    which_prayer = (short) (c - 'a');
 	}
     }
@@ -312,6 +324,13 @@ do_prayer:
     prayer_cost = cleric_spells[which_prayer].s_cost;
     if (cleric_spells[which_prayer].s_blessed) {
 	blessed = TRUE;
+	boost = FALSE;
+    }
+    if (boost) {
+#ifdef EARL
+	blessed = TRUE;
+	prayer_cost *= 3;
+#endif
     }
     if ((prayer_cost + pray_time) > pray_points) {
 	msg("Your prayer fails.");
@@ -428,7 +447,7 @@ cast ()
     int c, spell_cost;
     short i, num_spells, which_spell, avail_points;
     bool nohw = FALSE;
-    bool blessed = FALSE;
+    bool boost = FALSE, blessed = FALSE;
     static int repeat_spell = -1;
     int min_intel = 15;
 
@@ -488,6 +507,10 @@ cast ()
 	after = FALSE;
 	count = 0;
 	return;
+    }
+    if (isupper(c)) {
+	boost = TRUE;
+	c = tolower(c);
     }
     which_spell = (short) (c - 'a');
 
@@ -549,6 +572,10 @@ cast ()
 
     if (!nohw) {
 	c = wgetch(hw);
+	if (isupper(c)) {
+	    boost = TRUE;
+	    c = tolower(c);
+	}
 	which_spell = c - 'a';
 	while (which_spell < 0 || which_spell >= num_spells) {
 	    if (c == ESCAPE) {
@@ -561,6 +588,10 @@ cast ()
 	    waddstr(hw, "Please enter one of the listed spells. ");
 	    draw(hw);
 	    c = wgetch(hw);
+	    if (isupper(c)) {
+		boost = TRUE;
+		c = tolower(c);
+	    }
 	    which_spell = c - 'a';
 	}
     }
@@ -570,6 +601,13 @@ do_spell:
     spell_cost = magic_spells[which_spell].s_cost;
     if (magic_spells[which_spell].s_blessed) {
 	blessed = TRUE;
+	boost = FALSE;
+    }
+    if (boost) {
+#ifdef EARL
+	blessed = TRUE;
+	spell_cost *= 3;
+#endif
     }
 
     if (spell_power + spell_cost > avail_points) {
