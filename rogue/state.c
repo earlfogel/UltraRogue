@@ -316,7 +316,7 @@ ur_read_object(FILE *savef)
 
     id = ur_read_long(savef);
 
-    assert(id == URS_OBJECT);
+    assert(id == (long) URS_OBJECT);
 
     o->o_type = ur_read_int(savef);
     o->o_pos  = ur_read_coord(savef);
@@ -496,7 +496,7 @@ ur_read_bag(int isbag, FILE *savef)
 
     id = ur_read_long(savef);
 
-    assert( id == URS_BAGOBJECT );
+    assert( id == (long) URS_BAGOBJECT );
 
     cnt = ur_read_int(savef);
 
@@ -556,7 +556,7 @@ ur_read_monsters(FILE *savef)
 
     id = ur_read_long(savef);
 
-    assert(id == URS_MONSTERLIST);
+    assert(id == (long) URS_MONSTERLIST);
 
     cnt = ur_read_int(savef);
 
@@ -606,7 +606,7 @@ ur_read_monster_stats(FILE *savef)
 
     id = ur_read_long(savef);
 
-    assert(id == URS_MONSTERSTATS);
+    assert(id == (long) URS_MONSTERSTATS);
 
     m = ALLOC( sizeof(struct mstats) );
 
@@ -687,7 +687,7 @@ ur_read_trap(FILE *savef)
 
     id = ur_read_long(savef);
 
-    assert(id == URS_TRAP);
+    assert(id == (long) URS_TRAP);
 
     t = ALLOC( sizeof(struct trap));
 
@@ -719,7 +719,7 @@ ur_read_artifact(FILE *savef)
 
     id = ur_read_long(savef);
 
-    assert(id == URS_ARTIFACT);
+    assert(id == (long) URS_ARTIFACT);
 
     a = ALLOC( sizeof(struct artifact));
 
@@ -760,7 +760,7 @@ ur_read_stats(FILE *savef)
 
     id = ur_read_long(savef);
 
-    assert(id == URS_STATS);
+    assert(id == (long) URS_STATS);
 
     s = ALLOC(sizeof(struct stats));
 
@@ -829,7 +829,7 @@ ur_read_thing(FILE *savef)
 
     id = ur_read_long(savef);
 
-    assert(id == URS_THING);
+    assert(id == (long) URS_THING);
 
     t = ALLOC( sizeof(struct thing) );
 
@@ -905,7 +905,7 @@ ur_read_window(FILE *savef, WINDOW *win)
 
     id = ur_read_long(savef);
 
-    assert(id == URS_WINDOW);
+    assert(id == (long) URS_WINDOW);
 
     maxy = ur_read_short(savef);
     maxx = ur_read_short(savef);
@@ -968,7 +968,7 @@ ur_read_daemons(FILE *savef)
 	
     id = ur_read_long(savef);
 
-    assert(id == URS_DAEMONS);
+    assert(id == (long) URS_DAEMONS);
 
     for(i = 0; i < MAXDAEMONS; i++)
     {
