@@ -134,7 +134,12 @@ int monst;
     mvwaddstr(cw, 0, 18, retstr);
     draw(cw);
 
-    while ((ch=readchar()) == CTRL('P')) {
+    ch = readchar();
+    while (ch == ' ') {
+	ch = readchar();
+    }
+
+    while (ch == CTRL('P')) {
 	mpos = 0;
 	msg_index = (msg_index + 9) % 10;
 	msg_index = (msg_index + 9) % 10;
@@ -142,6 +147,7 @@ int monst;
 	msg(msgbuf[msg_index]);
 	mvwaddstr(cw, 0, mpos+1, retstr);
 	draw(cw);
+	ch = readchar();
     }
     if (ch != '\n' && ch != '\r')
 	wait_for('\n');
@@ -161,6 +167,25 @@ int monst;
 		msg("");
 		cleanup_old_level();
 		monst_dead = TRUE;  /* all of them! this ends the current turn */
+
+		/* forget stuff we've learned */
+		for(i = 0; i < MAXSCROLLS; i++) {
+		    s_guess[i] = NULL;
+		    s_know[i] = FALSE;
+		}
+		for(i = 0; i < MAXPOTIONS; i++) {
+		    p_guess[i] = NULL;
+		    p_know[i] = FALSE;
+		}
+		for(i = 0; i < MAXRINGS; i++) {
+		    r_guess[i] = NULL;
+		    r_know[i] = FALSE;
+		}
+		for(i = 0; i < MAXSTICKS; i++) {
+		    ws_guess[i] = NULL;
+		    ws_know[i] = FALSE;
+		}
+
 		if (restore_file(infd) == TRUE) {
 		    msg("Restarting level %d...", level);
 		    light(&hero);
