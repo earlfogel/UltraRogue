@@ -688,8 +688,11 @@ get_monst:
 	mp = THINGPTR(ip);
 	nip = next(ip);
 	if (mp->t_index == which_monst) {
+#if 0
 	    check_residue(mp);	/* Check for special features before removing */
 	    remove(&mp->t_pos, ip);
+#endif
+	    killed(ip, FALSE, TRUE);
 	}
     }
 
