@@ -1441,6 +1441,8 @@ void ring_off(void);
 int ring_eat(int hand);
 char *ring_num(struct object *obj);
 int ring_value(int type);
+int ring_blessed(int type);
+int ring_cursed(int type);
 /* rip.c */
 void death(int monst);
 void score(long amount, int flags, int monst);

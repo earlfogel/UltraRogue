@@ -3,6 +3,7 @@
  * @(#)player.c	7.0 (Indian Hill) 10/5/82
  */
 
+#include <ctype.h>
 #include "curses.h"
 #include "rogue.h"
 
@@ -171,17 +172,24 @@ pray ()
 {
     short i, num_prayers, which_prayer, pray_points;
     bool nohw = FALSE;
-    int c;
+    int c, prayer_cost;
+    bool blessed = FALSE;
     static int repeat_prayer = -1;
+    int min_wisdom = 17;
 
-    if (player.t_ctype != C_CLERIC && pstats.s_wisdom < 17) {
+    if (ring_blessed(R_WIZARD))
+	min_wisdom--;
+    else if (ring_cursed(R_WIZARD))
+	min_wisdom++;
+
+    if (player.t_ctype != C_CLERIC && pstats.s_wisdom < min_wisdom) {
 	msg("You are not permitted to pray.");
 	return;
     }
 
     /* Get the number of available prayers */
-    if (pstats.s_wisdom > 16) 
-	num_prayers = (pstats.s_wisdom - 15) / 2;
+    if (pstats.s_wisdom >= min_wisdom) 
+	num_prayers = (pstats.s_wisdom - min_wisdom + 2) / 2;
     else 
 	num_prayers = 0;
 
@@ -223,6 +231,7 @@ pray ()
     if (c == ESCAPE) {
 	msg("");
 	after = FALSE;
+	count = 0;
 	return;
     }
     which_prayer = (short) (c - 'a');
@@ -300,7 +309,11 @@ pray ()
 
 do_prayer:
 
-    if ((cleric_spells[which_prayer].s_cost + pray_time) > pray_points) {
+    prayer_cost = cleric_spells[which_prayer].s_cost;
+    if (cleric_spells[which_prayer].s_blessed) {
+	blessed = TRUE;
+    }
+    if ((prayer_cost + pray_time) > pray_points) {
 	msg("Your prayer fails.");
 	count = 0;
 	repeat_prayer = -1;
@@ -311,12 +324,12 @@ do_prayer:
 
     if (cleric_spells[which_prayer].s_type == TYP_POTION)
 	quaff(	cleric_spells[which_prayer].s_which,
-		cleric_spells[which_prayer].s_blessed);
+		blessed);
     else
 	read_scroll(	cleric_spells[which_prayer].s_which,
-			cleric_spells[which_prayer].s_blessed);
+			blessed);
 
-    pray_time += cleric_spells[which_prayer].s_cost;
+    pray_time += prayer_cost;
 
     if (count == 0)
 	repeat_prayer = -1;
@@ -412,19 +425,26 @@ annoy:
 void 
 cast ()
 {
-    int c;
+    int c, spell_cost;
     short i, num_spells, which_spell, avail_points;
     bool nohw = FALSE;
+    bool blessed = FALSE;
     static int repeat_spell = -1;
+    int min_intel = 15;
 
-    if (player.t_ctype != C_MAGICIAN && pstats.s_intel < 16) {
+    if (ring_blessed(R_WIZARD))
+	min_intel--;
+    else if (ring_cursed(R_WIZARD))
+	min_intel++;
+
+    if (player.t_ctype != C_MAGICIAN && pstats.s_intel < min_intel) {
 	msg("You are not permitted to cast spells.");
 	return;
     }
 
     /* Get the number of available spells */
-    if (pstats.s_intel >= 16) 
-	num_spells = pstats.s_intel - 15;
+    if (pstats.s_intel >= min_intel) 
+	num_spells = pstats.s_intel - min_intel + 1;
     else 
 	num_spells = 0;
 
@@ -466,6 +486,7 @@ cast ()
     if (c == ESCAPE) {
 	msg("");
 	after = FALSE;
+	count = 0;
 	return;
     }
     which_spell = (short) (c - 'a');
@@ -546,7 +567,12 @@ cast ()
 
 do_spell:
 
-    if ((spell_power + magic_spells[which_spell].s_cost) > avail_points) {
+    spell_cost = magic_spells[which_spell].s_cost;
+    if (magic_spells[which_spell].s_blessed) {
+	blessed = TRUE;
+    }
+
+    if (spell_power + spell_cost > avail_points) {
 	msg("Your attempt fails.");
 	count = 0;
 	repeat_spell = -1;
@@ -557,19 +583,19 @@ do_spell:
 
     if (magic_spells[which_spell].s_type == TYP_POTION)
         quaff(	magic_spells[which_spell].s_which,
-        	magic_spells[which_spell].s_blessed);
+        	blessed);
     else if (magic_spells[which_spell].s_type == TYP_SCROLL)
         read_scroll(	magic_spells[which_spell].s_which,
-        		magic_spells[which_spell].s_blessed);
+        		blessed);
     else if (magic_spells[which_spell].s_type == TYP_STICK) {
 	 if (get_dir())
 	      do_zap(	TRUE, 
 			magic_spells[which_spell].s_which,
-			magic_spells[which_spell].s_blessed);
+			blessed);
 	 else
 	      return;
     }
-    spell_power += magic_spells[which_spell].s_cost;
+    spell_power += spell_cost;
 
     if (count == 0)
 	repeat_spell = -1;

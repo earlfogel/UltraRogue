@@ -232,3 +232,37 @@ int type;
     if (ISRING(RIGHT_4, type))  result += cur_ring[RIGHT_4]->o_ac;
     return(result);
 }
+
+/* Are you wearing a blessed ring of the given type? */
+
+int 
+ring_blessed (type)
+int type;
+{
+    int i;
+
+    for (i=0; i<NFINGERS; i++) {
+	if (cur_ring[i] != NULL
+	 && cur_ring[i]->o_which == type
+	 && cur_ring[i]->o_flags & ISBLESSED)
+	    return 1;
+    }
+    return(0);
+}
+
+/* Are you wearing a cursed ring of the given type? */
+
+int 
+ring_cursed (type)
+int type;
+{
+    int i;
+
+    for (i=0; i<NFINGERS; i++) {
+	if (cur_ring[i] != NULL
+	 && cur_ring[i]->o_which == type
+	 && cur_ring[i]->o_flags & ISCURSED)
+	    return 1;
+    }
+    return(0);
+}

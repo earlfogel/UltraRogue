@@ -279,7 +279,7 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 				 * wait a bit,
 				 * in case a monster moves into range
 				 */
-				if (!can_fight(hero.x+dta.x,hero.y+dta.y))
+				if (!pick_monster(ch))
 				    waitcount--;
 			    } else {
 				fighting = FALSE;
@@ -591,8 +591,12 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 	if ((player.t_ctype == C_THIEF) &&
 	    (rnd(100) < (2*pstats.s_dext + 5*pstats.s_lvl))) 
 	    search(TRUE);
-	if (ISWEARING(R_SEARCH)) 
-	    search(FALSE);
+	if (ISWEARING(R_SEARCH)) {
+	    if (!ring_cursed(R_SEARCH)) 
+		search(FALSE);
+	    if (ring_blessed(R_SEARCH)) 
+		search(FALSE);
+	}
 	if (ISWEARING(R_TELEPORT) && rnd(100) < 2) {
 	    teleport();
 	    if (off(player, ISCLEAR)) {
@@ -660,6 +664,7 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 		}
 	    }
 	}
+
 	if (difficulty >= 2 && !fighting && (no_command == 0) && cur_weapon != NULL
 		&& rnd(on(player, STUMBLER) ? 399 : 9999) == 0
 		&& rnd(pstats.s_dext) < 
