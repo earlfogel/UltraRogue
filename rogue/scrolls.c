@@ -621,7 +621,7 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
 			}
 		    when STICK:
 			lb->o_charges += howmuch + 10;
-			if (flags == ISBLESSED)
+			if (blessed)
 			    lb->o_flags |= ISBLESSED;
 			if (lb->o_charges < 0)
 			    lb->o_charges = 0;
