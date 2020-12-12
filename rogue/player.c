@@ -449,7 +449,7 @@ cast ()
     bool nohw = FALSE;
     bool boost = FALSE, blessed = FALSE;
     static int repeat_spell = -1;
-    int min_intel = 15;
+    int min_intel = 16;
 
     if (ring_blessed(R_WIZARD))
 	min_intel--;
