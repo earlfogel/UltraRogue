@@ -1,3 +1,16 @@
+
+October 2020
+------------
+
+Rogue gets points for genocided monsters.
+
+Friendly monsters don't like being bumped into in hard games.
+
+Blessed rings of wizardry, searching and regeneration are better.
+
+Cursed rings of wizardry and searching are less effective.
+
+
 September 2020
 --------------
 
@@ -12,6 +25,8 @@ Fix spurious "Illegal command" messages due to saved commands.
 Vorpal blades are easier to create.
 
 Blessed genocide not affected by difficulty level.
+
+Fix: stuff you know/guess gets restored after autosave/restore
 
 
 August 2020
