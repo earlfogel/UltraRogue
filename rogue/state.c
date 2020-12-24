@@ -371,9 +371,6 @@ find_thing_index(struct linked_list *l, struct thing *item)
 {
     int cnt=0;
 
-    if (l == NULL)
-        return(-1);
-
     while(l != NULL)
     {
         if (item == (struct thing *) l->l_data)
