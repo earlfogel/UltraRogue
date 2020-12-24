@@ -549,6 +549,7 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
 			    (lb->o_which == R_WIZARD ||
 			     lb->o_which == R_SEARCH ||
 			     lb->o_which == R_REGEN  ||
+			     lb->o_which == R_LEVITATION  ||
 			     lb->o_which == R_DIGEST)
 			    ) {
 			    lb->o_flags |= ISBLESSED;
