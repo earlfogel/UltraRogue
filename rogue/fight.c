@@ -711,8 +711,7 @@ bool thrown;
                 msg("You feel slightly less wise now.");
                                 
                 pstats.s_wisdom = max(pstats.s_wisdom - 1, 3);
-		if (difficulty > 2 ||
-                    (difficulty == 2 && rnd(2) == 0))
+		if (rnd(difficulty) != 0)
 		    max_stats.s_wisdom = pstats.s_wisdom;
 
                 /* Now put back the ring changes */
@@ -933,6 +932,8 @@ bool thrown;
 		}
 	    }
 	}
+	if (off(player, ISBLIND) && on(player, CANSEE) && on(*mp, CANSURPRISE))
+	      turn_off(*mp, CANSURPRISE);
     }
     else {
 	/* If the thing was trying to surprise, no good */
@@ -1014,7 +1015,10 @@ int wplus;
 	 */
 	if (level > 35 && level < 85
 	    && need > 20 + wplus
-	    && (need < 25 + wplus || difficulty > 2)
+#if 0
+	    && (need < 25 + wplus || (difficulty > 2 && levtype != THRONE))
+#endif
+	    && (need < 22 + wplus + (difficulty*2))
 	    && res == 20 && rnd(5-difficulty) == 0
 	    ) {
 #if 0
