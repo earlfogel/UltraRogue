@@ -262,6 +262,23 @@ bool display;
      */
 line_two: 
 
+#ifdef EARL
+    if (wizard) {
+	struct linked_list *item;
+	int mcount = 0;
+	for (item = mlist; item != NULL; item = next(item)) {
+	    mcount++;
+	    if (item->l_data == NULL) {
+		msg("*** Monster #%d is missing! ***");
+		sleep(4);
+		moving = fighting = FALSE;
+	    }
+	}
+	wmove(cw, LINES-2, COLS-6);
+	wprintw(cw, "%-3d %-2d", mcount, demoncnt);
+    }
+#endif
+
     /*
      * work out current health
      */
@@ -284,7 +301,7 @@ line_two:
 	health_state = "  Itchy";
 #endif
     } else if (on(player, HASSTINK)) {
-	health_state = "  Sickened";
+	health_state = "  Queasy";
     } else if (on(player, ISBLIND)) {
 	health_state = "  Blind";
     } else if (on(player, ISDEAF)) {
@@ -309,7 +326,9 @@ line_two:
     } else if (fighting && serious_fight) {
 	health_state = "  Fighting";
     } else if (on(player, CANINWALL) && p_know[P_PHASE]) {
-	health_state = "  Phasing";
+	health_state = "  phasing";
+    } else if (on(player, CANINWALL) && find_slot(FUSE, FUSE_UNPHASE) == NULL) {
+	health_state = "  Phasing"; /* permanent phasing */
 #endif
     } else if (on(player, ISHUH)) {
 	health_state = "  Confused";
