@@ -218,7 +218,7 @@ int dx;
 
 	/* swap places with a monster */
 	if ((on(player, CANINWALL) && (moving||searching_run))
-	 || (on(*tp, ISFRIENDLY) && ch2 != GOLD && !fighting)) {
+	 || (on(*tp, ISFRIENDLY) && ch2 != GOLD && !fighting && difficulty <= 2)) {
                 mvwaddch(cw, hero.y, hero.x, ch);
                 mvwaddch(mw, hero.y, hero.x, ch);
                 mvwaddch(mw, nh.y, nh.x, (char) ' ');
@@ -609,7 +609,8 @@ coord *tc;
 		(ch == FIRETRAP && !(tp->tr_flags & ISFOUND))))
 		|| ((moving && (tp->tr_flags & ISFOUND) && rnd(100) <
 		thief_bonus + 2*pstats.s_dext + 5*pstats.s_lvl) &&
-		ch != FIRETRAP)) {
+		ch != FIRETRAP)
+		|| ring_blessed(R_LEVITATION)) {
 	    msg(tr_name(ch));
 	    tp->tr_flags |= ISFOUND;
 	    return (ch); 
