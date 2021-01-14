@@ -1,0 +1,227 @@
+A variety of hints, strategies and spoilers.
+
+This is not meant to be comprehensive, just things you may not
+discover on your own by playing the game.
+
+
+Rolling Characters
+------------------
+
+When rolling characters, your primary attribute will be 16 or 18 points,
+all others will be 12 or less.
+
+The best armor you can roll is Plate, but it rusts.
+The best armor you can roll that won't rust is Padded.  Either is
+good early in the game, but if you start with anything less
+than Plate, you should upgrade to Plate, Mithril or Crystalline armor at
+some point.
+
+Keep rolling characters until you find one you like, then save it so you
+can use it again in other games.
+
+You can roll any type of armor in easy games.
+
+
+Food
+----
+
+The amount of food you need is affected by the weight of your pack and by
+the rings you wear.  It's easy to starve early in the game when food is
+scarce, so be sparing in wearing rings of regeneration, alertness, sustain
+ability and searching, unless you have a ring of slow digestion too. 
+
+Blessed food lasts twice as long as regular food.
+
+Some food is special: lembas have healing properties and miruvors heal and
+restore abilities.
+
+Note that the blessed/cursed status of food (and some rings) is
+not shown in inventories until the end of the game.
+
+
+Secret Doors and Traps
+----------------------
+
+Use the 's' command to search for traps and secret doors, or use the
+searching run commands (<ctrl-H, ctrl-J, ...).  There are no secret doors
+or traps on the first level, but they become more common later.
+
+You can set your own traps with the '^' command.  I like to turn on the
+'cutcorners' option, then set a trap just inside a door.  That way, you can
+step around the trap, but most low level monsters can't.
+
+
+Mazes
+-----
+
+Mazes can be frustrating, as it may take a long time to find the staircase
+out.  Magic mapping helps with this, but if you don't want to struggle
+through a maze there are other ways out: a blessed scroll of teleportation,
+phasing through the floor, or creating a trap door and then falling through
+it.
+
+
+Party Rooms
+-----------
+
+Once you descend deeper in the dungeon, you'll find the occasional room filled
+with monsters and treasure.  The best way to deal with these is to stay in
+the corridor so the monsters can only approach you one at a time.  If
+that's not enough, set a trap blocking the door of the adjacent room (see
+above), then retreat behind the trap periodically to recover from your
+injuries.
+
+
+Armor
+-----
+
+Crystalline armor provides the best protection overall, but a strong enough
+blow can shatter it, unless you protect it first.  It also protects you
+from lightning, and can't rust.
+
+Mithril is the second best overall.  It gives extra protection
+from magical attacks, and can't rust.
+
+Note that protected crystalline armor can still shatter in hard games.
+The workaround for that is to first enchant a protection scroll, then use
+it to doubly protect your armor.  If you fully enchant and doubly protect
+your armor it becomes shiny and protects you from gazing monsters.
+
+
+Weapons
+-------
+
+The best weapons are the claymore, two-handed sword, long-pike and bastard
+sword.  Some monsters can only be hit by enchanted weapons, others require
+multiply enchanted weapons, and a few can't be hurt by any weapon.
+Enchanting weapons also stops them from rusting.  Enchanting a weapon
+beyond the safe point turns it into a vorpal blade.
+
+
+Potions
+-------
+
+Gain Ability - Increments one of your abilities (inteligence, strength,
+wisdom, etc.).  A blessed potion of gain ability increases all your
+abilities (up to a maximum of 25 points).  Collect all the cursed and
+normal gain ability potions you find, then enchant them when you can.  Be
+warned, though, gain ability can hurt you if any of your attributes are
+down (e.g. "Str:8(12)").  In that case, quaff a restore abilities potion or
+eat a miruvor first, to get back to normal.
+
+Clear Thought - clears up confusion resulting from fighting certain
+monsters, teleporting or falling through a trap door.  A blessed clear
+thought prevents you from being confused again for the rest of the game.
+
+Phasing - lets you walk through walls (and monsters).  You can also phase
+down through the floor or up through the ceiling (if you're wearing
+a ring of levitation), but doing so disables phasing.
+
+You can't phase down through the floor while wearing a ring of levitation,
+but if you try it then the phasing will never wear off.
+
+
+Scrolls
+-------
+
+Enchantment - This is the most useful general purpose scroll in the game,
+as you can use it to bless most things.  Be careful not to over-enchant
+rings, weapons or armor.  You can safely enchant rings to +5, armor to +8
+and weapons to 15 combined hit and damage points.  Each time you enchant
+them after that, there's a chance they'll explode.
+
+Protection - Protecting items in your pack stops magic-stealing monsters
+from stealing (or cursing) them, up until level 95 anyway.  Protecting
+armor also prevents rusting.
+
+Acquirement - This rare scroll lets you add any item to your pack.
+Normally it chooses a type at random (armor, weapon, scroll, ...)
+then you select any item you'd like from that category, but a blessed
+scroll of acquirement lets you choose any item of any type.
+
+Genocide - This lets you eliminate any type of monster from the game.
+Blessed genocide lets you remove two types.
+
+Ownership - Owned items return to you when thrown.  Blessed ownership
+prevents them from being stolen.
+
+
+Rings
+-----
+
+Extra Sight - Lets you see invisible monsters and prevents blindness.
+
+Add Intelligence and Increase Wisdom work as you'd expect.  Note that
+non-magical characters who increase their intelligence to at least 16 (or
+wisdom to 17) gain the ability to cast spells (or pray).
+
+Wizardry - This rare ring enhances your ability to cast spells or pray.
+A blessed ring of wizardry lets non-magical users cast spells and prayers
+a bit sooner.
+
+Sustain Health - prevents you from getting sick, diseased or infested with
+a parasite.
+
+Levitation - prevents damage from traps, except fire traps.  Also prevents
+you from going down, so it's most useful once you've finished exploring the
+dungeon and are on your way up again.  Blessed levitation protects you from
+fire traps as well.
+
+Blessed searching, regeneration, levitation and wizardry work better than
+normal; cursed searching, regeneration and wizardry are worse.
+
+
+Options
+-------
+
+Cutcorners - lets you move through doors at an angle, unless your dexterity
+is reduced.  Also affects the more dextrous monsters.
+
+Showcursor - show the text cursor.  This is normally hidden, which may make
+it hard to find your character on crowded levels.
+
+Autopickup - pick up anything you step on, unless 'm'oving or using
+the <ctrl> movement commands.  Set "noautopickup" to change this.
+
+Autosave - save the game at the start of each normal level, unless your
+character is seriously injured, sick, blind or fainting.  Then, should
+you die, you can roll back to the previous save point instead of starting
+over from the beginning.
+
+Difficulty - set to "easy", "normal" or "hard", as you wish.  You can also
+change difficulty on the fly, which may help if you get in over your head.
+
+Other options are unchanged from previous versions of urogue.
+
+Most options can be changed with the 'o' command.  Or you can
+use the SROGUEOPTS environment variable to set them in advance.  E.g.:
+
+  (linux)   export SROGUEOPTS=cutcorners,difficulty=hard,autosave
+
+  (windows) SET SROGUEOPTS=cutcorners,difficulty=easy,autosave
+
+The minimum dungeon size is 24x80.  You can make it larger, but only before
+the game starts.
+
+On linux, resize the window before running urogue and the game will adjust
+the dungeon to fit.
+
+On Windows, urogue creates a new 24x80 window by default.  To change the
+size, set the PDC_LINES and PDC_ROWS batch variables.  E.g.
+
+    SET PDC_LINES=30
+    SET PDC_COLS=90
+    urogue.exe
+
+There are a few options that can only be set on the command line.
+In addition to the monster selection options described in README.md,
+these are:
+
+  urogue -s : print list of top scores and exit
+
+  urogue -v : print version string and exit
+
+  urogue -n : start a new game, ignoring any previously saved game
+
+  urogue -d : turns on debugging
+
