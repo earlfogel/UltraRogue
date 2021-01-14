@@ -66,7 +66,7 @@ char **argv;
     /*
      * Open file
      */
-    if ((inf=fopen(scorefile,"r")) == NULL) {
+    if ((inf=fopen(scorefile,"rb")) == NULL) {
 	fprintf(stderr, "Unable to read %s\n", scorefile);
 	perror(scorefile);
 	exit(0);
@@ -89,15 +89,17 @@ char **argv;
     /*
      * Read top scores
      */
-    read(fileno(inf), (char *) top_ten, sizeof top_ten);
+    fread(top_ten, sizeof(top_ten), 1, inf);
     fclose(inf);
 
     /*
      * Show what we have
      */
-    for (scp = top_ten; scp < &top_ten[10]; scp++) {
-	if (scp->sc_score > 0) {
-	    printf("%10ld %10s\n", scp->sc_score, scp->sc_name);
+    if (num == 0) {
+	for (scp = top_ten; scp < &top_ten[10]; scp++) {
+	    if (scp->sc_score > 0) {
+		printf("%10ld %10s\n", scp->sc_score, scp->sc_name);
+	    }
 	}
     }
 
@@ -111,7 +113,7 @@ char **argv;
     for (scp = top_ten; scp < &top_ten[10]; scp++) {
 	if (i == num) {
 	    if (scp->sc_score > 0) {
-		printf("Delete entry %d\n", num);
+		printf("Delete entry %d %10ld %10s\n", num, scp->sc_score, scp->sc_name);
 		sc2 = scp;
 		while (sc2 < &top_ten[10]) {
 		    *sc2 = sc2[+1];
@@ -128,12 +130,12 @@ char **argv;
     /*
      * Update the file
      */
-    if ((outf=fopen(scorefile,"w")) == NULL) {
+    if ((outf=fopen(scorefile,"wb")) == NULL) {
 	fprintf(stderr, "Unable to write %s\n", scorefile);
 	perror(scorefile);
 	exit(0);
     }
-    write(fileno(outf), (char *) top_ten, sizeof top_ten);
+    fwrite(top_ten, sizeof(top_ten), 1, outf);
     fclose(outf);
 
 }
