@@ -490,9 +490,6 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
 		lb->o_flags |= ISPROT;
 		if (blessed)
 		    lb->o_flags |= IS2PROT;
-#if 0
-		mpos = 0;
-#endif
 		msg("Protected %s.", inv_name(lb,TRUE));
 	    }
 	    s_know[S_PROTECT] = TRUE;
@@ -670,9 +667,6 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
 		    default:
 			lb->o_flags |= flags;
 		}
-#if 0
-		mpos = 0;
-#endif
 		if (lb != NULL) 
 		    msg("Enchanted %s.", inv_name(lb,TRUE));
 	    }

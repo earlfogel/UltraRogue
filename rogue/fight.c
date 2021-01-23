@@ -963,9 +963,6 @@ bool thrown;
 	    fighting = keep_fighting = FALSE;
 	/* too much damage in one fight */
 	} else if (save_hpt-pstats.s_hpt > pstats.s_hpt/2
-#if 0
-		|| pstats.s_hpt < max_stats.s_hpt*limit
-#endif
 		) {
 	    msg("Ouch, that hurt.");
 	    fighting = keep_fighting = FALSE;
@@ -1015,9 +1012,6 @@ int wplus;
 	 */
 	if (level > 35 && level < 85
 	    && need > 20 + wplus
-#if 0
-	    && (need < 25 + wplus || (difficulty > 2 && levtype != THRONE))
-#endif
 	    && (need < 22 + wplus + (difficulty*2))
 	    && res == 20 && rnd(5-difficulty) == 0
 	    ) {

@@ -366,10 +366,6 @@ int monst;
 	for (scp = top_ten; scp < &top_ten[10]; scp++) {
 	    if (scp->sc_game_id == game_id)  /* we've seen this game before */
 		remove_slot = scp;
-#if 0
-	    if (scp->sc_score < 0)  /* shouldn't happen */
-		remove_slot = scp;
-#endif
 	    if (remove_slot)
 		break;
 	}
