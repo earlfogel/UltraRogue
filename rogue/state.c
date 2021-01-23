@@ -1180,8 +1180,8 @@ save_file(FILE *savef)
     ur_write_int(savef, game_id);
     ur_write_string(savef,whoami);
     ur_write_string(savef,fruit);
-    ur_write_string(savef,file_name);
-    ur_write_string(savef,"");       /* not used */
+    ur_write_string(savef,""); 	/* was file_name */
+    ur_write_string(savef,"");  /* was score_file */
 
     ur_write_string(savef,save_end);	/* for DUMPSTRING */
     ur_write_string(savef,save_end);	/* to verify end of file */
@@ -1451,10 +1451,13 @@ restore_file(FILE *savef)
     fd_data[1].mi_name = fruit; /* put fruit in the right place */
 
     str = ur_read_string(savef);
-    strcpy(file_name,str);
+    if (strcmp(str, file_name) != 0
+	&& strstr(str, "rogue.asave") != NULL)
+	msg("Restore file: %s", file_name);  /* hmm, it moved */
+    /* strcpy(unused_str1,str); */  /* was file_name */
     FREE(str);
     str = ur_read_string(savef);
-    /* strcpy(unused_str,str); */
+    /* strcpy(unused_str2,str); */  /* was score_file */
     FREE(str);
 
     DUMPSTRING

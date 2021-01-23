@@ -98,6 +98,8 @@ main (int argc, char **argv)
 	    else if (getenv("USER")) 
 		strcpy(whoami, getenv("USER"));
     }
+    if (stat(file_name, &sb) == 0 && S_ISREG(sb.st_mode))
+	restore_file = file_name;
 
     /*
      * Parse command-line options
@@ -132,9 +134,8 @@ main (int argc, char **argv)
 		exit(1);
 	    }
 	    break;
-	case 'r':   /* restore a saved game */
-	    if (stat(file_name, &sb) == 0 && S_ISREG(sb.st_mode))
-		restore_file = file_name;
+	case 'n':   /* DON'T restore a saved game */
+	    restore_file = NULL;
 	    break;
 	case 'v':
 	   printf("UltraRogue version %s\n", release);
