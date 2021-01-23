@@ -457,6 +457,8 @@ coord *cp;
 			    ch = rch;
 			when FLOOR:
 			    ch = (on(player, ISBLIND) ? FLOOR : ' ');
+			when SECRETDOOR:
+			    ;  /* do nothing */
 			otherwise:
 			    ch = ' ';
 		    }
