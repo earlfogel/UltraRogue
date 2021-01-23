@@ -250,6 +250,8 @@ new_level (
 	&& hungry_state < F_FAINT
 	&& pstats.s_hpt > max_stats.s_hpt / 2
 	&& off(player, HASINFEST)
+	&& off(player, ISBLIND)
+	&& off(player, PERMBLIND)
 	&& off(player, HASDISEASE)) {
 	char fname[200];
 	FILE *savefd;
