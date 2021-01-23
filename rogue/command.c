@@ -264,7 +264,7 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 			    dta.x = delta.x;
 			    beast = NULL;
 			    if (ch == 'F') {
-				waitcount = 1;
+				waitcount = 2;
 				if (serious_fight)
 				    waitcount++;
 			    } else {
@@ -281,6 +281,8 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 				 */
 				if (!pick_monster(ch))
 				    waitcount--;
+				if (waitcount == 0)
+				    after = FALSE;
 			    } else {
 				fighting = FALSE;
 				after = FALSE;
