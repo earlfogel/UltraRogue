@@ -122,8 +122,16 @@ steal ()
 
 	/* Find anything? */
 	if (s_item == NULL) {
-	    msg("The %s has nothing to steal.", mname);
-	    return;
+	    /* are they standing on something we can steal? */
+	    if ((s_item = find_obj(new_pos.y, new_pos.x)) != NULL) {
+		/* temporarily add it to the monster's pack
+		 * so we can steal it */
+		detach(lvl_obj, s_item);
+		attach(tp->t_pack, s_item);
+	    } else {
+		msg("The %s has nothing to steal.", mname);
+		return;
+	    }
 	}
 
 	if (tp->t_index == nummonst+2) {
