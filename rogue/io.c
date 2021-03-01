@@ -341,7 +341,7 @@ line_two:
     } else if (on(player, ISUNHERO)) {
 	health_state = "  Vulnerable";
     } else if (on(player, SUPEREAT) || on(player, POWEREAT)) {
-	health_state = "  Getting Hungry";
+	health_state = "  Warm";
     } else if (cur_armor == NULL && cur_weapon == NULL) {
 	health_state = "  No Armor, No Weapon";
     } else if (cur_armor == NULL) {
@@ -467,11 +467,11 @@ int ch;
 	if (c == ESCAPE) {
 	    fighting = FALSE;
 	    count = 0;
-	} else if (c != '\n' && c != ' ' && c != '\0'
-		   && c != 'f' && c != 'F' && c != CTRL('F')
-		   ) {
+	} else if (c != '\n' && c != ' ' && c != '\0') {
 	    save_ch = c;  /* save to use as next command */
-	    fighting = FALSE;
+        } else if (!fighting &&
+		    (c == 'f' || c == 'F' || c == CTRL('F'))) {
+	    save_ch = c;  /* save to use as next command */
 	}
     } else {
         while (readchar() != ch)
