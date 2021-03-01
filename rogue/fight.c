@@ -730,8 +730,7 @@ bool thrown;
 
                 msg("You feel slightly less intelligent now.");
                 pstats.s_intel = max(pstats.s_intel - 1, 3);
-		if (difficulty > 2 ||
-		    (difficulty == 2 && rnd(2) == 0))
+		if (rnd(difficulty) != 0)
 		    max_stats.s_intel = pstats.s_intel;
 
                 /* Now put back the ring changes */
@@ -1226,6 +1225,7 @@ struct object *cur_weapon;
 			def_er->t_stats.s_exp /= 2;  /* share the points */
 		    mcopy->t_stats.s_lvl = def_er->t_stats.s_lvl;
 		    mcopy->t_stats.s_exp = def_er->t_stats.s_exp;
+		    mcopy->t_stats.s_hpt = def_er->t_stats.s_hpt;
 		    debug("The %s divided!", monsters[def_er->t_index].m_name);
 		    if (!serious_fight)
 			fighting = FALSE;

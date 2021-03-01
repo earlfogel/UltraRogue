@@ -916,6 +916,7 @@ int damage;
 				    tp->t_stats.s_exp /= 2;  /* share the points */
 				mcopy->t_stats.s_lvl = tp->t_stats.s_lvl;
 				mcopy->t_stats.s_exp = tp->t_stats.s_exp;
+				mcopy->t_stats.s_hpt = tp->t_stats.s_hpt;
 				debug("The %s divided!", monsters[tp->t_index].m_name);
 			    }
 			}
