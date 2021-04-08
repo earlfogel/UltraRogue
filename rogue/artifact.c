@@ -83,7 +83,7 @@ apply ()
 	    debug("Rolled %d.", chance);
 	    if (chance > pstats.s_lvl*4) {
 		if (rnd(7) == 0 && difficulty > 2)
-		    do_major(obj);
+		    do_major();
 		else
 		    do_minor(obj);
 	    } else {
@@ -92,7 +92,6 @@ apply ()
 	    }
 	}
 	if (obj->art_stats.ar_flags & ISACTIVE) {
-	    /* active_artifact |= (1 << obj->o_which); */
 	    switch (which) {
 		case TR_PURSE:
 		    do_bag(obj);
@@ -687,7 +686,7 @@ struct object *tr;
 		}
 	}
 	when 98:
-		msg("You feel an emptyness inside.");
+		msg("You feel warm all over.");
 		turn_on(player, POWEREAT);
 	otherwise:
 		tr->art_stats.ar_flags &= ~ISACTIVE;
@@ -700,8 +699,7 @@ struct object *tr;
  * do_major: major malevolent effects
  */
 void 
-do_major (tr)
-struct object *tr;
+do_major ()
 {
     int which;
 
@@ -876,7 +874,8 @@ struct object *tr;
 		    cur_weapon->o_ac = 0;
 		}
 	otherwise:
-		do_minor(tr);
+		msg("You feel warm all over.");
+		turn_on(player, POWEREAT);
     }
 }
 
