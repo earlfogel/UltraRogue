@@ -145,7 +145,10 @@ int *ability;
 WINDOW *win;
 {
     char *abil;
-
+#if 0
+    if (*ability < 0)
+	*ability = C_FIGHTER;  /* shouldn't happen, but it did */
+#endif
     switch (*ability) {
 	case C_FIGHTER:
 	    abil = "Fighter";
@@ -161,6 +164,7 @@ WINDOW *win;
 	    break;
 	default:
 	    abil = "??";
+	    wprintw(win, "(%d) ", *ability);
     }
     waddstr(win, abil);
 }
