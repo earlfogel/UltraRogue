@@ -46,6 +46,13 @@ new_level (
 	no_food++;
     }
 
+#ifdef EARL
+    if (difficulty < 2) {
+	if (hungry_state == F_WEAK || hungry_state == F_FAINT)
+	    no_food = 4;	/* let there be food */
+    }
+#endif
+
     /*
      * Place the staircase down.
      */
