@@ -287,15 +287,12 @@ line_two:
     } else if (find_slot(FUSE, FUSE_SUFFOCATE) != NULL) {
 	health_state = "  Suffocating";
     } else if (on(player, HASINFEST)) {
-	if (pstats.s_hpt < max_stats.s_hpt / 8)
-	    health_state = "  *Very Ill*";
+	if (infest_dam > 1)
+	    health_state = "  **Very Sick**";
 	else
-	    health_state = "  Ill";
+	    health_state = " Very Sick";
     } else if (on(player, HASDISEASE)) {
-	if (pstats.s_hpt < max_stats.s_hpt / 8)
-	    health_state = "  *Very Sick*";
-	else
-	    health_state = "  Sick";
+	health_state = "  Sick";
 #if 0
     } else if (on(player, HASITCH)) {
 	health_state = "  Itchy";
