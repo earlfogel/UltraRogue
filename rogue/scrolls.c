@@ -680,7 +680,7 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
 	    struct object *lb;
 	    if (is_scroll && s_know[S_SILVER] == FALSE)
 	        msg("You are granted the power of magic hitting.");
-	    if ((ll = get_item("annoint",WEAPON)) != NULL) {
+	    if ((ll = get_item("anoint",WEAPON)) != NULL) {
 		lb = OBJPTR(ll);
 		if (blessed && !(lb->o_flags & ISSILVER)) {
 		    lb->o_hplus += rnd(2) + 2;
