@@ -558,7 +558,7 @@ int x;
 			msg("You are turned to stone !!! --More--");
 			wait_for(' ');
 			death(D_PETRIFY);
-			return NULL;  /* in case we die and are reborn */
+			return NULL;  /* prevent NPE in case we die and are reborn */
 		    } else {
 			no_command = STONETIME;
 			fighting = FALSE;
