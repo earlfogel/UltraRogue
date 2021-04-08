@@ -1,3 +1,55 @@
+March 2021
+----------
+
+Less likely to die of starvation in easy games.
+
+Ring of extra sight prevents blindness.
+
+Fix null pointer dereference after death by petrification
+followed by autosave/restore -- wake_monster() returned a
+pointer to the monster that killed you, but restore reset
+the list of monsters, invalidating that pointer.
+
+Fix: display glitch stealing item from under monster.
+
+
+February 2021
+-------------
+
+Can steal items from underneath monsters.
+
+Preserve hitpoints for dividing monsters.
+
+Allow buffering of fight commands.
+
+Move POWEREAT from do_minor to do_major.
+
+Lembas cure POWEREAT and SUPEREAT.
+
+
+January 2021
+------------
+
+More consistent behavior at the end of long fights.
+
+Fix the secret door display glitch entering a dark room after magic mapping.
+
+Don't autosave when rogue is blind.
+
+Fix - restoring a copied save file would overwrite original on next save
+
+
+December 2020
+-------------
+
+Fix: doctor stops working after save/restore on level with no monsters.
+
+Found permanent phasing cheat.
+
+Blessed ring of levitation protects you from fire traps.
+
+Saved games are resumed by default; use 'urogue -new' to override this.
+
 
 October 2020
 ------------

@@ -75,7 +75,7 @@ injuries.
 Armor
 -----
 
-Crystalline armor provides the best protection overall, but a strong enough
+Crystalline armor provides the best protection overall, but a strong 
 blow can shatter it, unless you protect it first.  It also protects you
 from lightning, and can't rust.
 
@@ -83,7 +83,7 @@ Mithril is the second best overall.  It gives extra protection
 from magical attacks, and can't rust.
 
 Note that protected crystalline armor can still shatter in hard games.
-The workaround for that is to first enchant a protection scroll, then use
+To prevent this, first enchant a protection scroll, then use
 it to doubly protect your armor.  If you fully enchant and doubly protect
 your armor it becomes shiny and protects you from gazing monsters.
 
@@ -94,8 +94,10 @@ Weapons
 The best weapons are the claymore, two-handed sword, long-pike and bastard
 sword.  Some monsters can only be hit by enchanted weapons, others require
 multiply enchanted weapons, and a few can't be hurt by any weapon.
-Enchanting weapons also stops them from rusting.  Enchanting a weapon
-beyond the safe point turns it into a vorpal blade.
+
+Enchanting metal weapons prevents rusting.  Enchanting a weapon
+beyond the safe point and anointing it with a magic hitting scroll
+creates a vorpal blade.
 
 
 Potions
@@ -128,28 +130,26 @@ Enchantment - This is the most useful general purpose scroll in the game,
 as you can use it to bless most things.  Be careful not to over-enchant
 rings, weapons or armor.  You can safely enchant rings to +5, armor to +8
 and weapons to 15 combined hit and damage points.  Each time you enchant
-them after that, there's a chance they'll explode.
+them beyond that, there's a chance they'll explode.
 
-Protection - Protecting items in your pack stops magic-stealing monsters
-from stealing (or cursing) them, up until level 95 anyway.  Protecting
-armor also prevents rusting.
+Protection - Protecting items in your pack stops monsters from stealing or
+cursing them, up until level 95 anyway.  Protecting metal armor prevents
+rusting.
 
 Acquirement - This rare scroll lets you add any item to your pack.
 Normally it chooses a type at random (armor, weapon, scroll, ...)
-then you select any item you'd like from that category, but a blessed
+then you select an item you'd like from that category, but a blessed
 scroll of acquirement lets you choose any item of any type.
 
 Genocide - This lets you eliminate any type of monster from the game.
 Blessed genocide lets you remove two types.
 
 Ownership - Owned items return to you when thrown.  Blessed ownership
-prevents them from being stolen.
+stops them from being stolen.
 
 
 Rings
 -----
-
-Extra Sight - Lets you see invisible monsters and prevents blindness.
 
 Add Intelligence and Increase Wisdom work as you'd expect.  Note that
 non-magical characters who increase their intelligence to at least 16 (or
