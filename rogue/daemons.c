@@ -382,7 +382,7 @@ stomach (daemon_arg *arg __attribute__((unused)))
 	}
 
 	if (on(player, POWEREAT)) {
-	    amount += 400;
+	    amount += 200;
 	    if (rnd(20) == 0)
 		turn_off(player, POWEREAT);
 	}

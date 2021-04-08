@@ -324,6 +324,11 @@ eat ()
 	when FD_LEMBA:
 	    amount = (HUNGERTIME / 2) + rnd(900);
 	    quaff(P_HEALING, FALSE);
+	    if (on(player, SUPEREAT) || on(player, POWEREAT)) {
+		turn_off(player, SUPEREAT);
+		turn_off(player, POWEREAT);
+		msg("Ahh, that hit the spot.");
+	    }
 	when FD_MIRUVOR:
 	    amount = (HUNGERTIME / 3) + rnd(500);
 	    quaff(P_HEALING, FALSE);
