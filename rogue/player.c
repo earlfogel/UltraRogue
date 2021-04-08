@@ -128,6 +128,7 @@ steal ()
 		 * so we can steal it */
 		detach(lvl_obj, s_item);
 		attach(tp->t_pack, s_item);
+		tp->t_oldch = (roomin(&tp->t_pos) == NULL ? PASSAGE : FLOOR);
 	    } else {
 		msg("The %s has nothing to steal.", mname);
 		return;
