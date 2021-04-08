@@ -526,6 +526,9 @@ int x;
 	/* blinding creatures */
 	if (on(*tp, CANBLIND) && off(player, ISBLIND)
 		&& off(player, ISINVIS)
+#ifdef EARL
+		&& !ISWEARING(R_SEEINVIS)
+#endif
 		&& !save(VS_WAND)) {
 	    if (cur_armor != NULL && cur_armor->o_flags & IS2PROT
 		    && (aplus < -7 || difficulty < 2)) {
@@ -555,7 +558,7 @@ int x;
 			msg("You are turned to stone !!! --More--");
 			wait_for(' ');
 			death(D_PETRIFY);
-			return it;
+			return NULL;  /* in case we die and are reborn */
 		    } else {
 			no_command = STONETIME;
 			fighting = FALSE;
