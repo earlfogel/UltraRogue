@@ -1079,7 +1079,7 @@ bool is_active(int artifact);
 bool make_artifact(void);
 struct object *new_artifact(int which, struct object *cur);
 void do_minor(struct object *tr);
-void do_major(struct object *tr);
+void do_major(void);
 void do_phial(void);
 void do_palantir(void);
 void do_silmaril(void);
