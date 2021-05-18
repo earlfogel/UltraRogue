@@ -912,7 +912,7 @@ int damage;
 				    turn_off(*mcopy, BOLTDIVIDE);
 			    }
 			    if (mcopy) {
-				if (tp->t_stats.s_exp > 2)
+				if (tp->t_stats.s_exp > 9)
 				    tp->t_stats.s_exp /= 2;  /* share the points */
 				mcopy->t_stats.s_lvl = tp->t_stats.s_lvl;
 				mcopy->t_stats.s_exp = tp->t_stats.s_exp;
