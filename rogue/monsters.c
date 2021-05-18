@@ -555,8 +555,9 @@ int x;
 		if (!save(VS_PETRIFICATION) && rnd(100) < 3) {
 		    msg("The gaze of the %s petrifies you.", mname);
 		    if (difficulty >= 2) {
-			msg("You are turned to stone !!! --More--");
-			wait_for(' ');
+			msg("You are turned to stone !!!");
+			mvwaddstr(cw, 0, mpos+1, retstr);
+			wait_for('\n');
 			death(D_PETRIFY);
 			return NULL;  /* prevent NPE in case we die and are reborn */
 		    } else {

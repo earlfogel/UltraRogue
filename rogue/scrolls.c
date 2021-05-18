@@ -488,8 +488,12 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
 	    if ((ll = get_item("protect",0)) != NULL) {
 		lb = OBJPTR(ll);
 		lb->o_flags |= ISPROT;
-		if (blessed)
+		if (blessed) {
 		    lb->o_flags |= IS2PROT;
+		    if (lb->o_type == ARMOR
+			&& armors[lb->o_which].a_class - lb->o_ac >= 8)
+			msg("Your armor shines brightly.");
+		}
 		msg("Protected %s.", inv_name(lb,TRUE));
 	    }
 	    s_know[S_PROTECT] = TRUE;
@@ -613,7 +617,7 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
 			    freeletter(ll);
 			    discard(ll);
 			    lb = NULL;
-			} else if (armors[lb->o_which].a_class - lb->o_ac >= limit
+			} else if (armors[lb->o_which].a_class - lb->o_ac >= 8
 				&& lb->o_flags & IS2PROT) {
 			    msg("Your armor shines brightly.");
 			}
