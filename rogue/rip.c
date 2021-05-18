@@ -145,7 +145,7 @@ int monst;
 	msg_index = (msg_index + 9) % 10;
 	if (msg_index < 0) msg_index = 9;
 	msg(msgbuf[msg_index]);
-	mvwaddstr(cw, 0, mpos+1, retstr);
+	/* mvwaddstr(cw, 0, mpos+1, retstr); */
 	draw(cw);
 	ch = readchar();
     }
