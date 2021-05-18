@@ -998,7 +998,7 @@ int wplus;
     /* give monsters a chance to hit well armored player */
     if (difficulty >= 2) {
 	if (class == C_MONSTER && need > 15) {
-	    if (difficulty > 2 && level < 90)
+	    if (difficulty > 3 || (difficulty > 2 && level < 90))
 		need = 15 + ((need - 15) * 0.5);
 	    else
 		need = 15 + ((need - 15) * 0.67);
@@ -1221,7 +1221,7 @@ struct object *cur_weapon;
 			turn_off(*mcopy, BLOWDIVIDE);
 		}
 		if (mcopy) {
-		    if (def_er->t_stats.s_exp > 2)
+		    if (def_er->t_stats.s_exp > 9)
 			def_er->t_stats.s_exp /= 2;  /* share the points */
 		    mcopy->t_stats.s_lvl = def_er->t_stats.s_lvl;
 		    mcopy->t_stats.s_exp = def_er->t_stats.s_exp;
