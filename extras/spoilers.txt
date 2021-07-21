@@ -127,10 +127,11 @@ Scrolls
 -------
 
 Enchantment - This is the most useful general purpose scroll in the game,
-as you can use it to bless most things.  Be careful not to over-enchant
-rings, weapons or armor.  You can safely enchant rings to +5, armor to +8
-and weapons to 15 combined hit and damage points.  Each time you enchant
-them beyond that, there's a chance they'll explode.
+as you can use it to bless most things.  You can safely enchant rings to
++5, armor to +8 and weapons to +15 combined hit and damage points.  Each
+time you enchant items beyond that there's a chance they'll explode.
+These limits increase by two for blessed enchantments, but in hard games
+the increased limit only applies to doubly protected items.
 
 Protection - Protecting items in your pack stops monsters from stealing or
 cursing them, up until level 95 anyway.  Protecting metal armor prevents
