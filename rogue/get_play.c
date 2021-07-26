@@ -64,15 +64,19 @@ geta_player ()
 	    if(def_array[i][I_STR])
 		cnt++;
 
+	/* you start with weaker armor in harder games */
 	if (difficulty == 2) {
 	    for(i=0; i<MAXPDEF; i++)
 		if(def_array[i][I_ARM] >= MITHRIL)
 		    def_array[i][I_ARM] -= 2;
-	}
-	if (difficulty > 2) {
+	} else if (difficulty == 3) {
 	    for(i=0; i<MAXPDEF; i++)
-		if(def_array[i][I_ARM] > PLATE_MAIL)
-		    def_array[i][I_ARM] -= 4;
+		if(def_array[i][I_ARM] >= PLATE_ARMOR)
+		    def_array[i][I_ARM] -= 3;
+	} else if (difficulty > 3) {
+	    for(i=0; i<MAXPDEF; i++)
+		if(def_array[i][I_ARM] >= BANDED_MAIL)
+		    def_array[i][I_ARM] -= 5;
 	}
 
 	if(!cnt){

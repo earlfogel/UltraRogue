@@ -284,10 +284,13 @@ re_roll:
     j = 0;
     while (armors[j].a_prob < i)
 	j++;
+    /* you start with weaker armor in harder games */
     if (difficulty == 2 && j >= MITHRIL)
 	j -= 2;
-    if (difficulty > 2 && j >= PLATE_MAIL)
-	j -= 4;
+    if (difficulty > 2 && j >= PLATE_ARMOR)
+	j -= 3;
+    if (difficulty > 3 && j >= BANDED_MAIL)
+	j -= 5;
     /*
      * See if this rogue is acceptable to the player.
      */
@@ -557,14 +560,13 @@ tweak_settings (bool first_time, int old_difficulty)
 
     /* urogue -hard */
     } else if (difficulty > 2) {
-#ifdef EARL
 	if (first_time) {
-	    if (player.t_ctype == C_THIEF || player.t_ctype == C_FIGHTER) {
+	    if (difficulty <= 3 &&
+		(player.t_ctype == C_THIEF || player.t_ctype == C_FIGHTER)) {
 		p_know[P_TFIND] = TRUE;
 		s_know[S_IDENT] = TRUE;
 	    }
 	}
-#endif
 	for(i=0; i < MAXSCROLLS; i++) {
 	    if (s_magic[i].mi_bless > 5 && s_magic[i].mi_bless < 100)
 		s_magic[i].mi_bless -= 5;  /* less chance of blessed scrolls */
@@ -582,6 +584,11 @@ tweak_settings (bool first_time, int old_difficulty)
 		ws_magic[i].mi_bless -= 5;  /* less chance of blessed wands */
 	}
     }
+#if 0
+fprintf(stderr, "Acquirement chance = %d/1000",
+s_magic[S_MAKEIT].mi_prob - s_magic[S_CURING].mi_prob);
+sleep(2);
+#endif
 }
 
 /*
