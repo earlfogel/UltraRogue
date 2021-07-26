@@ -187,11 +187,6 @@ bool max_monster;
 	    turn_on(*tp, CANSUMMON);
 	}
     }
-    /* vorpal blades are awesome */
-    if (cur_weapon != NULL && cur_weapon->o_flags & ISVORPED
-	    && on(*tp, CANSUMMON) && rnd(difficulty) == 0) {
-	turn_off(*tp, CANSUMMON);
-    }
 
     tp->t_turn = TRUE;
     tp->t_pack = NULL;
@@ -364,7 +359,7 @@ wanderer ()
 	    cnt = roll(2, 4);
 	else if (on(*tp, ISFLOCK) && j < 2)
 	    cnt = roll(1, 4);
-	if (level < 5) cnt /= 2;
+	if (level < 5 && difficulty <= 3) cnt /= 2;
 	for (j = 1; j <= cnt; j++) {
 	    struct thing  *mp = creat_mons(tp, tp->t_index, FALSE);
 	    if (mp != NULL) {

@@ -255,6 +255,12 @@ bool thrown;
 	    /* If the player hit something that can surprise, it can't now */
 	    if (on(*tp, CANSURPRISE)) turn_off(*tp, CANSURPRISE);
 
+	    /* vorpal blades are awesome */
+	    if (cur_weapon != NULL && cur_weapon->o_flags & ISVORPED
+		    && on(*tp, CANSUMMON) && rnd(difficulty) == 0) {
+		turn_off(*tp, CANSUMMON);
+	    }
+
 	    /* If the player hit something that can summon, it will try to */
 	    if (on(*tp, CANSUMMON) && rnd(40) < tp->t_stats.s_lvl
 		    && tp->t_stats.s_hpt > 0 ) {
@@ -709,11 +715,11 @@ bool thrown;
                 pstats.s_wisdom -= ring_str;
                                 
                 msg("You feel slightly less wise now.");
-                                
                 pstats.s_wisdom = max(pstats.s_wisdom - 1, 3);
+#ifndef EARL
 		if (rnd(difficulty) != 0)
 		    max_stats.s_wisdom = pstats.s_wisdom;
-
+#endif
                 /* Now put back the ring changes */
                 pstats.s_wisdom += ring_str;
 
@@ -730,9 +736,10 @@ bool thrown;
 
                 msg("You feel slightly less intelligent now.");
                 pstats.s_intel = max(pstats.s_intel - 1, 3);
+#ifndef EARL
 		if (rnd(difficulty) != 0)
 		    max_stats.s_intel = pstats.s_intel;
-
+#endif
                 /* Now put back the ring changes */
                 pstats.s_intel += ring_str;
             }
