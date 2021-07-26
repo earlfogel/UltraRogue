@@ -528,11 +528,11 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
 	    if ((ll = get_item("enchant",0)) != NULL) {
 		lb = OBJPTR(ll);
 		lb->o_flags &= ~ISCURSED;
-		if (is_scroll && (obj->o_flags & ISBLESSED)) {
+		if (blessed) {
 		    howmuch = 2;
 		    flags = ISBLESSED;
 		}
-		else if (is_scroll && (obj->o_flags & ISCURSED)) {
+		else if (cursed) {
 		    howmuch = -1;
 		    flags = ISCURSED;
 		}
@@ -544,8 +544,8 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
 		    case RING:
 			lb->o_ac += howmuch;
 			limit = 5;
-			if (blessed && difficulty <= 2)
-			    limit = 7;
+			if (blessed && (difficulty <= 2 || lb->o_flags & IS2PROT))
+			    limit += 2;
 			if (flags == ISBLESSED &&
 			    (lb->o_which == R_WIZARD ||
 			     lb->o_which == R_SEARCH ||
@@ -602,8 +602,8 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
 		    when ARMOR:
 			lb->o_ac -= howmuch;
 			limit = 8;
-			if (blessed && difficulty <= 2)
-			    limit = 10;
+			if (blessed && (difficulty <= 2 || lb->o_flags & IS2PROT))
+			    limit += 2;
 			if (armors[lb->o_which].a_class - lb->o_ac > limit
 				&& rnd(5) == 0) {
 			    msg("Your %s explodes in a cloud of dust.",
@@ -645,8 +645,8 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
 			else
 			    lb->o_dplus += howmuch;
 			limit = 15;
-			if (blessed && difficulty <= 2)
-			    limit = 17;
+			if (blessed && (difficulty <= 2 || lb->o_flags & IS2PROT))
+			    limit += 2;
 			if (lb->o_hplus + lb->o_dplus > limit
 				&& rnd(5) == 0) {
 			    msg("Your %s explodes in a cloud of dust.",
