@@ -222,6 +222,9 @@ pray ()
 	} else {
 	    pray_points /= 2;
 	}
+    } else if (difficulty == 2) {
+	if (pray_points > 20)
+	    pray_points = 20 + (pray_points-20) * 3.0/4.0;
     }
 
     if (num_prayers > maxprayers) 
@@ -496,6 +499,9 @@ cast ()
 	} else {
 	    avail_points /= 2;
 	}
+    } else if (difficulty == 2) {
+	if (avail_points > 20)
+	    avail_points = 20 + (avail_points-20) * 3.0/4.0;
     }
 
     if (num_spells > maxspells) 
