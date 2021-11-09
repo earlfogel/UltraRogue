@@ -438,6 +438,7 @@ bool blessed;
 		if (!blessed && save_throw(VS_WAND, tp))
 		    msg("Nothing happens.");
 		else {
+		    msg("");
 		    tp->t_no_move = FREEZETIME;
 		}
 	    }
