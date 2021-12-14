@@ -179,7 +179,7 @@ bool display;
     struct stats *stat_ptr, *max_ptr;
     int oy, ox, temp;
     char *pb;
-    static char buf[LINELEN];
+    static char buf[LINELEN*2];
     static int hpwidth = 0, s_hungry = -1;
     static int s_lvl = -1, s_pur, s_hp = -1, s_str, maxs_str, 
 		s_ac = 0;
