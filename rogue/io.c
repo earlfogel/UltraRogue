@@ -262,7 +262,7 @@ bool display;
      */
 line_two: 
 
-#ifdef EARL
+#if 0
     if (wizard) {
 	struct linked_list *item;
 	int mcount = 0;
@@ -287,16 +287,14 @@ line_two:
     } else if (find_slot(FUSE, FUSE_SUFFOCATE) != NULL) {
 	health_state = "  Suffocating";
     } else if (on(player, HASINFEST)) {
-	if (infest_dam > 1)
+	if (infest_dam > 1 || pstats.s_hpt < max_stats.s_hpt/3)
 	    health_state = "  **Very Sick**";
 	else
 	    health_state = " Very Sick";
     } else if (on(player, HASDISEASE)) {
 	health_state = "  Sick";
-#if 0
     } else if (on(player, HASITCH)) {
 	health_state = "  Itchy";
-#endif
     } else if (on(player, HASSTINK)) {
 	health_state = "  Queasy";
     } else if (on(player, ISBLIND)) {
@@ -345,6 +343,10 @@ line_two:
 	health_state = "  No Armor";
     } else if (cur_weapon == NULL) {
 	health_state = "  No Weapon";
+#ifdef EARL
+    } else if (char_type < 0 || char_type > 3) {
+	health_state = "  bad char_type ";
+#endif
     } else if (wizard) {
 	health_state = "  Debug Mode";
     } else {
