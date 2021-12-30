@@ -152,7 +152,7 @@ do_rooms ()
 		    cnt = roll(2, 4);
 		else if (on(*tp, ISFLOCK) && j < 2)
 		    cnt = roll(1, 4);
-		if (level < 5) cnt /= 2;
+		if (level < 5 && difficulty <= 3) cnt /= 2;
 		for (j = 1; j <= cnt; j++) {
 		    struct thing  *mp = creat_mons(tp, tp->t_index, FALSE);
 		    if (mp != NULL) {

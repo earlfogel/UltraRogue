@@ -214,6 +214,7 @@ fflush(stdout);
     keypad(cw,TRUE);		/* for arrow keys */
     keypad(hw,TRUE);		/* for arrow keys */
 
+
     /*
      * Restore saved game
      */
@@ -233,7 +234,9 @@ fflush(stdout);
 
     init_monsters(monster_flag);
 
-    predef = geta_player();
+    if (difficulty <= 3)
+	predef = geta_player();
+
 re_roll:
     if(!predef)
 	init_player();			/* Roll up the rogue */
@@ -294,7 +297,7 @@ re_roll:
     /*
      * See if this rogue is acceptable to the player.
      */
-    if(!puta_player(j,wpt,hpadd,dmadd))
+    if(!puta_player(j,wpt,hpadd,dmadd) && difficulty < 3)
  	goto re_roll;
     /*
      * It's OK. Add this stuff to the rogue's pack.
@@ -499,6 +502,9 @@ tweak_settings (bool first_time, int old_difficulty)
 	    if (ws_magic[i].mi_bless > 0 && ws_magic[i].mi_bless < 100)
 		ws_magic[i].mi_bless += 5;
 	}
+	s_magic[S_GENOCIDE].mi_prob += 1;
+	s_magic[S_MAKEIT].mi_prob += 1;
+	r_magic[R_WIZARD].mi_prob += 1;
     }
 
     /* normal difficulty */
@@ -583,6 +589,13 @@ tweak_settings (bool first_time, int old_difficulty)
 	    if (ws_magic[i].mi_bless > 5 && ws_magic[i].mi_bless < 100)
 		ws_magic[i].mi_bless -= 5;  /* less chance of blessed wands */
 	}
+	/*
+	 * make these items more rare in hard games
+	 * (which makes their immediate successors more common)
+	 */
+	s_magic[S_GENOCIDE].mi_prob -= 1;  /* 0.5% to 0.4 */
+	s_magic[S_MAKEIT].mi_prob -= 1;    /* 0.5% to 0.4 */
+	r_magic[R_WIZARD].mi_prob -= 1;    /* 0.4% to 0.3 */
     }
 #if 0
 fprintf(stderr, "Acquirement chance = %d/1000",

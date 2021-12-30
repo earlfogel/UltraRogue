@@ -312,8 +312,10 @@ int monst;
      */
     if (mindifficulty < 2) {
 	amount *= 0.67;
-    } else if (mindifficulty > 2) {
+    } else if (mindifficulty == 3) {
 	amount *= 1.50;
+    } else if (mindifficulty > 3) {
+	amount *= 2.25;
     }
 
     for (scp = top_ten; scp < &top_ten[10]; scp++)

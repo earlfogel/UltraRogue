@@ -181,8 +181,10 @@ WINDOW *win;
 	waddstr(win, "Easy");
     else if (*diff == 2)
 	waddstr(win, "Normal");
-    else if (*diff > 2)
+    else if (*diff == 3)
 	waddstr(win, "Hard");
+    else if (*diff > 3)
+	waddstr(win, "Very Hard");
     wclrtoeol(win);
 }
 
@@ -403,26 +405,22 @@ WINDOW *win;
 		if (!showcursor) curs_set(0);
 		return MINUS;
 	    default:
-		if (ch >= '1' && ch <= '3') {
+		if (ch >= '1' && ch <= '4') {
 		    *diff = ch - '0';
-		    put_diff(diff, win);
-		    getyx(win, ny, nx);
 		} else if (tolower(ch) == 'e') {  /* easy */
 		    *diff = 1;
-		    put_diff(diff, win);
-		    getyx(win, ny, nx);
 		} else if (tolower(ch) == 'n') {  /* normal */
 		    *diff = 2;
-		    put_diff(diff, win);
-		    getyx(win, ny, nx);
 		} else if (tolower(ch) == 'h') {  /* hard */
 		    *diff = 3;
-		    put_diff(diff, win);
-		    getyx(win, ny, nx);
+		} else if (tolower(ch) == 'v') {  /* very hard */
+		    *diff = 4;
 		} else {
-		    mvwaddstr(win, ny, nx + 5, "('E'asy, 'N'ormal, 'H'ard)");
+		    mvwaddstr(win, ny, nx + 5, "(Easy, Normal, Hard, Very hard)");
 		}
 		if (*diff != old_diff) {
+		    put_diff(diff, win);
+		    getyx(win, ny, nx);
 		    if (*diff < mindifficulty)
 			mindifficulty = *diff;
 		    tweak_settings(FALSE, old_diff);

@@ -259,6 +259,14 @@ int dmadd;
 	    weaps[wpt].w_name,
 	    pstats.s_hpt );
 	mvwaddstr(hw,5,5,pbuf);
+
+	if (difficulty > 3) {
+	    mvwaddstr(hw,7,5,"-- press any key to continue --");
+	    draw(hw);
+	    wgetch(hw);
+	    return(TRUE);
+	}
+
 	mvwaddstr(hw,0,0,"Would you like to re-roll the character?");
 	draw(hw);
 	if(wgetch(hw) == 'y')
