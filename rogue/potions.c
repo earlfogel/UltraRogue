@@ -275,10 +275,9 @@ bool blessed;
 		    msg("You sense the presence of magic on this level.");
 		    if (is_potion) 
 			p_know[P_TFIND] = TRUE;
-		    waddstr(cw, morestr);
 		    overlay(hw,cw);
 		    draw(cw);
-		    wait_for(0);
+		    msg(" ");
 		    msg("");
 		    break;
 		}
