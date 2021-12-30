@@ -73,6 +73,8 @@ endmsg ()
     msg_index = msg_index % 10;
     if (mpos)
     {
+	if (mpos > COLS - 3)
+	    mpos = COLS - 3;
 	wmove(cw, 0, mpos);
 	waddnstr(cw, morestr, COLS - mpos);
 	draw(cw);
@@ -178,7 +180,6 @@ bool display;
 {
     struct stats *stat_ptr, *max_ptr;
     int oy, ox, temp;
-    char *pb;
     static char buf[LINELEN*2];
     static int hpwidth = 0, s_hungry = -1;
     static int s_lvl = -1, s_pur, s_hp = -1, s_str, maxs_str, 
@@ -192,7 +193,7 @@ bool display;
     bool first_line=FALSE;
 
     /* Use a mini status version if we have a small window */
-    if (COLS < 80) {
+    if (COLS < 50) {
 	ministat();
 	return;
     }
@@ -223,18 +224,26 @@ bool display;
     /* Display the first line */
     first_line = TRUE;
     getyx(cw, oy, ox);
-    sprintf(buf, "Int:%d(%d)  Str:%d", stat_ptr->s_intel,
-    	max_ptr->s_intel, stat_ptr->s_str);
 
-    /* Maximum strength */
-    pb = &buf[strlen(buf)];
-    sprintf(pb, "(%d)", max_ptr->s_str);
-
-    pb = &buf[strlen(buf)];
-    sprintf(pb, "  Wis:%d(%d)  Dxt:%d(%d)  Const:%d(%d)  Carry:%d(%d)",
-	stat_ptr->s_wisdom,max_ptr->s_wisdom,stat_ptr->s_dext,max_ptr->s_dext,
-	stat_ptr->s_const,max_ptr->s_const,stat_ptr->s_pack/10,
-	stat_ptr->s_carry/10);
+    if (COLS >= 80) {
+	sprintf(buf, "Int:%d(%d)  Str:%d(%d)  Wis:%d(%d)  Dxt:%d(%d)  Const:%d(%d)  Carry:%d(%d)",
+	    stat_ptr->s_intel, max_ptr->s_intel, stat_ptr->s_str,max_ptr->s_str,
+	    stat_ptr->s_wisdom,max_ptr->s_wisdom,stat_ptr->s_dext,max_ptr->s_dext,
+	    stat_ptr->s_const,max_ptr->s_const,stat_ptr->s_pack/10,
+	    stat_ptr->s_carry/10);
+    } else if (COLS >= 70) {
+	sprintf(buf, "Int:%d(%d) Str:%d(%d) Wis:%d(%d) Dxt:%d(%d) Const:%d(%d) Pack:%d(%d)",
+	    stat_ptr->s_intel, max_ptr->s_intel, stat_ptr->s_str,max_ptr->s_str,
+	    stat_ptr->s_wisdom,max_ptr->s_wisdom,stat_ptr->s_dext,max_ptr->s_dext,
+	    stat_ptr->s_const,max_ptr->s_const,stat_ptr->s_pack/10,
+	    stat_ptr->s_carry/10);
+    } else {
+	sprintf(buf, "Int:%d/%d Str:%d/%d Wis:%d/%d Dxt:%d/%d Pck:%d/%d",
+	    stat_ptr->s_intel, max_ptr->s_intel, stat_ptr->s_str,max_ptr->s_str,
+	    stat_ptr->s_wisdom,max_ptr->s_wisdom,stat_ptr->s_dext,max_ptr->s_dext,
+	    stat_ptr->s_pack/10,
+	    stat_ptr->s_carry/10);
+    }
 
     /* Update first line status */
     s_intel = stat_ptr->s_intel;
@@ -370,12 +379,19 @@ line_two:
 	for (hpwidth = 0; temp; hpwidth++)
 	    temp /= 10;
     }
-    sprintf(buf, "Lvl:%d  Au:%d  Hp:%*d(%*d)  Ac:%d  Exp:%d/%ld  %s",
-	level, purse, hpwidth, stat_ptr->s_hpt, hpwidth, max_ptr->s_hpt,
-	(cur_armor != NULL ? (cur_armor->o_ac - 10 + stat_ptr->s_arm)
-		: stat_ptr->s_arm) - ring_value(R_PROTECT),
-	stat_ptr->s_lvl, stat_ptr->s_exp,
-	cnames[player.t_ctype][min(stat_ptr->s_lvl-1, 10)]);
+    if (COLS >= 80)
+	sprintf(buf, "Lvl:%d  Au:%d  Hp:%*d(%*d)  Ac:%d  Exp:%d/%ld  %s",
+	    level, purse, hpwidth, stat_ptr->s_hpt, hpwidth, max_ptr->s_hpt,
+	    (cur_armor != NULL ? (cur_armor->o_ac - 10 + stat_ptr->s_arm)
+		    : stat_ptr->s_arm) - ring_value(R_PROTECT),
+	    stat_ptr->s_lvl, stat_ptr->s_exp,
+	    cnames[player.t_ctype][min(stat_ptr->s_lvl-1, 10)]);
+    else
+	sprintf(buf, "Lvl:%d Hp:%*d(%*d) Ac:%d Exp:%d",
+	    level, hpwidth, stat_ptr->s_hpt, hpwidth, max_ptr->s_hpt,
+	    (cur_armor != NULL ? (cur_armor->o_ac - 10 + stat_ptr->s_arm)
+		    : stat_ptr->s_arm) - ring_value(R_PROTECT),
+	    stat_ptr->s_lvl);
 
     /*
      * Save old status
@@ -412,7 +428,7 @@ void
 ministat ()
 {
     int oy, ox, temp;
-    static char buf[LINELEN];
+    static char buf[LINELEN*2];
     static int hpwidth = 0;
     static int s_lvl = -1, s_pur, s_hp = -1;
 
