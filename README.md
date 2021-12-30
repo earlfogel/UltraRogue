@@ -49,13 +49,16 @@ and armor is less effective.  You are more vulnerable to magical
 attacks and your ability to do magic is reduced.  You can't start a hard
 game with plate, mithril or crystalline armor, but you may find some later.
 
-### Autosave and Autopickup
+### Autosave and Autopickup Options
 
 If you turn on Autosave, urogue will save the game periodically
-and let you roll back to the most recent save point when you die.
+and lets you roll back to the most recent save point when you die.
 
 If you turn Autopickup off (i.e. noautopickup) then your character
 won't pick things up automatically when you step on them.
+
+You can set these (and most other) options using the 'o' command in urogue,
+or via the SROGUEOPTS environment variable.
 
 ### Monsters
 
@@ -144,6 +147,7 @@ Here are a few other commands to get you started:
     e	eat food
     i	inventory
     m	move without picking up
+    o	examine/set options
     p	pray
     q	quaff a potion
     r	read a scroll
@@ -152,9 +156,9 @@ Here are a few other commands to get you started:
     S	save game
     Q	quit
 
-To restore a saved game from the default location, use "urogue -r".
-To restore a different saved game, use "urogue \<filename\>".  There are sample
-shell and batch files in the "extras" folder that do this for you.
+To restore a saved game from the default location, just run urogue again.
+To restore a different saved game, use "urogue \<filename\>".  If you don't
+want to restore a saved game, run "urogue -new" (or delete the save file).
 
 Older UltraRogue versions (which may no longer be playable) are available
 from the roguelike archive at: https://britzl.github.io/roguearchive/
