@@ -52,7 +52,7 @@ main (int argc, char **argv)
     struct linked_list *item;
     struct object *obj;
     int lowtime, wpt=0, i, j, hpadd, dmadd;
-    bool alldone,predef;
+    bool alldone, predef=0;
     char monster_flag = '+';
     time_t now;
     char *restore_file = NULL;
