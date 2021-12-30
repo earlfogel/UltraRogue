@@ -1496,7 +1496,7 @@ restore_file(FILE *savef)
 	}
     }
     if (find_slot(DAEMON, DAEMON_RUNNERS) == NULL) {
-	printf("Waking up monsters");
+	msg("Waking up monsters");
 	start_daemon(DAEMON_RUNNERS, 0, AFTER);
 	if (find_slot(DAEMON, DAEMON_RUNNERS) == NULL) {
 	    endwin();
