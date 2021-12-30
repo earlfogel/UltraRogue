@@ -1210,10 +1210,15 @@ struct object *cur_weapon;
 		debug("Defender was hit by poison.");
 	    }
 
+	    /* vorpal blades are awesome */
+	    if (cur_weapon != NULL && cur_weapon->o_flags & ISVORPED
+		    && on(*def_er, BLOWDIVIDE) && rnd(difficulty) == 0) {
+                turn_off(*def_er, BLOWDIVIDE);
+            }
+
 	    /* Check for no-damage and division */
 	    if (on(*def_er, BLOWDIVIDE) &&
-			!((weap != NULL) && (weap->o_flags & CANBURN
-			    || weap->o_flags & ISVORPED))) {
+			!((weap != NULL) && (weap->o_flags & CANBURN))) {
 		struct thing *mcopy;
 		mcopy = creat_mons(def_er, def_er->t_index, FALSE);
 		if (def_er->t_stats.s_lvl > 1) {
