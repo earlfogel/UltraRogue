@@ -5,14 +5,12 @@
 #include <stdio.h>
 #include "curses.h"
 #include "rogue.h"
+
 #ifdef BSD4
 #include <signal.h>
-#endif
-
-#ifdef BSD4
 
 #ifndef _WIN32
-void 
+void
 tstop ()
 {
   /*
@@ -20,9 +18,12 @@ tstop ()
    * we can assume that the signals remain set after an interupt.
    */
 
-
+#ifdef __FreeBSD__
+  sig_t SigCont;
+#else /* __FreeBSD__ *'
   __sighandler_t   SigCont;
-
+#endif /* __FreeBSD__ */
+  
   /*
    * We are basically commited at this point,
    * so ignore return codes,
@@ -49,6 +50,5 @@ tstop ()
   setup();
   return;
 }
+#endif /* !_WIN32 */
 #endif /* BSD4 */
-#endif
-
