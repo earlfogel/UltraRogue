@@ -20,7 +20,7 @@ tstop ()
 
 #ifdef __FreeBSD__
   sig_t SigCont;
-#else /* __FreeBSD__ *'
+#else /* __FreeBSD__ */
   __sighandler_t   SigCont;
 #endif /* __FreeBSD__ */
   
