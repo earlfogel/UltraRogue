@@ -494,7 +494,7 @@ bool blessed;
     for (mi = mlist; mi != NULL; mi = next(mi)) {
 	tp = THINGPTR(mi);
 	if ((blessed && roomin(&hero) == roomin(&tp->t_pos)) ||
-	    (abs(hero.x - tp->t_pos.x) < 10 && abs(hero.y - tp->t_pos.y) < 10)
+	    (abs(hero.x - tp->t_pos.x) < 5 && abs(hero.y - tp->t_pos.y) < 5)
 	) {
 	    tp->t_dest = &(tp->t_pos);
 	    turn_off(*tp, ISRUN);
