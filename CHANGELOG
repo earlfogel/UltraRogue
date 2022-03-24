@@ -1,3 +1,78 @@
+
+January 2022
+------------
+
+Scroll of peace has less range.
+
+
+November 2021
+-------------
+
+In very hard games you can't re-roll or re-use characters.
+
+
+October 2021
+------------
+
+Fix message when using wand of paralization.
+
+
+August 2021
+-----------
+
+Option to use left-handed movement keys (i.e. adeg <=> hjkl)
+Press '[' to undo this for one keypress (e.g. '[e' for eat)
+
+
+July 2021
+---------
+
+Carrying the Wand of Orcus lets you teleport up levels more quickly.
+
+Doubly protected items less likely to explode.
+
+Very hard games are harder:
+ - larger swarms and flocks of monsters in early levels
+ - fewer armor types available at start of game
+ - armor is less effective
+ - throne rooms have more and stronger monsters in early levels
+
+Blessed enchantment fix.
+
+
+June 2021
+---------
+
+Player recuperates more quickly while resting.
+
+Begin implementation of 'very hard' difficulty level.
+
+
+May 2021
+--------
+
+Ring of wizardry and scrolls of acquirement and genocide are more
+rare in hard games.
+
+Player gets fewer spell/prayer points in normal games.
+
+Vorpal blades more effective against summoning monsters.
+
+Fix: move vorpal blade code to fight.c.
+
+Fix: save/restore resets character type if it gets lost.
+
+
+April 2021
+----------
+
+Make hard games a bit harder deep in dungeon.
+
+More experience gained by killing divided monsters.
+
+More consistent feedback when making shiny armor.
+
+
 March 2021
 ----------
 
