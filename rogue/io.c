@@ -477,12 +477,20 @@ int ch;
         while ((c = readchar()) != '\n' && c != '\r')
 	    continue;
     } else if (ch == 0) {  /* any key */
-	while ((c = readchar()) >= KEY_MIN)  /* ignore arrow keys */
+	while ((c = readchar()) >= KEY_MIN	/* ignore arrow keys */
+#ifdef MOUSE
+	    && c != KEY_MOUSE
+#endif
+	    )
 	    continue;
 	if (c == ESCAPE) {
 	    fighting = FALSE;
 	    count = 0;
-	} else if (c != '\n' && c != ' ' && c != '\0') {
+	} else if (c != '\n' && c != ' ' && c != '\0'
+#ifdef MOUSE
+	    && c != KEY_MOUSE
+#endif
+	    ) {
 	    save_ch = c;  /* save to use as next command */
         } else if (!fighting &&
 		    (c == 'f' || c == 'F' || c == CTRL('F'))) {

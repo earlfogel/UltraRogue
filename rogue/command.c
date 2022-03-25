@@ -34,6 +34,9 @@ command ()
     static coord dta;
     static int minfight;
     static int waitcount;
+#ifdef MOUSE
+    MEVENT event;  /* mouse events */
+#endif
 
     if (on(player, ISHASTE)) 
 	ntimes++;
@@ -346,6 +349,15 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 			   msg("UltraRogue version %s.",
 				release);
 		when CTRL('R') : after = FALSE;
+#ifdef EARL
+		    if (autosave) {
+			msg("Do you want to restart this level? (y/N)");
+			wrefresh(cw);
+			if (readchar() == 'y')
+			    death(D_MISADVENTURE);	/* restart level? */
+			msg("");
+		    }
+#endif
 				WINDOW *tmpwin = newwin(LINES, COLS, 0, 0);
 				wclear(tmpwin);
 				wrefresh(tmpwin);
@@ -421,6 +433,75 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 		    if (levtype == POSTLEV)		/* sell something */
 			sell_it();
 		    after = FALSE;
+#ifdef MOUSE
+                when KEY_MOUSE:
+                    if (getmouse(&event) == OK
+                      && event.bstate & BUTTON1_RELEASED
+                       ) {
+                        coord dest;
+                        dest.x = event.x;
+                        dest.y = event.y;
+			if (winat(hero.y, hero.x) == STAIRS
+			    && hero.y == dest.y
+			    && hero.x == dest.x) {
+			    if (is_carrying(TR_WAND)) {	/* use stairs */
+				u_level();
+			    } else {
+				d_level();
+			    }
+			} else if (isalpha(winat(dest.y, dest.x))
+			    && DISTANCE(dest.y, dest.x, hero.y, hero.x) < 2) {
+			    count = 1;
+			    countch = 'f';
+                        } else if (winat(dest.y, dest.x) == FLOOR
+			    || winat(dest.y, dest.x) == STAIRS
+			    || winat(dest.y, dest.x) == PASSAGE
+			    || roomin(&dest)
+			    ) {	/* walk towards the mouse */
+			    int dx, dy;
+			    float angle = 2;
+			    if (winat(hero.y, hero.x) == PASSAGE
+				&& off(player, CANINWALL)) {
+				angle = 1;
+			    }
+			    dx = abs(dest.x - hero.x);
+			    dy = abs(dest.y - hero.y);
+                            if (dx > dy * angle) {		/* horizontal move */
+				count = dx;
+                                if (dest.x < hero.x)
+                                    countch = 'h';
+                                else if (dest.x > hero.x)
+                                    countch = 'l';
+                            } else if (dy > dx * angle) {	/* vertical move */
+				count = dy;
+                                if (dest.y < hero.y)
+                                    countch = 'k';
+                                else if (dest.y > hero.y)
+                                    countch = 'j';
+                            } else if (angle > 1) {		/* diagonal move */
+				count = min(dx,dy);
+                                if (dest.x < hero.x) {
+                                    if (dest.y < hero.y)
+                                        countch = 'y';
+                                    else
+                                        countch = 'b';
+                                } else if (dest.x > hero.x) {
+                                    if (dest.y < hero.y)
+                                        countch = 'u';
+                                    else
+                                        countch = 'n';
+                                }
+                            }
+#if 0
+                            /* player.t_dest = &dest; */
+                            msg("Button 1 at x:%d y:%d--More--", event.x, event.y);
+                            wait_for(0);
+                            msg("");
+#endif
+                        }
+                    }
+                    after = FALSE;
+#endif
 		otherwise :
 		    after = FALSE;
 		    if (wizard) switch (ch)

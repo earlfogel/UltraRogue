@@ -213,6 +213,9 @@ fflush(stdout);
     hw = newwin(LINES, COLS, 0, 0);
     keypad(cw,TRUE);		/* for arrow keys */
     keypad(hw,TRUE);		/* for arrow keys */
+#ifdef MOUSE
+    mousemask(BUTTON1_RELEASED, NULL);  /* for mouse buttons */
+#endif
 
 
     /*
