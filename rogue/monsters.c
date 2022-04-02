@@ -504,7 +504,7 @@ int x;
 	}
 
 	/* Fear */
-	if (on(*tp, CANFRIGHTEN)) {
+	if (on(*tp, CANFRIGHTEN) && off(*tp, CANSURPRISE)) {
 	    turn_off(*tp, CANFRIGHTEN);
 	    if (!save(VS_WAND) &&
 	        !(on(player, ISFLEE) && (player.t_dest == &tp->t_pos))) {
