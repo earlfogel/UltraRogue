@@ -214,7 +214,7 @@ bool pr;
 		}
 		return ;
 	}
-	if (pr && !fighting) {
+	if (pr && !fighting && !running) {
 		if (obj->o_type == WEAPON)
 			addmsg("The %s", weaps[obj->o_which].w_name);
 		else
