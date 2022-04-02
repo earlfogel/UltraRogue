@@ -9,6 +9,7 @@
 
 #ifdef _WIN32
 #define PDC_WIDE 1
+#define PDC_NCMOUSE 1
 #include <pdcurses.h>
 #else
 #include <curses.h>
