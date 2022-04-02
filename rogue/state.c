@@ -74,7 +74,6 @@ char *save_end    = "\nEnd of UltraRogue Game State\n";
 /*
  * leave room for future growth
  */
-int reserved3 = 0;
 int reserved2 = 0;
 int reserved1 = 0;
 
@@ -1173,7 +1172,7 @@ save_file(FILE *savef)
 
     ur_write_int(savef, autopickup);
     ur_write_int(savef, autosave);
-    ur_write_int(savef, reserved3);
+    ur_write_int(savef, use_mouse);
     ur_write_int(savef, reserved2);
     ur_write_int(savef, reserved1);  /* for future use */
 
@@ -1437,7 +1436,11 @@ restore_file(FILE *savef)
 
     autopickup = (bool) ur_read_int(savef);
     autosave = (bool) ur_read_int(savef);
-    reserved3 = (bool) ur_read_int(savef);
+    use_mouse = (bool) ur_read_int(savef);
+#ifdef MOUSE
+    if (use_mouse)
+	mousemask(BUTTON1_RELEASED, NULL);  /* for mouse buttons */
+#endif
     reserved2 = (bool) ur_read_int(savef);
     reserved1 = (bool) ur_read_int(savef);  /* for future use */
 
@@ -1477,6 +1480,21 @@ restore_file(FILE *savef)
     /*
      * Shouldn't happen
      */
+    if (char_type < 0) {
+	if (pstats.s_intel > pstats.s_str) {
+	    msg("I guess you are a magician.");
+	    char_type = 1;
+	} else if (pstats.s_wisdom > pstats.s_str) {
+	    msg("Ok wise guy, now you are a cleric.");
+	    char_type = 2;
+	} else if (pstats.s_dext > pstats.s_str) {
+	    msg("Hmm, I guess you are a thief.");
+	    char_type = 3;
+	} else {
+	    msg("Suffering from a loss of focus, you become a fighter.");
+	    char_type = 0;
+	}
+    }
     if (find_slot(DAEMON, DAEMON_DOCTOR) == NULL) {
 	msg("Paging the doctor.");
 	start_daemon(DAEMON_DOCTOR, &player, AFTER);

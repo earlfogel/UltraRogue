@@ -214,7 +214,8 @@ fflush(stdout);
     keypad(cw,TRUE);		/* for arrow keys */
     keypad(hw,TRUE);		/* for arrow keys */
 #ifdef MOUSE
-    mousemask(BUTTON1_RELEASED, NULL);  /* for mouse buttons */
+    if (use_mouse)
+	mousemask(BUTTON1_RELEASED, NULL);  /* for mouse buttons */
 #endif
 
 

@@ -26,7 +26,7 @@ struct optstruct {
 
 typedef struct optstruct	OPTION;
 
-int	get_bool(), get_str(), get_abil(), get_diff();
+int	get_bool(), get_str(), get_abil(), get_diff(), get_mouse();
 void put_diff(int *diff, WINDOW *win);
 
 OPTION	optlist[] = {
@@ -46,6 +46,10 @@ OPTION	optlist[] = {
 		(int *) &autopickup,	put_bool,	get_bool	},
     {"autosave",	"Save game automatically (autosave): ",
 		(int *) &autosave,	put_bool,	get_bool	},
+#ifdef MOUSE
+    {"usemouse",	"Use mouse to move (usemouse): ",
+		(int *) &use_mouse,	put_bool,	get_mouse	},
+#endif
     {"name",	 "Name (name): ",
 		(int *) whoami,		put_str,	get_str		},
     {"fruit",	 "Fruit (fruit): ",
@@ -187,7 +191,6 @@ WINDOW *win;
 	waddstr(win, "Very Hard");
     wclrtoeol(win);
 }
-
 
 /*
  * allow changing a boolean option and print it out
@@ -436,6 +439,32 @@ WINDOW *win;
     return NORM;
 }
 
+#ifdef MOUSE
+/*
+ *
+ * Use mouse click for movement?
+ */
+int
+get_mouse(mouse, win)
+bool *mouse;
+WINDOW *win;
+{
+    int ret;
+    bool old_mouse = *mouse;
+
+    ret = get_bool(mouse, win);
+
+    if (*mouse != old_mouse) {
+	if (use_mouse) {
+	    mousemask(BUTTON1_RELEASED, NULL);	/* enable KEY_MOUSE */
+	} else {
+	    mousemask(0, NULL);			/* disable KEY_MOUSE */
+	}
+    }
+
+    return ret;
+}
+#endif
 
 /*
  * parse options from string, usually taken from the environment.

@@ -164,7 +164,7 @@
 #define D_DROWN		-9
 #define D_FALL		-10
 #define D_FIRE		-11
-#define D_GENOCIDE	-12
+#define D_MISADVENTURE	-12
 
 /*
  * Things that appear on the screens
@@ -1045,6 +1045,7 @@ extern bool firstmove;			/* First move after setting door_stop */
 extern bool showcursor;			/* Option to show cursor */
 extern bool autopickup;			/* Option to pick up stuff you step on */
 extern bool autosave;			/* Option to save game automatically */
+extern bool use_mouse;			/* Option to allow mouse click to move */
 extern bool canwizard;			/* Will be permitted to do this */
 extern bool askme;			/* Ask about unidentified things */
 extern bool moving;			/* move using 'm' command */
@@ -1398,6 +1399,7 @@ void put_abil(int *ability, WINDOW *win);
 int get_bool(bool *bp, WINDOW *win);
 int get_str(char *opt, WINDOW *win);
 int get_abil(int *abil, WINDOW *win);
+int get_mouse(bool *mouse, WINDOW *win);
 void parse_opts(char *str);
 void strucpy(char *s1, char *s2, int len);
 /* pack.c */
