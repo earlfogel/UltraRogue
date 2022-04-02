@@ -377,6 +377,7 @@ bool thrown;
 {
     char *mname;
     bool did_hit = FALSE;
+    bool was_running = FALSE;
     int s_hpt, damage;
 
     /* If the monster is in a wall, it cannot attack */
@@ -387,6 +388,8 @@ bool thrown;
      * Since this is an attack, stop running and any healing that was
      * going on at the time.
      */
+    if (running)
+	was_running = TRUE;
     running = FALSE;
     player.t_quiet = 0;
     mp->t_quiet = 0;
@@ -954,10 +957,13 @@ bool thrown;
 		return TRUE;
 	    }
 	}
-	else if (thrown) 
+	else if (thrown) { 
+	    if (was_running)
+		running = TRUE;
 	    m_bounce(weapon, mname);
-	else 
+	} else {
 	    miss(mname, NULL);
+	}
     }
 
     damage = s_hpt - pstats.s_hpt;
@@ -1009,6 +1015,10 @@ int wplus;
 		need = 15 + ((need - 15) * 0.5);
 	    else
 		need = 15 + ((need - 15) * 0.67);
+
+	    /* the deeper you go, the harder it gets */
+	    if (level > 35 && difficulty > 2)
+		need -= level / 20;
 	}
 
 	/*
@@ -1392,6 +1402,10 @@ save_throw(int which, struct thing *tp)
 
     need = 14 + which - tp->t_stats.s_lvl / 2 - ring_bonus - armor_bonus;
 
+    /* the deeper you go, the harder it gets */
+    if (tp == &player && level > 35 && difficulty > 2)
+	need += level / 20;
+
     /* Roll of 20 always saves */
 
     if (need < 1)
@@ -1558,7 +1572,7 @@ m_bounce (weap, mname)
 struct object *weap;
 char *mname;
 {
-    if (fighting)
+    if (fighting || running)
 	return;
     if (weap->o_type == WEAPON)
 	msg("%s's %s misses you.", prname(mname, TRUE), weaps[weap->o_which].w_name);
