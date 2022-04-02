@@ -713,8 +713,11 @@ struct thing *flgptr;
 {
     if (ep->x == sp->x || ep->y == sp->y)
 	return TRUE;
-    if (cutcorners && ((flgptr == &player && lost_dext == 0)
-	|| flgptr->t_stats.s_dext > 16))
+    if (cutcorners &&
+	((flgptr == &player && lost_dext == 0) ||
+	 (flgptr != &player && flgptr->t_stats.s_dext > 16) ||
+	 (flgptr != &player && flgptr->t_stats.s_lvl > 4)
+	))
 	/* can squeeze around corners */
 	return (step_ok(ep->y, sp->x, MONSTOK, flgptr) ||
 		step_ok(sp->y, ep->x, MONSTOK, flgptr));
