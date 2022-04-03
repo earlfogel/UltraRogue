@@ -443,8 +443,8 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
                         dest.y = event.y;
 			if (winat(hero.y, hero.x) == STAIRS
 			    && hero.y == dest.y
-			    && hero.x == dest.x) {
-			    if (is_carrying(TR_WAND)) {	/* use stairs */
+			    && hero.x == dest.x) {	/* use stairs */
+			    if (is_carrying(TR_WAND)) {
 				u_level();
 			    } else {
 				d_level();
@@ -459,7 +459,7 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 			    || roomin(&dest)
 			    ) {	/* walk towards the mouse */
 			    int dx, dy;
-			    float angle = 2;
+			    float angle = 3;  /* preference for diagonal moves */
 			    if (winat(hero.y, hero.x) == PASSAGE
 				&& off(player, CANINWALL)) {
 				angle = 1;
