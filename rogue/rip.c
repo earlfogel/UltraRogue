@@ -637,6 +637,8 @@ int monst;
 		return "falling";
 	    case D_FIRE:
 		return "slow boiling in oil";
+	    case D_MISADVENTURE:
+		return "misadventure";
 	}
     return "";
 }

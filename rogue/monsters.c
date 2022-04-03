@@ -504,7 +504,6 @@ int x;
 	}
 
 	/* Fear */
-	if (on(*tp, CANFRIGHTEN) && off(*tp, CANSURPRISE)) {
 	    turn_off(*tp, CANFRIGHTEN);
 	    if (!save(VS_WAND) &&
 	        !(on(player, ISFLEE) && (player.t_dest == &tp->t_pos))) {
@@ -666,7 +665,7 @@ get_monst:
 	return;
     }
     if (strcmp(monst_name, "0") == 0 && difficulty >= 2) {	/* suicide */
-	death(D_GENOCIDE);
+	death(D_MISADVENTURE);
 	return;
     }
     which_monst = atoi(monst_name);
