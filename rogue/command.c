@@ -796,19 +796,6 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 	    }
 	}
     }
-#if 0
-    if (wizard) {
-	overlay(mw, cw);  /* monster awareness */
-	draw(cw);
-    }
-#endif
-    if (find_slot(DAEMON, DAEMON_DOCTOR) == NULL) {
-	static bool doctor_just_died = TRUE;
-	if (doctor_just_died)
-	    msg("Oh no, the doctor is gone!");
-	doctor_just_died = FALSE;
-	fighting = running = FALSE;
-    }
 }
 
 /*
