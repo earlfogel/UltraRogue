@@ -490,15 +490,14 @@ bool blessed;
 {
     struct linked_list *mi;
     struct thing *tp;
+    int range = (blessed)? 9: 5;
 
     for (mi = mlist; mi != NULL; mi = next(mi)) {
 	tp = THINGPTR(mi);
-	if ((blessed && roomin(&hero) == roomin(&tp->t_pos)) ||
-	    (abs(hero.x - tp->t_pos.x) < 5 && abs(hero.y - tp->t_pos.y) < 5)
-	) {
-	    tp->t_dest = &(tp->t_pos);
+	if (abs(hero.x - tp->t_pos.x) < range && abs(hero.y - tp->t_pos.y) < range) {
 	    turn_off(*tp, ISRUN);
 	    if (blessed && !save_throw(VS_MAGIC, tp)) {
+		tp->t_dest = &(tp->t_pos);
 		turn_off(*tp, ISMEAN);
 	    }
 	}
