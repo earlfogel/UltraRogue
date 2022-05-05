@@ -341,11 +341,11 @@ wield ()
  * pick a random position around the give (y, x) coordinates
  */
 int 
-fallpos (pos, newpos, extended, under)
+fallpos (pos, newpos, scatter, under)
 coord *pos;
 coord *newpos;
-bool extended;  /* stuff may scatter further */
-bool under;     /* even under the player or a monster */
+bool scatter;  /* stuff may scatter further */
+bool under;     /* even under the player */
 {
     int y, x, cnt, ch ;
 
@@ -360,8 +360,8 @@ bool under;     /* even under the player or a monster */
 		continue;
 	    }
 	    if (((ch = winat(y, x)) == FLOOR
-	      || (extended && ch == PASSAGE)
-	      || (under && isalpha(ch) &&
+	      || (scatter && ch == PASSAGE)
+	      || (scatter && isalpha(ch) &&
 		  (mvwinch(stdscr, y, x) == FLOOR || mvwinch(stdscr, y, x) == PASSAGE)
 		 )
 	        ) && rnd(++cnt) == 0) {
@@ -370,7 +370,7 @@ bool under;     /* even under the player or a monster */
 	    }
 	}
     }
-    if (extended && newpos->x == -1) {
+    if (scatter && newpos->x == -1) {
 	/*
 	 * If we haven't found an empty spot, take one
 	 * (virtual) step in each direction and try again
@@ -378,7 +378,7 @@ bool under;     /* even under the player or a monster */
 	for (y = pos->y - 1 ; y <= pos->y + 1 ; y++) {
 		for (x = pos->x - 1 ; x <= pos->x + 1 ; x++) {
 			ch = winat(y, x);
-			if (ch != ' ' && ch != '|' && ch != '-') {
+			if (ch != ' ' && ch != '|' && ch != '-' && ch != '&') {
 			    coord trypos;
 			    trypos.x = x;
 			    trypos.y = y;
