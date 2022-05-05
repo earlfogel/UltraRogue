@@ -330,7 +330,6 @@ get_food:
     add_pack(item, TRUE);
 
     resurrect = pstats.s_const;
-    new_level(FALSE);			/* Draw current level */
 
     /* tweaks based on difficulty level */
     tweak_settings(TRUE, 2);
@@ -342,6 +341,9 @@ get_food:
     light_fuse(FUSE_SWANDER, 0, WANDERTIME, AFTER);
     start_daemon(DAEMON_STOMACH, 0, AFTER);
     start_daemon(DAEMON_RUNNERS, 0, AFTER);
+
+    new_level(FALSE);			/* Draw current level */
+
     playit();
     /* notreached */
     return 0;
