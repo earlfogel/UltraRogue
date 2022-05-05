@@ -716,7 +716,7 @@ struct thing *flgptr;
     if (cutcorners &&
 	((flgptr == &player && lost_dext == 0) ||
 	 (flgptr != &player && flgptr->t_stats.s_dext > 16) ||
-	 (flgptr != &player && flgptr->t_stats.s_lvl > 4)
+	 (flgptr != &player && flgptr->t_stats.s_lvl > 4 && off(*flgptr,ISLARGE))
 	))
 	/* can squeeze around corners */
 	return (step_ok(ep->y, sp->x, MONSTOK, flgptr) ||
