@@ -241,6 +241,7 @@ struct magic_item p_magic[MAXPOTIONS] = {
     { "acute hearing",		 30, 200, 20, 15 },
     { "super heroism",		 10, 800, 20, 15 },
     { "disguise",		 40, 500, 0, 15 },
+    { "flying",			  0, 500, 0, 15 },
 };
 
 struct magic_item r_magic[MAXRINGS] = {
@@ -367,6 +368,7 @@ struct spells cleric_spells[] = {
 	{ P_PHASE,		40,	TYP_POTION,	FALSE },
 	{ S_TELEP,		40,	TYP_SCROLL,	FALSE },
 	{ S_PEACE,		60,	TYP_SCROLL,	FALSE },
+	{ P_LEVITATION,		80,	TYP_POTION,	TRUE },
 };
 int maxprayers = sizeof cleric_spells / sizeof (struct spells);
 

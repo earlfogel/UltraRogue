@@ -494,7 +494,8 @@
 #define P_HEAR		12
 #define P_SHERO		13
 #define P_DISGUISE	14
-#define	MAXPOTIONS	15
+#define P_LEVITATION	15
+#define	MAXPOTIONS	16
 
 /*
  * Scroll types
@@ -1195,7 +1196,8 @@ struct daemon
 #define FUSE_SHERO        24
 #define FUSE_WGHTCHK      25
 #define FUSE_CURE_INFEST  26
-#define FUSE_MAX          27
+#define FUSE_UNFLY        27
+#define FUSE_MAX          28
 
 #define DAEMON_NULL       0
 #define DAEMON_DOCTOR     1
@@ -1235,6 +1237,7 @@ void unsee(fuse_arg *arg);
 void unstink(fuse_arg *arg);
 void unclrhead(fuse_arg *arg);
 void unphase(fuse_arg *arg);
+void unfly(fuse_arg *arg);
 void sight(fuse_arg *arg);
 void res_strength(fuse_arg *arg);
 void nohaste(fuse_arg *arg);
@@ -1510,7 +1513,7 @@ void init_weapon(struct object *weap, int type);
 int hit_monster(int y, int x, struct object *obj, struct thing *tp);
 char *num(int n1, int n2);
 void wield(void);
-int fallpos(coord *pos, coord *newpos, bool extended, bool under);
+int fallpos(coord *pos, coord *newpos, bool scatter, bool under);
 /* wizard.c */
 void whatis(struct linked_list *what);
 void create_obj(int which_item, int which_type, bool cursed);

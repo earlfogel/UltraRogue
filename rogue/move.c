@@ -272,7 +272,7 @@ int dx;
 	case LAIR:
 	case RUSTTRAP:
 	    ch = be_trapped(&player, &nh);
-	    if (!ISWEARING(R_LEVITATION) &&
+	    if (!ISWEARING(R_LEVITATION) && off(player, CANFLY) &&
 		(old_hero.x != hero.x || old_hero.y != hero.y 
 			|| pool_teleport)) {
 		pool_teleport = FALSE;
@@ -607,7 +607,8 @@ coord *tc;
 	    return (ch);
 	if (player.t_ctype == C_THIEF) 
 	    thief_bonus = 10;
-	if ((ISWEARING(R_LEVITATION) && (ch != FIRETRAP || 
+	if (((ISWEARING(R_LEVITATION) || on(player, CANFLY))
+		&& (ch != FIRETRAP || 
 		(ch == FIRETRAP && !(tp->tr_flags & ISFOUND))))
 		|| ((moving && (tp->tr_flags & ISFOUND) && rnd(100) <
 		thief_bonus + 2*pstats.s_dext + 5*pstats.s_lvl) &&
@@ -862,11 +863,10 @@ coord *tc;
 		if (i < 30) {
 		    if(off(*th, CANSWIM)) {
 			if (can_see) msg("The %s drowned in the pool!", mname);
-			killed(mitem, FALSE, FALSE);
 		    } else {
-			if (can_see) msg("The %s swims happily in the pool!", mname);
-			turn_off(*th, ISMEAN);
+			if (can_see) msg("The %s dives into the pool and disappears.", mname);
 		    }
+		    killed(mitem, FALSE, FALSE);
 		}
 	    }
 	}

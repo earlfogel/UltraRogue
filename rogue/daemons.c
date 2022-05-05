@@ -531,3 +531,16 @@ shero (fuse_arg *arg __attribute__((unused)))
     chg_dext(2, FALSE, FALSE);
     turn_off(player, ISUNHERO);
 }
+
+/*
+ *  unfly()
+ *      player stops flying
+ */
+void
+unfly(fuse_arg *arg __attribute__((unused)))
+{
+    turn_off(player, CANFLY);
+
+    if (!ISWEARING(R_LEVITATION))
+        msg("You float gently to the ground.");
+}

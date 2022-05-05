@@ -542,6 +542,26 @@ bool blessed;
 		lengthen_fuse(FUSE_UNDISGUISE, blessed ? GONETIME*3 : GONETIME);
 	    else
 		msg("You feel an itchy feeling under your skin.");
+        when P_LEVITATION:
+            if (cursed) {
+                msg("You can't move.");
+                no_command = HOLDTIME;
+            }
+            else {
+                short   duration = (blessed ? 3 : 1);
+
+                if (on(player, CANFLY))
+                    lengthen_fuse(FUSE_UNFLY, duration * WANDERTIME);
+                else
+                {
+                    light_fuse(FUSE_UNFLY, 0, duration * WANDERTIME, AFTER);
+                    turn_on(player, CANFLY);
+                }
+
+                if (!ISWEARING(R_LEVITATION))
+                    msg("You %sbegin to float in the air!",
+                        blessed ? "quickly " : "");
+            }
 	otherwise:
 	    msg("What an odd tasting potion!");
 	    return;

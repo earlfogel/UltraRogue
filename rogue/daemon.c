@@ -54,6 +54,7 @@ struct fuse fuses[FUSE_MAX] =
     { FUSE_SHERO,        shero        },
     { FUSE_WGHTCHK,      wghtchk      },
     { FUSE_CURE_INFEST,  cure_infest  },
+    { FUSE_UNFLY,        unfly        },
 };
 
 /*

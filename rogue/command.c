@@ -38,6 +38,8 @@ command ()
     MEVENT event;  /* mouse events */
 #endif
 
+    if (on(player, CANFLY) && rnd(2) && running)
+	ntimes++;
     if (on(player, ISHASTE)) 
 	ntimes++;
     if (fighting && player.t_ctype == C_FIGHTER &&
