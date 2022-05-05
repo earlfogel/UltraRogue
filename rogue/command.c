@@ -443,21 +443,26 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
                         dest.y = event.y;
 			if (winat(hero.y, hero.x) == STAIRS
 			    && hero.y == dest.y
-			    && hero.x == dest.x) {	/* use stairs */
+			    && hero.x == dest.x) {
+			    /*
+			     * use stairs
+			     */
 			    if (is_carrying(TR_WAND)) {
 				u_level();
 			    } else {
 				d_level();
 			    }
 			} else if (isalpha(winat(dest.y, dest.x))
-			    && DISTANCE(dest.y, dest.x, hero.y, hero.x) < 2) {
+			    && DISTANCE(dest.y, dest.x, hero.y, hero.x) < 3) {
+			    /*
+			     * fight monster
+			     */
 			    count = 1;
 			    countch = 'f';
-                        } else if (winat(dest.y, dest.x) == FLOOR
-			    || winat(dest.y, dest.x) == STAIRS
-			    || winat(dest.y, dest.x) == PASSAGE
-			    || roomin(&dest)
-			    ) {	/* walk towards the mouse */
+                        } else if (dest.y > 0 && dest.y < LINES - 2) {
+			    /*
+			     * walk towards the mouse
+			     */
 			    int dx, dy;
 			    float angle = 3;  /* preference for diagonal moves */
 			    if (winat(hero.y, hero.x) == PASSAGE
@@ -791,6 +796,19 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 	    }
 	}
     }
+#if 0
+    if (wizard) {
+	overlay(mw, cw);  /* monster awareness */
+	draw(cw);
+    }
+#endif
+    if (find_slot(DAEMON, DAEMON_DOCTOR) == NULL) {
+	static bool doctor_just_died = TRUE;
+	if (doctor_just_died)
+	    msg("Oh no, the doctor is gone!");
+	doctor_just_died = FALSE;
+	fighting = running = FALSE;
+    }
 }
 
 /*
@@ -1052,7 +1070,7 @@ d_level ()
 	extinguish_fuse(FUSE_UNPHASE);	/* Using phase to go down gets rid of it */
 	no_phase = TRUE;
     }
-    if (ISWEARING(R_LEVITATION)) {
+    if (ISWEARING(R_LEVITATION) || on(player, CANFLY)) {
 	msg("You can't!  You're floating in the air.");
 	return;
     }
@@ -1081,7 +1099,8 @@ u_level ()
 
     ch = winat(hero.y, hero.x);
     if (has_artifact && (ch == STAIRS ||
-		(on(player, CANINWALL) && ISWEARING(R_LEVITATION)))) {
+		(on(player, CANINWALL)
+		&& (ISWEARING(R_LEVITATION) || on(player, CANFLY))))) {
 	if (--level == 0)
 	    total_winner();
 	else if (rnd(wizard ? 4 : 20) == 0)
@@ -1098,7 +1117,8 @@ u_level ()
 	return;
     }
     else if (ch != STAIRS && 
-		!(on(player, CANINWALL) && ISWEARING(R_LEVITATION)))
+		!(on(player, CANINWALL)
+		&& (ISWEARING(R_LEVITATION)|| on(player, CANFLY))))
 	msg("I see no way up.");
     else 
 	msg("Your way is magically blocked.");
