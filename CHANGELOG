@@ -1,6 +1,33 @@
+April 2022
+----------
+
+Cutcorners option is less favorable to player.
+
+Add prayer of flying.
+
+Tweak to mouse support.
+
+Tweak to how much things scatter when they fall.
+
+Start daemons earlier to fix autosave of first level.
+
+
+March 2022
+----------
+
+Don't stop running if a missile misses you.
+
+Monsters can't frighten you if you can't see them.
+
+Initial support for using mouse to move around the dungeon.
+
+In hard games, your armor is less effective the deeper you go.
+
 
 January 2022
 ------------
+
+Add death by misadventure, i.e. killing oneself.
 
 Scroll of peace has less range.
 
