@@ -601,7 +601,6 @@ coord *tc;
     else {
 	short thief_bonus = -30;
 
-	count = running = FALSE;
 	mvwaddch(cw, tp->tr_pos.y, tp->tr_pos.x, tp->tr_type);
 	if (no_command) 
 	    return (ch);
@@ -620,6 +619,8 @@ coord *tc;
 	}
 	if (moving)
 	    msg("Your attempt fails.");
+	if (off(player, CANINWALL)) count = FALSE;
+	running = FALSE;
     }
     save_ch = ' ';  /* no type-ahead */
     tp->tr_flags |= ISFOUND;
