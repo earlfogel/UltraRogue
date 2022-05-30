@@ -37,7 +37,7 @@ command ()
 #ifdef MOUSE
     MEVENT event;  /* mouse events */
     static bool mousemove = FALSE;
-    coord dest = {0,0};
+    static coord dest = {0,0};
 #endif
 
     if (on(player, CANFLY) && rnd(2) && running)
@@ -146,7 +146,7 @@ command ()
 				(x == hero.x && y == hero.y) ||
 				!step_ok(y, x, NOMONST, &player))
 				continue;  /* skip invalid moves */
-			    if (off(player, CANINWALL) && isatrap(winat(y, x)))
+			    if (off(player, CANFLY) && isatrap(winat(y, x)))
 				continue;  /* avoid traps */
 			    if (DISTANCE(dest.y, dest.x, y, x) < bestdist) {
 				bestx = x;
@@ -847,6 +847,23 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 	    }
 	}
     }
+#if 0
+    if (wizard) {
+	overlay(mw, cw);  /* monster awareness */
+	draw(cw);
+    }
+#endif
+#ifdef EARL
+    if (find_slot(DAEMON, DAEMON_DOCTOR) == NULL) {
+	static bool doctor_just_died = TRUE;
+	if (doctor_just_died) {
+	    msg("Oh no, the doctor is gone!");
+	    wait_for(0);
+	}
+	doctor_just_died = FALSE;
+	fighting = running = FALSE;
+    }
+#endif
 }
 
 /*
