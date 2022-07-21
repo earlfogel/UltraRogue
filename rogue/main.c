@@ -301,7 +301,7 @@ re_roll:
     /*
      * See if this rogue is acceptable to the player.
      */
-    if(!puta_player(j,wpt,hpadd,dmadd) && difficulty < 3)
+    if(!puta_player(j,wpt,hpadd,dmadd))
  	goto re_roll;
     /*
      * It's OK. Add this stuff to the rogue's pack.
