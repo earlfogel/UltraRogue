@@ -78,7 +78,7 @@ endmsg ()
 	wmove(cw, 0, mpos);
 	waddnstr(cw, morestr, COLS - mpos);
 	draw(cw);
-	if (pstats.s_hpt < max_stats.s_hpt*0.33)
+	if (pstats.s_hpt < max_stats.s_hpt/5)
 	    wait_for(' ');  /* rogue should be more careful when injured */
 	else
 	    wait_for(0);
@@ -299,7 +299,7 @@ line_two:
 	if (infest_dam > 1 || pstats.s_hpt < max_stats.s_hpt/3)
 	    health_state = "  **Very Sick**";
 	else
-	    health_state = " Very Sick";
+	    health_state = " Quite Sick";
     } else if (on(player, HASDISEASE)) {
 	health_state = "  Sick";
     } else if (on(player, HASITCH)) {
@@ -352,6 +352,8 @@ line_two:
 	health_state = "  No Armor";
     } else if (cur_weapon == NULL) {
 	health_state = "  No Weapon";
+    } else if (pstats.s_hpt < max_stats.s_hpt/5) {
+	health_state = " Depleted";
 #ifdef EARL
     } else if (char_type < 0 || char_type > 3) {
 	health_state = "  bad char_type ";
@@ -476,6 +478,11 @@ int ch;
     if (ch == '\n') {
         while ((c = readchar()) != '\n' && c != '\r')
 	    continue;
+#ifdef MOUSE
+    } else if (ch == ' ') {
+        while ((c = readchar()) != ' ' && c != KEY_MOUSE)
+	    continue;
+#endif
     } else if (ch == 0) {  /* any key */
 	while ((c = readchar()) >= KEY_MIN	/* ignore arrow keys */
 #ifdef MOUSE
