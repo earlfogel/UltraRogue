@@ -1695,7 +1695,7 @@ bool points;
 			obj->o_flags &= ~ISBLESSED;
 		    else
 			obj->o_flags |= ISCURSED;
-		    obj->o_flags &= ~(ISSILVER & ISZAPPED 
+		    obj->o_flags &= ~(ISSILVER & ISZAPPED & ISVORPED
 			& ISPOISON & CANRETURN & ISOWNED);
 		    obj->o_flags |= ISLOST;
 		    obj->o_hplus = 0;
