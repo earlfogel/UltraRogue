@@ -72,9 +72,11 @@ command ()
 	if (!((running || count || fighting) && jump)) {
 	    draw(cw);			/* Draw screen */
 	    if (running)
-		usleep(5000);
-	    else
+		usleep(4000);
+	    else if (count)
 		usleep(8000);
+	    else
+		usleep(12000);
 	}
 	take = 0;
 	after = TRUE;
@@ -142,12 +144,17 @@ command ()
 		    bestdist = curdist;
 		    for (x = hero.x - 1; x <= hero.x + 1; x++) {
 			for (y = hero.y - 1; y <= hero.y + 1; y++) {
-			    if (x < 0 || x > COLS || y < 1 || y > LINES - 2 ||
-				(x == hero.x && y == hero.y) ||
-				!step_ok(y, x, NOMONST, &player))
-				continue;  /* skip invalid moves */
-			    if (off(player, CANFLY) && isatrap(winat(y, x)))
-				continue;  /* avoid traps */
+			    if (x != dest.x || y != dest.y) {
+				if (x < 0 || x > COLS || y < 1 || y > LINES - 2 ||
+				    (x == hero.x && y == hero.y) ||
+				    (!step_ok(y, x, NOMONST, &player)
+					&& !(winat(y, x) == SECRETDOOR)))
+				    continue;  /* skip invalid moves */
+				if (off(player, CANFLY) && isatrap(winat(y, x)))
+				    continue;  /* avoid traps */
+				if (winat(y, x) == POST)
+				    continue;  /* avoid trading posts */
+			    }
 			    if (DISTANCE(dest.y, dest.x, y, x) < bestdist) {
 				bestx = x;
 				besty = y;
@@ -763,7 +770,7 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 	    if ((pstats.s_hpt -= infest_dam) <= 0) {
 		death(D_INFESTATION);
 		return;
-	    } else if (pstats.s_hpt < max_stats.s_hpt * 0.33) {
+	    } else if (pstats.s_hpt < max_stats.s_hpt/3) {
 		running = FALSE;
 	    }
 	}
