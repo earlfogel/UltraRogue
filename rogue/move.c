@@ -1062,10 +1062,17 @@ dip_it ()
 				ob->o_dplus = rnd(2);
 			}
 			ob->o_flags &= ~ISCURSED;
-		        msg("The %s glows blue for a moment.",weaps[wh].w_name);
+			if (ob->o_hplus + ob->o_dplus > 15
+                                && (ob->o_flags & ISSILVER)
+                                && !(ob->o_flags & ISVORPED)) {
+                            msg("Your weapon begins to shine.");
+                            ob->o_flags |= ISVORPED;
+			} else
+			    msg("The %s glows blue for a moment.",weaps[wh].w_name);
 		    }
 		    else if(i < 70) {	/* curse weapon here */
-			if ((ob->o_flags & ISCURSED) == NULL) {
+			if ((ob->o_flags & ISCURSED) == NULL
+			    && (ob->o_flags & IS2PROT) == NULL) {
 				ob->o_hplus = -(rnd(2)+1);
 				ob->o_dplus = -(rnd(2)+1);
 			}
@@ -1085,10 +1092,16 @@ dip_it ()
 			else
 			    ob->o_ac = -rnd(3)+ armors[wh].a_class;
 			ob->o_flags &= ~ISCURSED;
-		        msg("The %s glows blue for a moment.",armors[wh].a_name);
+			if (armors[wh].a_class - ob->o_ac >= 8
+				&& armors[wh].a_class - ob->o_ac <= 10
+                                && ob->o_flags & IS2PROT)
+                            msg("Your armor shines brightly.");
+			else
+			    msg("The %s glows blue for a moment.",armors[wh].a_name);
 		    }
 		    else if(i < 75){	/* curse armor */
-			if ((ob->o_flags & ISCURSED) == NULL)
+			if ((ob->o_flags & ISCURSED) == NULL
+			    && (ob->o_flags & IS2PROT) == NULL)
 			    ob->o_ac = rnd(3)+ armors[wh].a_class;
 			else
 			    ob->o_ac += rnd(2) + 1;
@@ -1137,7 +1150,8 @@ dip_it ()
 			ob->o_flags &= ~ISCURSED;
 		    }
 		    else if(i < 80) { /* curse ring */
-			if ((ob->o_flags & ISCURSED) == NULL)
+			if ((ob->o_flags & ISCURSED) == NULL
+			    && (ob->o_flags & IS2PROT) == NULL)
 			    ob->o_ac = -(rnd(2) + 1);
 			else
 			    ob->o_ac -= (rnd(2) + 1);
