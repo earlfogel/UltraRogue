@@ -86,6 +86,8 @@ doctor (daemon_arg *arg)
 	    limit = rnd(10) + 1;
 	else
 	    limit = rnd(curp->s_lvl) + 1;
+	if (difficulty > 2 && limit > 1)
+	    limit--;
 	if (ISRING(LEFT_1, R_REGEN)) curp->s_hpt += limit;
 	if (ISRING(LEFT_2, R_REGEN)) curp->s_hpt += limit;
 	if (ISRING(LEFT_3, R_REGEN)) curp->s_hpt += limit;
