@@ -428,7 +428,10 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 				release);
 		when CTRL('R') : after = FALSE;
 #ifdef EARL
-		    if (autosave) {
+		    char fname[200];
+		    strcpy(fname, home);
+		    strcat(fname, "rogue.asave");
+		    if (autosave && access(fname, F_OK) == -0) {
 			msg("Do you want to restart this level? (y/N)");
 			wrefresh(cw);
 			if (readchar() == 'y')
