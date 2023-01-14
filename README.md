@@ -1,4 +1,4 @@
-# UltraRogue
+# UltraRogue 1.0.8
 
 ### Table of Contents
 * [Introduction](#introduction)
@@ -19,8 +19,8 @@ I fell in love with urogue in the mid-1980s.  Later versions added
 more features and monsters, but the game also became more cumbersome
 to play.
 
-This new urogue feels like the original urogue, but with more monsters,
-working save/restore code, some new features and a bunch of bug fixes.
+This feels like the original urogue, but with more monsters,
+working save/restore code, some new and backported features and many bug fixes.
 I also streamlined gameplay to reduce typing and to lessen the strain on
 aging wrists.
 
@@ -49,13 +49,20 @@ and armor is less effective.  You are more vulnerable to magical
 attacks and your ability to do magic is reduced.  You can't start a hard
 game with plate, mithril or crystalline armor, but you may find some later.
 
-### Autosave and Autopickup Options
+There is also a Very Hard level.  Getting into this difficulty level is
+left as an exercise for the player.
+
+### New Options
 
 If you turn on Autosave, urogue will save the game periodically
 and lets you roll back to the most recent save point when you die.
+I.e, no permadeath.
 
-If you turn Autopickup off (i.e. noautopickup) then your character
+If you turn off Autopickup (i.e. noautopickup) then your character
 won't pick things up automatically when you step on them.
+
+If you turn on Cutcorners, you can move and fight around corners,
+as can the more dexterous monsters.
 
 You can set these (and most other) options using the 'o' command in urogue,
 or via the SROGUEOPTS environment variable.
@@ -160,7 +167,7 @@ To restore a saved game from the default location, just run urogue again.
 To restore a different saved game, use "urogue \<filename\>".  If you don't
 want to restore a saved game, run "urogue -new" (or delete the save file).
 
-Older UltraRogue versions (which may no longer be playable) are available
+Older urogue versions (which may no longer be playable) are available
 from the roguelike archive at: https://britzl.github.io/roguearchive/
 
 ## Prerequisites
@@ -184,10 +191,10 @@ See the INSTALL file if you'd like to build for Windows.
 ## Authors
 
 UltraRogue was originally written by Herb Chong, with many additional
-contributors.  The Roguelike Restoration Project released UltraRogue 1.0.7
+contributors.  The Roguelike Restoration Project released urogue 1.0.7
 in 2005.
 
-This version of UltraRogue, forked in 2018, is maintained by Earl Fogel.
+This is version 1.0.8 of urogue, maintained by Earl Fogel.
 
 ## License
 
