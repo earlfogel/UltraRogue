@@ -365,6 +365,7 @@ picky_inven ()
     struct linked_list *item;
     char ch, mch;
 
+    game_over = TRUE;	/* show more info */
     if (pack == NULL)
 	msg("You aren't carrying anything.");
     else if (next(pack) == NULL)
@@ -386,6 +387,7 @@ picky_inven ()
 	    }
 	msg("'%s' not in pack.", unctrl(mch));
     }
+    game_over = FALSE;
 }
 
 
