@@ -547,8 +547,19 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 			    /*
 			     * fight monster
 			     */
+			    if (!fighting) {
+				dta.y = dest.y - hero.y;
+				dta.x = dest.x - hero.x;
+				minfight = 10;
+				ch = 'f';
+				fighting = TRUE;
+			    } else {	/* shouldn't happen */
+				fighting = FALSE;
+			    }
+#if 0
 			    count = 1;
 			    countch = 'f';
+#endif
                         } else if (dest.y > 0 && dest.y < LINES - 2) {
 			    /*
 			     * walk towards the mouse
@@ -1039,7 +1050,7 @@ help ()
 
 	if (++cnt >= lines*2 && strp->h_ch && (strp->h_desc != NULL || wizard)) {
 	    wmove(hw, LINES-1, 0);
-	    wprintw(hw, morestr);
+	    wprintw(hw, "%s", morestr);
 	    draw(hw);
 	    (void) wgetch(hw);
 	    wclear(hw);
@@ -1047,7 +1058,7 @@ help ()
 	}
     }
     wmove(hw, LINES-1, 0);
-    wprintw(hw, spacemsg);
+    wprintw(hw, "%s", spacemsg);
     draw(hw);
     (void) wgetch(hw);
     wclear(hw);
