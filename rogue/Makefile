@@ -45,6 +45,14 @@ OPROGRAM=	urogue.bak
 #CFLAGS= -O0 -g -DBSD4=1 -Wall
 CFLAGS= -O -DBSD4=1 -DMOUSE -Wall -Wextra -Wformat=2
 
+# for clang/LLVM
+#CC=clang
+#CFLAGS= -O -DBSD4=1 -DMOUSE -Wall -Wextra -Wformat=2 \
+#	-Wno-deprecated-non-prototype \
+#	-Wno-knr-promoted-parameter \
+#	-Wno-unused-but-set-variable \
+#	-Wno-sometimes-uninitialized
+
 
 $(PROGRAM):	$(OBJS) $(MAKEFILE)
 		$(CC) $(LDFLAGS) $(OBJS) $(CRLIB) -o $@
