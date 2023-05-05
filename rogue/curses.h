@@ -13,5 +13,9 @@
 #include <pdcurses.h>
 #else
 #include <curses.h>
+#ifdef __clang__
+#undef mvwinch
+#define mvwinch(win,y,x)	(char) (wmove((win),(y),(x)) == ERR ? NCURSES_CAST(chtype, ERR) : winch(win))
+#endif
 #endif
 

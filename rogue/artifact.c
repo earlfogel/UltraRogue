@@ -1385,7 +1385,7 @@ do_wand ()
 	touchwin(hw);
 	for (i = 0; i < MAXSTICKS; i++) {
 	    sprintf(prbuf, "[%c]	%s", i + 'a', ws_magic[i].mi_name);
-	    mvwprintw(hw, i+2, 0, prbuf);
+	    mvwprintw(hw, i+2, 0, "%s", prbuf);
 	}
 	wmove(hw, 0, 0);
 	wprintw(hw, "Which power do you wish to use?");
