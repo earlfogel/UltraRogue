@@ -95,10 +95,6 @@
 /*
  * All the fun defines
  */
-#if 0
-#define next(ptr) (*ptr).l_next
-#define prev(ptr) (*ptr).l_prev
-#endif
 #define next(ptr) ((ptr)?(ptr->l_next):NULL)
 #define prev(ptr) ((ptr)?(ptr->l_prev):NULL)
 #define ldata(ptr) (*ptr).l_data
