@@ -55,6 +55,13 @@ bool no_unique;
 	    d = NLEVMONS*4 +
 		nlevmons*(cur_level - 1 - 4) + (rnd(range) - (range - 1 - NLEVMONS));
 	}
+#ifdef EARL
+	/* make the mid-dungeon more interesting */
+	if (difficulty > 2 && wander && cur_level > 40 && cur_level < 80
+	    && d < nummonst-50 && rnd(15) == 0) {
+	    d += 50;
+	}
+#endif
 	if (d < 1)
 	    d = rnd(NLEVMONS) + 1;
 	if (d > nummonst - NUMUNIQUE - 1) {
@@ -130,6 +137,15 @@ bool max_monster;
 	tp->t_stats.s_arm -= roll(2,(max_level-60)/8);
 	tp->t_stats.s_str += roll(2,(max_level-60)/12);
 	tp->t_stats.s_exp += roll(4, (max_level - 60) * 2) * mp->m_add_exp;
+#ifdef EARL
+    } else if (type > (level+25)*NLEVMONS && levtype == NORMLEV
+	&& type < nummonst && difficulty > 2) {
+	tp->t_stats.s_hpt += roll(4,(max_level-40)*2);
+	tp->t_stats.s_lvl += roll(4,(max_level-40)/8);
+	tp->t_stats.s_arm -= roll(2,(max_level-40)/8);
+	tp->t_stats.s_str += roll(2,(max_level-40)/12);
+	tp->t_stats.s_exp += roll(4, (max_level - 40) * 2) * mp->m_add_exp;
+#endif
     }
 
     /*
@@ -476,7 +492,7 @@ int x;
 		    }
 		} else if (on(player, ISINVIS)
 		 || (cur_armor != NULL && cur_armor->o_flags & IS2PROT
-			&& (aplus < -7 || difficulty < 2))) {
+			&& ((aplus < -7 && difficulty < 4) || difficulty < 2))) {
 		    msg("The %s's gaze has no effect.", mname);
 		} else {
 		    if (!fighting)
@@ -492,7 +508,7 @@ int x;
 	    !save(VS_PARALYZATION)) {
  	    if (on(player, ISINVIS)
 	     || (cur_armor != NULL && cur_armor->o_flags & IS2PROT
-		    && (aplus < -7 || difficulty < 2))) {
+		    && ((aplus < -7 && difficulty < 4) || difficulty < 2))) {
 		msg("The gaze of the %s is deflected by your shiny armor.", mname);
 	    } else if (ISWEARING(R_ALERT)) {
 		msg("You feel slightly drowsy for a moment.");
@@ -526,7 +542,7 @@ int x;
 #endif
 		&& !save(VS_WAND)) {
 	    if (cur_armor != NULL && cur_armor->o_flags & IS2PROT
-		    && (aplus < -7 || difficulty < 2)) {
+		    && ((aplus < -7 && difficulty < 4) || difficulty < 2)) {
 		msg("The gaze of the %s is deflected by your shiny armor.", mname);
 	    } else {
 		msg("The gaze of the %s blinds you.", mname);
@@ -544,7 +560,7 @@ int x;
 	     ) {
 		msg("The gaze of the %s has no effect.", mname);
 	    } else if (cur_armor != NULL && cur_armor->o_flags & IS2PROT
-		    && (aplus < -7 || difficulty < 2)) {
+		    && ((aplus < -7 && difficulty < 4) || difficulty < 2)) {
 		msg("The gaze of the %s is deflected by your shiny armor.", mname);
 	    } else {
 		if (!save(VS_PETRIFICATION) && rnd(100) < 3) {
@@ -606,7 +622,7 @@ genocide ()
 	/* Print left column */
 	wmove(hw, 2, 0);
 	for (i=0; i<left_limit; i++) {
-	    sprintf(monst_num, "%d", pres_monst);
+	    snprintf(monst_num, 4, "%d", pres_monst);
 	    if (monsters[pres_monst].m_normal == FALSE &&
 		monsters[pres_monst].m_wander == FALSE) {
 		sprintf(monst_num, "%*c", (int) strlen(monst_num), ' ');
@@ -621,7 +637,7 @@ genocide ()
 
 	/* Print right column */
 	for (i=0; i<left_limit && pres_monst<=nummonst-1; i++) {
-	    sprintf(monst_num, "%d", pres_monst);
+	    snprintf(monst_num, 4, "%d", pres_monst);
 	    if (monsters[pres_monst].m_normal == FALSE &&
 		monsters[pres_monst].m_wander == FALSE) {
 		sprintf(monst_num, "%*c", (int) strlen(monst_num), ' ');
