@@ -603,11 +603,6 @@ tweak_settings (bool first_time, int old_difficulty)
 	s_magic[S_MAKEIT].mi_prob -= 1;    /* 0.5% to 0.4 */
 	r_magic[R_WIZARD].mi_prob -= 1;    /* 0.4% to 0.3 */
     }
-#if 0
-fprintf(stderr, "Acquirement chance = %d/1000",
-s_magic[S_MAKEIT].mi_prob - s_magic[S_CURING].mi_prob);
-sleep(2);
-#endif
 }
 
 /*
