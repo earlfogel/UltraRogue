@@ -385,7 +385,7 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 				get_item("throw", NULL), &player);
 		when 'Q' : after = FALSE; quit();
 		when 'i' : after = FALSE; inventory(pack, 0);
-		when 'I' : after = FALSE; picky_inven();
+		when 'I' : after = FALSE; game_over=TRUE; picky_inven(); game_over=FALSE;
 		when 'd' : drop(NULL);
 		when 'q' : quaff(-1, FALSE);
 		when 'r' : read_scroll(-1, FALSE);
