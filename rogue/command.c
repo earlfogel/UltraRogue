@@ -148,9 +148,9 @@ command ()
 				if (x < 0 || x > COLS || y < 1 || y > LINES - 2 ||
 				    (x == hero.x && y == hero.y) ||
 				    (!step_ok(y, x, NOMONST, &player)
-					&& !(winat(y, x) == SECRETDOOR)))
+					&& !(mvwinch(cw, y, x) == SECRETDOOR)))
 				    continue;  /* skip invalid moves */
-				if (off(player, CANFLY) && isatrap(winat(y, x)))
+				if (off(player, CANFLY) && isatrap(mvwinch(cw, y, x)))
 				    continue;  /* avoid traps */
 				if (winat(y, x) == POST)
 				    continue;  /* avoid trading posts */
@@ -472,7 +472,7 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 			buy_it();
 		    else
 			add_pack(NULL, FALSE);
-		when ' ' : case '\0' :
+		when ' ' : case '\0' : case '\r' :
 		    after = FALSE;	/* Do Nothing */
 		when CTRL('W') :
 		    after = FALSE;
@@ -1138,6 +1138,10 @@ d_level ()
 {
     bool no_phase=FALSE;
 
+    if (isatrap(winat(hero.y, hero.x))) {
+	be_trapped(&player, &hero);
+	return;
+    }
     if (winat(hero.y, hero.x) != STAIRS) {
 	if (off(player, CANINWALL)) {	/* Must use stairs if can't phase */
 	    msg("I see no way down.");
