@@ -172,6 +172,13 @@ Blessed searching, regeneration, levitation and wizardry work better than
 normal; cursed searching, regeneration and wizardry are worse.
 
 
+Spells and Prayers
+------------------
+
+You can cast blessed spells and prayers (at extra cost)
+by typing upper-case letters.
+
+
 Options
 -------
 
