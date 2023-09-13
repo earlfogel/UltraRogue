@@ -41,7 +41,7 @@ int dx;
 {
     char ch;
     short legal=0;		/* Number of legal alternatives */
-    int y, x;			/* Holds legal new position */
+    int y=0, x=0;		/* Holds legal new position */
     int *ny, *nx;	/* Point to which direction to change */
 
     /* New position */
