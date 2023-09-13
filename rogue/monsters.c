@@ -55,13 +55,11 @@ bool no_unique;
 	    d = NLEVMONS*4 +
 		nlevmons*(cur_level - 1 - 4) + (rnd(range) - (range - 1 - NLEVMONS));
 	}
-#ifdef EARL
 	/* make the mid-dungeon more interesting */
 	if (difficulty > 2 && wander && cur_level > 40 && cur_level < 80
 	    && d < nummonst-50 && rnd(15) == 0) {
 	    d += 50;
 	}
-#endif
 	if (d < 1)
 	    d = rnd(NLEVMONS) + 1;
 	if (d > nummonst - NUMUNIQUE - 1) {
@@ -137,7 +135,6 @@ bool max_monster;
 	tp->t_stats.s_arm -= roll(2,(max_level-60)/8);
 	tp->t_stats.s_str += roll(2,(max_level-60)/12);
 	tp->t_stats.s_exp += roll(4, (max_level - 60) * 2) * mp->m_add_exp;
-#ifdef EARL
     } else if (type > (level+25)*NLEVMONS && levtype == NORMLEV
 	&& type < nummonst && difficulty > 2) {
 	tp->t_stats.s_hpt += roll(4,(max_level-40)*2);
@@ -145,7 +142,6 @@ bool max_monster;
 	tp->t_stats.s_arm -= roll(2,(max_level-40)/8);
 	tp->t_stats.s_str += roll(2,(max_level-40)/12);
 	tp->t_stats.s_exp += roll(4, (max_level - 40) * 2) * mp->m_add_exp;
-#endif
     }
 
     /*
