@@ -339,10 +339,8 @@ do_prayer:
 	boost = FALSE;
     }
     if (boost) {
-#ifdef EARL
 	blessed = TRUE;
 	prayer_cost *= 3;
-#endif
     }
     if ((prayer_cost + pray_time) > pray_points) {
 	msg("Your prayer fails.");
@@ -619,10 +617,8 @@ do_spell:
 	boost = FALSE;
     }
     if (boost) {
-#ifdef EARL
 	blessed = TRUE;
 	spell_cost *= 3;
-#endif
     }
 
     if (spell_power + spell_cost > avail_points) {
