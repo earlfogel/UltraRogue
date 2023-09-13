@@ -96,7 +96,7 @@ doctor (daemon_arg *arg)
 	if (ISRING(RIGHT_2, R_REGEN)) curp->s_hpt += limit;
 	if (ISRING(RIGHT_3, R_REGEN)) curp->s_hpt += limit;
 	if (ISRING(RIGHT_4, R_REGEN)) curp->s_hpt += limit;
-	if (ring_blessed(R_REGEN)) curp->s_hpt += limit/2;
+	if (ring_blessed(R_REGEN)) curp->s_hpt += limit/3;
 	if (ring_cursed(R_REGEN)) curp->s_hpt -= limit/2;
     }
     if (on(*tp, ISREGEN))
