@@ -169,7 +169,7 @@ int hand;
 	   }
 	}
     }
-    if (difficulty > 3 && !(cur_ring[hand]->o_flags & ISBLESSED))
+    if (difficulty > 3 && !(cur_ring[hand]->o_flags & ISBLESSED) && rnd(2))
 	return 1;
     return 0;
 }
