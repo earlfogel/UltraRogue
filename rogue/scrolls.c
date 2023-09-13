@@ -548,6 +548,8 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
 			    limit += 2;
 			if (flags == ISBLESSED &&
 			    (lb->o_which == R_WIZARD ||
+			     lb->o_which == R_HEALTH ||
+			     lb->o_which == R_SEEINVIS ||
 			     lb->o_which == R_SEARCH ||
 			     lb->o_which == R_REGEN  ||
 			     lb->o_which == R_LEVITATION  ||
