@@ -1231,7 +1231,7 @@ struct object *cur_weapon;
 			!((weap != NULL) && (weap->o_flags & CANBURN))) {
 		struct thing *mcopy;
 		mcopy = creat_mons(def_er, def_er->t_index, FALSE);
-		if (def_er->t_stats.s_lvl > 1) {
+		if (def_er->t_stats.s_lvl > 1 && rnd(difficulty) == 0) {
 		    /* 
 		     * the number of times a monster can divide
 		     * is based on it's experience level
@@ -1403,8 +1403,12 @@ save_throw(int which, struct thing *tp)
     need = 14 + which - tp->t_stats.s_lvl / 2 - ring_bonus - armor_bonus;
 
     /* the deeper you go, the harder it gets */
-    if (tp == &player && level > 35 && difficulty > 2)
-	need += level / 20;
+    if (tp == &player && difficulty > 2) {
+	if (level > 20)
+	    need += level / 20;
+	else
+	    need += rnd(2);
+    }
 
     /* Roll of 20 always saves */
 
