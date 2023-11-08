@@ -491,7 +491,7 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
 		if (blessed) {
 		    lb->o_flags |= IS2PROT;
 		    if (lb->o_type == ARMOR
-			&& armors[lb->o_which].a_class - lb->o_ac >= 8)
+			&& armors[lb->o_which].a_class - lb->o_ac >= 6 + difficulty)
 			msg("Your armor shines brightly.");
 		}
 		msg("Protected %s.", inv_name(lb,TRUE));
@@ -619,7 +619,7 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
 			    freeletter(ll);
 			    discard(ll);
 			    lb = NULL;
-			} else if (armors[lb->o_which].a_class - lb->o_ac >= 8
+			} else if (armors[lb->o_which].a_class - lb->o_ac >= 6 + difficulty
 				&& lb->o_flags & IS2PROT) {
 			    msg("Your armor shines brightly.");
 			}
