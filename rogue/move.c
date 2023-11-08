@@ -1092,8 +1092,8 @@ dip_it ()
 			else
 			    ob->o_ac = -rnd(3)+ armors[wh].a_class;
 			ob->o_flags &= ~ISCURSED;
-			if (armors[wh].a_class - ob->o_ac >= 8
-				&& armors[wh].a_class - ob->o_ac <= 10
+			if (armors[wh].a_class - ob->o_ac >= 6 + difficulty
+				&& armors[wh].a_class - ob->o_ac <= 8 + difficulty
                                 && ob->o_flags & IS2PROT)
                             msg("Your armor shines brightly.");
 			else
