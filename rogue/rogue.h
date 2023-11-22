@@ -205,8 +205,6 @@
  * Various constants
  */
 #define	MAXAUTH		10		/* Let's be realistic! */
-#define	PASSWD		rpass.rp_pass
-#define PASSWDSEED	rpass.rp_pkey
 #define	BEARTIME	3
 #define	SLEEPTIME	4
 #define	FREEZETIME	6
@@ -1516,4 +1514,3 @@ void create_obj(int which_item, int which_type, bool cursed);
 int getbless(void);
 void makemon(void);
 int teleport(void);
-int passwd(void);

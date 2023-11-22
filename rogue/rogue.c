@@ -470,7 +470,7 @@ struct h_list helpstr[] = {
 	{CTRL('M'),	"	see monster"},
 	{CTRL('O'),	"	outfit pack"},
 	{CTRL('V'),	"	create item"},
-	{CTRL('W'),	"	wizard's password"},
+	{CTRL('W'),	"	wizard mode"},
 	{CTRL('X'),	"	random teleport"},
 	{CTRL('Z'),	"	identify item"},
 	{0,		0}
