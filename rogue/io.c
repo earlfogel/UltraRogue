@@ -178,6 +178,7 @@ readchar ()
  * See https://lists.gnu.org/archive/html/bug-ncurses/2023-10/msg00079.html
  */
 #ifdef MOUSE
+#ifndef PDCURSES
 #undef wgetch
 int
 my_wgetch (win)
@@ -192,6 +193,7 @@ WINDOW *win;
     return(ch);
 }
 #define wgetch(win) my_wgetch(win)
+#endif
 #endif
 
 /*

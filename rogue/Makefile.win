@@ -7,13 +7,15 @@ OBJS= 	vers.o armor.o artifact.o chase.o command.o daemon.o daemons.o fight.o \
 	encumb.o get_play.o init.o io.o list.o main.o maze.o misc.o \
 	monsdata.o monsters.o move.o new_level.o options.o pack.o passages.o \
 	player.o potions.o rings.o rip.o rooms.o save.o state.o scrolls.o \
-	sticks.o things.o trader.o tunable.o sys_dep.o weapons.o wizard.o rogue.o 
+	sticks.o things.o trader.o tunable.o sys_dep.o weapons.o wizard.o rogue.o \
+	mouse.o
 
 CFILES= vers.c armor.c artifact.c chase.c command.c daemon.c daemons.c fight.c \
 	encumb.c get_play.c init.c io.c list.c main.c maze.c misc.c \
 	monsdata.c monsters.c move.c new_level.c options.c pack.c passages.c \
 	player.c potions.c rings.c rip.c rooms.c save.c state.c scrolls.c \
-	sticks.c things.c trader.c tunable.c sys_dep.c weapons.c wizard.c rogue.c 
+	sticks.c things.c trader.c tunable.c sys_dep.c weapons.c wizard.c rogue.c \
+	mouse.c
 
 SOURCES = $(CFILES) rogue.h mach_dep.h Makefile
 
@@ -106,6 +108,7 @@ main.o:		curses.h mach_dep.h rogue.h tunable.h
 maze.o:		curses.h rogue.h
 misc.o:		curses.h rogue.h
 monsters.o:	curses.h rogue.h mach_dep.h
+mouse.o:	curses.h rogue.h
 move.o:		curses.h rogue.h
 new_level.o:	curses.h rogue.h
 options.o:	curses.h rogue.h mach_dep.h 

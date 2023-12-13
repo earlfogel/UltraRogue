@@ -1310,7 +1310,9 @@ int step_ok(int y, int x, int can_on_monst, struct thing *flgptr);
 int shoot_ok(int ch);
 int readchar(void);
 #ifdef MOUSE
+#ifndef PDCURSES
 int my_wgetch(WINDOW *);
+#endif
 #endif
 void status(bool display);
 void ministat(void);
