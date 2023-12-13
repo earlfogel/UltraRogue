@@ -1,3 +1,11 @@
+November 2023
+-------------
+
+Remove last code relating to password for wizard(debug) mode.
+
+Artifacts may lose protection when dipped.
+
+
 September 2023
 --------------
 
@@ -6,6 +14,8 @@ Shiny armor harder to achieve in harder games.
 
 August 2023
 -----------
+
+Use 'F' for mouse fights.
 
 Rings use more food in very hard games, but not quite so much.
 

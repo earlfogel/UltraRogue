@@ -11,6 +11,9 @@
 #define remove(a,b) my_remove(a,b)
 #undef NULL
 #define NULL 0
+#ifdef MOUSE
+#define wgetch(win) my_wgetch(win)
+#endif
 
 /*
  * Maximum number of different things
@@ -1052,6 +1055,10 @@ extern bool in_shell;			/* True if executing a shell */
 extern bool monst_dead;			/* Indicates if monster got killed */
 extern bool game_over;			/* Is this the end? */
 extern bool serious_fight;		/* fight longer and harder */
+#ifdef MOUSE
+extern bool mousemove;
+extern bool firstmousemove;
+#endif
 extern coord oldpos;			/* Position before last look() call */
 extern coord delta;			/* Change indicated to get_dir() */
 extern char *spacemsg;
@@ -1302,6 +1309,9 @@ void endmsg(void);
 int step_ok(int y, int x, int can_on_monst, struct thing *flgptr);
 int shoot_ok(int ch);
 int readchar(void);
+#ifdef MOUSE
+int my_wgetch(WINDOW *);
+#endif
 void status(bool display);
 void ministat(void);
 void wait_for(int ch);
@@ -1369,6 +1379,9 @@ void genocide(void);
 char *id_monst(int monster);
 void check_residue(struct thing *tp);
 void sell(struct thing *tp);
+/* mouse.c */
+char do_mousemove(coord dest, coord prev);
+char do_mouseclick(coord dest);
 /* move.c */
 void do_run(int ch);
 void corr_move(int dy, int dx);

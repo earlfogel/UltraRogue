@@ -168,6 +168,31 @@ readchar ()
     return(wgetch(cw));
 }
 
+/*
+ * Wrapper for wgetch, making it easier to ignore mouse events
+ * in code that isn't ready for them.
+ *
+ * Ncurses 6.4 added window focus events which can't be masked.
+ * So we ignore these too.
+ *
+ * See https://lists.gnu.org/archive/html/bug-ncurses/2023-10/msg00079.html
+ */
+#ifdef MOUSE
+#undef wgetch
+int
+my_wgetch (win)
+WINDOW *win;
+{
+    int ch;
+    do {
+	ch = wgetch(win);
+    } while (ch == 01114 || ch == 01115
+	    || (win == hw && ch == KEY_MOUSE));
+
+    return(ch);
+}
+#define wgetch(win) my_wgetch(win)
+#endif
 
 /*
  * status:

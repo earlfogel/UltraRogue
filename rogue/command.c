@@ -24,6 +24,12 @@
  *	Process the user commands
  */
 
+#ifdef MOUSE
+    MEVENT event;  /* mouse events */
+    static coord dest = {0,0};
+    static coord prev = {0,0};
+#endif
+
 void 
 command ()
 {
@@ -34,11 +40,6 @@ command ()
     static coord dta;
     static int minfight;
     static int waitcount;
-#ifdef MOUSE
-    MEVENT event;  /* mouse events */
-    static bool mousemove = FALSE;
-    static coord dest = {0,0};
-#endif
 
     if (on(player, CANFLY) && rnd(2) && running)
 	ntimes++;
@@ -73,6 +74,10 @@ command ()
 	    draw(cw);			/* Draw screen */
 	    if (running)
 		usleep(4000);
+#ifdef MOUSE
+	    else if (mousemove)
+		usleep(24000);
+#endif
 	    else if (count)
 		usleep(8000);
 	    else
@@ -130,69 +135,16 @@ command ()
 		}
 	    }
 #ifdef MOUSE
-	    else if (mousemove)
-	    {
-		if (count) {
-		    /*
-		     * choose best direction for this step
-		     */
-		    int x, y;
-		    int curdist, bestdist, bestx, besty;
-		    bestx = hero.x;
-		    besty = hero.y;
-		    curdist = DISTANCE(dest.y, dest.x, hero.y, hero.x);
-		    bestdist = curdist;
-		    for (x = hero.x - 1; x <= hero.x + 1; x++) {
-			for (y = hero.y - 1; y <= hero.y + 1; y++) {
-			    if (x != dest.x || y != dest.y) {
-				if (x < 0 || x > COLS || y < 1 || y > LINES - 2 ||
-				    (x == hero.x && y == hero.y) ||
-				    (!step_ok(y, x, NOMONST, &player)
-					&& !(mvwinch(cw, y, x) == SECRETDOOR)))
-				    continue;  /* skip invalid moves */
-				if (off(player, CANFLY) && isatrap(mvwinch(cw, y, x)))
-				    continue;  /* avoid traps */
-				if (winat(y, x) == POST)
-				    continue;  /* avoid trading posts */
-			    }
-			    if (DISTANCE(dest.y, dest.x, y, x) < bestdist) {
-				bestx = x;
-				besty = y;
-				bestdist = DISTANCE(dest.y, dest.x, y, x);
-			    }
-			}
-		    }
-		    if (bestdist < curdist) {
-			if (bestx < hero.x && besty == hero.y)
-			    countch = 'h';
-			else if (bestx == hero.x && besty > hero.y)
-			    countch = 'j';
-			else if (bestx == hero.x && besty < hero.y)
-			    countch = 'k';
-			else if (bestx > hero.x && besty == hero.y)
-			    countch = 'l';
-			else if (bestx < hero.x && besty < hero.y)
-			    countch = 'y';
-			else if (bestx > hero.x && besty < hero.y)
-			    countch = 'u';
-			else if (bestx < hero.x && besty > hero.y)
-			    countch = 'b';
-			else if (bestx > hero.x && besty > hero.y)
-			    countch = 'n';
-		    }
-		    if ((hero.y == dest.y && hero.x == dest.x)
-			|| bestdist >= curdist) {
-			/* we made it, or we're stuck */
-			count = 1;
-			countch = ' ';
-			after = FALSE;
-			mousemove = FALSE;
-		    }
-		    ch = countch;
-		    moving = TRUE;
+	    else if (mousemove) {
+		/*
+		 * choose direction (h,j,k,l,...)
+		 */
+		ch = countch = do_mousemove(dest, prev);
+		if (ch == ' ') {
+		    prev.x = prev.y = 0;
 		} else {
-		    mousemove = FALSE;
-		    ch = countch = '.';
+		    prev.x = hero.x;
+		    prev.y = hero.y;
 		}
 	    }
 #endif
@@ -227,6 +179,23 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 	else {
 		ch = '.';
 	}
+
+#ifdef MOUSE
+	    /*
+	     * convert mouse click into a command
+	     */
+	    if (ch == KEY_MOUSE
+		  && getmouse(&event) == OK
+		  && event.bstate & BUTTON1_RELEASED
+		   ) {
+		    dest.x = event.x;
+		    dest.y = event.y;
+		    ch = do_mouseclick(dest);
+		    if (strchr("hjlkyubn", ch))
+			countch = ch;
+	    }
+#endif
+
 	if (!no_command)
 	{
 	    /*
@@ -514,71 +483,6 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 		    if (levtype == POSTLEV)		/* sell something */
 			sell_it();
 		    after = FALSE;
-#ifdef MOUSE
-                when KEY_MOUSE:
-                    if (getmouse(&event) == OK
-                      && event.bstate & BUTTON1_RELEASED
-                       ) {
-                        dest.x = event.x;
-                        dest.y = event.y;
-			if (hero.y == dest.y && hero.x == dest.x) {
-			    if (winat(hero.y, hero.x) == STAIRS) {
-				if (is_carrying(TR_WAND)) {
-				    u_level();
-				} else {
-				    d_level();
-				}
-			    } else if (winat(hero.y, hero.x) == POOL
-				    || winat(hero.y, hero.x) == POISONTRAP) {
-				dip_it();
-			    } else if (winat(hero.y, hero.x) == GOLD
-				    || winat(hero.y, hero.x) == POTION
-				    || winat(hero.y, hero.x) == SCROLL
-				    || winat(hero.y, hero.x) == FOOD
-				    || winat(hero.y, hero.x) == WEAPON
-				    || winat(hero.y, hero.x) == ARMOR
-				    || winat(hero.y, hero.x) == RING
-				    || winat(hero.y, hero.x) == ARTIFACT
-				    || winat(hero.y, hero.x) == STICK) {
-				add_pack(NULL, FALSE);
-			    }
-			} else if (isalpha(winat(dest.y, dest.x))
-			    && DISTANCE(dest.y, dest.x, hero.y, hero.x) < 4) {
-			    /*
-			     * fight monster
-			     */
-			    if (!fighting) {
-				dta.y = dest.y - hero.y;
-				dta.x = dest.x - hero.x;
-				minfight = 10;
-				ch = 'f';
-				fighting = TRUE;
-			    } else {	/* shouldn't happen */
-				fighting = FALSE;
-			    }
-#if 0
-			    count = 1;
-			    countch = 'f';
-#endif
-                        } else if (dest.y > 0 && dest.y < LINES - 2) {
-			    /*
-			     * walk towards the mouse
-			     */
-			    int dx, dy;
-			    dx = abs(dest.x - hero.x);
-			    dy = abs(dest.y - hero.y);
-			    count = dx + dy;  /* upper limit */
-			    mousemove = TRUE;
-#if 0
-                            /* player.t_dest = &dest; */
-                            msg("Button 1 at x:%d y:%d--More--", event.x, event.y);
-                            wait_for(0);
-                            msg("");
-#endif
-                        }
-                    }
-                    after = FALSE;
-#endif
 		otherwise :
 		    after = FALSE;
 		    if (wizard) switch (ch)
@@ -698,9 +602,9 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 			}
 			otherwise :
 			    if (ch < ' ' || ch > '~')
-				msg("Illegal command '%s' [0%o]", unctrl(ch), ch);
+				msg("Illegal wizard command '%s' [0%o]", unctrl(ch), ch);
 			    else
-				msg("Illegal command '%s'", unctrl(ch));
+				msg("Illegal wizard command '%s'", unctrl(ch));
 			    count = 0;
 		    }
 		    else
@@ -970,7 +874,10 @@ bool is_thief;
 		    }
 		    tp->tr_flags |= ISFOUND;
 		    mvwaddch(cw, y, x, ch);
-		    if (off(player, CANINWALL)) count = 0;
+#ifdef MOUSE
+		    if (!mousemove)
+#endif
+			count = 0;
 		    if (x != hero.x && y != hero.y) {
 			running = FALSE;
 			msg(tr_name(tp->tr_type));
@@ -979,7 +886,10 @@ bool is_thief;
 	    else if (ch == SECRETDOOR) {
 		    if (rnd(100) < 30 && !is_thief) {
 			mvaddch(y, x, DOOR);
-			if (off(player, CANINWALL)) count = 0;
+#ifdef MOUSE
+			if (!mousemove)
+#endif
+			    count = 0;
 		    }
 	    }
 	}
