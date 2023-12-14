@@ -603,7 +603,7 @@ genocide ()
     int num_monst = nummonst-1, pres_monst=1, num_lines=2*(LINES-3);
     short which_monst;
     char monst_name[60];
-    char monst_num[4];	/* blank if monster is already gone */
+    char monst_num[13];	/* blank if monster is already gone */
 
     /* Print out the monsters */
     while (num_monst > 0) {
@@ -633,7 +633,7 @@ genocide ()
 
 	/* Print right column */
 	for (i=0; i<left_limit && pres_monst<=nummonst-1; i++) {
-	    snprintf(monst_num, 4, "%d", pres_monst);
+	    snprintf(monst_num, 12, "%d", pres_monst);
 	    if (monsters[pres_monst].m_normal == FALSE &&
 		monsters[pres_monst].m_wander == FALSE) {
 		sprintf(monst_num, "%*c", (int) strlen(monst_num), ' ');
