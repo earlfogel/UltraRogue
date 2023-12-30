@@ -11,9 +11,6 @@
 #define remove(a,b) my_remove(a,b)
 #undef NULL
 #define NULL 0
-#ifdef MOUSE
-#define wgetch(win) my_wgetch(win)
-#endif
 
 /*
  * Maximum number of different things
@@ -1309,11 +1306,6 @@ void endmsg(void);
 int step_ok(int y, int x, int can_on_monst, struct thing *flgptr);
 int shoot_ok(int ch);
 int readchar(void);
-#ifdef MOUSE
-#ifndef PDCURSES
-int my_wgetch(WINDOW *);
-#endif
-#endif
 void status(bool display);
 void ministat(void);
 void wait_for(int ch);

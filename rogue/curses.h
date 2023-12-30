@@ -13,6 +13,12 @@
 #include <pdcurses.h>
 #else
 #include <curses.h>
+#ifdef MOUSE
+#ifndef PDCURSES
+int my_wgetch(WINDOW *);
+#define wgetch(win) my_wgetch(win)
+#endif
+#endif
 #ifdef __clang__
 #undef mvwinch
 #define mvwinch(win,y,x)	(char) (wmove((win),(y),(x)) == ERR ? NCURSES_CAST(chtype, ERR) : winch(win))
