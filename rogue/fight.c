@@ -1231,12 +1231,13 @@ struct object *cur_weapon;
 			!((weap != NULL) && (weap->o_flags & CANBURN))) {
 		struct thing *mcopy;
 		mcopy = creat_mons(def_er, def_er->t_index, FALSE);
-		if (def_er->t_stats.s_lvl > 1 && rnd(difficulty) == 0) {
+		if (def_er->t_stats.s_lvl > 1) {
 		    /* 
 		     * the number of times a monster can divide
 		     * is based on it's experience level
 		     */
-		    def_er->t_stats.s_lvl--;
+		    if (rnd(difficulty-1) == 0)
+			def_er->t_stats.s_lvl--;
 		} else {
 		    turn_off(*def_er, BLOWDIVIDE);
 		    if (mcopy)

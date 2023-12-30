@@ -1,3 +1,11 @@
+December 2023
+-------------
+
+Fix snprintf warning in monsters.c
+
+bug fix: dividing monsters were too easy to defeat
+
+
 November 2023
 -------------
 
