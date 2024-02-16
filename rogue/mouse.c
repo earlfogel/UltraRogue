@@ -16,7 +16,13 @@ coord prev;
 {
     char ch = ' ';
     static coord indoor = {0,0};
+    static coord prevdest = {0,0};
     if (count) {
+	if (dest.x != prevdest.x || dest.y != prevdest.y) {
+	    indoor.x = indoor.y = 0;
+	    prevdest.x = dest.x;
+	    prevdest.y = dest.y;
+	}
 	/*
 	 * choose best direction for this step
 	 */
@@ -179,7 +185,9 @@ coord prev;
 	    }
 	if (nmoves < 1 && prev.y > 0) {	/* dead end */
 	    search(TRUE);		/* maybe there's a secret door */
+#if 0
 	    prev.x = prev.y = 0;	/* if not, back up */
+#endif
 	    count--;
 	} else if (bestdist < curdist || nmoves == 1 || ndoors == 1
 	    || indoor.x > 0 || firstmousemove
@@ -200,13 +208,17 @@ coord prev;
 		ch = 'b';
 	    else if (bestx > hero.x && besty > hero.y)
 		ch = 'n';
+#if 0
 	    prev.x = hero.x; prev.y = hero.y;
+#endif
 	    firstmousemove = FALSE;
 	    if (count < 20 && bestdist < curdist && rnd(9)>0) {
 		count++;  /* don't stop just yet */
 	    }
 	} else {
+#if 0
 	    prev.x = prev.y = 0;
+#endif
 	    count = 1;
 	    ch = 's';
 	}
@@ -219,7 +231,9 @@ coord prev;
 	}
 	moving = TRUE;
     } else {
+#if 0
 	prev.x = prev.y = 0;
+#endif
 	mousemove = FALSE;
 	ch = '.';
     }
