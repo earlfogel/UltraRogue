@@ -514,6 +514,7 @@ cleanup_old_level() {
     extinguish_fuse(FUSE_SUFFOCATE);
     hold_count = 0;
     trap_tries = 0;
+    count = FALSE;
 
     /* clear windows */
     wclear(cw);
