@@ -112,7 +112,6 @@ bool game_over = FALSE;
 bool serious_fight = FALSE;
 #ifdef MOUSE
 bool mousemove = FALSE;
-bool firstmousemove = FALSE;
 #endif
 coord delta;				/* Change indicated to get_dir() */
 LEVTYPE levtype;			/* type of level i'm on */
@@ -418,8 +417,8 @@ struct h_list helpstr[] = {
 	{'u',	"	up & right"},
 	{'b',	"	down & left"},
 	{'n',	"	down & right"},
-	{'<',	"CTRL><dir> run and search"},
 	{'<',	"SHIFT><dir> run til adjacent"},
+	{'<',	"CTRL><dir> run and search"},
 	{'m',	"	move onto without picking up"},
 	{'t',	"	throw something"},
 	{'z',	"	zap a wand or staff"},
@@ -456,6 +455,7 @@ struct h_list helpstr[] = {
 	{'S',	"	save game and exit"},
 	{'Q',	"	quit"},
 	{'=',	"	listen for monsters"},
+	{'~',	"	points needed to raise levels"},
 	{'f',	"	fight monster"},
 	{'F',	"	fight monsters"},
 	{CTRL('F'),	"	fight all monsters"},

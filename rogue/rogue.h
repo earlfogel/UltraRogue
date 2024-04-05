@@ -1054,7 +1054,6 @@ extern bool game_over;			/* Is this the end? */
 extern bool serious_fight;		/* fight longer and harder */
 #ifdef MOUSE
 extern bool mousemove;
-extern bool firstmousemove;
 #endif
 extern coord oldpos;			/* Position before last look() call */
 extern coord delta;			/* Change indicated to get_dir() */

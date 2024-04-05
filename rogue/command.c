@@ -61,6 +61,12 @@ command ()
     do_fuses(BEFORE);
     while (ntimes--)
     {
+#if 0
+    if (wizard) {
+	overlay(mw, cw);  /* monster awareness */
+	draw(cw);
+    }
+#endif
 	moving = FALSE;
 	look(after);
 	if (!running) {
@@ -142,7 +148,7 @@ command ()
 		ch = countch = do_mousemove(dest, prev);
 		if (ch == ' ') {
 		    prev.x = prev.y = 0;
-		} else {
+		} else if (strchr("hjklyubn", ch)) {
 		    prev.x = hero.x;
 		    prev.y = hero.y;
 		}
@@ -191,8 +197,6 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 		    dest.x = event.x;
 		    dest.y = event.y;
 		    ch = do_mouseclick(dest);
-		    if (strchr("hjlkyubn", ch))
-			countch = ch;
 	    }
 #endif
 
@@ -772,12 +776,6 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 	    }
 	}
     }
-#if 0
-    if (wizard) {
-	overlay(mw, cw);  /* monster awareness */
-	draw(cw);
-    }
-#endif
 #ifdef EARL
     if (find_slot(DAEMON, DAEMON_DOCTOR) == NULL) {
 	static bool doctor_just_died = TRUE;

@@ -9,6 +9,8 @@
 #include <ctype.h>
 #include "rogue.h"
 
+bool firststep = FALSE;
+
 char 
 do_mousemove (dest, prev)
 coord dest;
@@ -17,6 +19,7 @@ coord prev;
     char ch = ' ';
     static coord indoor = {0,0};
     static coord prevdest = {0,0};
+
     if (count) {
 	if (dest.x != prevdest.x || dest.y != prevdest.y) {
 	    indoor.x = indoor.y = 0;
@@ -30,6 +33,7 @@ coord prev;
 	int curdist, bestdist, bestx, besty;
 	int nmoves = 0;
 	int ndoors = 0;
+	int nmonst = 0;
 	coord mydest, pos;
 	bestx = hero.x;
 	besty = hero.y;
@@ -63,12 +67,16 @@ coord prev;
 	    for (i = 0; i < myroom->r_nexits; i++) {  /* for each door */
 		exit = myroom->r_exit[i];
 		if (mvwinch(stdscr, exit.y, exit.x) == DOOR
-		    || (is_carrying(TR_SILMARIL) && is_active(TR_SILMARIL))
+		    || (exit.x == minx && show(exit.y,minx-1) == PASSAGE)
+		    || (exit.x == maxx && show(exit.y,maxx+1) == PASSAGE)
+		    || (exit.y == miny && show(miny-1,exit.x) == PASSAGE)
+		    || (exit.y == maxy && show(maxy+1,exit.x) == PASSAGE)
 		) {
 		    if (exit.x == indoor.x && exit.y == indoor.y
 			&& ndoors > 1)
 			continue; /* don't pick the door we came in */
-		    doordist = DISTANCE(dest.y, dest.x, exit.y, exit.x);
+		    doordist = DISTANCE(hero.y, hero.x, exit.y, exit.x)
+				+ DISTANCE(exit.y, exit.x, dest.y, dest.x);
 		    if (dest.y > maxy && exit.y != maxy) {
 			if (exit.y == miny)
 			    doordist *= 8;
@@ -93,11 +101,7 @@ coord prev;
 			else
 			    doordist *= 4;
 		    }
-		    if (doordist < bestdist
-			|| (doordist == bestdist
-			&& DISTANCE(hero.y, hero.x, exit.y, exit.x)
-			 < DISTANCE(hero.y, hero.x, bestdoor.y, bestdoor.x))
-			) {
+		    if (doordist < bestdist) {
 			bestdist = doordist;
 			bestdoor = exit;
 		    }
@@ -115,7 +119,7 @@ coord prev;
 		if (!(x == mydest.x && y == mydest.y)) {
 		    if (x < 0 || x > COLS || y < 1 || y > LINES - 2 ||
 			(x == hero.x && y == hero.y) ||
-			(!step_ok(y, x, NOMONST, &player)
+			(!step_ok(y, x, MONSTOK, &player)
 			    && !(mvwinch(cw, y, x) == SECRETDOOR)))
 			continue;  /* skip invalid moves */
 		    if (!ISWEARING(R_LEVITATION) && off(player, CANFLY) && isatrap(mvwinch(cw, y, x)))
@@ -124,18 +128,23 @@ coord prev;
 			continue;  /* avoid trading posts */
 		    if (x == prev.x && y == prev.y)
 			continue;  /* don't reverse course */
-		    if (winat(hero.y, hero.x) == PASSAGE
+		    if ((winat(hero.y, hero.x) == PASSAGE || levtype == MAZELEV)
+			&& off(player, CANINWALL)
 			&& (y != hero.y && x != hero.x)
-			&& !firstmousemove)
+			&& !firststep)
 			continue;  /* don't diagonal */
 		    if (winat(hero.y, hero.x) == DOOR
 			&& winat(y,x) == PASSAGE
 			&& (y != hero.y && x != hero.x)
-			&& !firstmousemove)
+			&& !firststep)
 			continue;  /* don't diagonal */
 		    if (winat(hero.y, hero.x) == DOOR
 			&& roomin(&tryp) == roomin(&prev))
 			continue;  /* don't back into room */
+		    if (isalpha(show(y, x))) {  /* eek, a monster */
+			nmonst++;  /* we'll try to avoid it */
+			continue;
+		    }
 		} else {  /* we found it */
 		    if (!step_ok(y, x, NOMONST, &player)
 		     && !(mvwinch(stdscr, y, x) == SECRETDOOR)) {
@@ -147,10 +156,6 @@ coord prev;
 		}
 		nmoves++;
 		if (DISTANCE(mydest.y, mydest.x, y, x) < bestdist
-#if 0
-		    || (DISTANCE(mydest.y, mydest.x, y, x) == bestdist
-			&& rnd(2))
-#endif
 		    || nmoves == 1) {
 		    bestx = x;
 		    besty = y;
@@ -183,15 +188,20 @@ coord prev;
 		indoor.x = 0;
 		indoor.y = 0;
 	    }
-	if (nmoves < 1 && prev.y > 0) {	/* dead end */
-	    search(TRUE);		/* maybe there's a secret door */
-#if 0
-	    prev.x = prev.y = 0;	/* if not, back up */
-#endif
-	    count--;
+	if (nmoves < 1) {	/* dead end */
+	    if (nmonst > 0) {	/* stop if there's a monster in the way */
+		ch = '.';
+		count = 1;
+		after = FALSE;
+	    } else if (prev.y > 0 && levtype == NORMLEV) {
+		search(FALSE);	/* maybe there's a secret door */
+				/* otherwise we need to back up */
+		count--;
+	    }
 	} else if (bestdist < curdist || nmoves == 1 || ndoors == 1
-	    || indoor.x > 0 || firstmousemove
-	    || winat(hero.y, hero.x) == PASSAGE) {
+	    || indoor.x > 0 || firststep
+	    || winat(hero.y, hero.x) == PASSAGE
+	    || levtype == MAZELEV) {
 	    if (bestx < hero.x && besty == hero.y)
 		ch = 'h';
 	    else if (bestx == hero.x && besty > hero.y)
@@ -208,19 +218,10 @@ coord prev;
 		ch = 'b';
 	    else if (bestx > hero.x && besty > hero.y)
 		ch = 'n';
-#if 0
-	    prev.x = hero.x; prev.y = hero.y;
-#endif
-	    firstmousemove = FALSE;
+	    firststep = FALSE;
 	    if (count < 20 && bestdist < curdist && rnd(9)>0) {
 		count++;  /* don't stop just yet */
 	    }
-	} else {
-#if 0
-	    prev.x = prev.y = 0;
-#endif
-	    count = 1;
-	    ch = 's';
 	}
 	if ((hero.y == dest.y && hero.x == dest.x)
 	    ) {  /* we made it */
@@ -231,9 +232,6 @@ coord prev;
 	}
 	moving = TRUE;
     } else {
-#if 0
-	prev.x = prev.y = 0;
-#endif
 	mousemove = FALSE;
 	ch = '.';
     }
@@ -275,8 +273,10 @@ coord dest;
 	 * walk towards the mouse
 	 */
 	count = LINES + COLS;  /* upper limit */
+	if (levtype == MAZELEV && off(player, CANINWALL))
+	    count /= 2;
 	mousemove = TRUE;
-	firstmousemove = TRUE;
+	firststep = TRUE;
 	ch = ' ';  /* do nothing, for now */
     }
     return(ch);
