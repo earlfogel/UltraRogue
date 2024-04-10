@@ -211,6 +211,11 @@ lengthen_fuse(int id, int xtime)
     if ((wire = find_slot(FUSE,id)) == NULL)
         return;
 
+#ifdef EARL
+if (id == FUSE_UNCONFUSE && wire->d_time > 100)
+return;
+#endif
+
     wire->d_time += xtime;
 
     return;
