@@ -1523,6 +1523,11 @@ restore_file(FILE *savef)
 	}
     }
 
+#ifdef EARL
+    if (hungry_state > F_HUNGRY)
+	no_food++;  /* cheat to avoid starvation */
+#endif
+
     return(TRUE);
 }
 

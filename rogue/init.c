@@ -133,6 +133,14 @@ init_player ()
 	when C_THIEF:
 	    pstats.s_dext = (special == 4) ? 18 : 16 ;
     }
+#ifdef EARL
+    if (pstats.s_intel < 11 && pstats.s_wisdom < 13) {
+	if (rnd(2))
+	    pstats.s_intel = 11;
+	else
+	    pstats.s_wisdom = 13;
+    }
+#endif
     if (pstats.s_const > 15)
 	pstats.s_hpt += pstats.s_const - 15;
     max_stats = pstats ;
