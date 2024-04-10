@@ -1,3 +1,25 @@
+March 2024
+----------
+
+mouse moves and commands with counts now stop if you fall through a trap door
+
+mouse moves stop if a monster blocks your path
+
+mouse moves were broken on maze levels
+
+
+February 2024
+-------------
+
+better distance calculation when choosing doors with mouse move
+
+
+January 2024
+------------
+
+blessed ring of regeneration not quite as good
+
+
 December 2023
 -------------
 
@@ -990,7 +1012,7 @@ Wizard mode:
 
 Originally wizard mode required typing a null character as a command-line
 argument to urogue (and typing a password), but that's too hard, so you can
-now use 'urogue -w -w' instead.
+now use 'urogue -d' (for debug) instead.
 
 
 Earlier
