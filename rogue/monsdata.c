@@ -1063,7 +1063,7 @@ struct monster monsters[] = {
 },
 {"green slime",
         0,  TRUE,   TRUE,   'S',    "0-0",
-        {NOMOVE, ISSCAVENGE, BOLTDIVIDE, BLOWDIVIDE, CANRUST, NOMOVE, CANINFEST, CANROT, ISSMALL},
+        {NOMOVE, ISSCAVENGE, BOLTDIVIDE, BLOWDIVIDE, CANRUST, CANINFEST, CANROT, ISSMALL},
         0, 0,
         2,
         {8, 610,    5,  9,  HPT("2d8"), "1d1"}
