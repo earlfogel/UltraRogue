@@ -130,7 +130,8 @@ command ()
 		    ch = runch;
 		    searching_run++;
 		} else if (searching_run == 2) {
-		    if (winat(hero.y, hero.x) == PASSAGE || levtype != NORMLEV) {
+		    if (winat(hero.y, hero.x) == PASSAGE || levtype != NORMLEV
+			|| pstats.s_hpt < max_stats.s_hpt) {
 			ch = runch;
 		    } else {
 			ch = 's';
@@ -685,7 +686,7 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 	/* accidents and general clumsiness */
 	if (fighting && rnd(50) == 0 && minfight < 1) {
 	    msg("You become tired of this nonsense.");
-	    fighting = after = FALSE;
+	    fighting = FALSE;
 	}
 	/* If player is infested, take off a hit point */
 	if (on(player, HASINFEST) && !ISWEARING(R_HEALTH)) {
@@ -705,6 +706,8 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 	    for (item = mlist; item != NULL; item = next(item)) {
 		tp = (struct thing *) ldata(item);
 		if (tp && DISTANCE(tp->t_pos.y, tp->t_pos.x, hero.y, hero.x) < 5) {
+		    if (on(*tp, NOBOLT))
+			continue;
 		    if ((tp->t_stats.s_hpt -= roll(2,4)) <= 0) {
 			msg("The %s is killed by an electric shock.",
 				monsters[tp->t_index].m_name);
@@ -728,7 +731,7 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 				    monsters[tp->t_index].m_name);
 		    turn_on(*tp, ISRUN);
 		    turn_off(*tp, ISDISGUISE);
-		    after = running = FALSE;
+		    running = FALSE;
 		}
 	    }
 	}
@@ -738,7 +741,7 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 		&& rnd(pstats.s_dext) < 
 		2 - hitweight() + (on(player, STUMBLER) ? 4 : 0)) {
 	    msg("You trip and stumble over your weapon.");
-	    running = after = FALSE;
+	    running = FALSE;
 	    if (rnd(8) == 0 && (pstats.s_hpt -= roll(1,10)) <= 0) {
 		msg("You break your neck and die.");
 		death(D_FALL);
@@ -772,7 +775,7 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 
 	    if (rnd(rare) == 0) {
 		new_level(THRONE);
-		fighting = running = after = FALSE;
+		fighting = running = FALSE;
 	    }
 	}
     }
