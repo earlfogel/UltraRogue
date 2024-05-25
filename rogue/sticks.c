@@ -173,7 +173,7 @@ bool blessed;
 		item = find_mons(y, x);
 		tp = THINGPTR(item);
 		/* if the monster gets the saving throw, leave the case */
-		if (!blessed && save_throw(VS_MAGIC, tp)) {
+		if (save_throw(VS_MAGIC - (blessed ? 5 : (cursed ? -5 : 0)), tp)) {
 		    msg("Nothing happens.");
 		    break;
 		}
@@ -415,7 +415,7 @@ bool blessed;
 			isalpha(mvwinch(mw, y, x))) {
 		item = find_mons(y, x);
 		tp = THINGPTR(item);
-		if (!blessed && save_throw(VS_MAGIC, tp))
+		if (save_throw(VS_MAGIC - (blessed ? 5 : (cursed ? -5 : 0)), tp))
 		     msg("Nothing happens.");
 		else
 		     turn_on (*tp, ISHUH);
@@ -435,7 +435,7 @@ bool blessed;
 			isalpha(mvwinch(mw, y, x))) {
 		item = find_mons(y, x);
 		tp = THINGPTR(item);
-		if (!blessed && save_throw(VS_WAND, tp))
+		if (save_throw(VS_WAND  - (blessed ? 5 : (cursed ? -5 : 0)), tp))
 		    msg("Nothing happens.");
 		else {
 		    msg("");
