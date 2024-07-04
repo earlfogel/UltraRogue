@@ -19,26 +19,31 @@ coord prev;
     char ch = ' ';
     static coord indoor = {0,0};
     static coord prevdest = {0,0};
+    static coord mydest = {0,0};
 
     if (count) {
-	if (dest.x != prevdest.x || dest.y != prevdest.y) {
-	    indoor.x = indoor.y = 0;
-	    prevdest.x = dest.x;
-	    prevdest.y = dest.y;
-	}
-	/*
-	 * choose best direction for this step
-	 */
 	int x, y;
 	int curdist, bestdist, bestx, besty;
 	int nmoves = 0;
 	int ndoors = 0;
 	int nmonst = 0;
-	coord mydest, pos;
+	coord pos;
+
+	if (dest.x != prevdest.x || dest.y != prevdest.y) {
+	    indoor.x = indoor.y = 0;
+	    prev.x = prev.y = 0;  /* local variables */
+	    prevdest.x = dest.x;
+	    prevdest.y = dest.y;
+	    mydest.x = dest.x;
+	    mydest.y = dest.y;
+	} else {
+	    firststep = FALSE;
+	}
+	/*
+	 * choose best direction for this step
+	 */
 	bestx = hero.x;
 	besty = hero.y;
-	mydest.x = dest.x;
-	mydest.y = dest.y;
 	/*
 	 * if we're not in the same room as our destination,
 	 * choose the exit nearest to that destination.
@@ -52,21 +57,33 @@ coord prev;
 	}
 	if (roomin(&hero) != NULL
 	    && roomin(&hero) != roomin(&dest)
-	    && mvwinch(stdscr, hero.y, hero.x) != DOOR
+	    && roomin(&hero) != roomin(&mydest)
+	    && winat(hero.y, hero.x) != DOOR
 	    && off(player, CANINWALL)) {
 	    struct room *myroom = roomin(&hero);
+	    struct room *destroom = roomin(&dest);
 	    coord exit, bestdoor;
 	    int i, doordist;
 	    int minx = myroom->r_pos.x;
 	    int miny = myroom->r_pos.y;
 	    int maxx = myroom->r_pos.x + myroom->r_max.x - 1;
 	    int maxy = myroom->r_pos.y + myroom->r_max.y - 1;
+	    int mindx, mindy, maxdx, maxdy;
+	    if (destroom == NULL) {
+		mindx = maxdx = dest.x;
+		mindy = maxdy = dest.y;
+	    } else {
+		mindx = destroom->r_pos.x;
+		mindy = destroom->r_pos.y;
+		maxdx = destroom->r_pos.x + destroom->r_max.x - 1;
+		maxdy = destroom->r_pos.y + destroom->r_max.y - 1;
+	    }
 	    bestdoor.y = 0;
 	    bestdoor.x = 0;
 	    bestdist = (COLS*COLS + LINES*LINES) * 32;  /* a big number */
 	    for (i = 0; i < myroom->r_nexits; i++) {  /* for each door */
 		exit = myroom->r_exit[i];
-		if (mvwinch(stdscr, exit.y, exit.x) == DOOR
+		if (winat(exit.y, exit.x) == DOOR
 		    || (exit.x == minx && show(exit.y,minx-1) == PASSAGE)
 		    || (exit.x == maxx && show(exit.y,maxx+1) == PASSAGE)
 		    || (exit.y == miny && show(miny-1,exit.x) == PASSAGE)
@@ -75,27 +92,29 @@ coord prev;
 		    if (exit.x == indoor.x && exit.y == indoor.y
 			&& ndoors > 1)
 			continue; /* don't pick the door we came in */
+		    if (winat(exit.y, exit.x) == ' ')
+			continue;  /* only pick doors we know */
 		    doordist = DISTANCE(hero.y, hero.x, exit.y, exit.x)
 				+ DISTANCE(exit.y, exit.x, dest.y, dest.x);
-		    if (dest.y > maxy && exit.y != maxy) {
+		    if (mindy > maxy && exit.y != maxy) {
 			if (exit.y == miny)
 			    doordist *= 8;
 			else
 			    doordist *= 4;
 		    }
-		    if (dest.y < miny && exit.y != miny) {
+		    if (maxdy < miny && exit.y != miny) {
 			if (exit.y == maxy)
 			    doordist *= 8;
 			else
 			    doordist *= 4;
 		    }
-		    if (dest.x > maxx && exit.x != maxx) {
+		    if (mindx > maxx && exit.x != maxx) {
 			if (exit.x == minx)
 			    doordist *= 8;
 			else
 			    doordist *= 4;
 		    }
-		    if (dest.x < minx && exit.x != minx) {
+		    if (maxdx < minx && exit.x != minx) {
 			if (exit.x == maxx)
 			    doordist *= 8;
 			else
@@ -109,8 +128,19 @@ coord prev;
 	    }
 	    mydest.x = bestdoor.x;
 	    mydest.y = bestdoor.y;
+debug("chose door at (%d,%d)", mydest.x, mydest.y);
+	} else if (
+	    (roomin(&hero) != NULL
+		&& roomin(&hero) != roomin(&dest)
+		&& roomin(&hero) != roomin(&mydest)
+	    )
+	    || winat(hero.y, hero.x) == DOOR
+	    || on(player, CANINWALL)
+	) {
+	    mydest.x = dest.x;
+	    mydest.y = dest.y;
 	}
-	curdist = DISTANCE(mydest.y, mydest.x, hero.y, hero.x);
+	curdist = DISTANCE(mydest.y, mydest.x, hero.y, hero.x) + 1;
 	bestdist = curdist;
 	for (x = hero.x - 1; x <= hero.x + 1; x++) {
 	    for (y = hero.y - 1; y <= hero.y + 1; y++) {
@@ -120,7 +150,7 @@ coord prev;
 		    if (x < 0 || x > COLS || y < 1 || y > LINES - 2 ||
 			(x == hero.x && y == hero.y) ||
 			(!step_ok(y, x, MONSTOK, &player)
-			    && !(mvwinch(cw, y, x) == SECRETDOOR)))
+			    && !(winat(y, x) == SECRETDOOR)))
 			continue;  /* skip invalid moves */
 		    if (!ISWEARING(R_LEVITATION) && off(player, CANFLY) && isatrap(mvwinch(cw, y, x)))
 			continue;  /* avoid traps */
@@ -131,11 +161,13 @@ coord prev;
 		    if ((winat(hero.y, hero.x) == PASSAGE || levtype == MAZELEV)
 			&& off(player, CANINWALL)
 			&& (y != hero.y && x != hero.x)
+			&& !isalpha(winat(prev.y, prev.x))
 			&& !firststep)
 			continue;  /* don't diagonal */
 		    if (winat(hero.y, hero.x) == DOOR
 			&& winat(y,x) == PASSAGE
 			&& (y != hero.y && x != hero.x)
+			&& !isalpha(winat(prev.y, prev.x))
 			&& !firststep)
 			continue;  /* don't diagonal */
 		    if (winat(hero.y, hero.x) == DOOR
@@ -146,12 +178,12 @@ coord prev;
 			continue;
 		    }
 		} else {  /* we found it */
-		    if (!step_ok(y, x, NOMONST, &player)
-		     && !(mvwinch(stdscr, y, x) == SECRETDOOR)) {
-			bestx = hero.x;
-			besty = hero.y;
+		    if ((winat(y, x) == SECRETDOOR)) {
+			count--;
+			return('s');  /* we'll search for it */
+		    } else if (!step_ok(y, x, NOMONST, &player)) {
 			count = 1;
-			break;
+			return(' ');
 		    }
 		}
 		nmoves++;
@@ -187,6 +219,8 @@ coord prev;
 	    ) { /* leave a room */
 		indoor.x = 0;
 		indoor.y = 0;
+		mydest.x = dest.x;
+		mydest.y = dest.y;
 	    }
 	if (nmoves < 1) {	/* dead end */
 	    if (nmonst > 0) {	/* stop if there's a monster in the way */
@@ -194,8 +228,13 @@ coord prev;
 		count = 1;
 		after = FALSE;
 	    } else if (prev.y > 0 && levtype == NORMLEV) {
-		search(FALSE);	/* maybe there's a secret door */
-				/* otherwise we need to back up */
+		/* maybe there's a secret door */
+		/* otherwise we need to back up */
+		search(FALSE);
+		search(FALSE);
+		search(FALSE);
+		count--;
+		count--;
 		count--;
 	    }
 	} else if (bestdist < curdist || nmoves == 1 || ndoors == 1
@@ -219,7 +258,7 @@ coord prev;
 	    else if (bestx > hero.x && besty > hero.y)
 		ch = 'n';
 	    firststep = FALSE;
-	    if (count < 20 && bestdist < curdist && rnd(9)>0) {
+	    if (count < 30 && bestdist < curdist && rnd(9)>0) {
 		count++;  /* don't stop just yet */
 	    }
 	}
