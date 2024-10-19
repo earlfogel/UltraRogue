@@ -10,6 +10,7 @@
 #include "rogue.h"
 
 bool firststep = FALSE;
+static int nsearch = 3;
 
 char 
 do_mousemove (dest, prev)
@@ -177,9 +178,12 @@ debug("chose door at (%d,%d)", mydest.x, mydest.y);
 			nmonst++;  /* we'll try to avoid it */
 			continue;
 		    }
+		    if (winat(hero.y, hero.x) == PASSAGE
+			&& winat(y, x) == SECRETDOOR) {
+			return('s');  /* we'll search for it */
+		    }
 		} else {  /* we found it */
 		    if ((winat(y, x) == SECRETDOOR)) {
-			count--;
 			return('s');  /* we'll search for it */
 		    } else if (!step_ok(y, x, NOMONST, &player)) {
 			count = 1;
@@ -227,15 +231,9 @@ debug("chose door at (%d,%d)", mydest.x, mydest.y);
 		ch = '.';
 		count = 1;
 		after = FALSE;
-	    } else if (prev.y > 0 && levtype == NORMLEV) {
+	    } else if (prev.y > 0 && levtype == NORMLEV && nsearch-- > 0) {
 		/* maybe there's a secret door */
-		/* otherwise we need to back up */
-		search(FALSE);
-		search(FALSE);
-		search(FALSE);
-		count--;
-		count--;
-		count--;
+		return('s');
 	    }
 	} else if (bestdist < curdist || nmoves == 1 || ndoors == 1
 	    || indoor.x > 0 || firststep
@@ -316,6 +314,7 @@ coord dest;
 	    count /= 2;
 	mousemove = TRUE;
 	firststep = TRUE;
+	nsearch = 3;
 	ch = ' ';  /* do nothing, for now */
     }
     return(ch);
