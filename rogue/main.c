@@ -573,7 +573,7 @@ tweak_settings (bool first_time, int old_difficulty)
     /* urogue -hard */
     } else if (difficulty > 2) {
 	if (first_time) {
-	    if (difficulty <= 3 &&
+	    if (difficulty == 3 &&
 		(player.t_ctype == C_THIEF || player.t_ctype == C_FIGHTER)) {
 		p_know[P_TFIND] = TRUE;
 		s_know[S_IDENT] = TRUE;
