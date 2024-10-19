@@ -881,14 +881,21 @@ void
 ur_write_window(FILE *savef, WINDOW *win)
 {
     int i,j;
+#ifdef PDCURSES
+    int y = getmaxy(win);
+    int x = getmaxx(win);
+#else
+    int y = getmaxy(win) - 1;
+    int x = getmaxx(win) - 1;
+#endif
 
     ur_write_long(savef, URS_WINDOW);
 
-    ur_write_short(savef, win->_maxy);
-    ur_write_short(savef, win->_maxx);
+    ur_write_short(savef, y);
+    ur_write_short(savef, x);
 
-    for(i=0; i < win->_maxy; i++)
-        for(j = 0; j < win->_maxx; j++)
+    for(i=0; i < y; i++)
+        for(j = 0; j < x; j++)
             ur_write_short(savef, mvwinch(win,i,j));
 }
 
@@ -896,6 +903,13 @@ void
 ur_read_window(FILE *savef, WINDOW *win)
 {
     int i,j;
+#ifdef PDCURSES
+    int y = getmaxy(win);
+    int x = getmaxx(win);
+#else
+    int y = getmaxy(win) - 1;
+    int x = getmaxx(win) - 1;
+#endif
     int maxy, maxx;
     long id;
 
@@ -906,19 +920,19 @@ ur_read_window(FILE *savef, WINDOW *win)
     maxy = ur_read_short(savef);
     maxx = ur_read_short(savef);
 
-    if (win->_maxy != maxy || win->_maxx != maxx) {
+    if (y != maxy || x != maxx) {
 	char oops[200];
 	endwin();
 #ifdef PDCURSES
 	sprintf(oops, "Terminal dimensions (%dx%d) do not match saved game (%dx%d).",
-		win->_maxx,win->_maxy,maxx,maxy);
+		x,y,maxx,maxy);
 	printf("%s\nPlease set window size and try again.\n", oops);
 	printf("I.e.:\n");
 	printf("   set PDC_LINES=%d\n", maxy);
 	printf("   set PDC_COLS=%d\n", maxx);
 #else
 	sprintf(oops, "Terminal dimensions (%dx%d) do not match saved game (%dx%d).",
-		win->_maxx+1,win->_maxy+1,maxx+1,maxy+1);
+		x+1,y+1,maxx+1,maxy+1);
 	printf("%s\nPlease resize window and try again.\n", oops);
 #endif
 	exit(1);
