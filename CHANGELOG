@@ -1,3 +1,23 @@
+October 2024
+------------
+
+better mouse moves when faced with (possible) secret door
+
+
+July 2024
+---------
+
+prefer straight line paths for mouse moves (avoid drunkard's walk)
+
+
+May 2024
+--------
+
+better path calculation for mouse moves between rooms
+
+fix: use curses getmaxy() and getmaxx() instead of struct WINDOW internals
+
+
 April 2024
 ----------
 
