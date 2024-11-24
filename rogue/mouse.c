@@ -129,7 +129,6 @@ coord prev;
 	    }
 	    mydest.x = bestdoor.x;
 	    mydest.y = bestdoor.y;
-debug("chose door at (%d,%d)", mydest.x, mydest.y);
 	} else if (
 	    (roomin(&hero) != NULL
 		&& roomin(&hero) != roomin(&dest)
@@ -159,20 +158,17 @@ debug("chose door at (%d,%d)", mydest.x, mydest.y);
 			continue;  /* avoid trading posts */
 		    if (x == prev.x && y == prev.y)
 			continue;  /* don't reverse course */
-		    if ((winat(hero.y, hero.x) == PASSAGE || levtype == MAZELEV)
+		    if ((winat(hero.y, hero.x) == PASSAGE || levtype == MAZELEV
+		     || (winat(hero.y, hero.x) == DOOR && winat(y,x) == PASSAGE))
 			&& off(player, CANINWALL)
 			&& (y != hero.y && x != hero.x)
 			&& !isalpha(winat(prev.y, prev.x))
 			&& !firststep)
 			continue;  /* don't diagonal */
 		    if (winat(hero.y, hero.x) == DOOR
-			&& winat(y,x) == PASSAGE
-			&& (y != hero.y && x != hero.x)
-			&& !isalpha(winat(prev.y, prev.x))
+			&& roomin(&prev)
+			&& roomin(&tryp) == roomin(&prev)
 			&& !firststep)
-			continue;  /* don't diagonal */
-		    if (winat(hero.y, hero.x) == DOOR
-			&& roomin(&tryp) == roomin(&prev))
 			continue;  /* don't back into room */
 		    if (isalpha(show(y, x))) {  /* eek, a monster */
 			nmonst++;  /* we'll try to avoid it */
@@ -238,6 +234,7 @@ debug("chose door at (%d,%d)", mydest.x, mydest.y);
 	} else if (bestdist < curdist || nmoves == 1 || ndoors == 1
 	    || indoor.x > 0 || firststep
 	    || winat(hero.y, hero.x) == PASSAGE
+	    || winat(hero.y, hero.x) == DOOR
 	    || levtype == MAZELEV) {
 	    if (bestx < hero.x && besty == hero.y)
 		ch = 'h';
