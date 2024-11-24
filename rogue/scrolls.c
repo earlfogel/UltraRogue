@@ -664,7 +664,8 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
 			    lb = NULL;
 			} else if (lb->o_hplus + lb->o_dplus > 15
 				&& (lb->o_flags & ISSILVER)
-				&& !(lb->o_flags & ISVORPED)) {
+				&& !(lb->o_flags & ISVORPED)
+				&& difficulty <= 3) {
 			    msg("Your weapon begins to shine.");
 			    lb->o_flags |= ISVORPED;  /* vorpal blade */
 			}
@@ -691,7 +692,8 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
 		if (blessed && !(lb->o_flags & ISSILVER)) {
 		    lb->o_hplus += rnd(2) + 2;
 		    lb->o_flags |= ISSILVER;
-		    if (lb->o_hplus + lb->o_dplus > 15 && !(lb->o_flags & ISVORPED)) {
+		    if (lb->o_hplus + lb->o_dplus > 15 && !(lb->o_flags & ISVORPED)
+			&& difficulty <= 3) {
 			msg("Your weapon has turned to silver and begins to shine!");
 			lb->o_flags |= ISVORPED;  /* vorpal blade */
 		    } else {

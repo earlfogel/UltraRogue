@@ -82,7 +82,7 @@ apply ()
 	    }
 	    debug("Rolled %d.", chance);
 	    if (chance > pstats.s_lvl*4) {
-		if (rnd(7) == 0 && difficulty > 2)
+		if (rnd(7) == 0 && difficulty >= 2)
 		    do_major();
 		else
 		    do_minor(obj);
@@ -800,24 +800,17 @@ do_major ()
 		    if ((obj = OBJPTR(item)) == cur_weapon)
 			break;
 		if (obj) {
-		    if (obj->o_flags & IS2PROT) {
-			msg("Your weapon vibrates for a moment.");
-		    } else if (obj->o_flags & ISPROT) {
-			msg("Your %s vibrates in your hand.", inv_name(obj, TRUE));
-			obj->o_flags &= ~ISPROT;
-		    } else {
-			if (obj->o_flags & ISMETAL)
-			    msg("Your %s melts and disappears.", inv_name(obj, TRUE));
-			else
-			    msg("Your %s crumbles in your hands.",
-					inv_name(obj, TRUE));
-			obj->o_flags &= ~ISCURSED;
-			dropcheck(obj);
-			detach(pack, item);
-			freeletter(item);
-			inpack--;
-			discard(item);
-		    }
+		    if (obj->o_flags & ISMETAL)
+			msg("Your %s melts and disappears.", inv_name(obj, TRUE));
+		    else
+			msg("Your %s crumbles in your hands.",
+				    inv_name(obj, TRUE));
+		    obj->o_flags &= ~ISCURSED;
+		    dropcheck(obj);
+		    detach(pack, item);
+		    freeletter(item);
+		    inpack--;
+		    discard(item);
 		}
 	}
 	when 9: {
@@ -832,21 +825,14 @@ do_major ()
 		    if ((obj = OBJPTR(item)) == cur_armor)
 			break;
 		if (obj) {
-		    if (obj->o_flags & IS2PROT) {
-			msg("Your armor vibrates for a moment.");
-		    } else if (obj->o_flags & ISPROT) {
-			msg("Your %s vibrates uncomfortably.", inv_name(obj, TRUE));
-			obj->o_flags &= ~ISPROT;
-		    } else {
-			msg("Your %s crumbles into small black powdery dust.",
-				    inv_name(obj, TRUE));
-			obj->o_flags &= ~ISCURSED;
-			dropcheck(obj);
-			detach(pack, item);
-			freeletter(item);
-			inpack--;
-			discard(item);
-		    }
+		    msg("Your %s crumbles into small black powdery dust.",
+				inv_name(obj, TRUE));
+		    obj->o_flags &= ~ISCURSED;
+		    dropcheck(obj);
+		    detach(pack, item);
+		    freeletter(item);
+		    inpack--;
+		    discard(item);
 		}
 	}
 	when 10:
@@ -854,25 +840,18 @@ do_major ()
 		    msg("Your hand glows yellow for an instant.");
 		    return;
 		}
-		if (cur_weapon->o_flags & IS2PROT) {
-		    msg("Your weapon vibrates for a moment.");
-		} else if (cur_weapon->o_flags & ISPROT) {
-		    msg("Your %s vibrates in your hand.", inv_name(cur_weapon, TRUE));
-		    cur_weapon->o_flags &= ~ISPROT;
-		} else {
-		    msg("Your %s glows bright red for a moment.", 
-			weaps[cur_weapon->o_which].w_name);
-		    if (cur_weapon->o_hplus > 0)
-			cur_weapon->o_hplus = -rnd(3);
-		    else
-			cur_weapon->o_hplus -= rnd(3);
-		    if (cur_weapon->o_dplus > 0)
-			cur_weapon->o_dplus = -rnd(3);
-		    else
-			cur_weapon->o_dplus -= rnd(3);
-		    cur_weapon->o_flags = ISCURSED|ISLOST;
-		    cur_weapon->o_ac = 0;
-		}
+		msg("Your %s glows bright red for a moment.", 
+		    weaps[cur_weapon->o_which].w_name);
+		if (cur_weapon->o_hplus > 0)
+		    cur_weapon->o_hplus = -rnd(3);
+		else
+		    cur_weapon->o_hplus -= rnd(3);
+		if (cur_weapon->o_dplus > 0)
+		    cur_weapon->o_dplus = -rnd(3);
+		else
+		    cur_weapon->o_dplus -= rnd(3);
+		cur_weapon->o_flags = ISCURSED|ISLOST;
+		cur_weapon->o_ac = 0;
 	otherwise:
 		msg("You feel warm all over.");
 		turn_on(player, POWEREAT);
@@ -926,7 +905,7 @@ do_phial ()
 	(void) wgetch(hw);
     }
     else
-	msg("Your attempt is successsful.");
+	msg("Your attempt is successful.");
     switch (which) {
 	case 0: read_scroll(S_LIGHT, TRUE);
 	when 1:
