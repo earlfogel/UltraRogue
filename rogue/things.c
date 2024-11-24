@@ -74,7 +74,7 @@ bool drop;
 	    if (obj->o_flags & ISPOISON)
 		sprintf(pb, "poisoned ");
 	    pb = &prbuf[strlen(prbuf)];
-	    if (obj->o_flags & ISVORPED)
+	    if (obj->o_flags & ISVORPED && difficulty <= 3)
 		sprintf(pb, "vorpal ");
 	    else if (obj->o_flags & ISSILVER)
 		sprintf(pb, "silver ");
