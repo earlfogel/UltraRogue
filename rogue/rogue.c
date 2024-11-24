@@ -208,7 +208,7 @@ struct magic_item s_magic[MAXSCROLLS] = {
     { "light",			 75, 100, 25, 15 },
     { "hold monster",		 25, 200, 33, 20 },
     { "sleep",			 25,  50, 20, 10 },
-    { "enchantment",		130, 130, 14, 9 },
+    { "enchantment",		135, 130, 14, 9 },
     { "identify",		160, 100, 0, 15 },
     { "scare monster",		 35, 190, 27, 21 },
     { "gold detection",		 15, 110, 20, 20 },
@@ -225,7 +225,7 @@ struct magic_item s_magic[MAXSCROLLS] = {
     { "ownership",		 20, 550, 25, 15 },
     { "food detection",		 40, 150, 25, 15 },
     { "electrification",	 20, 450, 0, 0 },
-    { "peace",			  5, 500, 0, 10 },
+    { "peace",			  0, 500, 0, 10 },
 };
 
 struct magic_item p_magic[MAXPOTIONS] = {
