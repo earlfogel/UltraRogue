@@ -198,7 +198,7 @@ bool thrown;
             /* metal weapons pass through NOMETAL monsters */
             if (on(*tp, NOMETAL) && (weap != NULL) &&
                 (weap->o_flags & ISMETAL) &&
-		!(weap->o_flags & ISVORPED)) {
+		!(weap->o_flags & ISVORPED && difficulty <= 3)) {
 		msg("The %s passes through the %s!",
 		    weaps[weap->o_which].w_name,
 		    monsters[tp->t_index].m_name);
@@ -219,8 +219,7 @@ bool thrown;
 		aggravate();
 		if (rnd(wizard ? 3 : 50) == 0 && cur_armor != NULL 
 		    && cur_armor->o_which == CRYSTAL_ARMOR
-		    && (difficulty > 2 || !(cur_armor->o_flags & ISPROT))
-		    ) {
+		    && (difficulty > 1)) {
 
 		    struct linked_list *item;
 		    struct object *obj;
@@ -233,11 +232,8 @@ bool thrown;
 		    if (item == NULL) {
 			debug("Can't find crystalline armor being worn.");
 		    } else if (cur_armor->o_flags & IS2PROT) {
-			if (!fighting)
-			    msg("Your armor vibrates for a moment.");
-		    } else if (cur_armor->o_flags & ISPROT) {
 			msg("Your armor vibrates uncomfortably.");
-			obj->o_flags &= ~ISPROT;
+			cur_armor->o_ac--;
 			fighting = FALSE;
 		    }
 		    else {
@@ -257,7 +253,8 @@ bool thrown;
 
 	    /* vorpal blades are awesome */
 	    if (cur_weapon != NULL && cur_weapon->o_flags & ISVORPED
-		    && on(*tp, CANSUMMON) && rnd(difficulty) == 0) {
+		    && on(*tp, CANSUMMON) && rnd(difficulty) == 0
+		    && difficulty <= 3) {
 		turn_off(*tp, CANSUMMON);
 	    }
 
@@ -449,8 +446,7 @@ bool thrown;
 	     */
 	    if (cur_armor != NULL && cur_armor->o_which == CRYSTAL_ARMOR) {
 		if (rnd(mp->t_stats.s_str + (cur_armor->o_ac/2)) > 20
-		    && (difficulty > 2 || !(cur_armor->o_flags & ISPROT))
-		    ) {
+		    && (difficulty > 1)) {
 
 		    struct linked_list *item;
 		    struct object *obj;
@@ -463,11 +459,8 @@ bool thrown;
 		    if (item == NULL) {
 			debug("Can't find crystalline armor being worn.");
 		    } else if (cur_armor->o_flags & IS2PROT) {
-			if (!fighting)
-			    msg("Your armor vibrates for a moment.");
-		    } else if (cur_armor->o_flags & ISPROT) {
 			msg("Your armor vibrates uncomfortably.");
-			obj->o_flags &= ~ISPROT;
+			cur_armor->o_ac--;
 			fighting = FALSE;
 		    }
 		    else {
@@ -1222,7 +1215,8 @@ struct object *cur_weapon;
 
 	    /* vorpal blades are awesome */
 	    if (cur_weapon != NULL && cur_weapon->o_flags & ISVORPED
-		    && on(*def_er, BLOWDIVIDE) && rnd(difficulty) == 0) {
+		    && on(*def_er, BLOWDIVIDE) && rnd(difficulty) == 0
+		    && difficulty <= 3) {
                 turn_off(*def_er, BLOWDIVIDE);
             }
 
