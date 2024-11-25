@@ -223,7 +223,8 @@ int monst;
 	move(i+14, 0);
 	printw("To recap your last moments, ...\n\n");
 	for (i=2;i<10;i++) {
-	    printw("    %s\n", msgbuf[(msg_index+i)%10]);
+		if (getcury(stdscr) < LINES-1)
+		    printw("    %s\n", msgbuf[(msg_index+i)%10]);
 	}
     }
 
