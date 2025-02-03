@@ -1064,7 +1064,8 @@ dip_it ()
 			ob->o_flags &= ~ISCURSED;
 			if (ob->o_hplus + ob->o_dplus > 15
                                 && (ob->o_flags & ISSILVER)
-                                && !(ob->o_flags & ISVORPED)) {
+                                && !(ob->o_flags & ISVORPED)
+				&& difficulty <= 3) {
                             msg("Your weapon begins to shine.");
                             ob->o_flags |= ISVORPED;
 			} else
