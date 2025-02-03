@@ -1210,7 +1210,7 @@ struct object *cur_weapon;
 			&& off(*def_er, ISUNDEAD)
 			&& !save_throw(VS_POISON, def_er)) {
 		damage = (def->s_hpt / 2) + 5;
-		debug("Defender was hit by poison.");
+		/* debug("Defender was hit by poison."); */
 	    }
 
 	    /* vorpal blades are awesome */

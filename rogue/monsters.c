@@ -56,7 +56,7 @@ bool no_unique;
 		nlevmons*(cur_level - 1 - 4) + (rnd(range) - (range - 1 - NLEVMONS));
 	}
 	/* make the mid-dungeon more interesting */
-	if (difficulty > 2 && wander && cur_level > 40 && cur_level < 80
+	if (difficulty > 3 && wander && cur_level > 40 && cur_level < 80
 	    && d < nummonst-50 && rnd(15) == 0) {
 	    d += 50;
 	}

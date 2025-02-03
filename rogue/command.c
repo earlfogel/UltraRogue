@@ -82,7 +82,10 @@ command ()
 		usleep(4000);
 #ifdef MOUSE
 	    else if (mousemove)
-		usleep(24000);
+		if (wizard)
+		    usleep(40000);
+		else
+		    usleep(24000);
 #endif
 	    else if (count)
 		usleep(8000);
@@ -462,7 +465,7 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 				msg("Welcome, oh mighty wizard.");
 				wizard = TRUE;
 				(void) signal(SIGQUIT, SIG_DFL);
-#ifdef EARL
+#if 0
 				pstats.s_hpt = max_stats.s_hpt;
 				quaff(P_RESTORE, FALSE);
 				spell_power = 0;

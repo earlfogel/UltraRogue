@@ -24,7 +24,8 @@ doctor (daemon_arg *arg)
     maxp = &(tp->maxstats);
 
     /* slowly regain magic, prayer points and luck */
-    if (tp == &player && curp->s_hpt == maxp->s_hpt && hungry_state == F_OK) {
+    if (tp == &player && curp->s_hpt == maxp->s_hpt && hungry_state == F_OK
+	&& difficulty < 3) {
 	if (spell_power > 0 && rnd(1000) < 1) {
 	    spell_power--;
 	    debug("You feel a bit more magical.");
