@@ -21,6 +21,7 @@ coord prev;
     static coord indoor = {0,0};
     static coord prevdest = {0,0};
     static coord mydest = {0,0};
+    int nsecret = 0;
 
     if (count) {
 	int x, y;
@@ -146,11 +147,14 @@ coord prev;
 	    for (y = hero.y - 1; y <= hero.y + 1; y++) {
 		coord tryp;
 		tryp.x = x; tryp.y = y;
+		if (mvwinch(cw, y, x) == SECRETDOOR) {
+		    nsecret++;
+		}
 		if (!(x == mydest.x && y == mydest.y)) {
 		    if (x < 0 || x > COLS || y < 1 || y > LINES - 2 ||
 			(x == hero.x && y == hero.y) ||
 			(!step_ok(y, x, MONSTOK, &player)
-			    && !(winat(y, x) == SECRETDOOR)))
+			    /* && !(winat(y, x) == SECRETDOOR) */ ))
 			continue;  /* skip invalid moves */
 		    if (!ISWEARING(R_LEVITATION) && off(player, CANFLY) && isatrap(mvwinch(cw, y, x)))
 			continue;  /* avoid traps */
@@ -173,10 +177,6 @@ coord prev;
 		    if (isalpha(show(y, x))) {  /* eek, a monster */
 			nmonst++;  /* we'll try to avoid it */
 			continue;
-		    }
-		    if (winat(hero.y, hero.x) == PASSAGE
-			&& winat(y, x) == SECRETDOOR) {
-			return('s');  /* we'll search for it */
 		    }
 		} else {  /* we found it */
 		    if ((winat(y, x) == SECRETDOOR)) {
@@ -227,6 +227,8 @@ coord prev;
 		ch = '.';
 		count = 1;
 		after = FALSE;
+	    } else if (nsecret > 0) {
+		return('s');  /* there is a secret door */
 	    } else if (prev.y > 0 && levtype == NORMLEV && nsearch-- > 0) {
 		/* maybe there's a secret door */
 		return('s');
@@ -253,7 +255,7 @@ coord prev;
 	    else if (bestx > hero.x && besty > hero.y)
 		ch = 'n';
 	    firststep = FALSE;
-	    if (count < 30 && bestdist < curdist && rnd(9)>0) {
+	    if (count < 50 && bestdist < curdist && rnd(9)>0) {
 		count++;  /* don't stop just yet */
 	    }
 	}
