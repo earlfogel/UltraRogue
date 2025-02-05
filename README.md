@@ -15,7 +15,7 @@ UltraRogue is an old ascii-graphics game developed by Herb Chong in the
 1980s and 1990s.  It's one of many roguelike games inspired by Dungeons and
 Dragons and by the original Unix game Rogue.
 
-I fell in love with urogue in the mid-1980s.  Later versions added
+I fell in love with urogue 1.0.2 in the mid-1980s.  Later versions added
 more features and monsters, but the game also became more cumbersome
 to play.
 
@@ -45,7 +45,7 @@ less likely to be summoned to a throne room.  Also, armor is more
 effective.
 
 In hard games, there are fewer blessed items, artifacts are more dangerous,
-and armor is less effective.  You are more vulnerable to magical
+and armor is less effective.  You are also more vulnerable to magical
 attacks and your ability to do magic is reduced.  You can't start a hard
 game with plate, mithril or crystalline armor, but you may find some later.
 
@@ -69,9 +69,9 @@ or via the SROGUEOPTS environment variable.
 
 ### Monsters
 
-To keep things interesting, urogue chooses a random selection of monsters
+To keep things interesting, urogue chooses a different selection of monsters
 each time you play.  By default, that includes the classic monsters from
-urogue 1.0.2 plus a random assortment of others.  If you want, you can use
+urogue 1.0.2 plus a random assortment of others.  If you like, you can use
 command line options to change this:
 
     * -mc: use only the classic monsters from urogue 1.0.2
@@ -88,9 +88,9 @@ you are fighting moves or dies, urogue picks another and keeps going.  Fights en
 when there are no more monsters in reach, or when you are too weak, sick,
 hungry or injured to continue.
 
-There are fewer interruptions when fighting, and fewer messages to
-distract you.  If you are much stronger than the monsters around
-you, this means you can press 'F' and then press space until they
+Compared to the original, there are fewer interruptions when fighting, and
+fewer messages to distract you.  If you are much stronger than the monsters
+around you, this means you can press 'F' and then press space until they
 all disappear.
 
 With the 'F' command, urogue tries to avoid friendly
@@ -101,14 +101,15 @@ include friendly and dividing monsters.
 
 ### Running Around
 
-Pressing \<SHIFT\> and a direction key runs until you reach something
+Pressing \<SHIFT\> and a direction key to run until you reach something
 interesting.  There is an option (nodoorstop) that lets you run into things
 (as in classic rogue).
 
-Pressing \<CTRL\> and a direction key does a controlled run -- where you
-stop and search after every step and don't pick things up when you step on
-them.  This is particularly useful in treasure chambers, but it does mean
-that any monsters that are chasing you quickly catch up.
+Pressing \<CTRL\> and a direction key does a controlled run -- you
+search after every step and don't pick things up when you step on
+them.  This is particularly useful when searching for secret doors and in
+treasure chambers, but it does mean that any monsters that are chasing you
+quickly catch up.
 
 ## Getting Started
 
