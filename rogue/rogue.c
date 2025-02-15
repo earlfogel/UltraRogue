@@ -408,7 +408,7 @@ char *cnames[4][11] = {
 
 struct h_list helpstr[] = {
 	{'?',	"	prints help"},
-	{'/',	"	identify object"},
+	{'/',	"	identify object or creature"},
 	{'h',	"	left"},
 	{'j',	"	down"},
 	{'k',	"	up"},

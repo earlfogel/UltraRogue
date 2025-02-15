@@ -1350,7 +1350,7 @@ char *ee;
 	case 0: s = (er == 0 ? " miss" : " misses");
 	when 1: s = (er == 0 ? " swing and miss" : " swings and misses");
 	when 2: s = (er == 0 ? " barely miss" : " barely misses");
-	when 3: s = (er == 0 ? " don't hit" : " doesn't hit");
+	when 3: s = (er == 0 ? " just miss" : " just misses");
     }
     addmsg(s);
     addmsg(" %s", prname(ee, FALSE));

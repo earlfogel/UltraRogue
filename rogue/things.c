@@ -150,11 +150,16 @@ bool drop;
 
     /* Is it time to reveal blessed/cursed status? */
     if (game_over && (obj->o_type == FOOD
+	    || (obj->o_type == ARTIFACT && wizard)
 	    || (obj->o_type == RING && (obj->o_ac != 11 || wizard)) )) {
 	if (obj->o_flags & ISCURSED)
 	    strcat(prbuf, " (cursed)");
 	else if (obj->o_flags & ISBLESSED)
 	    strcat(prbuf, " (blessed)");
+#if 0
+	if (wizard)
+	    sprintf(prbuf + strlen(prbuf), " ac=%d", obj->o_ac);
+#endif
     }
 
     if (obj == cur_armor)
