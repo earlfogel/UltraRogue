@@ -1,14 +1,12 @@
 @echo off
 rem Run UltraRogue
 
-rem Set Options:
-rem set SROGUEOPTS=cutcorners,difficulty=easy
+rem Set options and window size:
+rem SET SROGUEOPTS=cutcorners,difficulty=easy,autosave
+rem SET PDC_LINES=30
+rem SET PDC_COLS=90
 
-rem If we have a saved game, resume it, otherwise start a new one.
-if exist %APPDATA%\urogue\rogue.save (
-	urogue.exe %APPDATA%\urogue\rogue.save
-) else (
-	urogue.exe %*
-)
+urogue.exe %*
+
 echo.
 pause
