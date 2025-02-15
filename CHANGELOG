@@ -1,9 +1,20 @@
 February 2025
 -------------
 
-minor fixes
-
 update version date
+
+minor fixes to help, identify, cast and pray commands
+
+update to monster selection command-line options. The choices are:
+  -ma: all 400+ monsters from 1.0.7
+  -mc: just classic monsters from 1.0.2
+  -mr: a random selection of monsters (this is the default)
+
+more neutral monsters (neither friendly nor mean)
+
+<CTRL> movement keys don't search when you are being chased
+
+add welcome message for new users
 
 
 November 2024
