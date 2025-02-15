@@ -62,11 +62,12 @@ command ()
     while (ntimes--)
     {
 #if 0
-    if (wizard) {
-	overlay(mw, cw);  /* monster awareness */
-	draw(cw);
-    }
+	if (wizard && on(player, BLESSMAGIC)) {
+	    overlay(mw, cw);  /* monster awareness */
+	    draw(cw);
+	}
 #endif
+
 	moving = FALSE;
 	look(after);
 	if (!running) {
@@ -81,11 +82,12 @@ command ()
 	    if (running)
 		usleep(4000);
 #ifdef MOUSE
-	    else if (mousemove)
+	    else if (mousemove) {
 		if (wizard)
 		    usleep(40000);
 		else
 		    usleep(24000);
+	    }
 #endif
 	    else if (count)
 		usleep(8000);
@@ -134,6 +136,7 @@ command ()
 		    searching_run++;
 		} else if (searching_run == 2) {
 		    if (winat(hero.y, hero.x) == PASSAGE || levtype != NORMLEV
+			|| isalpha(winat(prev.y, prev.x))
 			|| pstats.s_hpt < max_stats.s_hpt) {
 			ch = runch;
 		    } else {
@@ -897,6 +900,10 @@ bool is_thief;
 		    }
 	    }
 	}
+#ifdef MOUSE
+    if (mousemove && !jump)
+	usleep(10000);
+#endif
 }
 
 /*
@@ -908,40 +915,9 @@ void
 help ()
 {
     struct h_list *strp = helpstr;
-    char helpch;
     int cnt;
     int lines = LINES - 2;
 
-    msg("Character you want help for (* for all): ");
-    helpch = readchar();
-    mpos = 0;
-    /*
-     * If its not a *, print the right help string
-     */
-    if (helpch != '*')
-    {
-	wmove(cw, 0, 0);
-	while (strp->h_ch)
-	{
-	    if (strp->h_desc == 0) {
-		if (!wizard) {
-		    break;
-		} else {
-		    strp++;
-		    continue;
-		}
-	    }
-
-	    if (strp->h_ch == helpch) {
-		msg("%s%s", unctrl(strp->h_ch), strp->h_desc);
-		break;
-	    }
-	    strp++;
-	}
-	if (strp->h_ch != helpch)
-	    msg("Unknown character '%s'.", unctrl(helpch));
-	return;
-    }
     /*
      * Here we print help for everything.
      * Then wait before we return to command mode
@@ -991,7 +967,8 @@ help ()
 void 
 identify ()
 {
-    char ch, *str;
+    int ch;
+    char *str;
 
     msg("What do you want identified? ");
     ch = readchar();
@@ -1001,6 +978,22 @@ identify ()
 	msg("");
 	return;
     }
+#ifdef MOUSE
+	    /*
+	     * identify the thing they clicked on
+	     */
+	    if (ch == KEY_MOUSE
+		  && getmouse(&event) == OK
+		  && event.bstate & BUTTON1_RELEASED
+		   ) {
+		    if (mvwinch(cw, event.y, event.x) == VPLAYER)
+			ch = VPLAYER;
+		    else if (mvwinch(cw, event.y, event.x) == IPLAYER)
+			ch = IPLAYER;
+		    else
+			ch = winat(event.y, event.x);
+	    }
+#endif
     if (isalpha(ch)) {
 	str = id_monst(ch);
     } else switch(ch)

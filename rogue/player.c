@@ -183,6 +183,7 @@ pray ()
     bool nohw = FALSE;
     int c, prayer_cost;
     bool boost = FALSE, blessed = FALSE;
+    int maxboost;
     static int repeat_prayer = -1;
     int min_wisdom = 17;
 
@@ -227,6 +228,8 @@ pray ()
 	    pray_points = 20 + (pray_points-20) * 3.0/4.0;
     }
 
+    maxboost = num_prayers - 3;
+
     if (num_prayers > maxprayers) 
 	num_prayers = maxprayers;
 
@@ -251,9 +254,11 @@ pray ()
 	c = tolower(c);
     }
     which_prayer = (short) (c - 'a');
-    if (which_prayer >= 0 && which_prayer < num_prayers) nohw = TRUE;
+    if (which_prayer >= 0 && which_prayer < num_prayers) {
+	nohw = TRUE;
+	msg("");
 
-    else if (slow_invent) {
+    } else if (slow_invent) {
 	char c;
 
 	for (i=0; i<num_prayers; i++) {
@@ -338,7 +343,7 @@ do_prayer:
 	blessed = TRUE;
 	boost = FALSE;
     }
-    if (boost) {
+    if (boost && which_prayer <= maxboost) {
 	blessed = TRUE;
 	prayer_cost *= 3;
     }
@@ -458,6 +463,7 @@ cast ()
     short i, num_spells, which_spell, avail_points;
     bool nohw = FALSE;
     bool boost = FALSE, blessed = FALSE;
+    int maxboost;
     static int repeat_spell = -1;
     int min_intel = 16;
 
@@ -502,6 +508,8 @@ cast ()
 	    avail_points = 20 + (avail_points-20) * 3.0/4.0;
     }
 
+    maxboost = num_spells - 3;
+
     if (num_spells > maxspells) 
 	num_spells = maxspells;
 
@@ -527,10 +535,11 @@ cast ()
     }
     which_spell = (short) (c - 'a');
 
-    if (which_spell >= 0 && which_spell < num_spells)
+    if (which_spell >= 0 && which_spell < num_spells) {
 	nohw = TRUE;
+	msg("");
 
-    else if (slow_invent) {
+    } else if (slow_invent) {
 	char c;
 
 	for (i=0; i<num_spells; i++) {
@@ -616,7 +625,7 @@ do_spell:
 	blessed = TRUE;
 	boost = FALSE;
     }
-    if (boost) {
+    if (boost && which_spell <= maxboost) {
 	blessed = TRUE;
 	spell_cost *= 3;
     }
