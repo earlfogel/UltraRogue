@@ -53,10 +53,12 @@ main (int argc, char **argv)
     struct object *obj;
     int lowtime, wpt=0, i, j, hpadd, dmadd;
     bool alldone, predef=0;
-    char monster_flag = '+';
+    char monster_flag = 'r';
     time_t now;
     char *restore_file = NULL;
     struct stat sb;
+    bool show_welcome = FALSE;
+    char char_file[LINELEN];
 
     (void) signal(SIGQUIT, SIG_IGN); 		/* ignore quit for now */
 
@@ -100,6 +102,13 @@ main (int argc, char **argv)
     }
     if (stat(file_name, &sb) == 0 && S_ISREG(sb.st_mode))
 	restore_file = file_name;
+
+    /* check for a character file */
+    strcpy(char_file, home);
+    strcat(char_file, ROGDEFS);
+    if (stat(char_file, &sb) != 0) {
+	show_welcome = TRUE;
+    }
 
     /*
      * Parse command-line options
@@ -343,6 +352,10 @@ get_food:
     start_daemon(DAEMON_RUNNERS, 0, AFTER);
 
     new_level(FALSE);			/* Draw current level */
+
+    if (show_welcome) {
+	msg("Welcome to urogue!  Press '?' for help.");
+    }
 
     playit();
     /* notreached */
