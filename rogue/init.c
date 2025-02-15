@@ -327,31 +327,7 @@ init_monsters (char flag)
 
     for (i=1; i<nummonst; i++) {
 	keep = TRUE;
-	if (flag == 'r') {  /* Select monsters at random */
-	    bool friendly = FALSE;
-	    for (j=0; j<NM_FLAGS; j++) {
-		if (monsters[i].m_flags[j] == ISFRIENDLY
-		 || monsters[i].m_flags[j] == HIGHFRIENDLY) {
-		    friendly = TRUE;
-		}
-	    }
-	    if (i==3 && monsters[1].m_normal == FALSE
-	      && monsters[2].m_normal == FALSE) {
-		/* keep at least one normal monster for the first level */
-	    } else if (i==3 && monsters[1].m_wander == FALSE
-	      && monsters[2].m_wander == FALSE) {
-		/* keep at least one wandering monster for the first level */
-	    } else if (friendly && rnd(12) > 0) {  /* remove most friendlies */
-		monsters[i].m_normal = FALSE;
-		monsters[i].m_wander = FALSE;
-		keep = FALSE;
-	    } else if (rnd(2) > 0) {  /* remove half the rest */
-		monsters[i].m_normal = FALSE;
-		monsters[i].m_wander = FALSE;
-		keep = FALSE;
-	    }
-
-	} else if (flag == 'c') {  /* Keep the classic monsters, remove the rest */
+	if (flag == 'c') {  /* Keep the classic monsters, remove the rest */
 	    bool classic = FALSE;
 	    for (j=0; j<NM_FLAGS; j++) {
 		if (monsters[i].m_flags[j] == CLASSIC) {
@@ -367,22 +343,14 @@ init_monsters (char flag)
 	} else if (flag == 'a') {  /* Keep all monsters */
 	    /* do nothing */
 
-	} else {  /* The classic monsters plus random extras */
-	    bool classic = FALSE;
-	    bool friendly = FALSE;
-	    for (j=0; j<NM_FLAGS; j++) {
-		if (monsters[i].m_flags[j] == CLASSIC) {
-		    classic = TRUE;
-		}
-		if (monsters[i].m_flags[j] == ISFRIENDLY
-		 || monsters[i].m_flags[j] == HIGHFRIENDLY) {
-		    friendly = TRUE;
-		}
-	    }
-	    if (classic) {
-		/* do nothing */
-	    } else if ((friendly && rnd(12) > 0)
-		|| (rnd(6) > 0)) {
+	} else {  /* Select monsters at random, more or less */
+	    if (i==3 && monsters[1].m_normal == FALSE
+	      && monsters[2].m_normal == FALSE) {
+		/* keep at least one normal monster for the first level */
+	    } else if (i==3 && monsters[1].m_wander == FALSE
+	      && monsters[2].m_wander == FALSE) {
+		/* keep at least one wandering monster for the first level */
+	    } else if (rnd(2) > 0) {  /* remove half the rest */
 		monsters[i].m_normal = FALSE;
 		monsters[i].m_wander = FALSE;
 		keep = FALSE;
@@ -400,7 +368,7 @@ init_monsters (char flag)
     }
 
     for (i=nummonst; i>0; i--) {
-	/* put back any summoned monsters we still need */
+	/* put back any summoned monsters we need */
 	if (monsters[i].m_normal==FALSE && monsters[i].m_wander==FALSE) {
 	    for (j=0; j<nsummoned; j++) {
 		if (strcmp(monsters[i].m_name, summoned[j]) == 0) {

@@ -292,11 +292,17 @@ bool max_monster;
     /* see if we can charm it */
     if (type < nummonst) {  /* except friendly fiend and lucifer */
 	i = roll(1,100);
+#if 0
 	if (i == 0 || (on(*tp, LOWFRIENDLY) && i < (pstats.s_charisma - 8)) ||
 	    (on(*tp, MEDFRIENDLY) && i < 2 * (pstats.s_charisma - 8)) ||
 	    (on(*tp, HIGHFRIENDLY) && i < 3 * (pstats.s_charisma - 8)))
+#endif
+	if (i == 0 || (on(*tp, LOWFRIENDLY) && i < pstats.s_charisma) ||
+	    (on(*tp, MEDFRIENDLY) && i < 2 * pstats.s_charisma) ||
+	    (on(*tp, HIGHFRIENDLY) && i < 3 * pstats.s_charisma))
 	{
-	    /* turn_on(*tp, ISFRIENDLY); */
+	    if (i > 90)
+		turn_on(*tp, ISFRIENDLY);
 	    turn_off(*tp, ISMEAN);
 	    tp->t_dest = &(tp->t_pos);
 	    turn_off(*tp, ISRUN);
