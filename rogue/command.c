@@ -77,18 +77,26 @@ command ()
 	status(FALSE);
 	lastscore = purse;
 	wmove(cw, hero.y, hero.x);
+#ifdef MOUSE
+	if (mousemove) {
+	    static char pch = ' ';
+	    if (!jump) {
+		draw(cw);		/* Draw screen */
+		if (wizard)
+		    usleep(40000);
+		else
+		    usleep(25000);
+	    } else if (pch != ch) {
+		draw(cw);
+		usleep(40000);
+		pch = ch;
+	    }
+	} else
+#endif
 	if (!((running || count || fighting) && jump)) {
 	    draw(cw);			/* Draw screen */
 	    if (running)
 		usleep(4000);
-#ifdef MOUSE
-	    else if (mousemove) {
-		if (wizard)
-		    usleep(40000);
-		else
-		    usleep(24000);
-	    }
-#endif
 	    else if (count)
 		usleep(8000);
 	    else
@@ -136,7 +144,9 @@ command ()
 		    searching_run++;
 		} else if (searching_run == 2) {
 		    if (winat(hero.y, hero.x) == PASSAGE || levtype != NORMLEV
+#ifdef MOUSE
 			|| isalpha(winat(prev.y, prev.x))
+#endif
 			|| pstats.s_hpt < max_stats.s_hpt) {
 			ch = runch;
 		    } else {
@@ -155,6 +165,9 @@ command ()
 		ch = countch = do_mousemove(dest, prev);
 		if (ch == ' ') {
 		    prev.x = prev.y = 0;
+		} else if (ch == 's') {
+		    draw(cw);
+		    usleep(100000);
 		} else if (strchr("hjklyubn", ch)) {
 		    prev.x = hero.x;
 		    prev.y = hero.y;
@@ -900,10 +913,6 @@ bool is_thief;
 		    }
 	    }
 	}
-#ifdef MOUSE
-    if (mousemove && !jump)
-	usleep(10000);
-#endif
 }
 
 /*
@@ -1258,7 +1267,7 @@ int y;
     struct linked_list *item;
     struct thing *tp;
 
-    mch = mvwinch(cw, y, x);
+    mch = show(y, x);
     tryp.x = x;
     tryp.y = y;
     if (isalpha(mch)
