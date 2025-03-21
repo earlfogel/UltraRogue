@@ -1373,8 +1373,11 @@ char *id_monst(int monster);
 void check_residue(struct thing *tp);
 void sell(struct thing *tp);
 /* mouse.c */
+#ifdef MOUSE
 char do_mousemove(coord dest, coord prev);
 char do_mouseclick(coord dest);
+coord fix_mousedest(coord dest);
+#endif
 /* move.c */
 void do_run(int ch);
 void corr_move(int dy, int dx);

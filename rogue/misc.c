@@ -545,7 +545,7 @@ struct object *obj;
 }
 
 /*
- * set up the direction co_ordinate for use in varios "prefix" commands
+ * get a direction for use in various "prefix" commands
  */
 int 
 get_dir ()

@@ -187,12 +187,14 @@ bool max_monster;
     if (difficulty > 2) {
 	if (strcmp(mp->m_name,"vilstrak") == 0) {
 	    turn_on(*tp, ISMEAN);
+#if 0
 	} else if (off(*tp, ISMEAN) && off(*tp, LOWFRIENDLY)
 		&& off(*tp, MEDFRIENDLY) && off(*tp, HIGHFRIENDLY)
 		&& strcmp(mp->m_name,"quartermaster") != 0
 		&& strcmp(mp->m_name,"valkyrie") != 0
 		&& rnd(3) == 0) {  /* some neutral monsters turn mean */
 	    turn_on(*tp, ISMEAN);
+#endif
 	} else if (strcmp(mp->m_name,"valkyrie") == 0 && rnd(3) > 0) {
 	    turn_on(*tp, CANSUMMON);
 	} else if (strcmp(mp->m_name,"time elemental") == 0 && rnd(3) > 0) {
