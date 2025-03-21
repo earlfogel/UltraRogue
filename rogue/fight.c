@@ -231,18 +231,10 @@ bool thrown;
 		    }
 		    if (item == NULL) {
 			debug("Can't find crystalline armor being worn.");
-		    } else if (cur_armor->o_flags & IS2PROT) {
-			msg("Your armor vibrates uncomfortably.");
-			cur_armor->o_ac--;
-			fighting = FALSE;
-		    }
-		    else {
+		    } else if (!(cur_armor->o_flags & IS2PROT) || difficulty > 3) {
 			msg("Your armor shatters from the shriek.");
 			cur_armor = NULL;
-			detach(pack, item);
-			freeletter(item);
-			discard(item);
-			inpack--;
+			del_pack(item);
 			fighting = FALSE;
 		    }
 		}
@@ -458,18 +450,10 @@ bool thrown;
 		    }
 		    if (item == NULL) {
 			debug("Can't find crystalline armor being worn.");
-		    } else if (cur_armor->o_flags & IS2PROT) {
-			msg("Your armor vibrates uncomfortably.");
-			cur_armor->o_ac--;
-			fighting = FALSE;
-		    }
-		    else {
+		    } else if (!(cur_armor->o_flags & IS2PROT) || difficulty > 3) {
 			msg("Your armor is shattered by the blow.");
 			cur_armor = NULL;
-			detach(pack, item);
-			freeletter(item);
-			discard(item);
-			inpack--;
+			del_pack(item);
 			fighting = FALSE;
 		    }
 		}
