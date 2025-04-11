@@ -390,7 +390,9 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 		when 'T' : take_off();
 		when 'P' : ring_on();
 		when 'R' : ring_off();
-		when 'o' : option(); strcpy(fd_data[1].mi_name, fruit);
+		when 'o' : after = FALSE; option();
+		    if (fd_data[1].mi_name != fruit)
+			strcpy(fd_data[1].mi_name, fruit);
 		when 'C' : call(FALSE);
 		when 'M' : call(TRUE);
 		when '~' : after = FALSE; next_level();
@@ -784,11 +786,9 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 	}
 	if (difficulty > 0) {
 	    /* may get summoned to a lower level */
-	    int rare;
+	    int rare = 200000;
 	    if (difficulty < 2)
 		rare = 400000;
-	    else if (difficulty == 2)
-		rare = 200000;
 	    else if (difficulty > 2)
 		rare = 150000;
 
@@ -1130,7 +1130,7 @@ bool mark;
 {
     struct object *obj;
     struct linked_list *item;
-    char **guess, *elsewise;
+    char **guess = r_guess, *elsewise = "";
     bool *know;
 
     if (mark) item = get_item("mark", MARKABLE);

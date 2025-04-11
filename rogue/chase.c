@@ -46,7 +46,7 @@ runners (daemon_arg *arg __attribute__((unused)))
 		((tp->t_dest == &hero) && on(player, ISINWALL) &&
 		 off(*tp, CANINWALL));
 
-	    if (off(*tp, ISSLOW) || tp->t_turn) {
+	    if (!monst_dead && (off(*tp, ISSLOW) || tp->t_turn)) {
 		daemon_arg targ;
 		targ.thingptr = tp;
 		doctor(&targ);
@@ -89,6 +89,8 @@ runners (daemon_arg *arg __attribute__((unused)))
 		}
 	    }
 	}
+	if (after == FALSE)	/* something happened to end this turn */
+	    return;
     }
 }
 
@@ -495,6 +497,9 @@ bool flee;
 	     on(*tp, CANSHOOT) &&
 	     (off(player, ISDISGUISE) || (rnd(tp->t_stats.s_lvl) > 6)) &&
 	    (shoot_dir = can_shoot(er, ee)) && (weapon = get_hurl(tp))) {
+#if 0
+		if (monst_dead) return(TRUE);	/* Did monster get itself killed? */
+#endif
 		missile(shoot_dir->y, shoot_dir->x, weapon, tp);
 		ch_ret = *er;
 		dist = DISTANCE(ch_ret.y, ch_ret.x, ee->y, ee->x);

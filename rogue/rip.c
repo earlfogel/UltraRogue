@@ -167,6 +167,7 @@ int monst;
 		msg("");
 		cleanup_old_level();
 		monst_dead = TRUE;  /* all of them! this ends the current turn */
+		after = FALSE;	/* so monsters don't get a turn */
 
 		/* forget stuff we've learned */
 		for(i = 0; i < MAXSCROLLS; i++) {

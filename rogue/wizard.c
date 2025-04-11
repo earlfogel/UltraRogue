@@ -76,8 +76,8 @@ bool cursed;
 {
     struct linked_list *item;
     struct object *obj;
-    int wh, whc;
-    char ch, newitem, newtype, msz, *pt;
+    int wh, whc, msz;
+    char ch, newitem, newtype, *pt;
     WINDOW *thiswin;
     int tsize;
     int pres_item = 1;
@@ -254,12 +254,12 @@ bool cursed;
 	        return;
 	    }
 	    newtype = atoi(numstr) - 1;
-	    if (newtype < 0 || newtype >= tsize) {
+	    if (newtype >= tsize) {
 		mvwaddstr(hw, 0, 0, "Please enter a number in the displayed range -- ");
 		mvwaddstr(hw,LINES - 1, 0, prbuf);
 		draw(hw);
 	    }
-	} until (newtype >= 0 && newtype < tsize);
+	} until (newtype < tsize);
         if (thiswin == hw)			/* restore screen if need be */
 	    restscr(cw);
     }

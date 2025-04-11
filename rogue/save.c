@@ -110,7 +110,8 @@ restore(char *file)
 	}
     }
 
-    strcpy(file_name, file);
+    if (file != file_name)
+	strcpy(file_name, file);
 
     clearok(cw, TRUE);
     touchwin(cw);

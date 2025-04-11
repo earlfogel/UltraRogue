@@ -790,10 +790,14 @@ ur_write_thing(FILE *savef, struct thing *t)
     ur_write_coord(savef, t->t_pos);
     ur_write_coord(savef, t->t_oldpos);
 
-    /* save destination, e.g. monster chasing player */
-    if (t->t_dest != NULL
+    /* save destination, i.e. monster chasing player,
+       but not player fleeing from monster */
+
+    if (t->t_dest != NULL || t->t_type == 0) {
+#if 0
      && t->t_dest->x == hero.x
      && t->t_dest->y == hero.y) {
+#endif
 	ur_write_int(savef, 1);
     } else {
 	ur_write_int(savef, -1);
@@ -1312,7 +1316,7 @@ restore_file(FILE *savef)
     DUMPSTRING
     p = ur_read_thing(savef);
     player = *p;
-    FREE(p);
+    /* FREE(p); */
 
     DUMPSTRING
     lvl_obj = ur_read_bag(0, savef);
