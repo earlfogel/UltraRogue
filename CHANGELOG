@@ -1,3 +1,9 @@
+April 2025
+----------
+
+code cleanup for Raspberry Pi
+
+
 February 2025
 -------------
 
@@ -15,6 +21,10 @@ more neutral monsters (neither friendly nor mean)
 <CTRL> movement keys don't search when you are being chased
 
 add welcome message for new users
+
+fix handling of hidden monsters and secret doors in mouse moves
+
+code cleanup
 
 
 November 2024
