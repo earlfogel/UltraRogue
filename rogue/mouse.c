@@ -166,7 +166,7 @@ coord prev;
 		     || (winat(hero.y, hero.x) == DOOR && winat(y,x) == PASSAGE))
 			&& off(player, CANINWALL)
 			&& (y != hero.y && x != hero.x)
-			&& !isalpha(winat(prev.y, prev.x))
+			&& !isalpha(show(prev.y, prev.x))
 			&& !firststep)
 			continue;  /* don't diagonal */
 		    if (winat(hero.y, hero.x) == DOOR
@@ -181,7 +181,8 @@ coord prev;
 		} else {  /* we found it */
 		    if ((winat(y, x) == SECRETDOOR)) {
 			return('s');  /* we'll search for it */
-		    } else if (!step_ok(y, x, NOMONST, &player)) {
+		    } else if (!step_ok(y, x, MONSTOK, &player)
+			    || isalpha(show(y, x))) {
 			count = 1;
 			return(' ');
 		    }
