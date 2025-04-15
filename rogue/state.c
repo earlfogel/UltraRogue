@@ -1316,7 +1316,7 @@ restore_file(FILE *savef)
     DUMPSTRING
     p = ur_read_thing(savef);
     player = *p;
-    /* FREE(p); */
+    FREE(p);
 
     DUMPSTRING
     lvl_obj = ur_read_bag(0, savef);
