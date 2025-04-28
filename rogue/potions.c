@@ -579,7 +579,7 @@ bool blessed;
     {
 	msg("What do you want to call it? ");
 	buf[0] = '\0';
-	if (get_str(buf, cw) == NORM && strlen(buf) > 0)
+	if (get_string(buf, cw) == NORM && strlen(buf) > 0)
 	{
 	    p_guess[which] = new((unsigned int) strlen(buf) + 1);
 	    strcpy(p_guess[which], buf);

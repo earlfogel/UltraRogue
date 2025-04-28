@@ -13,8 +13,7 @@ int inbag;
 char bag_letters[] = "zyxwvutsrqponmlkjihgfedcba";
 char *bag_index	= bag_letters + SIZE(bag_letters) - 1;
 char *bag_end	= bag_letters + SIZE(bag_letters) - 1;
-struct linked_list *get_bag();
-struct object *get_artifact();
+struct object *get_artifact(int artifact);
 
 /* 
  * apply an artifact
@@ -72,7 +71,7 @@ apply ()
 	    chance = rnd(100);
 	    if (wizard) {
 		msg("What roll? ");
-		if(get_str(prbuf,cw) == NORM) {
+		if(get_string(prbuf,cw) == NORM) {
 		    chance = atoi(prbuf);
 		    if(chance < 0 || chance > 99) {
 			msg("Invalid selection.");
@@ -247,7 +246,7 @@ struct object *tr;
     which = rnd(115);
     if (wizard) {
 	msg("Which minor effect? (%d)", which);
-	if(get_str(prbuf,cw) == NORM) {
+	if(get_string(prbuf,cw) == NORM) {
 	    which = atoi(prbuf);
 	    if(which < 0 || which > 104) {
 		msg("Invalid selection.");
@@ -706,7 +705,7 @@ do_major ()
     which = rnd(12);
     if (wizard) {
 	msg("Which major effect? (%d)", which);
-	if(get_str(prbuf,cw) == NORM) {
+	if(get_string(prbuf,cw) == NORM) {
 	    which = atoi(prbuf);
 	    if(which < 0 || which > 11) {
 		msg("Invalid selection.");
@@ -1306,7 +1305,7 @@ do_sceptre ()
 	which = rnd(6);
 	if (wizard) {
 	    msg("What wand? (%d)", which);
-	    if(get_str(prbuf,cw) == NORM) {
+	    if(get_string(prbuf,cw) == NORM) {
 		which = atoi(prbuf);
 		if(which < 0 || which > 5) {
 		msg("Invalid selection.");
@@ -1395,7 +1394,7 @@ do_wand ()
 	which = rnd(MAXSTICKS);
 	if (wizard) {
 	    msg("What wand? (%d)", which);
-	    if(get_str(prbuf,cw) == NORM) {
+	    if(get_string(prbuf,cw) == NORM) {
 		which = atoi(prbuf);
 		if(which < 0 || which >= MAXSTICKS) {
 		    msg("Invalid selection.");

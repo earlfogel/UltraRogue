@@ -37,7 +37,7 @@ save_game(void)
         mpos = 0;
         buf[0] = '\0';
 
-        if (get_str(buf, cw) == QUIT)
+        if (get_string(buf, cw) == QUIT)
         {
             msg("");
             return(FALSE);

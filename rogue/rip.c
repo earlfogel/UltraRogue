@@ -38,8 +38,6 @@ static char *rip[] = {
     0
 };
 
-char	*killname();
-
 /*
  * death:
  *	Do something really fun when hero dies
@@ -53,7 +51,6 @@ int monst;
     struct tm *lt;
     time_t date;
     char buf[80];
-    struct tm *localtime();
     int i;
     char ch;
 

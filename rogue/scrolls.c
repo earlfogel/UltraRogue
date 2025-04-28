@@ -864,7 +864,7 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
 	     s_guess[which] == NULL) {
 	msg("What do you want to call it? ");
 	buf[0] = '\0';
-	if (get_str(buf, cw) == NORM && strlen(buf) > 0)
+	if (get_string(buf, cw) == NORM && strlen(buf) > 0)
 	{
 	    s_guess[which] = new(strlen(buf) + 1);
 	    strcpy(s_guess[which], buf);

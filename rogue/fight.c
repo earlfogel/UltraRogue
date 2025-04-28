@@ -1094,7 +1094,6 @@ struct object *cur_weapon;
     int ndice, nsides, nplus, def_arm;
     bool did_hit = FALSE;
     int prop_hplus, prop_dplus;
-    char *strchr();	/* strchr was index */
 
     /* Get statistics */
     att = &att_er->t_stats;

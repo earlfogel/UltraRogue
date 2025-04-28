@@ -247,7 +247,7 @@ bool cursed;
 	draw(hw);
 	do {
 	    numstr[0] = '\0';
-	    ch = get_str(numstr, hw);
+	    ch = get_string(numstr, hw);
 	    if (ch == QUIT) {
 	        restscr(cw);
 	        msg("");
@@ -409,7 +409,7 @@ makemon ()
 
     do {
 	monst_name[0] = '\0';
-	i = get_str(monst_name, hw);
+	i = get_string(monst_name, hw);
 	if (i == QUIT) {
 	    restscr(cw);
 	    msg("");

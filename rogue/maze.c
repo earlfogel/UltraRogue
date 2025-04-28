@@ -11,7 +11,6 @@ struct bordercells {
 } myborder;
 
 char *frontier, *bits;
-char *moffset(), *foffset();
 int lines, cols;
 
 

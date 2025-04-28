@@ -12,56 +12,69 @@
 
 #define	NUM_OPTS	(sizeof optlist / sizeof (OPTION))
 
+typedef union
+{
+    void *varg;
+    char *str;
+    int  *iarg;
+} opt_arg;
 
-/*
- * description of an option and what to do with it
- */
 struct optstruct {
     char	*o_name;	/* option name */
     char	*o_prompt;	/* prompt for interactive entry */
-    int		*o_opt;		/* pointer to thing to set */
-    void	(*o_putfunc)();	/* function to print value */
-    int		(*o_getfunc)();	/* function to get value interactively */
+    opt_arg	o_opt;		/* pointer to thing to set */
+    void	(*o_putfunc)(opt_arg *arg,WINDOW *win);	/* function to print value */
+    int		(*o_getfunc)(opt_arg *arg,WINDOW *win);	/* function to get value interactively */
 };
 
 typedef struct optstruct	OPTION;
 
-int	get_bool(), get_str(), get_abil(), get_diff(), get_mouse();
-void put_diff(int *diff, WINDOW *win);
+void put_bool(opt_arg *o_opt, WINDOW *win);
+void put_str(opt_arg *o_opt, WINDOW *win);
+void put_abil(opt_arg *o_opt, WINDOW *win);
+void put_diff(opt_arg *o_opt, WINDOW *win);
+int get_bool(opt_arg *o_opt, WINDOW *win);
+int get_str(opt_arg *o_opt, WINDOW *win);
+int get_abil(opt_arg *o_opt, WINDOW *win);
+int get_mouse(opt_arg *o_opt, WINDOW *win);
+int get_diff(opt_arg *o_opt, WINDOW *win);
 
+/*
+ * description of an option and what to do with it
+ */
 OPTION	optlist[] = {
     {"doorstop", "Stop running when adjacent (doorstop): ",
-		 (int *) &doorstop,	put_bool,	get_bool	},
+	{&doorstop},	put_bool,	get_bool	},
     {"jump",	 "Show position only at end of run (jump): ",
-		 (int *) &jump,		put_bool,	get_bool	},
+	{&jump},		put_bool,	get_bool	},
     {"step",	"Do inventories one line at a time (step): ",
-		(int *) &slow_invent,	put_bool,	get_bool	},
+	{&slow_invent},	put_bool,	get_bool	},
     {"askme",	"Ask me about unidentified things (askme): ",
-		(int *) &askme,		put_bool,	get_bool	},
+	{&askme},		put_bool,	get_bool	},
     {"cutcorners",	"Move sharply around corners (cutcorners): ",
-		(int *) &cutcorners,	put_bool,	get_bool	},
+	{&cutcorners},	put_bool,	get_bool	},
     {"showcursor",	"Show cursor while playing (showcursor): ",
-		(int *) &showcursor,	put_bool,	get_bool	},
+	{&showcursor},	put_bool,	get_bool	},
     {"autopickup",	"Pick up things you step on (autopickup): ",
-		(int *) &autopickup,	put_bool,	get_bool	},
+	{&autopickup},	put_bool,	get_bool	},
     {"autosave",	"Save game automatically (autosave): ",
-		(int *) &autosave,	put_bool,	get_bool	},
+	{&autosave},	put_bool,	get_bool	},
 #ifdef MOUSE
     {"usemouse",	"Use mouse to move (usemouse): ",
-		(int *) &use_mouse,	put_bool,	get_mouse	},
+	{&use_mouse},	put_bool,	get_mouse	},
 #endif
     {"name",	 "Name (name): ",
-		(int *) whoami,		put_str,	get_str		},
+	{whoami},		put_str,	get_str		},
     {"fruit",	 "Fruit (fruit): ",
-		(int *) fruit,		put_str,	get_str		},
+	{fruit},		put_str,	get_str		},
     {"file",	 "Save file (file): ",
-		(int *) file_name,	put_str,	get_str		},
+	{file_name},	put_str,	get_str		},
     {"score",	 "Score file (score): ",
-		(int *) score_file,	put_str,	get_str		},
+	{score_file},	put_str,	get_str		},
     {"class",	"Character class (class): ",
-		(int *) &char_type,	put_abil,	get_abil	},
+	{&char_type},	put_abil,	get_abil	},
     {"difficulty",	"Difficulty: ",
-		(int *) &difficulty,	put_diff,	get_diff	},
+	{&difficulty},	put_diff,	get_diff	},
 };
 
 /*
@@ -81,7 +94,7 @@ option ()
     for (op = optlist; op < &optlist[NUM_OPTS]; op++)
     {
 	waddstr(hw, op->o_prompt);
-	(*op->o_putfunc)(op->o_opt, hw);
+	(*op->o_putfunc)(&op->o_opt, hw);
 	waddch(hw, '\n');
     }
     /*
@@ -91,7 +104,7 @@ option ()
     for (op = optlist; op < &optlist[NUM_OPTS]; op++)
     {
 	waddstr(hw, op->o_prompt);
-	if ((retval = (*op->o_getfunc)(op->o_opt, hw))) {
+	if ((retval = (*op->o_getfunc)(&op->o_opt, hw))) {
 	    if (retval == QUIT)
 		break;
 	    else if (op > optlist) {	/* MINUS */
@@ -122,38 +135,38 @@ option ()
  * put out a boolean
  */
 void
-put_bool(b, win)
-bool	*b;
+put_bool(opt, win)
+opt_arg	*opt;
 WINDOW *win;
 {
-    waddstr(win, *b ? "True" : "False");
+    waddstr(win, *opt->iarg ? "True" : "False");
 }
 
 /*
  * put out a string
  */
 void
-put_str(str, win)
-char *str;
+put_str(opt, win)
+opt_arg *opt;
 WINDOW *win;
 {
-    waddstr(win, str);
+    waddstr(win, opt->str);
 }
 
 /*
  * print the character type
  */
 void
-put_abil(ability, win)
-int *ability;
+put_abil(opt, win)
+opt_arg *opt;
 WINDOW *win;
 {
     char *abil;
 #if 0
-    if (*ability < 0)
-	*ability = C_FIGHTER;  /* shouldn't happen, but it did */
+    if (*opt->iarg < 0)
+	*opt->iarg = C_FIGHTER;  /* shouldn't happen, but it did */
 #endif
-    switch (*ability) {
+    switch (*opt->iarg) {
 	case C_FIGHTER:
 	    abil = "Fighter";
 	    break;
@@ -168,7 +181,7 @@ WINDOW *win;
 	    break;
 	default:
 	    abil = "??";
-	    wprintw(win, "(%d) ", *ability);
+	    wprintw(win, "(%d) ", *opt->iarg);
     }
     waddstr(win, abil);
 }
@@ -177,17 +190,17 @@ WINDOW *win;
  * print the difficulty level
  */
 void
-put_diff(diff, win)
-int *diff;
+put_diff(opt, win)
+opt_arg *opt;
 WINDOW *win;
 {
-    if (*diff < 2)
+    if (*opt->iarg < 2)
 	waddstr(win, "Easy");
-    else if (*diff == 2)
+    else if (*opt->iarg == 2)
 	waddstr(win, "Normal");
-    else if (*diff == 3)
+    else if (*opt->iarg == 3)
 	waddstr(win, "Hard");
-    else if (*diff > 3)
+    else if (*opt->iarg > 3)
 	waddstr(win, "Very Hard");
     wclrtoeol(win);
 }
@@ -196,8 +209,8 @@ WINDOW *win;
  * allow changing a boolean option and print it out
  */
 int
-get_bool(bp, win)
-bool *bp;
+get_bool(opt, win)
+opt_arg *opt;
 WINDOW *win;
 {
     int oy, ox;
@@ -206,7 +219,7 @@ WINDOW *win;
     curs_set(1);			/* show cursor */
     op_bad = TRUE;
     getyx(win, oy, ox);
-    waddstr(win, *bp ? "True" : "False");
+    waddstr(win, *opt->iarg ? "True" : "False");
     while(op_bad)	
     {
 	wmove(win, oy, ox);
@@ -215,12 +228,12 @@ WINDOW *win;
 	{
 	    case 't':
 	    case 'T':
-		*bp = TRUE;
+		*opt->iarg = TRUE;
 		op_bad = FALSE;
 		break;
 	    case 'f':
 	    case 'F':
-		*bp = FALSE;
+		*opt->iarg = FALSE;
 		op_bad = FALSE;
 		break;
 	    case '\n':
@@ -242,7 +255,7 @@ WINDOW *win;
     }
     wmove(win, oy, ox);
     wclrtoeol(win);
-    waddstr(win, *bp ? "True" : "False");
+    waddstr(win, *opt->iarg ? "True" : "False");
     waddch(win, '\n');
     if (!showcursor) curs_set(0);			/* hide cursor */
     return NORM;
@@ -253,6 +266,14 @@ WINDOW *win;
  */
 int
 get_str(opt, win)
+opt_arg *opt;
+WINDOW *win;
+{
+    return( get_string(opt->str, win) );
+}
+
+int
+get_string(opt, win)
 char *opt;
 WINDOW *win;
 {
@@ -326,7 +347,7 @@ WINDOW *win;
  */
 int
 get_abil(abil, win)
-int *abil;
+opt_arg *abil;
 WINDOW *win;
 {
     int oy, ox, ny, nx;
@@ -373,19 +394,19 @@ WINDOW *win;
  * Change difficulty level on the fly
  */
 int
-get_diff(diff, win)
-int *diff;
+get_diff(opt, win)
+opt_arg *opt;
 WINDOW *win;
 {
     int oy, ox, ny, nx;
     bool op_bad;
     int ch;
-    int old_diff = difficulty;
+    int old_diff = *opt->iarg;
 
     curs_set(1);			/* show cursor */
     op_bad = TRUE;
     getyx(win, oy, ox);
-    put_diff(diff, win);
+    put_diff(opt, win);
     getyx(win, ny, nx);
     while(op_bad)	
     {
@@ -409,25 +430,25 @@ WINDOW *win;
 		return MINUS;
 	    default:
 		if (ch >= '1' && ch <= '4') {
-		    *diff = ch - '0';
+		    *opt->iarg = ch - '0';
 		} else if (tolower(ch) == 'e') {  /* easy */
-		    *diff = 1;
+		    *opt->iarg = 1;
 		} else if (tolower(ch) == 'n') {  /* normal */
-		    *diff = 2;
+		    *opt->iarg = 2;
 		} else if (tolower(ch) == 'h') {  /* hard */
-		    *diff = 3;
+		    *opt->iarg = 3;
 		} else if (tolower(ch) == 'v') {  /* very hard */
-		    *diff = 4;
+		    *opt->iarg = 4;
 		} else {
 		    mvwaddstr(win, ny, nx + 5, "(Easy, Normal, Hard, Very hard)");
 		}
-		if (*diff != old_diff) {
-		    put_diff(diff, win);
+		if (*opt->iarg != old_diff) {
+		    put_diff(opt, win);
 		    getyx(win, ny, nx);
-		    if (*diff < mindifficulty)
-			mindifficulty = *diff;
+		    if (*opt->iarg < mindifficulty)
+			mindifficulty = *opt->iarg;
 		    tweak_settings(FALSE, old_diff);
-		    old_diff = *diff;
+		    old_diff = *opt->iarg;
 		}
 	}
     }
@@ -445,16 +466,16 @@ WINDOW *win;
  * Use mouse click for movement?
  */
 int
-get_mouse(mouse, win)
-bool *mouse;
+get_mouse(opt, win)
+opt_arg *opt;
 WINDOW *win;
 {
     int ret;
-    bool old_mouse = *mouse;
+    bool old_mouse = *opt->iarg;
 
-    ret = get_bool(mouse, win);
+    ret = get_bool(opt, win);
 
-    if (*mouse != old_mouse) {
+    if (*opt->iarg != old_mouse) {
 	if (use_mouse) {
 	    mousemask(BUTTON1_RELEASED, NULL);	/* enable KEY_MOUSE */
 	} else {
@@ -497,7 +518,7 @@ char *str;
 	    if (EQSTR(str, op->o_name, len))
 	    {
 		if (op->o_putfunc == put_bool)	/* if option is a boolean */
-		    *(bool *)op->o_opt = TRUE;
+		    *op->o_opt.iarg = TRUE;
 		else				/* string option */
 		{
 		    char *start;
@@ -527,27 +548,27 @@ char *str;
 		    /* Put the value into the option field */
 		    if (op->o_putfunc == put_diff) {
 			if (strcasecmp(value,"hard") == 0 || atoi(value) == 3) {
-			    *op->o_opt = 3;
+			    *op->o_opt.iarg = 3;
 			    mindifficulty = 3;
 			} else if (strcasecmp(value,"easy") == 0 || atoi(value) == 1) {
-			    *op->o_opt = 1;
+			    *op->o_opt.iarg = 1;
 			    mindifficulty = 1;
 			}
 		    } else if (op->o_putfunc != put_abil)
-			strcpy((char *)op->o_opt, value);
+			strcpy((char *)op->o_opt.str, value);
 
-		    else if (*op->o_opt == -1) { /* Only init ability once */
+		    else if (*op->o_opt.iarg == -1) { /* Only init ability once */
 			int len = strlen(value);
 
 			if (isupper(value[0])) value[0] = tolower(value[0]);
 			if (EQSTR(value, "fighter", len))
-				*op->o_opt = C_FIGHTER;
+				*op->o_opt.iarg = C_FIGHTER;
 			else if (EQSTR(value, "magic", min(len, 5)))
-				*op->o_opt = C_MAGICIAN;
+				*op->o_opt.iarg = C_MAGICIAN;
 			else if (EQSTR(value, "cleric", len))
-				*op->o_opt = C_CLERIC;
+				*op->o_opt.iarg = C_CLERIC;
 			else if (EQSTR(value, "thief", len))
-				*op->o_opt = C_THIEF;
+				*op->o_opt.iarg = C_THIEF;
 		    }
 		}
 		break;
@@ -558,7 +579,7 @@ char *str;
 	    else if (op->o_putfunc == put_bool
 	      && EQSTR(str, "no", 2) && EQSTR(str + 2, op->o_name, len - 2))
 	    {
-		*(bool *)op->o_opt = FALSE;
+		*(bool *)op->o_opt.iarg = FALSE;
 		break;
 	    }
 

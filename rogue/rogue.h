@@ -1399,15 +1399,9 @@ void do_throne(void);
 void cleanup_old_level(void);
 /* options.c */
 void option(void);
-void put_bool(bool *b, WINDOW *win);
-void put_str(char *str, WINDOW *win);
-void put_abil(int *ability, WINDOW *win);
-int get_bool(bool *bp, WINDOW *win);
-int get_str(char *opt, WINDOW *win);
-int get_abil(int *abil, WINDOW *win);
-int get_mouse(bool *mouse, WINDOW *win);
 void parse_opts(char *str);
 void strucpy(char *s1, char *s2, int len);
+int get_string(char *opt, WINDOW *win);
 /* pack.c */
 bool add_pack(struct linked_list *item, bool silent);
 int inventory(struct linked_list *list, int type);

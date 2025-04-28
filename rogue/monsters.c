@@ -92,7 +92,6 @@ bool max_monster;
     char *ip, *hitp;
     short i, min_intel, max_intel;
     short num_dice, num_sides=8, num_extra=0;
-    char *strchr();
 
     attach(mlist, item);
     tp = THINGPTR(item);
@@ -674,7 +673,7 @@ genocide ()
 
 get_monst:
     monst_name[0] = '\0';
-    get_str(monst_name, hw);
+    get_string(monst_name, hw);
     if (strcmp(monst_name, "q") == 0 || strlen(monst_name) < 1) {
 	clearok(cw, TRUE);
 	touchwin(cw);

@@ -529,7 +529,7 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 			    int tlev;
 			    prbuf[0] = NULL;
 			    msg("Which level? ");
-			    if(get_str(prbuf,cw) == NORM) {
+			    if(get_string(prbuf,cw) == NORM) {
 				msg("");
 				tlev = atoi(prbuf);
 				if(tlev < 1) {
@@ -1185,7 +1185,7 @@ bool mark;
 	msg("What do you want to call it? ");
     }
     prbuf[0] = '\0';
-    if (get_str(prbuf, cw) == NORM) {
+    if (get_string(prbuf, cw) == NORM) {
 	if (mark) {
 	    strncpy(obj->o_mark, prbuf, MARKLEN-1);
 	    obj->o_mark[MARKLEN-1] = '\0';
