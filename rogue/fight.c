@@ -284,14 +284,16 @@ bool thrown;
 		    bool summon_ok = TRUE;
 
 		    /* can't summon a unique that already exists */
-		    if (monsters[which].m_flags[0] & ISUNIQUE) {
-			struct linked_list *nitem;
-			struct thing *ntp;
-			for (nitem = mlist; nitem != NULL; nitem = next(nitem)) {
-			    ntp = THINGPTR(nitem);
-			    if (ntp->t_index == which) {
-				msg("The %s becomes rather annoyed at you!", mname);
-				summon_ok = FALSE;
+		    for (i=0; i<NM_FLAGS; i++) {
+			if (monsters[which].m_flags[i] == ISUNIQUE) {
+			    struct linked_list *nitem;
+			    struct thing *ntp;
+			    for (nitem = mlist; nitem != NULL; nitem = next(nitem)) {
+				ntp = THINGPTR(nitem);
+				if (ntp->t_index == which) {
+				    msg("The %s becomes rather annoyed at you!", mname);
+				    summon_ok = FALSE;
+				}
 			    }
 			}
 		    }

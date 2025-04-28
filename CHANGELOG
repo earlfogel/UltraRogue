@@ -5,6 +5,8 @@ code cleanup for Raspberry Pi
 
 code cleanup for GCC 15
 
+fix: ISUNIQUE check when summoning only worked when it was the first flag
+
 
 February 2025
 -------------
