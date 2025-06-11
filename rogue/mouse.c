@@ -50,7 +50,7 @@ coord prev;
     int npdoors = 0;
     int nmonst = 0;
     coord pos;
-    coord best;
+    coord best = {hero.x, hero.y};
     int minx, miny, maxx, maxy;
     struct room *myroom = roomin(&hero);
 
@@ -118,9 +118,6 @@ coord prev;
 	coord exit, bestdoor;
 	int i, doordist;
 	int mindx, mindy, maxdx, maxdy;
-
-	best.x = hero.x;
-	best.y = hero.y;
 
 	if (destroom == NULL) {
 	    mindx = maxdx = dest.x;
