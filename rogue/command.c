@@ -86,7 +86,7 @@ command ()
 		    usleep(40000);
 		else
 		    usleep(25000);
-	    } else if (pch != ch) {
+	    } else if (pch != ch) {	/* changed direction */
 		draw(cw);
 		usleep(40000);
 		pch = ch;
@@ -145,7 +145,7 @@ command ()
 		} else if (searching_run == 2) {
 		    if (winat(hero.y, hero.x) == PASSAGE || levtype != NORMLEV
 #ifdef MOUSE
-			|| isalpha(winat(prev.y, prev.x))
+			|| isalpha(show(prev.y, prev.x)) /* being chased */
 #endif
 			|| pstats.s_hpt < max_stats.s_hpt) {
 			ch = runch;
@@ -210,13 +210,20 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 	    /*
 	     * convert mouse click into a command
 	     */
-	    if (ch == KEY_MOUSE
-		  && getmouse(&event) == OK
-		  && event.bstate & BUTTON1_RELEASED
-		   ) {
+	    if (ch == KEY_MOUSE) {
+		if (getmouse(&event) == OK
+		  && event.bstate & BUTTON1_RELEASED) {
 		    dest.x = event.x;
 		    dest.y = event.y;
 		    ch = do_mouseclick(dest);
+		    /*
+		     * if destination is unreachable, pick another
+		     */
+		    if (mousemove)
+			dest = fix_mousedest(dest);
+		} else {
+		    ch = ' ';
+		}
 	    }
 #endif
 
@@ -656,6 +663,10 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 	if (take != 0 && levtype != POSTLEV) {
 	    if (autopickup && !moving && (!searching_run || take == GOLD))
 	        pick_up(take);
+#ifdef MOUSE
+	    else if (autopickup && mousemove && take == GOLD)
+	        pick_up(take);
+#endif
 	    else
 		show_floor();
 	}
