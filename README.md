@@ -70,13 +70,12 @@ or via the SROGUEOPTS environment variable.
 ### Monsters
 
 To keep things interesting, urogue chooses a different selection of monsters
-each time you play.  By default, that includes the classic monsters from
-urogue 1.0.2 plus a random assortment of others.  If you like, you can use
-command line options to change this:
+each time you play.  If you like, you can use command line options to
+change this:
 
-    * -mc: use only the classic monsters from urogue 1.0.2
-    * -mr: use a random selection of monsters
     * -ma: use all 400+ monsters
+    * -mc: use only the classic monsters from urogue 1.0.2
+    * -mr: use a random selection of monsters (the default)
 
 ### Fighting
 
@@ -177,8 +176,8 @@ A C compiler, a curses library, and make.
 
 ## Installation
 
-This software builds on linux and windows.  Probably other unix's too,
-but I haven't tried any recently.
+This software builds on linux, windows and the raspberry pi.  Probably
+other unix's too, but I haven't tried any recently.
 
 To build urogue, change to the rogue sub-directory and type make:
 
