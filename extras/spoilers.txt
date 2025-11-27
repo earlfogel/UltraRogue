@@ -46,19 +46,23 @@ Use the 's' command to search for traps and secret doors, or use the
 searching run commands (<ctrl-H, ctrl-J, ...).  There are no secret doors
 or traps on the first level, but they become more common later.
 
-You can set your own traps with the '^' command.  I like to turn on the
+You can set traps with the '^' command.  I like to turn on the
 'cutcorners' option, then set a trap just inside a door.  That way, you can
-step around the trap, but most low level monsters can't.
+step around the trap, but many monsters can't.
+
+If you get stuck (e.g. surrounded by monsters you can't defeat), you can
+set a trap door, and then use the '>' command to fall through it to the
+next level.
 
 
 Mazes
 -----
 
-Mazes can be frustrating, as it may take a long time to find the staircase
-out.  Magic mapping helps with this, but if you don't want to struggle
-through a maze there are other ways out: a blessed scroll of teleportation,
-phasing through the floor, or creating a trap door and then falling through
-it.
+Mazes can be challenging, as it may take a long time to find the staircase
+out.  Light and magic mapping spells help, but there are also quicker ways
+out: blessed teleportation, phasing through the floor, phasing through the
+ceiling (when flying or levitating) or creating a trap door and then
+falling through it.
 
 
 Party Rooms
@@ -152,13 +156,12 @@ stops them from being stolen.
 Rings
 -----
 
-Add Intelligence and Increase Wisdom work as you'd expect.  Note that
-non-magical characters who increase their intelligence to at least 16 (or
-wisdom to 17) gain the ability to cast spells (or pray).
+Add Intelligence and Increase Wisdom - non-magical characters who increase
+their intelligence to 16 (or wisdom to 17) gain the ability to cast spells
+(or pray).
 
-Wizardry - This rare ring enhances your ability to cast spells or pray.
-A blessed ring of wizardry lets non-magical users cast spells and prayers
-a bit sooner.
+Wizardry - enhances your ability to cast spells and prayers.
+When blessed, it lets you reach new spells and prayers a bit earlier.
 
 Sustain Health - prevents you from getting sick, diseased or infested with
 a parasite.
@@ -168,15 +171,17 @@ you from going down, so it's most useful once you've finished exploring the
 dungeon and are on your way up again.  Blessed levitation protects you from
 fire traps as well.
 
-Blessed searching, regeneration, levitation and wizardry work better than
-normal; cursed searching, regeneration and wizardry are worse.
+Blessed search, regeneration, levitation and wizardry rings work better than
+normal; cursed search, regeneration and wizardry are worse.
 
 
 Spells and Prayers
 ------------------
 
-You can cast blessed spells and prayers (at extra cost)
-by typing upper-case letters.
+You can cast blessed spells and prayers by typing upper-case letters.
+
+This costs three times the usual number of points, and only works when
+there are three spells/prayers listed beyond the one you want.
 
 
 Options
@@ -196,8 +201,10 @@ character is seriously injured, sick, blind or fainting.  Then, should
 you die, you can roll back to the previous save point instead of starting
 over from the beginning.
 
-Difficulty - set to "easy", "normal" or "hard", as you wish.  You can also
+Difficulty - set to easy, normal, hard or very hard.  You can also
 change difficulty on the fly, which may help if you get in over your head.
+
+Usemouse - lets you use a mouse to move, fight monsters, pick things up, etc.
 
 Other options are unchanged from previous versions of urogue.
 
@@ -208,8 +215,7 @@ use the SROGUEOPTS environment variable to set them in advance.  E.g.:
 
   (windows) SET SROGUEOPTS=cutcorners,difficulty=easy,autosave
 
-The minimum dungeon size is 24x80.  You can make it larger, but only before
-the game starts.
+The minimum dungeon size is 24x80.
 
 On linux, resize the window before running urogue and the game will adjust
 the dungeon to fit.
@@ -221,9 +227,9 @@ size, set the PDC_LINES and PDC_ROWS batch variables.  E.g.
     SET PDC_COLS=90
     urogue.exe
 
-There are a few options that can only be set on the command line.
-In addition to the monster selection options described in README.md,
-these are:
+A few options can only be set on the command line.
+This includes the monster selection options described in README.md,
+as well as:
 
   urogue -s : print list of top scores and exit
 
