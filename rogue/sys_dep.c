@@ -18,7 +18,7 @@ tstop ()
    * we can assume that the signals remain set after an interupt.
    */
 
-#ifdef __FreeBSD__
+#if defined(__FreeBSD__) || defined(__APPLE__)
   sig_t SigCont;
 #else /* __FreeBSD__ */
   __sighandler_t   SigCont;
