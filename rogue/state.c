@@ -1204,7 +1204,7 @@ save_file(FILE *savef)
     ur_write_string(savef,save_end);	/* to verify end of file */
 }
 
-#define DUMPSTRING { str = ur_read_string(savef); /*printf("%s",str);fflush(stdout);*/ FREE(str); }
+#define DUMPSTRING { str = ur_read_string(savef); /*if (!isendwin()) endwin(); fprintf(stderr,"%s",str); refresh();*/ FREE(str); }
 
 int
 restore_file(FILE *savef)
