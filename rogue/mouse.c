@@ -32,9 +32,7 @@ struct wall {
 } walls[4];
 
 char 
-do_mousemove (dest, prev)
-coord dest;
-coord prev;
+do_mousemove (coord dest, coord prev)
 {
     char ch = ' ';
     static char oldch = ' ';
@@ -352,8 +350,7 @@ debug("stuck in a loop");
 }
 
 char 
-do_mouseclick (dest)
-coord dest;
+do_mouseclick (coord dest)
 {
     char ch = ' ';
 
@@ -400,8 +397,7 @@ coord dest;
  * if destination is unreachable, pick another
  */
 coord
-fix_mousedest (dest)
-    coord dest;
+fix_mousedest (coord dest)
 {
     int x, y;
     int radius = 1;

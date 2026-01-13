@@ -7,9 +7,7 @@
 #include "rogue.h"
 
 void 
-quaff (which, blessed)
-int which;
-bool blessed;
+quaff (int which, bool blessed)
 {
     struct object *obj;
     struct linked_list *item=NULL, *titem;
@@ -581,7 +579,7 @@ bool blessed;
 	buf[0] = '\0';
 	if (get_string(buf, cw) == NORM && strlen(buf) > 0)
 	{
-	    p_guess[which] = new((unsigned int) strlen(buf) + 1);
+	    p_guess[which] = my_malloc((unsigned int) strlen(buf) + 1);
 	    strcpy(p_guess[which], buf);
 	}
     }
@@ -592,8 +590,7 @@ bool blessed;
 /* Lower a level of experience */
 
 void 
-lower_level (who)
-int who;
+lower_level (int who)
 {
     int fewer, nsides=0;
 
@@ -689,8 +686,7 @@ res_intelligence ()
  */
 
 void 
-add_strength (cursed)
-bool cursed;
+add_strength (bool cursed)
 {
 
     if (cursed) {
@@ -713,8 +709,7 @@ bool cursed;
  * Increase player's intelligence
  */
 void 
-add_intelligence (cursed)
-bool cursed;
+add_intelligence (bool cursed)
 {
     int ring_str;	/* Value of ring strengths */
 
@@ -746,8 +741,7 @@ bool cursed;
  */
 
 void 
-add_wisdom (cursed)
-bool cursed;
+add_wisdom (bool cursed)
 {
     int ring_str;	/* Value of ring strengths */
 
@@ -779,8 +773,7 @@ bool cursed;
  */
 
 void 
-add_dexterity (cursed)
-bool cursed;
+add_dexterity (bool cursed)
 {
     /* Now do the potion */
     if (cursed) {
@@ -804,8 +797,7 @@ bool cursed;
  */
 
 void 
-add_const (cursed)
-bool cursed;
+add_const (bool cursed)
 {
     /* Do the potion */
     if (cursed) {

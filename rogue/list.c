@@ -15,9 +15,7 @@
  */
 
 void 
-_detach (list, item)
-struct linked_list **list;
-struct linked_list *item;
+_detach (struct linked_list **list, struct linked_list *item)
 {
     if (*list == item)
 	*list = next(item);
@@ -33,9 +31,7 @@ struct linked_list *item;
  */
 
 void 
-_attach (list, item)
-struct linked_list **list;
-struct linked_list *item;
+_attach (struct linked_list **list, struct linked_list *item)
 {
     if (*list != NULL)
     {
@@ -58,8 +54,7 @@ struct linked_list *item;
  */
 
 void 
-_free_list (ptr)
-struct linked_list **ptr;
+_free_list (struct linked_list **ptr)
 {
     struct linked_list *item;
 
@@ -78,8 +73,7 @@ struct linked_list **ptr;
  */
 
 void 
-discard (item)
-struct linked_list *item;
+discard (struct linked_list *item)
 {
     total -= 2;
     item->l_next = NULL;
@@ -94,14 +88,13 @@ struct linked_list *item;
  */
 
 struct linked_list *
-new_item (size)
-int size;
+new_item (int size)
 {
     struct linked_list *item;
 
-    if ((item = (struct linked_list *) new(sizeof *item)) == NULL)
+    if ((item = (struct linked_list *) my_malloc(sizeof *item)) == NULL)
 	msg("Ran out of memory for header after %d items", total);
-    if ((item->l_data = new(size)) == NULL)
+    if ((item->l_data = my_malloc(size)) == NULL)
 	msg("Ran out of memory for data after %d items", total);
     item->l_next = item->l_prev = NULL;
     item->l_letter = '\0';
@@ -109,8 +102,7 @@ int size;
 }
 
 char *
-new (size)
-int size;
+my_malloc (int size)
 {
     char *space = (char *) malloc((size_t) size);
     static char errbuf[LINELEN];

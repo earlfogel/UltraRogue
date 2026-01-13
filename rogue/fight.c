@@ -32,10 +32,7 @@ static bool keep_fighting;  /* even if we kill something */
 static int save_hpt;  /* your hit points at start of fight */
 
 void 
-do_fight (y, x, multiple)
-int y;
-int x;
-bool multiple;
+do_fight (int y, int x, bool multiple)
 {
     float limit = 0.33;
     if (serious_fight)
@@ -77,10 +74,7 @@ bool multiple;
  */
 
 int 
-fight (mp, weap, thrown)
-coord *mp;
-struct object *weap;
-bool thrown;
+fight (coord *mp, struct object *weap, bool thrown)
 {
     struct thing *tp;
     struct linked_list *item;
@@ -361,10 +355,7 @@ bool thrown;
  */
 
 int 
-attack (mp, weapon, thrown)
-struct thing *mp;
-struct object *weapon;
-bool thrown;
+attack (struct thing *mp, struct object *weapon, bool thrown)
 {
     char *mname;
     bool did_hit = FALSE;
@@ -971,25 +962,21 @@ bool thrown;
  */
 
 int 
-swing (class, at_lvl, op_arm, wplus)
-int class;
-int at_lvl;
-int op_arm;
-int wplus;
+swing (int charclass, int at_lvl, int op_arm, int wplus)
 {
     int res = rnd(20)+1;
     int need;
 
-    need = att_mat[class].base -
-	   att_mat[class].factor *
-	   ((min(at_lvl, att_mat[class].max_lvl) -
-	    att_mat[class].offset)/att_mat[class].range) +
+    need = att_mat[charclass].base -
+	   att_mat[charclass].factor *
+	   ((min(at_lvl, att_mat[charclass].max_lvl) -
+	    att_mat[charclass].offset)/att_mat[charclass].range) +
 	   (10 - op_arm);
     if (need > 20 && need <= 25) need = 20;
 
     /* give monsters a chance to hit well armored player */
     if (difficulty >= 2) {
-	if (class == C_MONSTER && need > 15) {
+	if (charclass == C_MONSTER && need > 15) {
 	    if (difficulty > 3 || (difficulty > 2 && level < 90))
 		need = 15 + ((need - 15) * 0.5);
 	    else
@@ -1011,7 +998,7 @@ int wplus;
 	    && res == 20 && rnd(5-difficulty) == 0
 	    ) {
 #if 0
-		if (class == C_MONSTER)
+		if (charclass == C_MONSTER)
 		    msg("Lucky hit (%d+%d < %d)", res, wplus, need);
 		else
 		    msg("Lucky hit (you have %d, normally need: %d)", res+wplus, need);
@@ -1084,12 +1071,7 @@ check_level ()
  */
 
 int 
-roll_em (att_er, def_er, weap, hurl, cur_weapon)
-struct thing *att_er;
-struct thing *def_er;
-struct object *weap;
-bool hurl;
-struct object *cur_weapon;
+roll_em (struct thing *att_er, struct thing *def_er, struct object *weap, bool hurl, struct object *cur_weapon)
 {
     struct stats *att, *def;
     char *cp;
@@ -1267,9 +1249,7 @@ struct object *cur_weapon;
  */
 
 char *
-prname (who, upper)
-char *who;
-bool upper;
+prname (char *who, bool upper)
 {
     static char tbuf[LINELEN];
 
@@ -1294,9 +1274,7 @@ bool upper;
  */
 
 void 
-hit (er, ee)
-char *er;
-char *ee;
+hit (char *er, char *ee)
 {
     char *s = "";
 
@@ -1321,9 +1299,7 @@ char *ee;
  */
 
 void 
-miss (er, ee)
-char *er;
-char *ee;
+miss (char *er, char *ee)
 {
     char *s = "";
 
@@ -1406,8 +1382,7 @@ save_throw(int which, struct thing *tp)
  */
 
 int 
-save (which)
-int which;
+save (int which)
 {
     return save_throw(which, &player);
 }
@@ -1418,8 +1393,7 @@ int which;
  */
 
 int 
-dext_plus (dexterity)
-int dexterity;
+dext_plus (int dexterity)
 {
     return ((dexterity-10)/3);
 }
@@ -1431,8 +1405,7 @@ int dexterity;
  */
 
 int 
-dext_prot (dexterity)
-int dexterity;
+dext_prot (int dexterity)
 {
     return ((dexterity-9)/2);
 }
@@ -1442,8 +1415,7 @@ int dexterity;
  */
 
 int 
-str_plus (str)
-int str;
+str_plus (int str)
 {
     return((str-10)/3);
 }
@@ -1454,8 +1426,7 @@ int str;
  */
 
 int 
-add_dam (str)
-int str;
+add_dam (int str)
 {
     return((str-9)/2);
 }
@@ -1498,9 +1469,7 @@ raise_level ()
  */
 
 void 
-thunk (weap, mname)
-struct object *weap;
-char *mname;
+thunk (struct object *weap, char *mname)
 {
     if (fighting)
 	return;
@@ -1516,9 +1485,7 @@ char *mname;
  */
 
 void 
-m_thunk (weap, mname)
-struct object *weap;
-char *mname;
+m_thunk (struct object *weap, char *mname)
 {
     if (fighting)
 	return;
@@ -1534,9 +1501,7 @@ char *mname;
  */
 
 void 
-bounce (weap, mname)
-struct object *weap;
-char *mname;
+bounce (struct object *weap, char *mname)
 {
     if (fighting)
 	return;
@@ -1552,9 +1517,7 @@ char *mname;
  */
 
 void 
-m_bounce (weap, mname)
-struct object *weap;
-char *mname;
+m_bounce (struct object *weap, char *mname)
 {
     if (fighting || running)
 	return;
@@ -1568,9 +1531,7 @@ char *mname;
  * remove a monster from the screen
  */
 void
-remove(mp, item)
-coord *mp;
-struct linked_list *item;
+remove(coord *mp, struct linked_list *item)
 {
     struct linked_list *pitem, *nexti;
     struct thing *tp;
@@ -1615,8 +1576,7 @@ struct linked_list *item;
  */
 
 int 
-is_magic (obj)
-struct object *obj;
+is_magic (struct object *obj)
 {
     switch (obj->o_type)
     {
@@ -1640,10 +1600,7 @@ struct object *obj;
  */
 
 void 
-killed (item, pr, points)
-struct linked_list *item;
-bool pr;	/* print result */
-bool points;
+killed (struct linked_list *item, bool pr, bool points)
 {
     struct thing *tp;
     struct linked_list *pitem, *nexti;
@@ -1739,9 +1696,7 @@ bool points;
  */
 
 struct object *
-wield_weap (weapon, mp)
-struct object *weapon;
-struct thing *mp;
+wield_weap (struct object *weapon, struct thing *mp)
 {
     int look_for;
     struct linked_list *pitem;

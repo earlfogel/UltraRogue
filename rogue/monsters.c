@@ -15,9 +15,7 @@
  */
 
 short 
-randmonster (wander, no_unique)
-bool wander;
-bool no_unique;
+randmonster (bool wander, bool no_unique)
 {
     int d, cur_level, range, i; 
     float nlevmons = NLEVMONS;
@@ -81,11 +79,7 @@ bool no_unique;
  */
 
 void 
-new_monster (item, type, cp, max_monster)
-struct linked_list *item;
-int type;
-coord *cp;
-bool max_monster;
+new_monster (struct linked_list *item, int type, coord *cp, bool max_monster)
 {
     struct thing *tp;
     struct monster *mp;
@@ -413,9 +407,7 @@ wanderer ()
  * what to do when the hero steps next to a monster
  */
 struct linked_list *
-wake_monster (y, x)
-int y;
-int x;
+wake_monster (int y, int x)
 {
     struct thing *tp;
     struct linked_list *it;
@@ -722,8 +714,7 @@ get_monst:
  */
 
 char * 
-id_monst (monster)
-int monster;
+id_monst (int monster)
 {
     int i;
     static char buf[200];
@@ -763,8 +754,7 @@ int monster;
  * Check_residue takes care of any effect of the monster 
  */
 void 
-check_residue (tp)
-struct thing *tp;
+check_residue (struct thing *tp)
 {
     /*
      * Take care of special abilities
@@ -797,8 +787,7 @@ struct thing *tp;
  */
 
 void 
-sell (tp)
-struct thing *tp;
+sell (struct thing *tp)
 {
     struct linked_list *item;
     int i, j, min_worth, nitems, goods=0, chance, which_item, w;

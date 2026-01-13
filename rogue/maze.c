@@ -145,9 +145,7 @@ draw_maze ()
  *	Calculate memory address for bits
  */
 char *
-moffset (y, x)
-int y;
-int x;
+moffset (int y, int x)
 {
 
 	return (bits + (y * (COLS - 1)) + x);
@@ -158,9 +156,7 @@ int x;
  *	Calculate memory address for frontier
  */
 char *
-foffset (y, x)
-int y;
-int x;
+foffset (int y, int x)
 {
 
 	return (frontier + (y * cols) + x);
@@ -171,9 +167,7 @@ int x;
  *	Figure out cells to open up 
  */
 int 
-findcells (y, x)
-int y;
-int x;
+findcells (int y, int x)
 {
 	int rtpos, i;
 
@@ -224,11 +218,7 @@ int x;
  *	Removes appropriate walls from the maze
  */
 void 
-rmwall (newy, newx, oldy, oldx)
-int newy;
-int newx;
-int oldy;
-int oldx;
+rmwall (int newy, int newx, int oldy, int oldx)
 {
 	int xdif,ydif;
 	

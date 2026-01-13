@@ -14,8 +14,7 @@
  */
 
 char *
-tr_name (ch)
-int ch;
+tr_name (int ch)
 {
     char *s = "";
 
@@ -55,8 +54,7 @@ int ch;
  */
 
 void 
-look (wakeup)
-bool wakeup;
+look (bool wakeup)
 {
     int x, y;
     char ch, och;
@@ -240,9 +238,7 @@ bool wakeup;
  */
 
 int 
-secretdoor (y, x)
-int y;
-int x;
+secretdoor (int y, int x)
 {
     int i;
     struct room *rp;
@@ -268,9 +264,7 @@ int x;
  */
 
 struct linked_list *
-find_obj (y, x)
-int y;
-int x;
+find_obj (int y, int x)
 {
     struct linked_list *obj;
     struct object *op;
@@ -363,10 +357,7 @@ eat ()
  */
 
 void 
-chg_str (amt, both, lost)
-int amt;
-bool both;
-bool lost;
+chg_str (int amt, bool both, bool lost)
 {
     int ring_str;		/* ring strengths */
     struct stats *ptr;		/* for speed */
@@ -402,10 +393,7 @@ bool lost;
  */
 
 void 
-chg_dext (amt, both, lost)
-int amt;
-bool both;
-bool lost;
+chg_dext (int amt, bool both, bool lost)
 {
     int ring_dext;		/* ring strengths */
     struct stats *ptr;		/* for speed */
@@ -439,8 +427,7 @@ bool lost;
  */
 
 void 
-add_haste (blessed)
-bool blessed;
+add_haste (bool blessed)
 {
     short hasttime;
 
@@ -485,8 +472,7 @@ aggravate ()
  *	calm the monsters around you
  */
 void 
-calm (blessed)
-bool blessed;
+calm (bool blessed)
 {
     struct linked_list *mi;
     struct thing *tp;
@@ -508,8 +494,7 @@ bool blessed;
  * for printfs: if string starts with a vowel, return "n" for an "an"
  */
 char *
-vowelstr (str)
-char *str;
+vowelstr (char *str)
 {
     switch (tolower(*str))
     {
@@ -528,8 +513,7 @@ char *str;
  * see if the object is one of the currently used items
  */
 int 
-is_current (obj)
-struct object *obj;
+is_current (struct object *obj)
 {
     if (obj == NULL)
 	return FALSE;
@@ -656,9 +640,7 @@ wait_for(0);
  */
 
 bool 
-maze_view (y, x)
-int y;
-int x;
+maze_view (int y, int x)
 {
     int start, goal, delta, ycheck, xcheck, absy, absx;
     bool row;

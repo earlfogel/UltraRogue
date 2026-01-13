@@ -135,9 +135,7 @@ option ()
  * put out a boolean
  */
 void
-put_bool(opt, win)
-opt_arg	*opt;
-WINDOW *win;
+put_bool(opt_arg *opt, WINDOW *win)
 {
     waddstr(win, *opt->iarg ? "True" : "False");
 }
@@ -146,9 +144,7 @@ WINDOW *win;
  * put out a string
  */
 void
-put_str(opt, win)
-opt_arg *opt;
-WINDOW *win;
+put_str(opt_arg *opt, WINDOW *win)
 {
     waddstr(win, opt->str);
 }
@@ -157,9 +153,7 @@ WINDOW *win;
  * print the character type
  */
 void
-put_abil(opt, win)
-opt_arg *opt;
-WINDOW *win;
+put_abil(opt_arg *opt, WINDOW *win)
 {
     char *abil;
 #if 0
@@ -190,9 +184,7 @@ WINDOW *win;
  * print the difficulty level
  */
 void
-put_diff(opt, win)
-opt_arg *opt;
-WINDOW *win;
+put_diff(opt_arg *opt, WINDOW *win)
 {
     if (*opt->iarg < 2)
 	waddstr(win, "Easy");
@@ -209,9 +201,7 @@ WINDOW *win;
  * allow changing a boolean option and print it out
  */
 int
-get_bool(opt, win)
-opt_arg *opt;
-WINDOW *win;
+get_bool(opt_arg *opt, WINDOW *win)
 {
     int oy, ox;
     bool op_bad;
@@ -265,17 +255,13 @@ WINDOW *win;
  * set a string option
  */
 int
-get_str(opt, win)
-opt_arg *opt;
-WINDOW *win;
+get_str(opt_arg *opt, WINDOW *win)
 {
     return( get_string(opt->str, win) );
 }
 
 int
-get_string(opt, win)
-char *opt;
-WINDOW *win;
+get_string(char *opt, WINDOW *win)
 {
     char *sp;
     int c, oy, ox;
@@ -346,9 +332,7 @@ WINDOW *win;
  * The ability field is read-only
  */
 int
-get_abil(abil, win)
-opt_arg *abil;
-WINDOW *win;
+get_abil(opt_arg *abil, WINDOW *win)
 {
     int oy, ox, ny, nx;
     bool op_bad;
@@ -394,9 +378,7 @@ WINDOW *win;
  * Change difficulty level on the fly
  */
 int
-get_diff(opt, win)
-opt_arg *opt;
-WINDOW *win;
+get_diff(opt_arg *opt, WINDOW *win)
 {
     int oy, ox, ny, nx;
     bool op_bad;
@@ -466,9 +448,7 @@ WINDOW *win;
  * Use mouse click for movement?
  */
 int
-get_mouse(opt, win)
-opt_arg *opt;
-WINDOW *win;
+get_mouse(opt_arg *opt, WINDOW *win)
 {
     int ret;
     bool old_mouse = *opt->iarg;
@@ -496,8 +476,7 @@ WINDOW *win;
  */
 
 void 
-parse_opts (str)
-char *str;
+parse_opts (char *str)
 {
     char *sp;
     OPTION *op;
@@ -596,10 +575,7 @@ char *str;
  * copy string using unctrl for things
  */
 void 
-strucpy (s1, s2, len)
-char *s1;
-char *s2;
-int len;
+strucpy (char *s1, char *s2, int len)
 {
     const char *sp;
 

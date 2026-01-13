@@ -12,8 +12,7 @@
  *	Update his pack weight and adjust fooduse accordingly
  */
 void 
-updpack (getmax)
-int getmax;
+updpack (int getmax)
 {
 
 	int topcarry, curcarry;
@@ -64,8 +63,7 @@ packweight ()
  *	Get the weight of an object
  */
 int 
-itemweight (wh)
-struct object *wh;
+itemweight (struct object *wh)
 {
 	int weight;
 	int ac;

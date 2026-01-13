@@ -44,8 +44,7 @@ static char *rip[] = {
  */
 
 void 
-death (monst)
-int monst;
+death (int monst)
 {
     char **dp = rip, *killer;
     struct tm *lt;
@@ -239,10 +238,7 @@ int monst;
 
 /* VARARGS2 */
 void 
-score (amount, flags, monst)
-long amount;
-int flags;
-int monst;
+score (long amount, int flags, int monst)
 {
     static struct sc_ent {
 	long sc_score;
@@ -593,8 +589,7 @@ total_winner ()
 }
 
 char *
-killname (monst)
-int monst;
+killname (int monst)
 {
     static char mons_name[80];
 
@@ -647,8 +642,7 @@ int monst;
  *	Display the contents of the hero's pack
  */
 void 
-showpack (howso)
-char *howso;
+showpack (char *howso)
 {
 	char *iname;
 	int cnt, worth, ch, oldpurse;
@@ -729,8 +723,7 @@ byebye ()
  *	chance of resurrection according to modifed D&D probabilities
  */
 int 
-save_resurrect (bonus)
-int bonus;
+save_resurrect (int bonus)
 {
     int need, adjust;
 

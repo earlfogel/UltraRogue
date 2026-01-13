@@ -127,9 +127,7 @@ do_passages ()
  */
 
 void 
-conn (r1, r2)
-int r1;
-int r2;
+conn (int r1, int r2)
 {
     struct room *rpf, *rpt;
     int rmt;
@@ -265,9 +263,7 @@ int r2;
  */
 
 void 
-door (rm, cp)
-struct room *rm;
-coord *cp;
+door (struct room *rm, coord *cp)
 {
     cmov(*cp);
     addch(rnd(10) < level - 1 && rnd(100) < 20 ? SECRETDOOR : DOOR);

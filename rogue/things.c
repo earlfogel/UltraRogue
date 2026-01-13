@@ -15,9 +15,7 @@
  *	inventory.
  */
 char *
-inv_name (obj, drop)
-struct object *obj;
-bool drop;
+inv_name (struct object *obj, bool drop)
 {
     char *pb;
 
@@ -192,8 +190,7 @@ bool drop;
  *	put something down
  */
 int 
-drop (item)
-struct linked_list *item;
+drop (struct linked_list *item)
 {
     char ch='.';
     struct linked_list *obj, *nobj;
@@ -276,8 +273,7 @@ struct linked_list *item;
  * do special checks for dropping or unweilding|unwearing|unringing
  */
 int 
-dropcheck (op)
-struct object *op;
+dropcheck (struct object *op)
 {
     if (op == NULL)
 	return TRUE;
@@ -481,11 +477,7 @@ new_thing ()
  * provide a new item tailored to specification
  */
 struct linked_list *
-spec_item (type, which, hit, damage)
-int type;
-int which;
-int hit;
-int damage;
+spec_item (int type, int which, int hit, int damage)
 {
     struct linked_list *item;
     struct object *obj;
@@ -554,9 +546,7 @@ int damage;
  * pick an item out of a list of nitems possible magic items
  */
 int 
-pick_one (magic, nitems)
-struct magic_item *magic;
-int nitems;
+pick_one (struct magic_item *magic, int nitems)
 {
     struct magic_item *end;
     int i;
@@ -591,8 +581,7 @@ int nitems;
  */
 
 char *
-blesscurse (flags)
-int flags;
+blesscurse (int flags)
 {
     if (flags & ISKNOW)  {
 	if (flags & ISCURSED) return("cursed ");

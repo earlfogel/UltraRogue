@@ -169,8 +169,7 @@ do_rooms ()
  */
 
 void 
-draw_room (rp)
-struct room *rp;
+draw_room (struct room *rp)
 {
     int j, k;
 
@@ -198,8 +197,7 @@ struct room *rp;
  */
 
 void 
-horiz (cnt)
-int cnt;
+horiz (int cnt)
 {
     while (cnt--)
 	addch('-');
@@ -211,8 +209,7 @@ int cnt;
  */
 
 void 
-vert (cnt)
-int cnt;
+vert (int cnt)
 {
     int x, y;
 
@@ -230,9 +227,7 @@ int cnt;
  */
 
 void 
-rnd_pos (rp, cp)
-struct room *rp;
-coord *cp;
+rnd_pos (struct room *rp, coord *cp)
 {
     cp->x = rp->r_pos.x + rnd(rp->r_max.x-2) + 1;
     cp->y = rp->r_pos.y + rnd(rp->r_max.y-2) + 1;

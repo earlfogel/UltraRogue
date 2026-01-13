@@ -206,11 +206,7 @@ again:
 
 
 int 
-puta_player (arm, wpt, hpadd, dmadd)
-int arm;
-int wpt;
-int hpadd;
-int dmadd;
+puta_player (int arm, int wpt, int hpadd, int dmadd)
 {
 
 	char char_file[LINELEN];	/* Where the file should be! */

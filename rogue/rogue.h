@@ -1135,7 +1135,7 @@ struct delayed_action
 #define DAEMON 1
 #define FUSE   2
 
-typedef void fuse;
+typedef void fuse_type;
 typedef void my_daemon;
 
 typedef union
@@ -1155,7 +1155,7 @@ typedef union
 struct fuse
 {
     int index;
-    fuse (*func)(fuse_arg *arg);
+    fuse_type (*func)(fuse_arg *arg);
 };
 
 struct daemon
@@ -1259,10 +1259,10 @@ int totalenc(void);
 void wghtchk(fuse_arg *arg);
 int hitweight(void);
 /* fight.c */
-void do_fight(int y, int x, int multiple);
+void do_fight(int y, int x, bool multiple);
 int fight(coord *mp, struct object *weap, bool thrown);
 int attack(struct thing *mp, struct object *weapon, bool thrown);
-int swing(int class, int at_lvl, int op_arm, int wplus);
+int swing(int charclass, int at_lvl, int op_arm, int wplus);
 void next_level(void);
 void check_level(void);
 int roll_em(struct thing *att_er, struct thing *def_er, struct object *weap, bool hurl, struct object *cur_weapon);
@@ -1317,7 +1317,7 @@ void _attach(struct linked_list **list, struct linked_list *item);
 void _free_list(struct linked_list **ptr);
 void discard(struct linked_list *item);
 struct linked_list *new_item(int size);
-char *new(int size);
+char *my_malloc(int size);
 /* main.c */
 int main(int argc, char **argv);
 void endit(void);

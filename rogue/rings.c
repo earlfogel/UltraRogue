@@ -104,7 +104,7 @@ ring_on ()
 	buf[0] = '\0';
 	if (get_string(buf, cw) == NORM && strlen(buf) > 0)
 	{
-	    r_guess[obj->o_which] = new((unsigned int) strlen(buf) + 1);
+	    r_guess[obj->o_which] = my_malloc((unsigned int) strlen(buf) + 1);
 	    strcpy(r_guess[obj->o_which], buf);
 	}
 	msg("");
@@ -145,8 +145,7 @@ ring_off ()
  * how much food does this ring use up?
  */
 int 
-ring_eat (hand)
-int hand;
+ring_eat (int hand)
 {
     if (cur_ring[hand] == NULL)
 	return 0;
@@ -178,8 +177,7 @@ int hand;
  * print ring bonuses
  */
 char *
-ring_num (obj)
-struct object *obj;
+ring_num (struct object *obj)
 {
     static char buf[5];
 
@@ -219,8 +217,7 @@ struct object *obj;
 /* Return the effect of the specified ring */
 
 int 
-ring_value (type)
-int type;
+ring_value (int type)
 {
     int result = 0;
 
@@ -238,8 +235,7 @@ int type;
 /* Are you wearing a blessed ring of the given type? */
 
 int 
-ring_blessed (type)
-int type;
+ring_blessed (int type)
 {
     int i;
 
@@ -255,8 +251,7 @@ int type;
 /* Are you wearing a cursed ring of the given type? */
 
 int 
-ring_cursed (type)
-int type;
+ring_cursed (int type)
 {
     int i;
 

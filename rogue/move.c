@@ -20,8 +20,7 @@ coord nh;
  */
 
 void 
-do_run (ch)
-int ch;
+do_run (int ch)
 {
     running = TRUE;
     after = FALSE;
@@ -35,9 +34,7 @@ int ch;
  */
 
 void 
-corr_move (dy, dx)
-int dy;
-int dx;
+corr_move (int dy, int dx)
 {
     char ch;
     short legal=0;		/* Number of legal alternatives */
@@ -117,9 +114,7 @@ int dx;
  */
 
 void 
-do_move (dy, dx)
-int dy;
-int dx;
+do_move (int dy, int dx)
 {
     char ch;
     coord old_hero;
@@ -346,8 +341,7 @@ int dx;
  */
 
 void 
-light (cp)
-coord *cp;
+light (coord *cp)
 {
     struct room *rp;
     int j, k, x, y;
@@ -475,9 +469,7 @@ coord *cp;
  */
 
 bool 
-blue_light (blessed, cursed)
-bool blessed;
-bool cursed;
+blue_light (bool blessed, bool cursed)
 {
     struct room *rp;
     bool ret_val=FALSE;	/* Whether or not affect is known */
@@ -534,9 +526,7 @@ bool cursed;
  */
 
 int 
-show (y, x)
-int y;
-int x;
+show (int y, int x)
 {
     char ch = winat(y, x);
     struct linked_list *item;
@@ -573,9 +563,7 @@ int x;
  */
 
 int 
-be_trapped (th, tc)
-struct thing *th;
-coord *tc;
+be_trapped (struct thing *th, coord *tc)
 {
     struct trap *tp;
     char ch, *mname="@";
@@ -1183,9 +1171,7 @@ dip_it ()
  */
 
 struct trap *
-trap_at (y, x)
-int y;
-int x;
+trap_at (int y, int x)
 {
     struct trap *tp, *ep;
 
@@ -1206,10 +1192,7 @@ int x;
  */
 
 void 
-set_trap (tp, y, x)
-struct thing *tp;
-int y;
-int x;
+set_trap (struct thing *tp, int y, int x)
  {
     bool is_player = (tp == &player);
     int selection = rnd(7) + 1;
@@ -1288,8 +1271,7 @@ int x;
  */
 
 coord *
-rndmove (who)
-struct thing *who;
+rndmove (struct thing *who)
 {
     int x, y;
     int ex, ey, nopen = 0;
@@ -1337,8 +1319,7 @@ struct thing *who;
  *	Returns TRUE if this character is some kind of trap
  */
 int 
-isatrap (ch)
-int ch;
+isatrap (int ch)
 {
 	switch(ch) {
 		case DARTTRAP:

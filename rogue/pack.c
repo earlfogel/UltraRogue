@@ -13,9 +13,7 @@
  * use it as the linked_list pointer instead of gettting it off the ground.
  */
 bool 
-add_pack (item, silent)
-struct linked_list *item;
-bool silent;
+add_pack (struct linked_list *item, bool silent)
 {
     struct linked_list *ip, *lp=NULL;
     struct object *obj, *op=NULL;
@@ -251,9 +249,7 @@ picked_up:
  *	list what is in the pack
  */
 int 
-inventory (list, type)
-struct linked_list *list;
-int type;
+inventory (struct linked_list *list, int type)
 {
     struct object *obj;
     char ch;
@@ -333,8 +329,7 @@ int type;
  *	Add something to characters pack.
  */
 void 
-pick_up (ch)
-int ch;
+pick_up (int ch)
 {
     switch(ch)
     {
@@ -394,9 +389,7 @@ picky_inven ()
  *	pick something out of a pack for a purpose
  */
 struct linked_list *
-get_item (purpose, type)
-char *purpose;
-int type;
+get_item (char *purpose, int type)
 {
     struct linked_list *obj, *pit, *savepit=NULL;
     struct object *pob;
@@ -515,8 +508,7 @@ int type;
 }
 
 int 
-pack_char (obj)
-struct object *obj;
+pack_char (struct object *obj)
 {
     struct linked_list *item;
     char c;
@@ -536,8 +528,7 @@ struct object *obj;
  *	Take something out of the hero's pack
  */
 void 
-del_pack (what)
-struct linked_list *what;
+del_pack (struct linked_list *what)
 {
 	struct object *op;
 
@@ -560,8 +551,7 @@ struct linked_list *what;
  *	This updates cur_weapon etc for dropping things
  */
 void 
-cur_null (op)
-struct object *op;
+cur_null (struct object *op)
 {
 	if (op == cur_weapon)
 	    cur_weapon = NULL;
@@ -605,8 +595,7 @@ char *pack_index	= pack_letters + SIZE(pack_letters) - 1;
 char *pack_end	= pack_letters + SIZE(pack_letters) - 1;
 
 void 
-getletter (item)
-struct linked_list *item;
+getletter (struct linked_list *item)
 {
 	if (item != NULL) {
 		if (pack_index > pack_letters && islower(pack_index[-1]))
@@ -617,8 +606,7 @@ struct linked_list *item;
 }
 
 void 
-freeletter (item)
-struct linked_list *item;
+freeletter (struct linked_list *item)
 {
 	if (item != NULL && islower(item->l_letter))
 		if (pack_index < pack_end)

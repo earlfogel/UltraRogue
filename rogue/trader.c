@@ -245,8 +245,7 @@ open_market()
  * 	Return the name for this type of object
  */
 char *
-typ_name(obj)
-struct object *obj;
+typ_name(struct object *obj)
 {
 	static char buff[2*LINELEN];
 	int wh;
@@ -276,8 +275,7 @@ struct object *obj;
  *	Calculate an objects worth in gold
  */
 int
-get_worth(obj)
-struct object *obj;
+get_worth(struct object *obj)
 {
 	int worth, wh;
 

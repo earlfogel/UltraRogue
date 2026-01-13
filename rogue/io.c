@@ -98,11 +98,7 @@ endmsg ()
  */
 
 int 
-step_ok (y, x, can_on_monst, flgptr)
-int y;
-int x;
-int can_on_monst;
-struct thing *flgptr;
+step_ok (int y, int x, int can_on_monst, struct thing *flgptr)
 {
     struct linked_list *item;
     char ch;
@@ -142,8 +138,7 @@ struct thing *flgptr;
  */
 
 int 
-shoot_ok (ch)
-int ch;
+shoot_ok (int ch)
 {
     switch (ch)
     {
@@ -181,8 +176,7 @@ readchar ()
 #ifndef PDCURSES
 #undef wgetch
 int
-my_wgetch (win)
-WINDOW *win;
+my_wgetch (WINDOW *win)
 {
     int ch;
     do {
@@ -202,8 +196,7 @@ WINDOW *win;
  */
 
 void 
-status (display)
-bool display;
+status (bool display)
 {
     struct stats *stat_ptr, *max_ptr;
     int oy, ox, temp;
@@ -495,8 +488,7 @@ ministat ()
  */
 
 void 
-wait_for (ch)
-int ch;
+wait_for (int ch)
 {
     int c;
 
@@ -542,9 +534,7 @@ int ch;
  */
 
 void
-show_win(scr, message)
-WINDOW *scr;
-char *message;
+show_win(WINDOW *scr, char *message)
 {
     mvwaddstr(scr, 0, 0, message);
     touchwin(scr);
@@ -560,9 +550,7 @@ char *message;
  *	Displays message on bottom line and waits for a space to return
  */
 void
-dbotline(scr,message)
-WINDOW *scr;
-char *message;
+dbotline(WINDOW *scr, char *message)
 {
 	mvwaddstr(scr,LINES-1,0,message);
 	draw(scr);
@@ -575,8 +563,7 @@ char *message;
  *	Restores the screen to the terminal
  */
 void
-restscr(scr)
-WINDOW *scr;
+restscr(WINDOW *scr)
 {
 	clearok(scr,TRUE);
 	touchwin(scr);

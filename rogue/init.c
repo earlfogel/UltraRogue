@@ -237,7 +237,7 @@ init_names ()
 	    *cp++ = ' ' ;
 	}
 	*--cp = '\0' ;
-	s_names[i] = (char *) new(strlen(prbuf)+1) ;
+	s_names[i] = (char *) my_malloc(strlen(prbuf)+1) ;
 	s_know[i] = FALSE ;
 	s_guess[i] = NULL ;
 	strcpy(s_names[i], prbuf) ;
@@ -413,10 +413,7 @@ init_monsters (char flag)
 
 
 void 
-badcheck (name, magic, bound)
-char *name;
-struct magic_item *magic;
-int bound;
+badcheck (char *name, struct magic_item *magic, int bound)
 {
     struct magic_item *end ;
 

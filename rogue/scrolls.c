@@ -10,9 +10,7 @@
 #include "rogue.h"
 
 void 
-read_scroll (which, blessed)
-int which;
-bool blessed;
+read_scroll (int which, bool blessed)
 {
     struct object *obj, *nobj;
     struct linked_list *item=NULL, *nitem;
@@ -866,7 +864,7 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
 	buf[0] = '\0';
 	if (get_string(buf, cw) == NORM && strlen(buf) > 0)
 	{
-	    s_guess[which] = new(strlen(buf) + 1);
+	    s_guess[which] = my_malloc(strlen(buf) + 1);
 	    strcpy(s_guess[which], buf);
 	}
     }
@@ -879,10 +877,7 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
  */
 
 struct thing *
-creat_mons (person, monster, report)
-struct thing *person;
-int monster;
-bool report;
+creat_mons (struct thing *person, int monster, bool report)
 {
     int x, y;
     bool appear = 0;
@@ -948,8 +943,7 @@ bool report;
  *      being worn by the hero  by Bruce Dautrich 4/3/84
  */
 int 
-is_r_on (obj)
-struct object *obj;
+is_r_on (struct object *obj)
 {
 	if(obj==cur_ring[LEFT_1]||obj==cur_ring[LEFT_2]||
 	   obj==cur_ring[LEFT_3]||obj==cur_ring[LEFT_4]||

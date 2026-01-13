@@ -498,7 +498,7 @@ ur_read_bag(int isbag, FILE *savef)
 
     for(i = 0; i < cnt; i++)
     {
-        l         = (struct linked_list *) new(sizeof(struct linked_list));
+        l         = (struct linked_list *) my_malloc(sizeof(struct linked_list));
         l->l_prev = previous;
 
         if (previous != NULL)
@@ -561,7 +561,7 @@ ur_read_monsters(FILE *savef)
 
     for(i = 0; i < cnt; i++)
     {
-        l         = (struct linked_list *) new(sizeof(struct linked_list));
+        l         = (struct linked_list *) my_malloc(sizeof(struct linked_list));
 
         l->l_prev = previous;
 

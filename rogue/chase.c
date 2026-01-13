@@ -100,9 +100,7 @@ runners (daemon_arg *arg __attribute__((unused)))
  */
 
 void 
-do_chase (th, flee)
-struct thing *th;
-bool flee;
+do_chase (struct thing *th, bool flee)
 {
     struct room *rer, *ree,	/* room of chaser, room of chasee */
 			*old_room,	/* old room of monster */
@@ -321,9 +319,7 @@ bool flee;
  */
 
 void 
-runto (runner, spot)
-coord *runner;
-coord *spot;
+runto (coord *runner, coord *spot)
 {
     struct linked_list *item;
     struct thing *tp;
@@ -352,10 +348,7 @@ coord *spot;
  */
 
 int 
-chase (tp, ee, flee)
-struct thing *tp;
-coord *ee;
-bool flee;
+chase (struct thing *tp, coord *ee, bool flee)
 {
     int x, y;
     int dist, thisdist, monst_dist = MAXINT;
@@ -669,8 +662,7 @@ bool flee;
  */
 
 struct room *
-roomin (cp)
-coord *cp;
+roomin (coord *cp)
 {
     struct room *rp;
 
@@ -689,9 +681,7 @@ coord *cp;
  */
 
 struct linked_list *
-find_mons (y, x)
-int y;
-int x;
+find_mons (int y, int x)
 {
     struct linked_list *item;
     struct thing *th;
@@ -711,10 +701,7 @@ int x;
  */
 
 int 
-diag_ok (sp, ep, flgptr)
-coord *sp;
-coord *ep;
-struct thing *flgptr;
+diag_ok (coord *sp, coord *ep, struct thing *flgptr)
 {
     if (ep->x == sp->x || ep->y == sp->y)
 	return TRUE;
@@ -738,9 +725,7 @@ struct thing *flgptr;
  */
 
 int 
-cansee (y, x)
-int y;
-int x;
+cansee (int y, int x)
 {
     struct room *rer;
     coord tp;
@@ -767,9 +752,7 @@ int x;
  */
 
 coord *
-can_shoot (er, ee)
-coord *er;
-coord *ee;
+can_shoot (coord *er, coord *ee)
 {
     static coord shoot_dir;
     int ery, erx, eey, eex;
@@ -804,12 +787,7 @@ coord *ee;
  */
 
 bool 
-straight_shot (ery, erx, eey, eex, shooting)
-int ery;
-int erx;
-int eey;
-int eex;
-coord *shooting;
+straight_shot (int ery, int erx, int eey, int eex, coord *shooting)
 {
     int dy, dx;	/* Deltas */
     char ch;
@@ -856,8 +834,7 @@ coord *shooting;
 /* Get_hurl returns the weapon that the monster will "throw" if it has one */
 
 struct linked_list *
-get_hurl (tp)
-struct thing *tp;
+get_hurl (struct thing *tp)
 {
     static struct linked_list *arrow, *bolt, *rock, *silverarrow, *fbbolt;
     struct linked_list *pitem;
@@ -911,8 +888,7 @@ struct thing *tp;
  */
 
 bool 
-can_blink (tp)
-struct thing *tp;
+can_blink (struct thing *tp)
 {
     short y, x, index=9;
     coord tryp;	/* To hold the coordinates for use in diag_ok */

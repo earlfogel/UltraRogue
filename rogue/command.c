@@ -873,8 +873,7 @@ quit ()
  */
 
 void 
-search (is_thief)
-bool is_thief;
+search (bool is_thief)
 {
     int x, y;
     char ch;
@@ -1136,8 +1135,7 @@ u_level ()
  * allow a user to call a potion, scroll, or ring something
  */
 void 
-call (mark)
-bool mark;
+call (bool mark)
 {
     struct object *obj;
     struct linked_list *item;
@@ -1204,7 +1202,7 @@ bool mark;
 	else if (strlen(prbuf) > 0) {
 	    if (guess[obj->o_which] != NULL)
 		FREE(guess[obj->o_which]);
-	    guess[obj->o_which] = new((unsigned int) strlen(prbuf) + 1);
+	    guess[obj->o_which] = my_malloc((unsigned int) strlen(prbuf) + 1);
 	    strcpy(guess[obj->o_which], prbuf);
 	} else {
 	    if (guess[obj->o_which] != NULL)
@@ -1222,8 +1220,7 @@ bool mark;
  * and keep going as long as there's a monster in reach.
  */
 bool
-pick_monster (ch)
-char ch;
+pick_monster (char ch)
 {
     int x, y, found_monster=0;
     coord found;
@@ -1269,9 +1266,7 @@ char ch;
  * see if there's a monster we'd like to fight at the given position
  */
 bool
-can_fight (x, y)
-int x;
-int y;
+can_fight (int x, int y)
 {
     int mch;
     coord tryp;

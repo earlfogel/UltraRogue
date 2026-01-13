@@ -50,8 +50,7 @@
 #define CANCFMASK ( 0 )
 
 void 
-fix_stick (cur)
-struct object *cur;
+fix_stick (struct object *cur)
 {
     if (strcmp(ws_type[cur->o_which], "staff") == 0) {
 	cur->o_weight = 100;
@@ -84,10 +83,7 @@ struct object *cur;
 }
 
 void 
-do_zap (gotdir, which, blessed)
-bool gotdir;
-int which;
-bool blessed;
+do_zap (bool gotdir, int which, bool blessed)
 {
     struct linked_list *item, *nitem;
     struct object *obj=NULL, *nobj;
@@ -678,11 +674,7 @@ bool blessed;
  */
 
 void 
-drain (ymin, ymax, xmin, xmax)
-int ymin;
-int ymax;
-int xmin;
-int xmax;
+drain (int ymin, int ymax, int xmin, int xmax)
 {
     int i, j, count;
     struct thing *ick;
@@ -725,8 +717,7 @@ int xmax;
  * charge a wand for wizards.
  */
 char *
-charge_str (obj)
-struct object *obj;
+charge_str (struct object *obj)
 {
     static char buf[20];
 
@@ -746,14 +737,8 @@ struct object *obj;
  */
 
 bool 
-shoot_bolt (shooter, start, dir, get_points, reason, name, damage)
-struct thing *shooter;
-coord start;
-coord dir;
-bool get_points;
-int reason;
-char *name;
-int damage;
+shoot_bolt (struct thing *shooter, coord start, coord dir, bool get_points,
+    int reason, char *name, int damage)
 {
     char dirch='/', ch;
     bool used, change;

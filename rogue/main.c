@@ -379,8 +379,7 @@ endit ()
  */
 
 void 
-fatal (s)
-char *s;
+fatal (char *s)
 {
     clear();
     move(LINES-2, 0);
@@ -419,8 +418,7 @@ char *s;
  */
 
 int 
-rnd (range)
-int range;
+rnd (int range)
 {
 #ifndef _WIN32
 	return (range == 0 ? 0 : (random() & 0x7fffffff) % range);
@@ -435,9 +433,7 @@ int range;
  */
 
 int 
-roll (number, sides)
-int number;
-int sides;
+roll (int number, int sides)
 {
     int dtotal = 0;
 

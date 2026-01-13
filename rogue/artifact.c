@@ -125,8 +125,7 @@ apply ()
  */
 
 bool 
-possessed (artifact)
-int artifact;
+possessed (int artifact)
 {
 	if ((picked_artifact >> artifact) & 1) 
 	   return TRUE;
@@ -139,8 +138,7 @@ int artifact;
  */
 
 bool 
-is_carrying (artifact)
-int artifact;
+is_carrying (int artifact)
 {
 	if ((has_artifact >> artifact) & 1) 
 	   return TRUE;
@@ -153,8 +151,7 @@ int artifact;
  */
 
 bool 
-is_active (artifact)
-int artifact;
+is_active (int artifact)
 {
 	if ((active_artifact >> artifact) & 1) 
 	   return TRUE;
@@ -201,9 +198,7 @@ make_artifact ()
  * make a specified artifact
  */
 struct object *
-new_artifact (which, cur)
-int which;
-struct object *cur;
+new_artifact (int which, struct object *cur)
 {
 	if (which >= MAXARTIFACT) {
 	    debug("Bad artifact %d.  Random one created.", which);
@@ -238,8 +233,7 @@ struct object *cur;
  * do_minor: side effects and minor malevolent effects of artifacts
  */
 void 
-do_minor (tr)
-struct object *tr;
+do_minor (struct object *tr)
 {
     int which;
 
@@ -1168,8 +1162,7 @@ do_amulet ()
  * as a bag of holding
  */
 void 
-do_bag (obj)
-struct object *obj;
+do_bag (struct object *obj)
 {
     int ch, which, limit;
 
@@ -1573,8 +1566,7 @@ do_crown ()
  *	move an object from the bag to the bag of holding
  */
 void 
-add_bag (bag)
-struct linked_list **bag;
+add_bag (struct linked_list **bag)
 {
     struct linked_list *ip, *lp=NULL;
     struct object *obj, *op=NULL;
@@ -1682,8 +1674,7 @@ added:
  *	pick something out of bag
  */
 struct linked_list *
-get_bag (bag)
-struct linked_list **bag;
+get_bag (struct linked_list **bag)
 {
     struct linked_list *obj, *pit;
     struct object *pob;
@@ -1751,8 +1742,7 @@ struct linked_list **bag;
  *	list what is in the bag
  */
 void 
-bag_inventory (list)
-struct linked_list *list;
+bag_inventory (struct linked_list *list)
 {
     struct object *obj;
     char ch;
@@ -1793,9 +1783,7 @@ struct linked_list *list;
 }
 
 int 
-bag_char (obj, bag)
-struct object *obj;
-struct linked_list *bag;
+bag_char (struct object *obj, struct linked_list *bag)
 {
     struct linked_list *item;
     char c;
@@ -1811,8 +1799,7 @@ struct linked_list *bag;
 }
 
 void 
-bagletter (item)
-struct linked_list *item;
+bagletter (struct linked_list *item)
 {
 	if (item != NULL) {
 		if (bag_index > bag_letters && islower(bag_index[-1]))
@@ -1823,8 +1810,7 @@ struct linked_list *item;
 }
 
 void 
-delbagletter (item)
-struct linked_list *item;
+delbagletter (struct linked_list *item)
 {
 	if (item != NULL && islower(item->l_letter))
 		if (bag_index < bag_end)
@@ -1837,8 +1823,7 @@ struct linked_list *item;
  *      find an artifact in pack or bag
  */
 struct object *
-get_artifact (artifact)
-int artifact;
+get_artifact (int artifact)
 {
     struct linked_list *bag = NULL;
     struct linked_list *item;

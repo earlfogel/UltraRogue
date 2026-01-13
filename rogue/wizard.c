@@ -13,8 +13,7 @@
  */
 
 void 
-whatis (what)
-struct linked_list *what;
+whatis (struct linked_list *what)
 {
     struct object *obj;
     struct linked_list *item;
@@ -69,10 +68,7 @@ struct linked_list *what;
  *	Create any object for wizard, scroll, magician, or cleric
  */
 void 
-create_obj (which_item, which_type, cursed)
-int which_item;
-int which_type;
-bool cursed;
+create_obj (int which_item, int which_type, bool cursed)
 {
     struct linked_list *item;
     struct object *obj;

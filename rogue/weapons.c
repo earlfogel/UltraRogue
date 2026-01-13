@@ -15,11 +15,7 @@
  */
 
 void 
-missile (ydelta, xdelta, item, tp)
-int ydelta;
-int xdelta;
-struct linked_list *item;
-struct thing *tp;
+missile (int ydelta, int xdelta, struct linked_list *item, struct thing *tp)
 {
 	struct object *obj ;
 	struct linked_list *nitem ;
@@ -113,11 +109,7 @@ struct thing *tp;
  * across the room
  */
 void 
-do_motion (obj, ydelta, xdelta, tp)
-struct object *obj;
-int ydelta;
-int xdelta;
-struct thing *tp;
+do_motion (struct object *obj, int ydelta, int xdelta, struct thing *tp)
 {
 
 	/*
@@ -161,9 +153,7 @@ struct thing *tp;
  */
 
 void 
-fall (item, pr)
-struct linked_list *item;
-bool pr;
+fall (struct linked_list *item, bool pr)
 {
 	struct object *obj ;
 	struct room *rp ;
@@ -230,9 +220,7 @@ bool pr;
  */
 
 void 
-init_weapon (weap, type)
-struct object *weap;
-int type;
+init_weapon (struct object *weap, int type)
 {
 	struct init_weps *iwp ;
 
@@ -256,11 +244,7 @@ int type;
  */
 
 int 
-hit_monster (y, x, obj, tp)
-int y;
-int x;
-struct object *obj;
-struct thing *tp;
+hit_monster (int y, int x, struct object *obj, struct thing *tp)
 {
 	static coord mp ;
 
@@ -286,9 +270,7 @@ struct thing *tp;
  */
 
 char *
-num (n1, n2)
-int n1;
-int n2;
+num (int n1, int n2)
 {
 	static char numbuf[LINELEN] ;
 
@@ -341,11 +323,11 @@ wield ()
  * pick a random position around the give (y, x) coordinates
  */
 int 
-fallpos (pos, newpos, scatter, under)
-coord *pos;
-coord *newpos;
-bool scatter;  /* stuff may scatter further */
-bool under;     /* even under the player */
+fallpos (
+coord *pos,
+coord *newpos,
+bool scatter,  /* stuff may scatter further */
+bool under)     /* even under the player */
 {
     int y, x, cnt, ch ;
 
