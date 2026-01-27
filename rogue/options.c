@@ -497,7 +497,7 @@ parse_opts (char *str)
 	    if (EQSTR(str, op->o_name, len))
 	    {
 		if (op->o_putfunc == put_bool)	/* if option is a boolean */
-		    *op->o_opt.iarg = TRUE;
+		    *(bool *)op->o_opt.iarg = TRUE;
 		else				/* string option */
 		{
 		    char *start;
