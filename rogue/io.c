@@ -11,6 +11,7 @@
 
 static char mbuf[2*BUFSIZ];
 static int newpos = 0;
+char *get_health(void);
 
 /*
  * msg:
@@ -251,14 +252,8 @@ status (bool display)
 	    stat_ptr->s_wisdom,max_ptr->s_wisdom,stat_ptr->s_dext,max_ptr->s_dext,
 	    stat_ptr->s_const,max_ptr->s_const,stat_ptr->s_pack/10,
 	    stat_ptr->s_carry/10);
-    } else if (COLS >= 70) {
-	sprintf(buf, "Int:%d(%d) Str:%d(%d) Wis:%d(%d) Dxt:%d(%d) Const:%d(%d) Pack:%d(%d)",
-	    stat_ptr->s_intel, max_ptr->s_intel, stat_ptr->s_str,max_ptr->s_str,
-	    stat_ptr->s_wisdom,max_ptr->s_wisdom,stat_ptr->s_dext,max_ptr->s_dext,
-	    stat_ptr->s_const,max_ptr->s_const,stat_ptr->s_pack/10,
-	    stat_ptr->s_carry/10);
     } else {
-	sprintf(buf, "Int:%d/%d Str:%d/%d Wis:%d/%d Dxt:%d/%d Pck:%d/%d",
+	sprintf(buf, "Int:%d/%d Str:%d/%d Wis:%d/%d Dxt:%d/%d Pack:%d/%d",
 	    stat_ptr->s_intel, max_ptr->s_intel, stat_ptr->s_str,max_ptr->s_str,
 	    stat_ptr->s_wisdom,max_ptr->s_wisdom,stat_ptr->s_dext,max_ptr->s_dext,
 	    stat_ptr->s_pack/10,
@@ -291,35 +286,86 @@ status (bool display)
      */
 line_two: 
 
-#if 0
-    if (wizard) {
-	struct linked_list *item;
-	int mcount = 0;
-	for (item = mlist; item != NULL; item = next(item)) {
-	    mcount++;
-	    if (item->l_data == NULL) {
-		msg("*** Monster #%d is missing! ***");
-		sleep(4);
-		moving = fighting = FALSE;
-	    }
-	}
-	wmove(cw, LINES-2, COLS-6);
-	wprintw(cw, "%-3d %-2d", mcount, demoncnt);
+    health_state = get_health();
+
+    if (!display				&&
+	s_hp == stat_ptr->s_hpt			&& 
+	s_exp == stat_ptr->s_exp		&& 
+        s_pur == purse && 
+	s_ac == (cur_armor != NULL ? (cur_armor->o_ac - 10 + stat_ptr->s_arm)
+		: stat_ptr->s_arm) - ring_value(R_PROTECT) && 
+	s_health_state == health_state		&& 
+	s_lvl == level 				&& 
+	s_hungry == hungry_state		) return;
+	
+    if (!first_line) getyx(cw, oy, ox);
+    if (s_hp != max_ptr->s_hpt)
+    {
+	temp = s_hp = max_ptr->s_hpt;
+	for (hpwidth = 0; temp; hpwidth++)
+	    temp /= 10;
     }
-#endif
+    if (COLS >= 80)
+	sprintf(buf, "Lvl:%d  Au:%d  Hp:%*d(%*d)  Ac:%d  Exp:%d/%ld  %s %s",
+	    level, purse, hpwidth, stat_ptr->s_hpt, hpwidth, max_ptr->s_hpt,
+	    (cur_armor != NULL ? (cur_armor->o_ac - 10 + stat_ptr->s_arm)
+		    : stat_ptr->s_arm) - ring_value(R_PROTECT),
+	    stat_ptr->s_lvl, stat_ptr->s_exp,
+	    cnames[player.t_ctype][min(stat_ptr->s_lvl-1, 10)],
+	    (health_state != NULL)? health_state: "");
+    else
+	sprintf(buf, "Lvl:%d Hp:%*d/%*d Ac:%d Exp:%d  %s",
+	    level, hpwidth, stat_ptr->s_hpt, hpwidth, max_ptr->s_hpt,
+	    (cur_armor != NULL ? (cur_armor->o_ac - 10 + stat_ptr->s_arm)
+		    : stat_ptr->s_arm) - ring_value(R_PROTECT),
+	    stat_ptr->s_lvl,
+	    (health_state != NULL)? health_state:
+		cnames[player.t_ctype][min(stat_ptr->s_lvl-1, 10)]);
 
     /*
-     * work out current health
+     * Save old status
      */
-    if (pstats.s_hpt <= 0) {  /* dead */
-	health_state = NULL;
-    } else if (find_slot(FUSE, FUSE_SUFFOCATE) != NULL) {
+    s_lvl = level;
+    s_pur = purse;
+    s_hp = stat_ptr->s_hpt;
+    s_exp = stat_ptr->s_exp; 
+    s_ac = (cur_armor != NULL ? (cur_armor->o_ac - 10 + stat_ptr->s_arm)
+	: stat_ptr->s_arm) - ring_value(R_PROTECT);
+    s_health_state = health_state;
+    mvwaddstr(cw, LINES - 1, 0, buf);
+    wclrtoeol(cw);
+    s_hungry = hungry_state;
+    wmove(cw, oy, ox);
+}
+
+/*
+ * work out current health
+ */
+char *
+get_health()
+{
+    char *health_state = "Healthy";
+
+    if (pstats.s_hpt <= 0)  /* dead */
+	return(NULL);
+
+    switch (hungry_state)
+    {
+	when F_HUNGRY:
+	    return("  Hungry");
+	when F_WEAK:
+	    return("  Weak");
+	when F_FAINT:
+	    return("  Fainting");
+    }
+
+    if (find_slot(FUSE, FUSE_SUFFOCATE) != NULL) {
 	health_state = "  Suffocating";
     } else if (on(player, HASINFEST)) {
 	if (infest_dam > 1 || pstats.s_hpt < max_stats.s_hpt/3)
-	    health_state = "  **Very Sick**";
+	    health_state = "  Sick!!!";
 	else
-	    health_state = " Quite Sick";
+	    health_state = " Sick!";
     } else if (on(player, HASDISEASE)) {
 	health_state = "  Sick";
     } else if (on(player, HASITCH)) {
@@ -334,15 +380,15 @@ line_two:
 	health_state = "  Slow";
     } else if (on(player, ISFLEE)) {
 	health_state = "  Terrified";
-    } else if (stat_ptr->s_intel < 8) {
+    } else if (pstats.s_intel < 8) {
 	health_state = "  Dim-witted";
-    } else if (stat_ptr->s_str < 8) {
+    } else if (pstats.s_str < 8) {
 	health_state = "  Feeble";
-    } else if (stat_ptr->s_wisdom < 8) {
+    } else if (pstats.s_wisdom < 8) {
 	health_state = "  Clueless";
-    } else if (stat_ptr->s_dext < 8) {
+    } else if (pstats.s_dext < 8) {
 	health_state = "  Bumbling";
-    } else if (stat_ptr->s_const < 8) {
+    } else if (pstats.s_const < 8) {
 	health_state = "  Frail";
 #if 0
     } else if (on(player, ISHUH) && fighting) {
@@ -366,12 +412,10 @@ line_two:
 	health_state = "  Vulnerable";
     } else if (on(player, SUPEREAT) || on(player, POWEREAT)) {
 	health_state = "  Warm";
-    } else if (cur_armor == NULL && cur_weapon == NULL) {
-	health_state = "  No Armor, No Weapon";
     } else if (cur_armor == NULL) {
-	health_state = "  No Armor";
+	health_state = "  Armor?";
     } else if (cur_weapon == NULL) {
-	health_state = "  No Weapon";
+	health_state = "  Weapon?";
     } else if (pstats.s_hpt < max_stats.s_hpt/5) {
 	health_state = " Depleted";
 #ifdef EARL
@@ -383,68 +427,9 @@ line_two:
     } else {
 	health_state = NULL;
     }
-
-    if (!display				&&
-	s_hp == stat_ptr->s_hpt			&& 
-	s_exp == stat_ptr->s_exp		&& 
-        s_pur == purse && 
-	s_ac == (cur_armor != NULL ? (cur_armor->o_ac - 10 + stat_ptr->s_arm)
-		: stat_ptr->s_arm) - ring_value(R_PROTECT) && 
-	s_health_state == health_state		&& 
-	s_lvl == level 				&& 
-	s_hungry == hungry_state		) return;
-	
-    if (!first_line) getyx(cw, oy, ox);
-    if (s_hp != max_ptr->s_hpt)
-    {
-	temp = s_hp = max_ptr->s_hpt;
-	for (hpwidth = 0; temp; hpwidth++)
-	    temp /= 10;
-    }
-    if (COLS >= 80)
-	sprintf(buf, "Lvl:%d  Au:%d  Hp:%*d(%*d)  Ac:%d  Exp:%d/%ld  %s",
-	    level, purse, hpwidth, stat_ptr->s_hpt, hpwidth, max_ptr->s_hpt,
-	    (cur_armor != NULL ? (cur_armor->o_ac - 10 + stat_ptr->s_arm)
-		    : stat_ptr->s_arm) - ring_value(R_PROTECT),
-	    stat_ptr->s_lvl, stat_ptr->s_exp,
-	    cnames[player.t_ctype][min(stat_ptr->s_lvl-1, 10)]);
-    else
-	sprintf(buf, "Lvl:%d Hp:%*d(%*d) Ac:%d Exp:%d",
-	    level, hpwidth, stat_ptr->s_hpt, hpwidth, max_ptr->s_hpt,
-	    (cur_armor != NULL ? (cur_armor->o_ac - 10 + stat_ptr->s_arm)
-		    : stat_ptr->s_arm) - ring_value(R_PROTECT),
-	    stat_ptr->s_lvl);
-
-    /*
-     * Save old status
-     */
-    s_lvl = level;
-    s_pur = purse;
-    s_hp = stat_ptr->s_hpt;
-    s_exp = stat_ptr->s_exp; 
-    s_ac = (cur_armor != NULL ? (cur_armor->o_ac - 10 + stat_ptr->s_arm)
-	: stat_ptr->s_arm) - ring_value(R_PROTECT);
-    s_health_state = health_state;
-    mvwaddstr(cw, LINES - 1, 0, buf);
-    switch (hungry_state)
-    {
-	case F_OK:
-	    if (health_state != NULL) {
-		waddstr(cw, health_state);
-	    } else {
-		wclrtoeol(cw);
-	    }
-	when F_HUNGRY:
-	    waddstr(cw, "  Hungry");
-	when F_WEAK:
-	    waddstr(cw, "  Weak");
-	when F_FAINT:
-	    waddstr(cw, "  Fainting");
-    }
-    wclrtoeol(cw);
-    s_hungry = hungry_state;
-    wmove(cw, oy, ox);
+    return(health_state);
 }
+
 
 void 
 ministat ()
