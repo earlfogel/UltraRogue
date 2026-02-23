@@ -247,6 +247,10 @@ do_move (int dy, int dx)
 		return;
 	    }
 	    else if (running) {
+		/* at last! now we can run through walls */
+		if (ch == ' ' && is_carrying(TR_SILMARIL) && is_active(TR_SILMARIL)) {
+		    break;
+		}
 		after = running = FALSE;
 		search(FALSE);
 		if (!first)
