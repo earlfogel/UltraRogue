@@ -74,7 +74,6 @@ char *save_end    = "\nEnd of UltraRogue Game State\n";
 /*
  * leave room for future growth
  */
-int reserved2 = 0;
 int reserved1 = 0;
 
 struct linked_list  *fam_ptr = NULL;        /* A ptr to the familiar        */
@@ -886,11 +885,11 @@ ur_write_window(FILE *savef, WINDOW *win)
 {
     int i,j;
 #ifdef PDCURSES
-    int y = getmaxy(win);
-    int x = getmaxx(win);
+    short y = getmaxy(win);
+    short x = getmaxx(win);
 #else
-    int y = getmaxy(win) - 1;
-    int x = getmaxx(win) - 1;
+    short y = getmaxy(win) - 1;
+    short x = getmaxx(win) - 1;
 #endif
 
     ur_write_long(savef, URS_WINDOW);
@@ -908,13 +907,13 @@ ur_read_window(FILE *savef, WINDOW *win)
 {
     int i,j;
 #ifdef PDCURSES
-    int y = getmaxy(win);
-    int x = getmaxx(win);
+    short y = getmaxy(win);
+    short x = getmaxx(win);
 #else
-    int y = getmaxy(win) - 1;
-    int x = getmaxx(win) - 1;
+    short y = getmaxy(win) - 1;
+    short x = getmaxx(win) - 1;
 #endif
-    int maxy, maxx;
+    short maxy, maxx;
     long id;
 
     id = ur_read_long(savef);
@@ -1191,7 +1190,7 @@ save_file(FILE *savef)
     ur_write_int(savef, autopickup);
     ur_write_int(savef, autosave);
     ur_write_int(savef, use_mouse);
-    ur_write_int(savef, reserved2);
+    ur_write_int(savef, nlives);
     ur_write_int(savef, reserved1);  /* for future use */
 
     ur_write_int(savef, game_id);
@@ -1459,8 +1458,9 @@ restore_file(FILE *savef)
     if (use_mouse)
 	mousemask(BUTTON1_RELEASED, NULL);  /* for mouse buttons */
 #endif
-    reserved2 = (bool) ur_read_int(savef);
-    reserved1 = (bool) ur_read_int(savef);  /* for future use */
+    nlives = ur_read_int(savef);
+    if (nlives < 1) nlives = 1;
+    reserved1 = ur_read_int(savef);  /* for future use */
 
     game_id = ur_read_int(savef);
     str = ur_read_string(savef);

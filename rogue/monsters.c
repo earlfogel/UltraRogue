@@ -987,7 +987,7 @@ sell (struct thing *tp)
     /* Display the goods */
     msg("The %s shows you %s wares.--More--", monsters[nummonst].m_name,
 	(rnd(2)? "his": "her"));
-    wait_for(' ');
+    wait_for(0);
     msg("");
     clearok(cw, TRUE);
     touchwin(cw);

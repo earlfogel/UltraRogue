@@ -841,7 +841,8 @@ shoot_bolt (struct thing *shooter, coord start, coord dir, bool get_points,
 
 		if (y>BOLT_LENGTH-5 && !bounced) {
 		    bounced = TRUE;
-		    msg("The %s bounces!", name);
+		    if (!fighting)
+			msg("The %s bounces!", name);
 		}
 		y--;
 		break;
