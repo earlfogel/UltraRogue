@@ -18,6 +18,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <errno.h>
 #include "rogue.h"
 #include "state.h"
 
@@ -146,11 +147,11 @@ death (int monst)
 	ch = readchar();
     }
     if (ch != '\n' && ch != '\r')
-	wait_for('\n');
+	wait_for(0);
 
     if (autosave == TRUE) {
 	char fname[200];
-	FILE *infd;
+	FILE *infd, *outfd;
 
 	strcpy(fname, home);
         strcat(fname, "rogue.asave");
@@ -184,10 +185,23 @@ death (int monst)
 		}
 
 		if (restore_file(infd) == TRUE) {
+		    nlives++;
+#ifdef EARL
+		    msg("Restarting level %d... (life %d)", level, nlives);
+#else
 		    msg("Restarting level %d...", level);
+#endif
 		    light(&hero);
 		    draw(cw);
 		    fclose(infd);
+		    /* save again, to increment nlives */
+		    if ((outfd = fopen(fname, "wb")) == NULL) {
+			msg("");
+			msg("Autosave error: %s.%s", strerror(errno));
+		    } else {
+			save_file(outfd);
+			fclose(outfd);
+		    }
 		    return;
 		}
 	    }
@@ -225,8 +239,12 @@ death (int monst)
 	}
     }
 
+#ifdef FLUTTER
+    playing = FALSE;
+#else
     move(LINES-1, 0);
     idenpack();
+#endif
     refresh();
     score(pstats.s_exp, KILLED, monst);
     exit(0);
@@ -240,11 +258,16 @@ death (int monst)
 void 
 score (long amount, int flags, int monst)
 {
+#ifdef FLUTTER
+    if (flags != CHICKEN)
+        wait_for(0);
+#else
     static struct sc_ent {
 	long sc_score;
 	char sc_name[76];
 	long sc_gold;
-	int sc_flags;
+	short sc_flags;
+	short sc_lives;
 	int sc_level;
 	short sc_artifacts;
 	short sc_monster;
@@ -263,6 +286,7 @@ score (long amount, int flags, int monst)
     char *packend;
     FILE *fd_score = NULL;	/* file descriptor for the score file */
     bool write_it = FALSE;
+    bool made_it = FALSE;	/* made it into the top ten */
 
 
     signal(SIGINT, (sig_t)byebye);
@@ -303,7 +327,7 @@ score (long amount, int flags, int monst)
     }
 
     /*
-     * adjust score based on difficulty level
+     * adjust score
      */
     if (mindifficulty < 2) {
 	amount *= 0.67;
@@ -312,6 +336,8 @@ score (long amount, int flags, int monst)
     } else if (mindifficulty > 3) {
 	amount *= 2.25;
     }
+    if (nlives > 1)
+	amount /= nlives;
 
     for (scp = top_ten; scp < &top_ten[10]; scp++)
     {
@@ -319,6 +345,7 @@ score (long amount, int flags, int monst)
 	scp->sc_name[0] = '\0';
 	scp->sc_gold = 0L;
 	scp->sc_flags = 0;
+	scp->sc_lives = 0;
 	scp->sc_level = 0;
 	scp->sc_monster = 0;
 	scp->sc_artifacts = 0;
@@ -356,10 +383,10 @@ score (long amount, int flags, int monst)
 	fclose(fd_score);
     }
 
-    /*
-     * Insert player in list if need be
-     */
     if (amount > 0) {
+	/*
+	 * Insert player in list if need be
+	 */
 	for (scp = top_ten; scp < &top_ten[10]; scp++) {
 	    if (scp->sc_game_id == game_id)  /* we've seen this game before */
 		remove_slot = scp;
@@ -367,9 +394,12 @@ score (long amount, int flags, int monst)
 		break;
 	}
 	for (scp = top_ten; scp < &top_ten[10]; scp++) {
-	    if (amount > scp->sc_score)
+	    if (amount > scp->sc_score) {
+		made_it = TRUE;
 		break;
+	    }
 	}
+	if (!made_it) scp = &top_ten[9];
 
 	/*
 	 * Congrats, made it into top 10
@@ -399,6 +429,7 @@ score (long amount, int flags, int monst)
 			cnames[player.t_ctype][min(pstats.s_lvl,11) - 1]);
 	    strcat(scp->sc_name, prbuf);
 	    scp->sc_flags = flags;
+	    scp->sc_lives = nlives;
 	    if (flags == WINNER || flags == TOTAL)
 		scp->sc_level = max_level;
 	    else
@@ -406,8 +437,10 @@ score (long amount, int flags, int monst)
 	    scp->sc_monster = monst;
 	    scp->sc_artifacts = picked_artifact;
 	    scp->sc_game_id = game_id;
-	    write_it = TRUE;
+	    if (made_it)
+		write_it = TRUE;
 	}
+    } else {
     }
     if (flags != SCOREIT) {
 	refresh();
@@ -417,12 +450,22 @@ score (long amount, int flags, int monst)
     /*
      * Print the list
      */
-    printf("\nTop Ten Adventurers:\nRank  Score    Gold\tName\n");
+    if (made_it || flags == SCOREIT)
+	printf("\nTop Ten Adventurers:\nRank  Score    Gold\tName\n");
+    else
+	printf("\n\n      Score    Gold\tName\n");
     for (scp = top_ten; scp < &top_ten[10]; scp++) {
 
+	if (!made_it && scp->sc_game_id != game_id && flags != SCOREIT)
+	    continue;
+
 	if (scp->sc_score > 0) {
-	    printf("%-2d    %-8ld %-8ld\t%s:\n", (int) (scp - top_ten + 1),
-		scp->sc_score, scp->sc_gold, scp->sc_name);
+	    if (made_it)
+		printf("%-2d    %-8ld %-8ld\t%s:\n", (int) (scp - top_ten + 1),
+		    scp->sc_score, scp->sc_gold, scp->sc_name);
+	    else
+		printf("      %-8ld %-8ld\t%s:\n",
+		    scp->sc_score, scp->sc_gold, scp->sc_name);
 	    if (scp->sc_artifacts) {
 		char things[60];
 		int  i;
@@ -471,10 +514,13 @@ score (long amount, int flags, int monst)
 		printf(" %s", killer);
 	    }
 
+	    if (scp->sc_lives > 1)
+		printf(" using %d lives", scp->sc_lives);
+
 	    if (canwizard)
 		printf(" (game #%d)", scp->sc_game_id);
 
-	    if (scp->sc_game_id == game_id) { /* the game we just played */
+	    if (made_it && scp->sc_game_id == game_id) { /* the game we just played */
 		printf(" (just now).\n");
 	    } else {
 		printf(".\n");
@@ -507,7 +553,7 @@ score (long amount, int flags, int monst)
 	if (access(fname, F_OK) == -0)
 	    unlink(fname);
     }
-
+#endif
 }
 
 void 
