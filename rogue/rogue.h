@@ -1116,7 +1116,7 @@ void u_level(void);
 void shell(void);
 void call(bool mark);
 bool pick_monster (char ch);
-bool can_fight (int x, int y);
+bool can_fight (int y, int x);
 
 /* daemon.c */
 

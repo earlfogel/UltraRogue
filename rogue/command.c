@@ -40,6 +40,9 @@ command ()
     static coord dta;
     static int minfight;
     static int waitcount;
+    bool fight_ended = FALSE;
+    int dx = 0, dy = 0;
+    bool ctrl_move = FALSE;
 
     if (on(player, CANFLY) && rnd(2) && running)
 	ntimes++;
@@ -267,25 +270,39 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 		case 'y': case 'u': case 'b': case 'n':
 		    runch = ch;
 		    break;
-		case 'H': case 'J': case 'K': case 'L':
-		case 'Y': case 'U': case 'B': case 'N':
-		    runch = tolower(ch);
-		    if (doorstop && !on(player, ISBLIND)) {
-			door_stop = TRUE;
-			firstmove = TRUE;
-		    }
-		    break;
 		case CTRL('H'): case CTRL('J'): case CTRL('K'): case CTRL('L'):
 	        case CTRL('Y'): case CTRL('U'): case CTRL('B'): case CTRL('N'):
 #define UNCTRL(x)	((x) + 'A' - 1)
 		    ch = UNCTRL(ch);
 #undef	UNCTRL
-		    runch = tolower(ch);
-		    if (doorstop && !on(player, ISBLIND)) {
-			door_stop = TRUE;
-			firstmove = TRUE;
+		    ctrl_move = TRUE;
+		    serious_fight = TRUE;
+		    /* fall through */
+		case 'H': case 'J': case 'K': case 'L':
+		case 'Y': case 'U': case 'B': case 'N':
+		    if      (ch == 'H') { dx = -1; dy = 0; }
+		    else if (ch == 'J') { dx = 0;  dy = 1; }
+		    else if (ch == 'K') { dx = 0;  dy = -1; }
+		    else if (ch == 'L') { dx = 1;  dy = 0; }
+		    else if (ch == 'Y') { dx = -1; dy = -1; }
+		    else if (ch == 'U') { dx = 1;  dy = -1; }
+		    else if (ch == 'B') { dx = -1; dy = 1; }
+		    else /*ch == 'N'*/  { dx = 1;  dy = 1; }
+#if 0
+		    if (!ctrl_move)
+			serious_fight = FALSE;
+#endif
+                    if (can_fight(hero.y+dy, hero.x+dx)) {
+			ch = 'f';
+                    } else {
+			runch = tolower(ch);
+			if (doorstop && !on(player, ISBLIND)) {
+			    door_stop = TRUE;
+			    firstmove = TRUE;
+			}
+			if (ctrl_move)
+			    searching_run = 1;	/* alternately search and move */
 		    }
-		    searching_run = 1;	/* alternately search and move */
 		    break;
 	    }
 
@@ -335,12 +352,17 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 		     */
 		    if (!fighting ||
 		        (ch == 'F'
-			    && !can_fight(hero.x+dta.x,hero.y+dta.y))) {
+			    && !can_fight(hero.y+dta.y,hero.x+dta.x))) {
 			/*
 			 * Look for a monster to fight.
 			 * If we can't find one, ask the player.
 			 */
-			if (pick_monster(ch) || (!fighting && get_dir())) {
+			if (dx != 0 || dy != 0) { /* use this direction */
+			    dta.y = dy;
+			    dta.x = dx;
+			    beast = NULL;
+			    waitcount = 2;
+			} else if (pick_monster(ch) || (!fighting && get_dir())) {
 			    dta.y = delta.y;
 			    dta.x = delta.x;
 			    beast = NULL;
@@ -377,6 +399,8 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 		    }
 		    do_fight(dta.y, dta.x,
 			(ch == 'F') ? TRUE : FALSE);
+		    if (!fighting)
+			fight_ended = TRUE;
 		when 't':
 		    if (!get_dir())
 			after = FALSE;
@@ -459,6 +483,7 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 			    if (decrement)
 				msg_index = (msg_index + 9) % 10;
 		}
+#ifndef FLUTTER
 		when 'S' : 
 		    after = FALSE;
 		    if (save_game())
@@ -468,6 +493,7 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 			endwin();
 			exit(0);
 		    }
+#endif
 		when '.' : if (rnd(2) == 0) player.t_quiet++;	/* Rest command */
 		when ',' :
 		    if (levtype == POSTLEV)
@@ -650,11 +676,13 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 			after = FALSE;
 		    }
 	    }
+#if 0
 	    /*
 	     * turn off flags if no longer needed
 	     */
 	    if (!running)
 		door_stop = FALSE;
+#endif
 	}
 	/*
 	 * If player ran into something to take, let them pick it up.
@@ -685,8 +713,12 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
     if (an_after)
     {
 	look(FALSE);
+	if (fight_ended)
+	    fighting = TRUE;  /* temporarily */
 	do_daemons(AFTER);
 	do_fuses(AFTER);
+	if (fight_ended)
+	    fighting = FALSE;
 
 	/* Special abilities */
 	if ((player.t_ctype == C_THIEF) &&
@@ -1233,7 +1265,7 @@ pick_monster (char ch)
 	for (x = hero.x - 1; x <= hero.x + 1; x++) {
 	    if (rnd(2)) {
 		for (y = hero.y - 1; y <= hero.y + 1; y++) {
-		    if (can_fight(x,y)) {
+		    if (can_fight(y,x)) {
 			found_monster++;
 			found.x = x - hero.x;
 			found.y = y - hero.y;
@@ -1241,7 +1273,7 @@ pick_monster (char ch)
 		}
 	    } else {
 		for (y = hero.y + 1; y >= hero.y - 1; y--) {
-		    if (can_fight(x,y)) {
+		    if (can_fight(y,x)) {
 			found_monster++;
 			found.x = x - hero.x;
 			found.y = y - hero.y;
@@ -1266,7 +1298,7 @@ pick_monster (char ch)
  * see if there's a monster we'd like to fight at the given position
  */
 bool
-can_fight (int x, int y)
+can_fight (int y, int x)
 {
     int mch;
     coord tryp;
