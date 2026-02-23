@@ -233,6 +233,8 @@ read_scroll (int which, bool blessed)
 		    switch (nch = ch = mvwinch(hw, i, j)) {
 			case SECRETDOOR:
 			    /* mvaddch(i, j, nch = DOOR); */
+			    nch = secretdoor(i,j);
+			    break;
 			case '-':
 			case '|':
 			case DOOR:
