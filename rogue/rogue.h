@@ -997,6 +997,7 @@ extern int maxpack;			/* max items that fit in pack */
 extern int nummonst;			/* number of types of monsters */
 extern int searching_run;		/* alternately search and step */
 extern int save_ch;			/* saved command for next turn */
+extern int nlives;			/* number of lives we've used so far */
 extern char take;			/* Thing the rogue is taking */
 extern char prbuf[];			/* Buffer for sprintfs */
 extern char outbuf[];			/* Output buffer for stdout */

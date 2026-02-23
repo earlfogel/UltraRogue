@@ -57,6 +57,7 @@ int maxpack = MAXPACK;
 int auth_or[MAXAUTH];
 int searching_run = 0;
 int save_ch = ' ';
+int nlives = 1;				/* number of lives we've used so far */
 char curpurch[15];			/* name of item ready to buy */
 char PLAYER = VPLAYER;			/* what the player looks like */
 char take;				/* Thing the rogue is taking */
