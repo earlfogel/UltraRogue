@@ -559,7 +559,7 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
 			    }
 			if (lb->o_ac > limit && lb->o_ac < 11
 				&& rnd(5) == 0) {
-			    int on = is_r_on(lb);
+			    int on = is_ring_on(lb);
 			    msg("Your ring explodes in a cloud of smoke.");
 			    lb->o_flags &= ~ISCURSED;
 			    dropcheck(lb);
@@ -585,7 +585,7 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
 			    discard(ll);
 			    lb = NULL;
 			}
-			else if (is_r_on(lb)) {
+			else if (is_ring_on(lb)) {
 			    switch(lb->o_which) {
 				case R_ADDSTR:
 				    pstats.s_str += howmuch;
@@ -737,6 +737,14 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
 		}
 		else if (blessed && !(lb->o_flags & ISOWNED)) {
 		    lb->o_flags |= (ISOWNED | CANRETURN);
+#ifdef EARL
+		    if (lb->o_type == TYP_ARTIFACT
+			&& lb->o_flags & ISPROT
+			&& !(lb->o_flags & IS2PROT)
+			) {
+			lb->o_flags &= ~ISPROT;  /* remove protection */
+		    }
+#endif
 		    msg("The gods smile upon you.");
 		}
 		else if (blessed | cursed) {
@@ -940,18 +948,3 @@ creat_mons (struct thing *person, int monster, bool report)
     return((struct thing *) NULL);
 }
 
-/*
- *	This subroutine determines if an object that is a ring is
- *      being worn by the hero  by Bruce Dautrich 4/3/84
- */
-int 
-is_r_on (struct object *obj)
-{
-	if(obj==cur_ring[LEFT_1]||obj==cur_ring[LEFT_2]||
-	   obj==cur_ring[LEFT_3]||obj==cur_ring[LEFT_4]||
-	   obj==cur_ring[RIGHT_1]||obj==cur_ring[RIGHT_2]||
-	   obj==cur_ring[RIGHT_3]||obj==cur_ring[RIGHT_4]) {
-	   return TRUE;
-	}
-	return FALSE;
-}

@@ -210,6 +210,9 @@ look (bool wakeup)
 		    case ' ':
 			break;
 		    default:
+#ifdef FLUTTER
+			if ((horiz || vert) && (x == hero.x || y == hero.y))
+#endif
 			running = FALSE;
 			break;
 		}
@@ -517,11 +520,7 @@ is_current (struct object *obj)
 {
     if (obj == NULL)
 	return FALSE;
-    if (obj == cur_armor || obj == cur_weapon || 
-	obj == cur_ring[LEFT_1] || obj == cur_ring[LEFT_2] ||
-	obj == cur_ring[LEFT_3] || obj == cur_ring[LEFT_4] ||
-	obj == cur_ring[RIGHT_1] || obj == cur_ring[RIGHT_2] ||
-	obj == cur_ring[RIGHT_3] || obj == cur_ring[RIGHT_4]) {
+    if (obj == cur_armor || obj == cur_weapon || is_ring_on(obj)) {
 	msg("That's already in use.");
 	return TRUE;
     }

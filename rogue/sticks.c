@@ -1045,6 +1045,12 @@ at_hero:
 		    else if (!fighting)
 			msg("The %s whizzes by you.", name);
 		}
+#ifdef FLUTTER
+if (ch == '.')
+    dirch = '#';
+else
+    dirch = '.';
+#endif
 		mvwaddch(cw, pos.y, pos.x, dirch);
 		draw(cw);
 	}

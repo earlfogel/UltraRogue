@@ -248,6 +248,9 @@ new_level (
 
     wmove(cw, hero.y, hero.x);
     waddch(cw, PLAYER);
+#ifdef FLUTTER
+    if (levtype != POSTLEV)
+#endif
     status(TRUE);
 
     if (autosave == TRUE

@@ -79,7 +79,7 @@ endmsg ()
 	wmove(cw, 0, mpos);
 	waddnstr(cw, morestr, COLS - mpos);
 	draw(cw);
-	if (pstats.s_hpt < max_stats.s_hpt/5)
+	if (pstats.s_hpt < max_stats.s_hpt/5 && !flutter)
 	    wait_for(' ');  /* rogue should be more careful when injured */
 	else
 	    wait_for(0);
@@ -246,18 +246,17 @@ status (bool display)
     first_line = TRUE;
     getyx(cw, oy, ox);
 
-    if (COLS >= 80) {
+    if (COLS >= 80 && !flutter) {
 	sprintf(buf, "Int:%d(%d)  Str:%d(%d)  Wis:%d(%d)  Dxt:%d(%d)  Const:%d(%d)  Carry:%d(%d)",
 	    stat_ptr->s_intel, max_ptr->s_intel, stat_ptr->s_str,max_ptr->s_str,
 	    stat_ptr->s_wisdom,max_ptr->s_wisdom,stat_ptr->s_dext,max_ptr->s_dext,
 	    stat_ptr->s_const,max_ptr->s_const,stat_ptr->s_pack/10,
 	    stat_ptr->s_carry/10);
     } else {
-	sprintf(buf, "Int:%d/%d Str:%d/%d Wis:%d/%d Dxt:%d/%d Pack:%d/%d",
+	sprintf(buf, "Int:%d/%d Str:%d/%d Wis:%d/%d Dxt:%d/%d Pack:%d%%",
 	    stat_ptr->s_intel, max_ptr->s_intel, stat_ptr->s_str,max_ptr->s_str,
 	    stat_ptr->s_wisdom,max_ptr->s_wisdom,stat_ptr->s_dext,max_ptr->s_dext,
-	    stat_ptr->s_pack/10,
-	    stat_ptr->s_carry/10);
+	    (stat_ptr->s_pack * 100)/ stat_ptr->s_carry);
     }
 
     /* Update first line status */
@@ -305,7 +304,7 @@ line_two:
 	for (hpwidth = 0; temp; hpwidth++)
 	    temp /= 10;
     }
-    if (COLS >= 80)
+    if (COLS >= 80 && !flutter)
 	sprintf(buf, "Lvl:%d  Au:%d  Hp:%*d(%*d)  Ac:%d  Exp:%d/%ld  %s %s",
 	    level, purse, hpwidth, stat_ptr->s_hpt, hpwidth, max_ptr->s_hpt,
 	    (cur_armor != NULL ? (cur_armor->o_ac - 10 + stat_ptr->s_arm)
@@ -313,14 +312,18 @@ line_two:
 	    stat_ptr->s_lvl, stat_ptr->s_exp,
 	    cnames[player.t_ctype][min(stat_ptr->s_lvl-1, 10)],
 	    (health_state != NULL)? health_state: "");
-    else
-	sprintf(buf, "Lvl:%d Hp:%*d/%*d Ac:%d Exp:%d  %s",
-	    level, hpwidth, stat_ptr->s_hpt, hpwidth, max_ptr->s_hpt,
+    else {
+	sprintf(buf, "Lvl:%d Au:%d Hp:%*d/%*d Ac:%d Exp:%d ",
+	    level, purse, hpwidth, stat_ptr->s_hpt, hpwidth, max_ptr->s_hpt,
 	    (cur_armor != NULL ? (cur_armor->o_ac - 10 + stat_ptr->s_arm)
 		    : stat_ptr->s_arm) - ring_value(R_PROTECT),
-	    stat_ptr->s_lvl,
+	    stat_ptr->s_lvl);
+	if (flutter)
+	    sprintf(buf+strlen(buf), " Player:");
+	sprintf(buf+strlen(buf), "%s",
 	    (health_state != NULL)? health_state:
 		cnames[player.t_ctype][min(stat_ptr->s_lvl-1, 10)]);
+    }
 
     /*
      * Save old status
@@ -366,6 +369,8 @@ get_health()
 	    health_state = "  Sick!!!";
 	else
 	    health_state = " Sick!";
+    } else if (pstats.s_hpt < max_stats.s_hpt/5) {
+	health_state = " Depleted";
     } else if (on(player, HASDISEASE)) {
 	health_state = "  Sick";
     } else if (on(player, HASITCH)) {
@@ -380,6 +385,8 @@ get_health()
 	health_state = "  Slow";
     } else if (on(player, ISFLEE)) {
 	health_state = "  Terrified";
+    } else if (on(player, ISHUH)) {
+	health_state = "  Confused";
     } else if (pstats.s_intel < 8) {
 	health_state = "  Dim-witted";
     } else if (pstats.s_str < 8) {
@@ -400,8 +407,6 @@ get_health()
     } else if (on(player, CANINWALL) && find_slot(FUSE, FUSE_UNPHASE) == NULL) {
 	health_state = "  Phasing"; /* permanent phasing */
 #endif
-    } else if (on(player, ISHUH)) {
-	health_state = "  Confused";
     } else if (on(player, ISUNSMELL)) {
 	health_state = "  Unscented";
     } else if (on(player, STUMBLER)) {
@@ -413,11 +418,15 @@ get_health()
     } else if (on(player, SUPEREAT) || on(player, POWEREAT)) {
 	health_state = "  Warm";
     } else if (cur_armor == NULL) {
-	health_state = "  Armor?";
+	if (flutter)
+	    health_state = "  Armor?";
+	else
+	    health_state = "  No Armor";
     } else if (cur_weapon == NULL) {
-	health_state = "  Weapon?";
-    } else if (pstats.s_hpt < max_stats.s_hpt/5) {
-	health_state = " Depleted";
+	if (flutter)
+	    health_state = "  Weapon?";
+	else
+	    health_state = "  No Weapon";
 #ifdef EARL
     } else if (char_type < 0 || char_type > 3) {
 	health_state = "  bad char_type ";

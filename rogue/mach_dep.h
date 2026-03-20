@@ -10,6 +10,10 @@
 #include <stdlib.h>
 #endif
 
+#ifdef	FLUTTER
+#   include <stdlib.h>
+#endif
+
 #ifdef _WIN32
 #define random rand
 #define srandom srand

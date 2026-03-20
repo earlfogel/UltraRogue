@@ -1850,3 +1850,16 @@ get_artifact (int artifact)
     }
     return(NULL);
 }
+
+#ifdef FLUTTER
+void reset_bag(void)
+{
+    has_artifact = 0;
+    picked_artifact = 0;
+    active_artifact = 0;
+    strcpy(bag_letters, "zyxwvutsrqponmlkjihgfedcba");
+    bag_index	= bag_letters + SIZE(bag_letters) - 1;
+    bag_end	= bag_letters + SIZE(bag_letters) - 1;
+    /* free_list(bag); */
+}
+#endif

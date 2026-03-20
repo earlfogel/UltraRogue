@@ -635,3 +635,18 @@ show_floor ()
 		}
 	}
 }
+
+#ifdef FLUTTER
+void reset_pack(void)
+{
+    int i;
+    for (i=0; i<NFINGERS; i++) {
+	cur_ring[i] = NULL;
+    }
+    inpack = 0;
+    strcpy(pack_letters, "zyxwvutsrqponmlkjihgfedcba");
+    pack_index	= pack_letters + SIZE(pack_letters) - 1;
+    pack_end	= pack_letters + SIZE(pack_letters) - 1;
+    free_list(player.t_pack);
+}
+#endif

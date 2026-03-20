@@ -1015,7 +1015,7 @@ dip_it ()
 	    return;
 	}
 	if (tp->tr_flags & ISGONE) {
-	    msg("This %s appears to have used once already.",
+	    msg("This %s appears to have been used already.",
 		(tp->tr_type == POOL ? "shimmering pool" : "poison pool"));
 	    return;
 	}
@@ -1030,10 +1030,7 @@ dip_it ()
 	    msg("You have to take off your armor before you can dip it.");
 	    return;
 	}
-	else if(ob == cur_ring[LEFT_1] || ob == cur_ring[LEFT_2] ||
-		ob == cur_ring[LEFT_3] || ob == cur_ring[LEFT_4] ||
-		ob == cur_ring[RIGHT_1] || ob == cur_ring[RIGHT_2] ||
-		ob == cur_ring[RIGHT_3] || ob == cur_ring[RIGHT_4]) {
+	else if (is_ring_on(ob)) {
 	    msg("You have to take that ring off before you can dip it.");
 	    return;
 	}

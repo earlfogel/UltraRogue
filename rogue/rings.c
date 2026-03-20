@@ -233,7 +233,6 @@ ring_value (int type)
 }
 
 /* Are you wearing a blessed ring of the given type? */
-
 int 
 ring_blessed (int type)
 {
@@ -249,7 +248,6 @@ ring_blessed (int type)
 }
 
 /* Are you wearing a cursed ring of the given type? */
-
 int 
 ring_cursed (int type)
 {
@@ -262,4 +260,20 @@ ring_cursed (int type)
 	    return 1;
     }
     return(0);
+}
+
+/*
+ * Is an object that is a ring being worn by the hero
+ * by Bruce Dautrich 4/3/84
+ */
+int 
+is_ring_on (struct object *obj)
+{
+    if (obj==cur_ring[LEFT_1] || obj==cur_ring[LEFT_2] ||
+        obj==cur_ring[LEFT_3] || obj==cur_ring[LEFT_4] ||
+        obj==cur_ring[RIGHT_1]|| obj==cur_ring[RIGHT_2] ||
+        obj==cur_ring[RIGHT_3]|| obj==cur_ring[RIGHT_4]) {
+       return TRUE;
+    }
+    return FALSE;
 }

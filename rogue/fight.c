@@ -856,12 +856,8 @@ attack (struct thing *mp, struct object *weapon, bool thrown)
 			    obj->o_flags |= ISCURSED;
 			msg("You feel nimble fingers reach into you pack.");
 		    }
-		    if (((obj != cur_armor && obj != cur_weapon &&
-			obj != cur_ring[LEFT_1] && obj != cur_ring[LEFT_2] &&
-			obj != cur_ring[LEFT_3] && obj != cur_ring[LEFT_4] &&
-			obj != cur_ring[RIGHT_1] && obj != cur_ring[RIGHT_2] &&
-			obj != cur_ring[RIGHT_3] && obj != cur_ring[RIGHT_4] &&
-			!(obj->o_flags & ISPROT) && is_magic(obj) )
+		    if (((obj != cur_armor && obj != cur_weapon && !is_ring_on(obj)
+			&& !(obj->o_flags & ISPROT) && is_magic(obj) )
 			    || (level > 95 && difficulty >= 2))
 			&& get_worth(obj) > worth) {
 			steal = item;

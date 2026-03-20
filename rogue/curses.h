@@ -8,20 +8,22 @@
 
 
 #ifdef _WIN32
-#define PDC_WIDE 1
-#define PDC_NCMOUSE 1
-#include <pdcurses.h>
+#   define PDC_WIDE 1
+#   define PDC_NCMOUSE 1
+#   include <pdcurses.h>
 #else
-#include <curses.h>
-#ifdef MOUSE
-#ifndef PDCURSES
-int my_wgetch(WINDOW *);
-#define wgetch(win) my_wgetch(win)
-#endif
-#endif
-#ifdef __clang__
-#undef mvwinch
-#define mvwinch(win,y,x)	(char) (wmove((win),(y),(x)) == ERR ? NCURSES_CAST(chtype, ERR) : winch(win))
-#endif
-#endif
+#   include <curses.h>
+#   ifndef FLUTTER
+#       ifdef MOUSE
+#           ifndef PDCURSES
+        	int my_wgetch(WINDOW *);
+#               define wgetch(win) my_wgetch(win)
+#           endif /* PDCURSES */
+#       endif /* MOUSE */
+#       ifdef __clang__
+#           undef mvwinch
+#           define mvwinch(win,y,x)	(char) (wmove((win),(y),(x)) == ERR ? NCURSES_CAST(chtype, ERR) : winch(win))
+#       endif /* __clang__ */
+#   endif /* !FLUTTER */
+#endif /* !_WIN32 */
 

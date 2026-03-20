@@ -1056,6 +1056,7 @@ extern bool serious_fight;		/* fight longer and harder */
 #ifdef MOUSE
 extern bool mousemove;
 #endif
+extern bool flutter;			/* code built to run as a flutter app */
 extern coord oldpos;			/* Position before last look() call */
 extern coord delta;			/* Change indicated to get_dir() */
 extern char *spacemsg;
@@ -1094,6 +1095,9 @@ void bag_inventory(struct linked_list *list);
 int bag_char(struct object *obj, struct linked_list *bag);
 void bagletter(struct linked_list *item);
 void delbagletter(struct linked_list *item);
+#ifdef FLUTTER
+void reset_bag(void);
+#endif
 /* chase.c */
 void do_chase(struct thing *th, bool flee);
 void runto(coord *runner, coord *spot);
@@ -1416,6 +1420,9 @@ void idenpack(void);
 void getletter(struct linked_list *item);
 void freeletter(struct linked_list *item);
 void show_floor(void);
+#ifdef FLUTTER
+void reset_pack(void);
+#endif
 /* passages.c */
 void do_passages(void);
 void conn(int r1, int r2);
@@ -1427,6 +1434,9 @@ void steal(void);
 void pray(void);
 void affect(void);
 void cast(void);
+#ifdef FLUTTER
+void reset_player(void);
+#endif
 /* potions.c */
 void quaff(int which, bool blessed);
 void lower_level(int who);
@@ -1446,6 +1456,7 @@ char *ring_num(struct object *obj);
 int ring_value(int type);
 int ring_blessed(int type);
 int ring_cursed(int type);
+int is_ring_on(struct object *obj);
 /* rip.c */
 void death(int monst);
 void score(long amount, int flags, int monst);
@@ -1474,7 +1485,6 @@ int getword(int fd);
 /* scrolls.c */
 void read_scroll(int which, bool blessed);
 struct thing *creat_mons(struct thing *person, int monster, bool report);
-int is_r_on(struct object *obj);
 /* sticks.c */
 void fix_stick(struct object *cur);
 void do_zap(bool gotdir, int which, bool blessed);

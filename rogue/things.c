@@ -283,11 +283,7 @@ dropcheck (struct object *op)
 	    return(FALSE);
 	}
     }
-    if (op != cur_armor && op != cur_weapon &&
-	op != cur_ring[LEFT_1] && op != cur_ring[LEFT_2] &&
-	op != cur_ring[LEFT_3] && op != cur_ring[LEFT_4] &&
-	op != cur_ring[RIGHT_1] && op != cur_ring[RIGHT_2] &&
-	op != cur_ring[RIGHT_3] && op != cur_ring[RIGHT_4]) 
+    if (op != cur_armor && op != cur_weapon && !is_ring_on(op))
 	    return TRUE;
     if (op->o_flags & ISCURSED) {
 	msg("You can't.  It appears to be cursed.");
@@ -299,10 +295,7 @@ dropcheck (struct object *op)
 	waste_time();
 	cur_armor = NULL;
     }
-    else if (op == cur_ring[LEFT_1] || op == cur_ring[LEFT_2] ||
-	op == cur_ring[LEFT_3] || op == cur_ring[LEFT_4] ||
-	op == cur_ring[RIGHT_1] || op == cur_ring[RIGHT_2] ||
-	op == cur_ring[RIGHT_3] || op == cur_ring[RIGHT_4]) {
+    else if (is_ring_on(op)) {
 	if      (op == cur_ring[LEFT_1])  cur_ring[LEFT_1]  = NULL;
 	else if (op == cur_ring[LEFT_2])  cur_ring[LEFT_2]  = NULL;
 	else if (op == cur_ring[LEFT_3])  cur_ring[LEFT_3]  = NULL;

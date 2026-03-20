@@ -354,7 +354,8 @@ do_prayer:
 	return;
     }
 
-    msg("Your prayer has been granted.");
+    if (!flutter)
+	msg("Your prayer has been granted.");
 
     if (cleric_spells[which_prayer].s_type == TYP_POTION)
 	quaff(	cleric_spells[which_prayer].s_which,
@@ -637,7 +638,8 @@ do_spell:
 	return;
     }
 
-    msg("Your spell is successful.");
+    if (!flutter)
+	msg("Your spell is successful.");
 
     if (magic_spells[which_spell].s_type == TYP_POTION)
         quaff(	magic_spells[which_spell].s_which,
@@ -661,3 +663,33 @@ do_spell:
 	repeat_spell = which_spell;
     }
 }
+
+#ifdef FLUTTER
+void reset_player(void)
+{
+    char_type = -1;
+    fighting = FALSE;
+    running = FALSE;
+    foodlev = 1;
+    level = 1;
+    purse = 0;
+    inpack = 0;
+    total = 0;
+    food_left = HUNGERTIME;
+    hungry_state = F_OK;
+    infest_dam=0;
+    lost_str=0;
+    hold_count = 0;
+    pray_time = 0;
+    spell_power = 0;
+    has_artifact = 0;
+    picked_artifact = 0;
+    active_artifact = 0;
+    turn_off(player, CANINWALL);
+    turn_off(player, HASDISEASE);
+    turn_off(player, POWEREAT);
+    turn_off(player, SUPEREAT);
+    turn_off(player, HASINFEST);
+    turn_off(player, ISBLIND);
+}
+#endif

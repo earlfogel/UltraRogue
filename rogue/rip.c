@@ -160,7 +160,11 @@ death (int monst)
 	    msg("");
 	    msg("Would you like to back up a bit and try again? (Y/n)");
 	    ch = readchar();
-	    if (ch != 'n' && ch != 'N') {
+	    if (ch == 'n' || ch == 'N') {
+		/* delete old autosave file */
+		if (access(fname, F_OK) == -0)
+		    unlink(fname);
+	    } else {
 		msg("");
 		cleanup_old_level();
 		monst_dead = TRUE;  /* all of them! this ends the current turn */
@@ -239,12 +243,12 @@ death (int monst)
 	}
     }
 
-#ifdef FLUTTER
-    playing = FALSE;
-#else
-    move(LINES-1, 0);
-    idenpack();
-#endif
+    if (flutter) {
+	playing = FALSE;
+    } else {
+	move(LINES-1, 0);
+	idenpack();
+    }
     refresh();
     score(pstats.s_exp, KILLED, monst);
     exit(0);
@@ -540,18 +544,6 @@ score (long amount, int flags, int monst)
 	    printf("Unable to write %s\n", score_file);
 	    return;
 	}
-    }
-
-    /*
-     * delete old autosave file when we win or quit
-     */
-    if (autosave == TRUE && flags != SCOREIT) {
-	char fname[200];
-
-        strcpy(fname, home);
-        strcat(fname, "rogue.asave");
-	if (access(fname, F_OK) == -0)
-	    unlink(fname);
     }
 #endif
 }

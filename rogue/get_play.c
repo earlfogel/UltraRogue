@@ -33,7 +33,9 @@ int def_array[MAXPDEF][MAXPATT];	/* Pre-defined chars */
 int 
 geta_player ()
 {
-
+#ifdef FLUTTER
+    return FALSE;
+#else
 	struct linked_list *item;
 	struct object *obj;
 	char char_file[LINELEN];	/* Where the file should be! */
@@ -202,6 +204,7 @@ again:
 	add_pack(item, TRUE);
 	cur_armor = obj;
 	return(TRUE);
+#endif
 }
 
 
@@ -256,10 +259,10 @@ puta_player (int arm, int wpt, int hpadd, int dmadd)
 	    pstats.s_hpt );
 	mvwaddstr(hw,5,5,pbuf);
 
-	if (difficulty > 3) {
-	    mvwaddstr(hw,7,5,"-- press any key to continue --");
+	if (flutter || difficulty > 3) {
+	    mvwaddstr(hw,8,5,"-- press any key to continue --");
 	    draw(hw);
-	    wgetch(hw);
+	    (void) wgetch(hw);
 	    return(TRUE);
 	}
 

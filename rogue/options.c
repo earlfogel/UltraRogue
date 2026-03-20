@@ -58,8 +58,10 @@ OPTION	optlist[] = {
 	{&showcursor},	put_bool,	get_bool	},
     {"autopickup",	"Pick up things you step on (autopickup): ",
 	{&autopickup},	put_bool,	get_bool	},
+#ifndef __ANDROID__
     {"autosave",	"Save game automatically (autosave): ",
 	{&autosave},	put_bool,	get_bool	},
+#endif
 #ifdef MOUSE
     {"usemouse",	"Use mouse to move (usemouse): ",
 	{&use_mouse},	put_bool,	get_mouse	},
@@ -561,8 +563,8 @@ parse_opts (char *str)
 	    {
 		*op->o_opt.barg = FALSE;
 		break;
-            } else if (strcmp(str,"debug") == 0) {  /* a hidden option */
-                canwizard = TRUE;
+	    } else if (strcmp(str,"debug") == 0) {  /* a hidden option */
+		canwizard = TRUE;
 		break;
 	    }
 
