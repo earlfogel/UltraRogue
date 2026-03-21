@@ -914,7 +914,7 @@ struct monster monsters[] = {
         8,
         {18,    400,    5,  4,  HPT("7d8"), "3d6/2d10"}
 },
-{"griffin",
+{"griffon",
         0,  TRUE,   TRUE,   'g',    "0-0",
         {CANFLY, ISMEAN, ISLARGE},
         0, 0,

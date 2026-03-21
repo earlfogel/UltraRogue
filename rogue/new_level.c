@@ -190,6 +190,10 @@ new_level (
     player.t_oldpos = player.t_pos;	/* Set the current position */
     light(&hero);
 
+#ifdef FLUTTER
+    status(TRUE);
+#endif
+
     if (levtype != POSTLEV && levtype != THRONE) {
 	if (on(player, BLESSMAP) && rnd(5) == 0) {
 	    read_scroll(S_MAP, FALSE);
@@ -255,6 +259,7 @@ new_level (
 
     if (autosave == TRUE
 	&& levtype == NORMLEV
+	&& max_level > 1
 	&& hungry_state < F_FAINT
 	&& pstats.s_hpt > max_stats.s_hpt / 2
 	&& off(player, HASINFEST)

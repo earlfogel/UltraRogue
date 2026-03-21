@@ -44,9 +44,62 @@
 #include <mcheck.h>
 #endif
 
+#ifdef FLUTTER
+int rogue_running;
+
+int is_rogue_running()
+{
+    return rogue_running;
+}
+
+/* find the sub-type of an object (e.g. a healing potion) */
+int what_thing(int y, int x) {
+    struct linked_list *item;
+    struct object *obj;
+    item = find_obj(y, x);
+    if (item != NULL) {
+	obj = (struct object *) ldata(item);
+	if (obj != NULL) {
+	    return obj->o_which;
+	}
+    }
+    return 0;
+}
+
+/* find the type of an object (e.g. a potion) */
+int which_thing(int y, int x) {
+    struct linked_list *item;
+    struct object *obj;
+    item = find_obj(y, x);
+    if (item != NULL) {
+	obj = (struct object *) ldata(item);
+	if (obj != NULL) {
+	    return obj->o_type;
+	}
+    }
+    return -1;
+}
+
+int which_monst(int y, int x) {
+    struct linked_list *item;
+    struct thing *th;
+    item = find_mons(y, x);
+    if (item != NULL) {
+	th = (struct thing *) ldata(item);
+	if (th != NULL) {
+	    return th->t_index;
+	}
+    }
+    return -1;
+}
+#endif
 
 int 
+#ifdef FLUTTER
+rogue_main (int argc, char **argv)
+#else
 main (int argc, char **argv)
+#endif
 {
     char *env;
     struct linked_list *item;
@@ -83,6 +136,10 @@ main (int argc, char **argv)
     /* get home from environment */
     if ((env = getenv("HOME")) != NULL)
 	strcpy(home, env);
+#ifdef __ANDROID__
+    else if (strlen(home) < 5)  /* airplane mode */
+	strcpy(home, "/data/user/0/com.example.urogue/app_flutter");
+#endif
     else
 	strcpy(home, ".");
     strcat(home, "/");
@@ -100,6 +157,7 @@ main (int argc, char **argv)
 	    else if (getenv("USER")) 
 		strcpy(whoami, getenv("USER"));
     }
+#ifndef FLUTTER
     if (stat(file_name, &sb) == 0 && S_ISREG(sb.st_mode))
 	restore_file = file_name;
 
@@ -109,11 +167,19 @@ main (int argc, char **argv)
     if (stat(char_file, &sb) != 0) {
 	show_welcome = TRUE;
     }
-
+#endif
     /*
      * Parse command-line options
      * Anything remaining after this should be the path to a saved game.
      */
+#if 0
+printf("Running: %s", argv[0]);
+for (i=1; i<argc; i++) {
+    printf(" %s", argv[i]);
+}
+printf("\n");
+#endif
+
     while (--argc > 0 && (*++argv)[0] == '-') {
 	switch (argv[0][1]) {
 	case 'd':  /* -debug: debug mode */
@@ -149,9 +215,13 @@ main (int argc, char **argv)
 	case 'v':
 	   printf("UltraRogue version %s\n", release);
 	   exit(0);
+	   break;
 	default:
+#ifndef FLUTTER
 	    usage();
 	    exit(1);
+#endif
+	   break;
 	}
     }
     if (argc>0)
@@ -184,14 +254,47 @@ exit(0);
     fd_data[1].mi_name = ALLOC(LINELEN);
     strcpy(fd_data[1].mi_name, fruit);
 
+#ifdef FLUTTER
+if (rogue_running) {
+    /* we're restarting, so reset a few things */
+    playing = TRUE;
+    cleanup_old_level();
+    reset_player();
+    reset_pack();
+    if (is_carrying(TR_PURSE))
+	reset_bag();
+    monst_dead = TRUE;
+    after = FALSE;
+    count = 0;
+    no_command = 0;
+    save_ch = ' ';
+    kill_daemon(DAEMON_DOCTOR);
+    extinguish_fuse(FUSE_SWANDER);
+    kill_daemon(DAEMON_STOMACH);
+    kill_daemon(DAEMON_RUNNERS);
+} else {
+    rogue_running = TRUE;
+#endif
     init_things();			/* Set up probabilities of things */
     init_fd();				/* Set up food probabilities */
     init_colors();			/* Set up colors of potions */
     init_stones();			/* Set up stone settings of rings */
     init_materials();			/* Set up materials of wands */
     init_names();			/* Set up names of scrolls */
-
+#ifdef FLUTTER
+}
+#endif
     initscr();				/* Start up cursor package */
+
+/*
+ * needed for flutter
+ */
+#ifdef FLUTTER
+LINES=25; COLS=80;
+#endif
+#if 0
+printf("LINES=%d COLS=%d Curses version: %s\n", LINES, COLS, curses_version());
+#endif
 
 #ifdef PDCURSES
     {
@@ -231,6 +334,7 @@ fflush(stdout);
     /*
      * Restore saved game
      */
+#ifndef FLUTTER
     if (restore_file) {
 	if (!restore(restore_file)) /* Note: restore returns on error only */
 	    exit(1);
@@ -244,6 +348,7 @@ fflush(stdout);
     usleep(250000);
     if (wizard)
 	usleep(250000);
+#endif
 
     init_monsters(monster_flag);
 
@@ -358,6 +463,7 @@ get_food:
     }
 
     playit();
+
     /* notreached */
     return 0;
 }
@@ -370,6 +476,9 @@ get_food:
 void 
 endit ()
 {
+#ifdef FLUTTER
+    rogue_running = FALSE;
+#endif
     fatal("Ok, if you want to exit that badly, I'll have to allow it\n");
 }
 

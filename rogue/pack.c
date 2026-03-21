@@ -422,7 +422,8 @@ get_item (char *purpose, int type)
 	    ch = readchar();
 	    save_ch = ' ';  /* no type-ahead */
 	    mpos = 0;
-	    if (ch == ESCAPE) {		/* abort if escape hit */
+	    if (ch == ESCAPE		/* abort if escape hit */
+		|| (ch == ' ' && flutter)) {
 		after = FALSE;
 		msg("");		/* clear display */
 		return NULL;

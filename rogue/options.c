@@ -48,20 +48,22 @@ OPTION	optlist[] = {
 	{&doorstop},	put_bool,	get_bool	},
     {"jump",	 "Show position only at end of run (jump): ",
 	{&jump},		put_bool,	get_bool	},
+#ifndef FLUTTER
     {"step",	"Do inventories one line at a time (step): ",
 	{&slow_invent},	put_bool,	get_bool	},
+#endif
     {"askme",	"Ask me about unidentified things (askme): ",
 	{&askme},		put_bool,	get_bool	},
     {"cutcorners",	"Move sharply around corners (cutcorners): ",
 	{&cutcorners},	put_bool,	get_bool	},
+#ifndef FLUTTER
     {"showcursor",	"Show cursor while playing (showcursor): ",
 	{&showcursor},	put_bool,	get_bool	},
+#endif
     {"autopickup",	"Pick up things you step on (autopickup): ",
 	{&autopickup},	put_bool,	get_bool	},
-#ifndef __ANDROID__
     {"autosave",	"Save game automatically (autosave): ",
 	{&autosave},	put_bool,	get_bool	},
-#endif
 #ifdef MOUSE
     {"usemouse",	"Use mouse to move (usemouse): ",
 	{&use_mouse},	put_bool,	get_mouse	},
@@ -70,10 +72,12 @@ OPTION	optlist[] = {
 	{whoami},		put_str,	get_str		},
     {"fruit",	 "Fruit (fruit): ",
 	{fruit},		put_str,	get_str		},
+#ifndef FLUTTER
     {"file",	 "Save file (file): ",
 	{file_name},	put_str,	get_str		},
     {"score",	 "Score file (score): ",
 	{score_file},	put_str,	get_str		},
+#endif
     {"class",	"Character class (class): ",
 	{&char_type},	put_abil,	get_abil	},
     {"difficulty",	"Difficulty: ",
@@ -96,6 +100,17 @@ option ()
      */
     for (op = optlist; op < &optlist[NUM_OPTS]; op++)
     {
+	if (flutter) {
+	    char *paren = strstr(op->o_prompt, " (");
+	    if (paren) {
+		char *prompt = ALLOC(strlen(op->o_prompt) + 1);
+		strcpy(prompt, op->o_prompt);
+		paren = strstr(prompt, " (");
+		strcpy(paren, ":");
+		op->o_prompt = prompt;
+	    }
+	}
+
 	waddstr(hw, op->o_prompt);
 	(*op->o_putfunc)(&op->o_opt, hw);
 	waddch(hw, '\n');
@@ -213,6 +228,8 @@ get_bool(opt_arg *opt, WINDOW *win)
     op_bad = TRUE;
     getyx(win, oy, ox);
     waddstr(win, *opt->barg ? "True" : "False");
+    if (flutter)
+	mvwaddstr(win, oy, ox + 10, "(T or F)");
     while(op_bad)	
     {
 	wmove(win, oy, ox);
@@ -345,6 +362,8 @@ get_abil(opt_arg *abil, WINDOW *win)
     getyx(win, oy, ox);
     put_abil(abil, win);
     getyx(win, ny, nx);
+    if (flutter)
+	mvwaddstr(win, ny, nx + 5, "(no change allowed)");
     while(op_bad)	
     {
 	wmove(win, oy, ox);
@@ -393,6 +412,8 @@ get_diff(opt_arg *opt, WINDOW *win)
     getyx(win, oy, ox);
     put_diff(opt, win);
     getyx(win, ny, nx);
+    if (flutter)
+	mvwaddstr(win, ny, nx + 5, "(Easy, Normal, Hard, Very hard)");
     while(op_bad)	
     {
 	wmove(win, oy, ox);

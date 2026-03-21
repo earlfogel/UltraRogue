@@ -1025,19 +1025,20 @@ sell (struct thing *tp)
     mvwaddstr(hw, nitems+3, 0, buffer);
     mvwaddstr(hw, 0, 0, "How about one of the following goods? ");
     draw(hw);
-    /* Get rid of the monster */
-    killed(item, FALSE, FALSE);
-    monst_dead = TRUE;
 
     which_item = wgetch(hw) - 'a';
     while (which_item < 0 || which_item >= nitems) {
 	if (which_item == ESCAPE - 'a') {
+	    killed(item, FALSE, FALSE);
 	    return;
 	}
 	mvwaddstr(hw, 0, 0, "Please enter one of the listed items. ");
 	draw(hw);
 	which_item = wgetch(hw) - 'a';
     }
+
+    /* Get rid of the monster */
+    killed(item, FALSE, FALSE);
 
     if (selection[which_item].worth > purse) {
 	msg("You cannot afford it.");
