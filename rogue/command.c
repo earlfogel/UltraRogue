@@ -26,9 +26,9 @@
 
 #ifdef MOUSE
     MEVENT event;  /* mouse events */
+#endif
     static coord dest = {0,0};
     static coord prev = {0,0};
-#endif
 
 void 
 command ()
@@ -80,7 +80,6 @@ command ()
 	status(FALSE);
 	lastscore = purse;
 	wmove(cw, hero.y, hero.x);
-#ifdef MOUSE
 	if (mousemove) {
 	    static char pch = ' ';
 	    if (!jump) {
@@ -95,12 +94,14 @@ command ()
 		pch = ch;
 	    }
 	} else
-#endif
 	if (!((running || count || fighting) && jump)) {
 	    draw(cw);			/* Draw screen */
-	    if (running)
-		usleep(4000);
-	    else if (count)
+	    if (running) {
+		if (flutter)
+		    usleep(10000);
+		else
+		    usleep(4000);
+	    } else if (count)
 		usleep(8000);
 	    else
 		usleep(12000);
@@ -158,7 +159,6 @@ command ()
 		    ch = runch;
 		}
 	    }
-#ifdef MOUSE
 	    else if (mousemove) {
 		/*
 		 * choose direction (h,j,k,l,...)
@@ -168,13 +168,15 @@ command ()
 		    prev.x = prev.y = 0;
 		} else if (ch == 's') {
 		    draw(cw);
-		    usleep(100000);
+		    if (flutter)
+			usleep(10000);
+		    else
+			usleep(100000);
 		} else if (strchr("hjklyubn", ch)) {
 		    prev.x = hero.x;
 		    prev.y = hero.y;
 		}
 	    }
-#endif
 	    else if (count) ch = countch;
 	    else
 	    {
@@ -208,24 +210,24 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 	}
 
 #ifdef MOUSE
-	    /*
-	     * convert mouse click into a command
-	     */
-	    if (ch == KEY_MOUSE) {
-		if (getmouse(&event) == OK
-		  && event.bstate & BUTTON1_RELEASED) {
-		    dest.x = event.x;
-		    dest.y = event.y;
-		    ch = do_mouseclick(dest);
-		    /*
-		     * if destination is unreachable, pick another
-		     */
-		    if (mousemove)
-			dest = fix_mousedest(dest);
-		} else {
-		    ch = ' ';
-		}
+	/*
+	 * convert mouse click into a command
+	 */
+	if (ch == KEY_MOUSE) {
+	    if (getmouse(&event) == OK
+	      && event.bstate & BUTTON1_RELEASED) {
+		dest.x = event.x;
+		dest.y = event.y;
+		ch = do_mouseclick(dest);
+		/*
+		 * if destination is unreachable, pick another
+		 */
+		if (mousemove)
+		    dest = fix_mousedest(dest);
+	    } else {
+		ch = ' ';
 	    }
+	}
 #endif
 	/* go up/down stairs or run towards them */
 	if (ch == '%' && levtype != POSTLEV) {
@@ -468,29 +470,35 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 			   msg("UltraRogue version %s.",
 				release);
 		when CTRL('R') :
-#ifdef EARL
 #ifdef FLUTTER
 		case 'X':
 #endif
 		    after = FALSE;
+#ifdef EARL
 		    char fname[200];
 		    strcpy(fname, home);
-		    strcat(fname, "rogue.asave");
-		    if (autosave && access(fname, F_OK) == -0) {
+		    strcat(fname, autosave_file);
+		    if (autosave && access(fname, F_OK) == 0) {
 			msg("Do you want to restart this level? (y/N)");
-			wrefresh(cw);
+			draw(cw);
 			if (readchar() == 'y')
 			    death(D_MISADVENTURE);	/* restart level? */
 			msg("");
 		    }
 #endif
-				WINDOW *tmpwin = newwin(LINES, COLS, 0, 0);
-				wclear(tmpwin);
-				wrefresh(tmpwin);
-				(void) delwin(tmpwin);
-				usleep(50000);
-				wrefresh(cw);
-				touchwin(cw); /* MMMMMMMMMM */
+#ifdef FLUTTER
+		    redraw(cw);
+#endif
+		    wclear(curscr);
+#if 0
+		    WINDOW *tmpwin = newwin(LINES, COLS, 0, 0);
+		    wclear(tmpwin);
+		    draw(tmpwin);
+		    (void) delwin(tmpwin);
+#endif
+		    usleep(50000);
+		    draw(cw);
+		    touchwin(cw); /* MMMMMMMMMM */
 		when CTRL('P') :
 #ifdef FLUTTER
 		case '-':
@@ -716,10 +724,8 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 	if (take != 0 && levtype != POSTLEV) {
 	    if (autopickup && !moving && (!searching_run || take == GOLD))
 	        pick_up(take);
-#ifdef MOUSE
 	    else if (autopickup && mousemove && take == GOLD)
 	        pick_up(take);
-#endif
 	    else
 		show_floor();
 	}
@@ -899,6 +905,13 @@ quit ()
     ch = readchar();
     if (ch == 'y')
     {
+	if (autosave) {
+	    char fname[200];
+	    strcpy(fname, home);
+	    strcat(fname, autosave_file);
+	    if (access(fname, F_OK) == 0)
+		unlink(fname);	/* delete old autosave file */
+	}
 	clear();
 	move(LINES-1, 0);
 	draw(stdscr);
@@ -961,9 +974,7 @@ search (bool is_thief)
 		    }
 		    tp->tr_flags |= ISFOUND;
 		    mvwaddch(cw, y, x, ch);
-#ifdef MOUSE
 		    if (!mousemove)
-#endif
 			count = 0;
 		    if (x != hero.x && y != hero.y) {
 			running = FALSE;
@@ -973,9 +984,7 @@ search (bool is_thief)
 	    else if (ch == SECRETDOOR) {
 		    if (rnd(100) < 30 && !is_thief) {
 			mvaddch(y, x, DOOR);
-#ifdef MOUSE
 			if (!mousemove)
-#endif
 			    count = 0;
 		    }
 	    }
@@ -1148,6 +1157,8 @@ d_level ()
     level++;
     new_level(NORMLEV);
     if (no_phase) unphase(NULL);
+    dest.x = dest.y = 0;
+    prev.x = prev.y = 0;
 }
 
 /*
@@ -1177,6 +1188,8 @@ u_level ()
 	    extinguish_fuse(FUSE_UNPHASE);
 	    unphase(NULL);
 	}
+	dest.x = dest.y = 0;
+	prev.x = prev.y = 0;
 	return;
     }
     else if (ch != STAIRS && 
@@ -1267,6 +1280,7 @@ call (bool mark)
 	    guess[obj->o_which] = NULL;
 	}
     }
+    msg("");
 }
 
 
