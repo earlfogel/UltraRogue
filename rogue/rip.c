@@ -154,7 +154,7 @@ death (int monst)
 	FILE *infd, *outfd;
 
 	strcpy(fname, home);
-        strcat(fname, "rogue.asave");
+        strcat(fname, autosave_file);
 
 	if ((infd = fopen(fname, "rb")) != NULL) {
 	    msg("");
@@ -162,7 +162,7 @@ death (int monst)
 	    ch = readchar();
 	    if (ch == 'n' || ch == 'N') {
 		/* delete old autosave file */
-		if (access(fname, F_OK) == -0)
+		if (access(fname, F_OK) == 0)
 		    unlink(fname);
 	    } else {
 		msg("");
@@ -623,6 +623,15 @@ total_winner ()
 	score(pstats.s_exp, TOTAL, 0);
     else
 	score(pstats.s_exp, WINNER, 0);
+
+    if (autosave) {
+	char fname[200];
+	strcpy(fname, home);
+	strcat(fname, autosave_file);
+	if (access(fname, F_OK) == 0)
+	    unlink(fname);  /* delete old autosave file */
+    }
+
     exit(0);
 }
 

@@ -270,7 +270,7 @@ new_level (
 	FILE *savefd;
 
 	strcpy(fname, home);
-	strcat(fname, "rogue.asave");
+	strcat(fname, autosave_file);
         if ((savefd = fopen(fname, "wb")) == NULL) {
             msg("");
             msg("Autosave error: %s.%s", strerror(errno));    /* fake perror() */

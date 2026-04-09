@@ -147,7 +147,11 @@ main (int argc, char **argv)
 
     /* Get default save file */
     strcpy(file_name, home);
+#ifdef FLUTTER
+    strcat(file_name, autosave_file);
+#else
     strcat(file_name, "rogue.save");
+#endif
 
     if ((env = getenv("SROGUEOPTS")) != NULL)
 	parse_opts(env);
@@ -334,12 +338,17 @@ fflush(stdout);
     /*
      * Restore saved game
      */
-#ifndef FLUTTER
+#ifdef FLUTTER
+    if (restore_file) {
+	restore_file = NULL;
+    }
+#endif
     if (restore_file) {
 	if (!restore(restore_file)) /* Note: restore returns on error only */
 	    exit(1);
     }
 
+#ifndef FLUTTER
    if (wizard)
 	printf("Hello %s, welcome to dungeon #%d", whoami, dnum);
     else
