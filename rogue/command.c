@@ -486,7 +486,7 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 			msg("");
 		    }
 #endif
-#ifdef FLUTTER
+#if 0
 		    redraw(cw);
 #endif
 		    wclear(curscr);

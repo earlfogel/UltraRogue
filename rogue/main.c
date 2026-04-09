@@ -90,6 +90,9 @@ int which_monst(int y, int x) {
 	    return th->t_index;
 	}
     }
+    if (x == hero.x && y == hero.y) {
+	return 0;
+    }
     return -1;
 }
 #endif

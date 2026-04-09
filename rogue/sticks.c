@@ -98,6 +98,7 @@ do_zap (bool gotdir, int which, bool blessed)
     if (which == NULL) {
 	if ((item = get_item("zap with", STICK)) == NULL)
 	    return;
+	msg("");
 	obj = OBJPTR(item);
 	if (obj->o_type != STICK && !(obj->o_flags & ISZAPPED)) {
 	    msg("You can't zap with that!");
