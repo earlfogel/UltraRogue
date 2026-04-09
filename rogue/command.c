@@ -227,6 +227,23 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 		}
 	    }
 #endif
+	/* go up/down stairs or run towards them */
+	if (ch == '%' && levtype != POSTLEV) {
+	    int x, y;
+	    if (winat(hero.y, hero.x) == STAIRS) {
+		ch = do_mouseclick(hero);
+	    } else {
+		for (x = 0; x < COLS; x++) {
+		    for (y = 1; y < LINES - 2; y++) {
+			if (mvwinch(cw, y, x) == STAIRS) {
+			    dest.y = y;
+			    dest.x = x;
+			    ch = do_mouseclick(dest);
+			}
+		    }
+		}
+	    }
+	}
 
 	if (!no_command)
 	{
