@@ -79,7 +79,7 @@ int reserved1 = 0;
 struct linked_list  *fam_ptr = NULL;        /* A ptr to the familiar        */
 struct linked_list  *curr_mons  = NULL;     /* The mons. currently moving   */
 struct linked_list  *next_mons = NULL;      /* The mons. after curr_mons    */
-struct object       *bag_obj  = NULL;       /* The Magic Bag, if we have it */
+/* struct object       *bag_obj  = NULL; */      /* The Magic Bag, if we have it */
 
 
 /****************************************************************************/
@@ -1473,7 +1473,7 @@ restore_file(FILE *savef)
 
     str = ur_read_string(savef);
     if (strcmp(str, file_name) != 0
-	&& strstr(str, "rogue.asave") != NULL)
+	&& strstr(str, autosave_file) != NULL)
 	msg("Restore file: %s", file_name);  /* hmm, it moved */
     /* strcpy(unused_str1,str); */  /* was file_name */
     FREE(str);
