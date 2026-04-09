@@ -534,6 +534,9 @@ quaff (int which, bool blessed)
 		   PLAYER = 'a' + rnd(26);
 		else
 		   PLAYER = 'A' + rnd(26);
+#ifdef FLUTTER
+		PLAYER = '\'';
+#endif
 		light(&hero);
 	    }
 	    else if (off(player, ISINVIS))

@@ -8,6 +8,8 @@
 #include "curses.h"
 #include <ctype.h>
 #include <string.h>
+#include <fcntl.h>
+#include <unistd.h>
 #include "rogue.h"
 
 #define	NUM_OPTS	(sizeof optlist / sizeof (OPTION))
@@ -38,6 +40,7 @@ int get_bool(opt_arg *o_opt, WINDOW *win);
 int get_str(opt_arg *o_opt, WINDOW *win);
 int get_abil(opt_arg *o_opt, WINDOW *win);
 int get_mouse(opt_arg *o_opt, WINDOW *win);
+int get_autosave(opt_arg *o_opt, WINDOW *win);
 int get_diff(opt_arg *o_opt, WINDOW *win);
 
 /*
@@ -46,9 +49,9 @@ int get_diff(opt_arg *o_opt, WINDOW *win);
 OPTION	optlist[] = {
     {"doorstop", "Stop running when adjacent (doorstop): ",
 	{&doorstop},	put_bool,	get_bool	},
+#ifndef FLUTTER
     {"jump",	 "Show position only at end of run (jump): ",
 	{&jump},		put_bool,	get_bool	},
-#ifndef FLUTTER
     {"step",	"Do inventories one line at a time (step): ",
 	{&slow_invent},	put_bool,	get_bool	},
 #endif
@@ -63,7 +66,7 @@ OPTION	optlist[] = {
     {"autopickup",	"Pick up things you step on (autopickup): ",
 	{&autopickup},	put_bool,	get_bool	},
     {"autosave",	"Save game automatically (autosave): ",
-	{&autosave},	put_bool,	get_bool	},
+	{&autosave},	put_bool,	get_autosave	},
 #ifdef MOUSE
     {"usemouse",	"Use mouse to move (usemouse): ",
 	{&use_mouse},	put_bool,	get_mouse	},
@@ -77,9 +80,9 @@ OPTION	optlist[] = {
 	{file_name},	put_str,	get_str		},
     {"score",	 "Score file (score): ",
 	{score_file},	put_str,	get_str		},
-#endif
     {"class",	"Character class (class): ",
 	{&char_type},	put_abil,	get_abil	},
+#endif
     {"difficulty",	"Difficulty: ",
 	{&difficulty},	put_diff,	get_diff	},
 };
@@ -100,7 +103,7 @@ option ()
      */
     for (op = optlist; op < &optlist[NUM_OPTS]; op++)
     {
-	if (flutter) {
+	if (flutter) { /* remove option name in parentheses */
 	    char *paren = strstr(op->o_prompt, " (");
 	    if (paren) {
 		char *prompt = ALLOC(strlen(op->o_prompt) + 1);
@@ -229,7 +232,7 @@ get_bool(opt_arg *opt, WINDOW *win)
     getyx(win, oy, ox);
     waddstr(win, *opt->barg ? "True" : "False");
     if (flutter)
-	mvwaddstr(win, oy, ox + 10, "(T or F)");
+	mvwaddstr(win, oy, ox + 6, "(T or F)");
     while(op_bad)	
     {
 	wmove(win, oy, ox);
@@ -327,7 +330,14 @@ get_string(char *opt, WINDOW *win)
 	    continue;
 	}
 	*sp++ = c;
-	waddstr(win, unctrl(c));
+	/* waddstr(win, unctrl(c)); */
+	if (flutter && win == cw) { /* 'call' or 'mark' */
+	    *sp = '\0';
+	    mvwaddstr(win, 0, ox, buf);
+	    wclrtoeol(win), draw(win);
+	} else {
+	    waddstr(win, unctrl(c));
+	}
     }
     *sp = '\0';
     if (sp > buf)	/* only change option if something has been typed */
@@ -468,18 +478,17 @@ get_diff(opt_arg *opt, WINDOW *win)
 
 #ifdef MOUSE
 /*
- *
  * Use mouse click for movement?
  */
 int
 get_mouse(opt_arg *opt, WINDOW *win)
 {
     int ret;
-    bool old_mouse = *opt->barg;
+    bool old_value = *opt->barg;
 
     ret = get_bool(opt, win);
 
-    if (*opt->barg != old_mouse) {
+    if (*opt->barg != old_value) {
 	if (use_mouse) {
 	    mousemask(BUTTON1_RELEASED, NULL);	/* enable KEY_MOUSE */
 	} else {
@@ -490,6 +499,30 @@ get_mouse(opt_arg *opt, WINDOW *win)
     return ret;
 }
 #endif
+
+/*
+ * automatically save on every level?
+ */
+int
+get_autosave(opt_arg *opt, WINDOW *win)
+{
+    int ret;
+    bool old_value = *opt->barg;
+
+    ret = get_bool(opt, win);
+
+    if (*opt->barg != old_value) {
+	if (!autosave) {
+	    char fname[200];
+            strcpy(fname, home);
+            strcat(fname, autosave_file);
+            if (access(fname, F_OK) == 0)
+                unlink(fname);  /* delete old autosave file */
+	}
+    }
+
+    return ret;
+}
 
 /*
  * parse options from string, usually taken from the environment.

@@ -1561,6 +1561,8 @@ remove(coord *mp, struct linked_list *item)
 
     mvwaddch(mw, mp->y, mp->x, ' ');
     mvwaddch(cw, mp->y, mp->x, ((struct thing *) ldata(item))->t_oldch);
+    if (flutter)
+	draw(cw); /* so flutter sees that it is gone */
     detach(mlist, item);
     discard(item);
     monst_dead = TRUE;

@@ -102,13 +102,15 @@ restore(char *file)
     fclose(infd);  /* need to close file before deleting on Windows */
 #endif
 
-    if (access(file, F_OK) == -0) {
+#ifndef FLUTTER
+    if (access(file, F_OK) == 0) {
 	if (unlink(file) < 0) {
 	    endwin();
 	    printf("Cannot unlink file\n");
 	    return(FALSE);
 	}
     }
+#endif
 
     if (file != file_name)
 	strcpy(file_name, file);

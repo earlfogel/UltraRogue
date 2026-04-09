@@ -71,9 +71,9 @@ do_post()
 	wmove(cw,13,0);
 	waddstr(cw,"Welcome to Friendly Fiend's Flea Market\n\r");
 	waddstr(cw,"=======================================\n\r");
-	waddstr(cw,"$: Prices object that you stand upon.\n\r");
-	waddstr(cw,"#: Buys the object that you stand upon.\n\r");
-	waddstr(cw,"%: Trades in something in your pack for gold.\n\r");
+	waddstr(cw,"$: Price object that you stand upon.\n\r");
+	waddstr(cw,"#: Buy the object that you stand upon.\n\r");
+	waddstr(cw,"%: Trade in something in your pack for gold.\n\r");
 	trans_line();
 }
 

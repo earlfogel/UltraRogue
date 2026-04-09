@@ -3,8 +3,6 @@
  *
  */
 
-#ifdef MOUSE
-
 #include "curses.h"
 #include <ctype.h>
 #include "rogue.h"
@@ -15,6 +13,7 @@ static bool reachable;
 
 int check_doors(struct room *room, int minx, int maxx, int miny, int maxy);
 int check_possible_doors(struct room *room, int minx, int maxx, int miny, int maxy, coord dest);
+bool my_step_ok(int y, int x);
 
 #define STEPS(y1, x1, y2, x2) (abs(x2 - x1) + abs(y2 - y1))
 #define NORTH 0
@@ -181,7 +180,9 @@ do_mousemove (coord dest, coord prev)
 	    if (dest.y > maxy) mydest.y = maxy;
 	    if (dest.y < miny) mydest.y = miny;
 	}
-    } else if (winat(hero.y, hero.x) == DOOR || on(player, CANINWALL)) {
+    } else if ((winat(hero.y, hero.x) == DOOR
+		&& winat(prev.y, prev.x) != PASSAGE)
+	    || on(player, CANINWALL)) {
 	mydest.x = dest.x;
 	mydest.y = dest.y;
     }
@@ -197,47 +198,45 @@ do_mousemove (coord dest, coord prev)
 	for (y = hero.y - 1; y <= hero.y + 1; y++) {
 	    coord tryp;
 	    tryp.x = x; tryp.y = y;
-	    if (mvwinch(cw, y, x) == SECRETDOOR) {
-		nsecret++;
+	    if (x < 0 || x > COLS || y < 1 || y > LINES - 2 ||
+		(x == hero.x && y == hero.y) ||
+		!my_step_ok(y, x))
+		continue;  /* skip invalid moves */
+	    if (!ISWEARING(R_LEVITATION) && off(player, CANFLY) && isatrap(show(y, x)))
+		continue;  /* avoid traps */
+	    if (winat(y, x) == POST)
+		continue;  /* avoid trading posts */
+	    if (x == prev.x && y == prev.y)
+		continue;  /* don't reverse course */
+	    if ((winat(hero.y, hero.x) == PASSAGE || levtype == MAZELEV
+	     || (winat(hero.y, hero.x) == DOOR && winat(y,x) == PASSAGE))
+		&& off(player, CANINWALL)
+		&& (y != hero.y && x != hero.x)
+		&& !isalpha(show(prev.y, prev.x))
+		&& !firststep)
+		continue;  /* don't diagonal */
+	    if (winat(hero.y, hero.x) == DOOR
+		&& roomin(&prev)
+		&& roomin(&tryp) == roomin(&prev)
+		&& !firststep)
+		continue;  /* don't back into room */
+	    if (isalpha(show(y, x))) {  /* eek, a monster */
+		nmonst++;  /* we'll try to avoid it */
+		continue;
 	    }
-	    if (!(x == mydest.x && y == mydest.y)) {
-		if (x < 0 || x > COLS || y < 1 || y > LINES - 2 ||
-		    (x == hero.x && y == hero.y) ||
-		    (!step_ok(y, x, MONSTOK, &player)
-			/* && !(winat(y, x) == SECRETDOOR) */ ))
-		    continue;  /* skip invalid moves */
-		if (!ISWEARING(R_LEVITATION) && off(player, CANFLY) && isatrap(show(y, x)))
-		    continue;  /* avoid traps */
-		if (winat(y, x) == POST)
-		    continue;  /* avoid trading posts */
-		if (x == prev.x && y == prev.y)
-		    continue;  /* don't reverse course */
-		if ((winat(hero.y, hero.x) == PASSAGE || levtype == MAZELEV
-		 || (winat(hero.y, hero.x) == DOOR && winat(y,x) == PASSAGE))
-		    && off(player, CANINWALL)
-		    && (y != hero.y && x != hero.x)
-		    && !isalpha(show(prev.y, prev.x))
-		    && !firststep)
-		    continue;  /* don't diagonal */
-		if (winat(hero.y, hero.x) == DOOR
-		    && roomin(&prev)
-		    && roomin(&tryp) == roomin(&prev)
-		    && !firststep)
-		    continue;  /* don't back into room */
-		if (isalpha(show(y, x))) {  /* eek, a monster */
-		    nmonst++;  /* we'll try to avoid it */
-		    continue;
-		}
-	    } else {  /* we found it */
-		if ((winat(y, x) == SECRETDOOR)) {
+	    /* we found it */
+	    if (x == mydest.x && y == mydest.y) {
+		if (mvwinch(stdscr, y, x) == SECRETDOOR) {
 		    return('s');  /* we'll search for it */
-		} else if (!step_ok(y, x, MONSTOK, &player)
-			|| isalpha(show(y, x))) {
+		} else if (!my_step_ok(y, x) || isalpha(show(y, x))) {
 		    count = 1;
 		    return(' ');
 		}
 	    }
-	    nmoves++;
+	    if (mvwinch(stdscr, y, x) == SECRETDOOR)
+		nsecret++;
+	    else
+		nmoves++;
 	    if (STEPS(mydest.y, mydest.x, y, x) < bestdist
 		|| nmoves == 1) {
 		best.x = x;
@@ -409,8 +408,7 @@ fix_mousedest (coord dest)
     /*
      * if destination is unreachable, move it
      */
-    if (!step_ok(dest.y, dest.x, MONSTOK, &player)
-	&& !(mvwinch(stdscr, dest.y, dest.x) == SECRETDOOR)) {
+    if (!my_step_ok(dest.y, dest.x)) {
 #if 0
 	while (radius < (COLS + LINES)/6) {
 #endif
@@ -446,8 +444,7 @@ fix_mousedest (coord dest)
     }
 
     /* we fixed it */
-    if (step_ok(dest.y, dest.x, MONSTOK, &player)
-	|| mvwinch(stdscr, dest.y, dest.x) == SECRETDOOR) {
+    if (my_step_ok(dest.y, dest.x)) {
 	reachable = TRUE;
     } else {
 	count /= 2;	/* give up sooner */
@@ -568,4 +565,14 @@ check_possible_doors(struct room *myroom, int minx, int maxx, int miny, int maxy
     return (npdoors);
 }
 
-#endif
+bool
+my_step_ok(int y, int x)
+{
+    coord tryp;
+    tryp.x = x; tryp.y = y;
+
+    if ((step_ok(y, x, MONSTOK, &player) && diag_ok(&hero, &tryp, &player))
+	    || (mvwinch(stdscr, y, x) == SECRETDOOR))
+	    return(TRUE);
+    return(FALSE);
+}

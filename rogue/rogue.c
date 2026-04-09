@@ -87,7 +87,6 @@ bool inwhgt = FALSE;			/* true if from wghtchk() */
 bool after;				/* True if we want after daemons */
 bool showcursor = FALSE;		/* Option to show cursor */
 bool autopickup = TRUE;			/* Option to pick up things you step on */
-bool autosave = FALSE;			/* Option to save game automatically */
 bool use_mouse = FALSE;			/* Option to move via mouse clicks */
 bool canwizard = FALSE;			/* Will be permitted to do this */
 bool s_know[MAXSCROLLS];		/* Do you know what a scroll does */
@@ -102,7 +101,17 @@ bool notify = TRUE;
 bool cutcorners = FALSE;
 bool doorstop = TRUE;
 bool door_stop = FALSE;
-bool jump = TRUE;
+#ifdef FLUTTER
+    bool autosave = TRUE;		/* Option to save game automatically */
+    bool jump = FALSE;
+    bool flutter = TRUE;		/* code built to run as a flutter app */
+    char *autosave_file = "rogue.asave";
+#else
+    bool autosave = FALSE;		/* Option to save game automatically */
+    bool jump = TRUE;
+    bool flutter = FALSE;		/* code built normally */
+    char *autosave_file = "rogue.asave";
+#endif
 bool slow_invent = FALSE;
 bool firstmove = FALSE;
 bool askme = TRUE;			/* ask me about unidentified things */
@@ -111,14 +120,7 @@ bool in_shell = FALSE;
 bool monst_dead = FALSE;
 bool game_over = FALSE;
 bool serious_fight = FALSE;
-#ifdef MOUSE
 bool mousemove = FALSE;
-#endif
-#ifdef FLUTTER
-bool flutter = TRUE;			/* code built to run as a flutter app */
-#else
-bool flutter = FALSE;			/* code built normally */
-#endif
 coord delta;				/* Change indicated to get_dir() */
 LEVTYPE levtype;			/* type of level i'm on */
 

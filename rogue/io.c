@@ -318,11 +318,21 @@ line_two:
 	    (cur_armor != NULL ? (cur_armor->o_ac - 10 + stat_ptr->s_arm)
 		    : stat_ptr->s_arm) - ring_value(R_PROTECT),
 	    stat_ptr->s_lvl);
+	if (flutter) {
+	    if (health_state != NULL)
+		sprintf(buf+strlen(buf), " Player: %s", health_state);
+	} else {
+	    sprintf(buf+strlen(buf), "%s",
+		(health_state != NULL)? health_state:
+		    cnames[player.t_ctype][min(stat_ptr->s_lvl-1, 10)]);
+	}
+#if 0
 	if (flutter)
 	    sprintf(buf+strlen(buf), " Player:");
 	sprintf(buf+strlen(buf), "%s",
 	    (health_state != NULL)? health_state:
 		cnames[player.t_ctype][min(stat_ptr->s_lvl-1, 10)]);
+#endif
     }
 
     /*
