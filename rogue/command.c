@@ -1157,8 +1157,6 @@ d_level ()
     level++;
     new_level(NORMLEV);
     if (no_phase) unphase(NULL);
-    dest.x = dest.y = 0;
-    prev.x = prev.y = 0;
 }
 
 /*
@@ -1188,8 +1186,6 @@ u_level ()
 	    extinguish_fuse(FUSE_UNPHASE);
 	    unphase(NULL);
 	}
-	dest.x = dest.y = 0;
-	prev.x = prev.y = 0;
 	return;
     }
     else if (ch != STAIRS && 

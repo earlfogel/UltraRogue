@@ -67,9 +67,10 @@ d_list[MAXDAEMONS] = {
 	_X_, _X_, _X_, _X_, _X_, _X_, _X_, _X_, _X_, _X_,
 };
 
-char *prev_format = "UltraRogue Portable Save File Release 101e";
-char *save_format = "UltraRogue Portable Save File Release 102e";
+char *prev_format = "UltraRogue Portable Save File Release 102e";
+char *save_format = "UltraRogue Portable Save File Release 103e";
 char *save_end    = "\nEnd of UltraRogue Game State\n";
+bool compatibility_mode = FALSE;
 
 /*
  * leave room for future growth
@@ -870,27 +871,12 @@ ur_read_thing(FILE *savef)
     return(t);
 }
 
-/*
- * Note that there's an off-by-one error in these two routines on Linux,
- * so we don't read/write the last row and column of the window.
- *
- * Fixing this would break backwards compatibility with old save files.
- *
- * Also note that win->_maxx and win->_maxy differ in ncurses and pdcurses,
- * so we shouldn't use them, but that also breaks backwards compatibility.
- */
-
 void
 ur_write_window(FILE *savef, WINDOW *win)
 {
     int i,j;
-#ifdef PDCURSES
     short y = getmaxy(win);
     short x = getmaxx(win);
-#else
-    short y = getmaxy(win) - 1;
-    short x = getmaxx(win) - 1;
-#endif
 
     ur_write_long(savef, URS_WINDOW);
 
@@ -902,16 +888,17 @@ ur_write_window(FILE *savef, WINDOW *win)
             ur_write_short(savef, mvwinch(win,i,j));
 }
 
-void
+bool
 ur_read_window(FILE *savef, WINDOW *win)
 {
     int i,j;
-#ifdef PDCURSES
     short y = getmaxy(win);
     short x = getmaxx(win);
-#else
-    short y = getmaxy(win) - 1;
-    short x = getmaxx(win) - 1;
+#ifndef PDCURSES
+    if (compatibility_mode) {
+	y -= 1;
+	x -= 1;
+    }
 #endif
     short maxy, maxx;
     long id;
@@ -926,25 +913,29 @@ ur_read_window(FILE *savef, WINDOW *win)
     if (y != maxy || x != maxx) {
 	char oops[200];
 	endwin();
-#ifdef PDCURSES
-	sprintf(oops, "Terminal dimensions (%dx%d) do not match saved game (%dx%d).",
+	if (compatibility_mode) {
+	    sprintf(oops, "Terminal dimensions (%dx%d) do not match saved game (%dx%d).",
+		x+1,y+1,maxx+1,maxy+1);
+	} else {
+	    sprintf(oops, "Terminal dimensions (%dx%d) do not match saved game (%dx%d).",
 		x,y,maxx,maxy);
+	}
+#ifdef PDCURSES
 	printf("%s\nPlease set window size and try again.\n", oops);
 	printf("I.e.:\n");
 	printf("   set PDC_LINES=%d\n", maxy);
 	printf("   set PDC_COLS=%d\n", maxx);
 #else
-	sprintf(oops, "Terminal dimensions (%dx%d) do not match saved game (%dx%d).",
-		x+1,y+1,maxx+1,maxy+1);
 	printf("%s\nPlease resize window and try again.\n", oops);
 #endif
-	exit(1);
+	return(FALSE);
     }
-
 
     for(i=0; i < maxy; i++)
         for(j = 0; j < maxx; j++)
             mvwaddch(win,i,j,ur_read_short(savef));
+
+    return(TRUE);
 }
 
 void
@@ -1213,7 +1204,6 @@ restore_file(FILE *savef)
     struct trap *t;
     struct room *r;
     struct thing *p;
-    bool compatibility_mode = FALSE;
 
     str = ur_read_string(savef);
 
@@ -1235,13 +1225,11 @@ restore_file(FILE *savef)
 	if (s_names[i] != NULL) FREE(s_names[i]);
         s_names[i] = ur_read_string(savef);
         s_know[i] = (bool) ur_read_short(savef);
-	if (!compatibility_mode) {
-	    str = ur_read_string(savef);
-	    if (*str == '\0')
-		FREE(str);
-	    else
-		s_guess[i] = str;
-	}
+	str = ur_read_string(savef);
+	if (*str == '\0')
+	    FREE(str);
+	else
+	    s_guess[i] = str;
     }
 
     DUMPSTRING
@@ -1249,39 +1237,33 @@ restore_file(FILE *savef)
 	if (p_colors[i] != NULL) FREE(p_colors[i]);
         p_colors[i] = ur_read_string(savef);
         p_know[i] = (bool) ur_read_short(savef);
-	if (!compatibility_mode) {
-	    str = ur_read_string(savef);
-	    if (*str == '\0')
-		FREE(str);
-	    else
-		p_guess[i] = str;
-	}
+	str = ur_read_string(savef);
+	if (*str == '\0')
+	    FREE(str);
+	else
+	    p_guess[i] = str;
     }
 
     DUMPSTRING
     for(i=0; i < MAXRINGS; i++) {
         r_stones[i] = ur_read_string(savef);
         r_know[i] = (bool) ur_read_short(savef);
-	if (!compatibility_mode) {
-	    str = ur_read_string(savef);
-	    if (*str == '\0')
-		FREE(str);
-	    else
-		r_guess[i] = str;
-	}
+	str = ur_read_string(savef);
+	if (*str == '\0')
+	    FREE(str);
+	else
+	    r_guess[i] = str;
     }
 
     DUMPSTRING
     for(i=0; i < MAXSTICKS; i++) {
         ws_made[i] = ur_read_string(savef);
         ws_know[i] = (bool) ur_read_short(savef);
-	if (!compatibility_mode) {
-	    str = ur_read_string(savef);
-	    if (*str == '\0')
-		FREE(str);
-	    else
-		ws_guess[i] = str;
-	}
+	str = ur_read_string(savef);
+	if (*str == '\0')
+	    FREE(str);
+	else
+	    ws_guess[i] = str;
     }
 
     DUMPSTRING
@@ -1438,10 +1420,10 @@ restore_file(FILE *savef)
     FREE(str);
 
     DUMPSTRING
-    ur_read_window(savef, cw);
-    ur_read_window(savef, hw);
-    ur_read_window(savef, mw);
-    ur_read_window(savef, stdscr);
+    if (!ur_read_window(savef, cw)) return(FALSE);
+    if (!ur_read_window(savef, hw)) return(FALSE);
+    if (!ur_read_window(savef, mw)) return(FALSE);
+    if (!ur_read_window(savef, stdscr)) return(FALSE);
 
     DUMPSTRING
     difficulty = ur_read_int(savef);
@@ -1519,7 +1501,7 @@ restore_file(FILE *savef)
 	if (find_slot(DAEMON, DAEMON_DOCTOR) == NULL) {
 	    endwin();
 	    printf("\nSorry, the doctor is out.\n");
-	    exit(1);
+	    return(FALSE);
 	}
     }
     if (find_slot(DAEMON, DAEMON_STOMACH) == NULL) {
@@ -1528,7 +1510,7 @@ restore_file(FILE *savef)
 	if (find_slot(DAEMON, DAEMON_STOMACH) == NULL) {
 	    endwin();
 	    printf("\nSorry, your stomach has gone away.\n");
-	    exit(1);
+	    return(FALSE);
 	}
     }
     if (find_slot(DAEMON, DAEMON_RUNNERS) == NULL) {
@@ -1537,7 +1519,7 @@ restore_file(FILE *savef)
 	if (find_slot(DAEMON, DAEMON_RUNNERS) == NULL) {
 	    endwin();
 	    printf("\nSorry, the monsters are too tired to play\n");
-	    exit(1);
+	    return(FALSE);
 	}
     }
 

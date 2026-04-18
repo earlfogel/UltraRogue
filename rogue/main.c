@@ -45,6 +45,61 @@
 #endif
 
 #ifdef FLUTTER
+#include <ctype.h>
+#include <pthread.h>
+#include <semaphore.h>
+sem_t mutex;
+int which_thing(int y, int x);
+
+void
+draw(WINDOW *win)
+{
+    sem_wait(&mutex);
+    touchwin(win);
+    wmove(win, LINES, 0);
+    wrefresh(win);
+    sem_post(&mutex);
+}
+
+/*
+ * repair current screen, when stuff is drawn in the wrong place
+ * use ^R or 'X' command to trigger.
+ */
+#if 0
+void
+redraw(WINDOW *win)
+{
+    int x, y;
+    char ch, ch2;
+
+    if (win != cw)
+	return;
+
+    for (x=0; x<COLS; x++) {
+	for (y=1; y<LINES - 2; y++) {
+	    ch = mvwinch(cw, y, x);
+	    if (isalpha(ch)) {
+		if (mvwinch(mw, y, x) == ' ')
+		    mvwaddch(cw, y, x, ' ');	/* clear */
+	    } else if (strchr(",*!?:)]=/", ch) != NULL) {
+		ch2 = which_thing(y, x);
+		if (ch2 == -1)
+		    mvwaddch(cw, y, x, ' ');	/* clear */
+		else if (ch2 != ch)
+		    mvwaddch(cw, y, x, ch2);	/* reset */
+	    } else if (ch == '&') {
+		ch2 = secretdoor(y, x);
+		mvwaddch(cw, y, x, ch2);	/* reset */
+	    } else if (ch != ' ') {
+		ch2 = mvwinch(stdscr, y, x);
+		if (ch2 != ch)
+		    mvwaddch(cw, y, x, ch2);	/* reset */
+	    }
+	}
+    }
+}
+#endif
+
 int rogue_running;
 
 int is_rogue_running()
@@ -95,6 +150,35 @@ int which_monst(int y, int x) {
     }
     return -1;
 }
+
+bool on_stairs()
+{
+    char ch;
+    sem_wait(&mutex);
+    ch = mvwinch(stdscr, hero.y, hero.x);
+    sem_post(&mutex);
+    if (ch == '%')
+	return 1;
+    return 0;
+}
+
+char *get_visible()
+{
+    int x, y;
+    static char buf[25*80+1];  /* screen size plus null-termination */
+    if (curscr == NULL)
+	return "";
+    sem_wait(&mutex);
+    for (y=0; y<25; y++) {
+	for (x=0; x<80; x++) {
+	    buf[(y*80)+x] = mvwinch(curscr, y, x);
+	}
+    }
+    sem_post(&mutex);
+    buf[sizeof(buf) - 1] = '\0';  /* add string terminator */
+    return buf;
+}
+
 #endif
 
 int 
@@ -114,7 +198,13 @@ main (int argc, char **argv)
     char *restore_file = NULL;
     struct stat sb;
     bool show_welcome = FALSE;
+#ifndef FLUTTER
     char char_file[LINELEN];
+#endif
+
+#ifdef FLUTTER
+    sem_init(&mutex, 0, 1);
+#endif
 
     (void) signal(SIGQUIT, SIG_IGN); 		/* ignore quit for now */
 
@@ -164,10 +254,10 @@ main (int argc, char **argv)
 	    else if (getenv("USER")) 
 		strcpy(whoami, getenv("USER"));
     }
-#ifndef FLUTTER
     if (stat(file_name, &sb) == 0 && S_ISREG(sb.st_mode))
 	restore_file = file_name;
 
+#ifndef FLUTTER
     /* check for a character file */
     strcpy(char_file, home);
     strcat(char_file, ROGDEFS);
@@ -275,6 +365,7 @@ if (rogue_running) {
     count = 0;
     no_command = 0;
     save_ch = ' ';
+    runch = ' ';
     kill_daemon(DAEMON_DOCTOR);
     extinguish_fuse(FUSE_SWANDER);
     kill_daemon(DAEMON_STOMACH);
@@ -294,15 +385,16 @@ if (rogue_running) {
     initscr();				/* Start up cursor package */
 
 /*
- * needed for flutter
+ * no longer needed for flutter
  */
-#ifdef FLUTTER
-LINES=25; COLS=80;
-#endif
 #if 0
+LINES=25; COLS=80;  /* see PDCurses-3.4/impl/pdc_impl.c */
 printf("LINES=%d COLS=%d Curses version: %s\n", LINES, COLS, curses_version());
+printf("PDC_LINES=%s PDC_COLS=%s\n", getenv("PDC_LINES"), getenv("PDC_COLS"));
+fflush(stdout);
 #endif
 
+#ifndef FLUTTER
 #ifdef PDCURSES
     {
 	int pdc_lines = LINES;
@@ -320,6 +412,7 @@ fflush(stdout);
 }
 	}
     }
+#endif
 #endif
 
     setup();
@@ -342,13 +435,19 @@ fflush(stdout);
      * Restore saved game
      */
 #ifdef FLUTTER
+    /*
     if (restore_file) {
-	restore_file = NULL;
+	if (stat(restore_file, &sb) != 0 || !S_ISREG(sb.st_mode))
+	    restore_file = NULL;
     }
+    */
 #endif
     if (restore_file) {
-	if (!restore(restore_file)) /* Note: restore returns on error only */
+	if (!restore(restore_file)) { /* Note: restore returns on error only */
+	    if (flutter)
+		unlink(restore_file);  /* delete bad autosave file */
 	    exit(1);
+	}
     }
 
 #ifndef FLUTTER
@@ -475,6 +574,10 @@ get_food:
     }
 
     playit();
+
+#ifdef FLUTTER
+    sem_destroy(&mutex);
+#endif
 
     /* notreached */
     return 0;

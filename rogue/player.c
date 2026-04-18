@@ -354,9 +354,6 @@ do_prayer:
 	return;
     }
 
-    if (!flutter)
-	msg("Your prayer has been granted.");
-
     if (cleric_spells[which_prayer].s_type == TYP_POTION)
 	quaff(	cleric_spells[which_prayer].s_which,
 		blessed);
@@ -637,9 +634,6 @@ do_spell:
 	repeat_spell = -1;
 	return;
     }
-
-    if (!flutter)
-	msg("Your spell is successful.");
 
     if (magic_spells[which_spell].s_type == TYP_POTION)
         quaff(	magic_spells[which_spell].s_which,
