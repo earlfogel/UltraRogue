@@ -246,7 +246,7 @@ status (bool display)
     first_line = TRUE;
     getyx(cw, oy, ox);
 
-    if (COLS >= 80 && !flutter) {
+    if (COLS >= 72 && !flutter) {
 	sprintf(buf, "Int:%d(%d)  Str:%d(%d)  Wis:%d(%d)  Dxt:%d(%d)  Const:%d(%d)  Carry:%d(%d)",
 	    stat_ptr->s_intel, max_ptr->s_intel, stat_ptr->s_str,max_ptr->s_str,
 	    stat_ptr->s_wisdom,max_ptr->s_wisdom,stat_ptr->s_dext,max_ptr->s_dext,
@@ -304,7 +304,7 @@ line_two:
 	for (hpwidth = 0; temp; hpwidth++)
 	    temp /= 10;
     }
-    if (COLS >= 80 && !flutter)
+    if (COLS >= 72 && !flutter)
 	sprintf(buf, "Lvl:%d  Au:%d  Hp:%*d(%*d)  Ac:%d  Exp:%d/%ld  %s %s",
 	    level, purse, hpwidth, stat_ptr->s_hpt, hpwidth, max_ptr->s_hpt,
 	    (cur_armor != NULL ? (cur_armor->o_ac - 10 + stat_ptr->s_arm)

@@ -738,7 +738,7 @@ pet_message:	    msg("The dungeon begins to rumble and shake!");
 		else if (blessed && !(lb->o_flags & ISOWNED)) {
 		    lb->o_flags |= (ISOWNED | CANRETURN);
 #ifdef EARL
-		    if (lb->o_type == TYP_ARTIFACT
+		    if (lb->o_type == ARTIFACT
 			&& lb->o_flags & ISPROT
 			&& !(lb->o_flags & IS2PROT)
 			) {

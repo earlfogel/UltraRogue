@@ -464,6 +464,7 @@ struct h_list helpstr[] = {
 	{'Q',	"	quit"},
 	{'=',	"	listen for monsters"},
 	{'~',	"	points needed to raise levels"},
+	{'%',	"	run to (or use) stairs"},
 	{'f',	"	fight monster"},
 	{'F',	"	fight monsters"},
 	{CTRL('F'),	"	fight all monsters"},

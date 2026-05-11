@@ -469,12 +469,9 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 		when 'v' : after = FALSE;
 			   msg("UltraRogue version %s.",
 				release);
-		when CTRL('R') :
-#ifdef FLUTTER
-		case 'X':
-#endif
-		    after = FALSE;
 #ifdef EARL
+		when 'X':
+		    after = FALSE;
 		    char fname[200];
 		    strcpy(fname, home);
 		    strcat(fname, autosave_file);
@@ -486,6 +483,7 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 			msg("");
 		    }
 #endif
+		when CTRL('R') :
 #if 0
 		    redraw(cw);
 #endif
@@ -500,9 +498,7 @@ fprintf(stderr, "ch: '%s' [0%o]\n", unctrl(ch), ch);
 		    draw(cw);
 		    touchwin(cw); /* MMMMMMMMMM */
 		when CTRL('P') :
-#ifdef FLUTTER
 		case '-':
-#endif
 		{
 			    bool decrement = FALSE;
 
