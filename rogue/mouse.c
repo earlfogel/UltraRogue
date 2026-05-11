@@ -387,7 +387,7 @@ do_mouseclick (coord dest)
 	/*
 	 * walk towards the mouse
 	 */
-	count = (LINES + COLS);  /* upper limit */
+	count = LINES + COLS;  /* upper limit */
 	if (levtype == MAZELEV && off(player, CANINWALL))
 	    count /= 2;
 	mousemove = TRUE;
