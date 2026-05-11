@@ -146,25 +146,25 @@ msg("dest area from %d,%d to %d,%d", mindx,mindy, maxdx,maxdy);
 		    continue; /* don't pick the door we came in */
 		doordist = DISTANCE(hero.y, hero.x, exit.y, exit.x)
 			    + DISTANCE(exit.y, exit.x, dest.y, dest.x);
-		if (mindy > maxy+1 && exit.y != maxy) {
+		if (mindy > maxy && exit.y != maxy) {
 		    if (exit.y == miny)
 			doordist *= 8;
 		    else
 			doordist *= 4;
 		}
-		if (maxdy < miny-1 && exit.y != miny) {
+		if (maxdy < miny && exit.y != miny) {
 		    if (exit.y == maxy)
 			doordist *= 8;
 		    else
 			doordist *= 4;
 		}
-		if (mindx > maxx+1 && exit.x != maxx) {
+		if (mindx > maxx && exit.x != maxx) {
 		    if (exit.x == minx)
 			doordist *= 8;
 		    else
 			doordist *= 4;
 		}
-		if (maxdx < minx-1 && exit.x != minx) {
+		if (maxdx < minx && exit.x != minx) {
 		    if (exit.x == maxx)
 			doordist *= 8;
 		    else
