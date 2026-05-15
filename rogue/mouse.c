@@ -123,12 +123,9 @@ do_mousemove (coord dest, coord prev)
 	    mindy = maxdy = dest.y;
 	} else {
 	    mindx = destroom->r_pos.x - (destroom->r_pos.x % (COLS/3));
-	    mindy = destroom->r_pos.y - (destroom->r_pos.y % (LINES/3));
+	    mindy = destroom->r_pos.y - (destroom->r_pos.y % ((LINES-3)/3)) + 1;
 	    maxdx = mindx + COLS/3 - 1;
-	    maxdy = mindy + LINES/3 - 1;
-/*
-msg("dest area from %d,%d to %d,%d", mindx,mindy, maxdx,maxdy);
- */
+	    maxdy = mindy + (LINES-3)/3 - 1;
 	}
 	bestdoor.y = 0;
 	bestdoor.x = 0;
