@@ -13,16 +13,16 @@
 
 UltraRogue is an old ascii-graphics game developed by Herb Chong in the
 1980s and 1990s.  It's one of many roguelike games inspired by Dungeons and
-Dragons and by the original Unix game Rogue.
+Dragons and by the original game Rogue.
 
 I fell in love with urogue 1.0.2 in the mid-1980s.  Later versions added
 more features and monsters, but the game also became more cumbersome
 to play.
 
-This feels like the original urogue, but with more monsters,
-working save/restore code, some new and backported features and many bug fixes.
-I also streamlined gameplay to reduce typing and to lessen the strain on
-aging wrists.
+This new version feels like the old urogue, but with more monsters,
+some new and backported features and many bug fixes including working
+save/restore code.  I also streamlined gameplay to reduce typing and to
+lessen the strain on aging wrists.
 
 If you have fond memories of the original urogue or other early roguelikes,
 then you may like this one too.
@@ -45,7 +45,7 @@ less likely to be summoned to a throne room.  Also, armor is more
 effective.
 
 In hard games, there are fewer blessed items, artifacts are more dangerous,
-and armor is less effective.  You are also more vulnerable to magical
+and armor is less effective.  You are more vulnerable to magical
 attacks and your ability to do magic is reduced.  You can't start a hard
 game with plate, mithril or crystalline armor, but you may find some later.
 
@@ -54,7 +54,7 @@ left as an exercise for the player.
 
 ### New Options
 
-If you turn on Autosave, urogue will save the game periodically
+If you turn on Autosave, urogue saves the game periodically
 and lets you roll back to the most recent save point when you die.
 I.e, no permadeath.
 
@@ -63,6 +63,9 @@ won't pick things up automatically when you step on them.
 
 If you turn on Cutcorners, you can move and fight around corners,
 as can the more dexterous monsters.
+
+If you turn on Usemouse, you can move around by clicking on things with
+your mouse.
 
 You can set these (and most other) options using the 'o' command in urogue,
 or via the SROGUEOPTS environment variable.
@@ -83,9 +86,9 @@ Use the 'f' command to fight a single monster.  If there is more than one
 monster in reach, urogue asks which you want to fight.
 
 Use the 'F' command to fight a group of monsters. I.e., when the monster
-you are fighting moves or dies, urogue picks another and keeps going.  Fights end
-when there are no more monsters in reach, or when you are too weak, sick,
-hungry or injured to continue.
+you are fighting moves away or dies, urogue picks another and the fight
+continues.  'F' fights end when there are no more monsters in reach, or when
+you are too weak, sick, hungry or injured to continue.
 
 Compared to the original, there are fewer interruptions when fighting, and
 fewer messages to distract you.  If you are much stronger than the monsters
@@ -106,9 +109,9 @@ interesting.  There is an option (nodoorstop) that lets you run into things
 
 Pressing \<CTRL\> and a direction key does a controlled run -- you
 search after every step and don't pick things up when you step on
-them.  This is particularly useful when searching for secret doors and in
-treasure chambers, but it does mean that any monsters that are chasing you
-quickly catch up.
+them.  This is handy when searching for secret doors and in treasure
+chambers, but makes it easier for monsters that are chasing you to catch
+up.
 
 ## Getting Started
 
@@ -117,12 +120,13 @@ commands to wander through a dungeon fighting monsters and collecting
 treasure.  The dungeon, monsters and treasure are all displayed on screen
 as text characters.  For example, you are an '@' sign, and monsters are
 various letters of the alphabet.  The dungeon itself is drawn with dots,
-dashes, vertical bars and so on.
+dashes, vertical bars and so on. Each level has a staircase ('%') that
+takes you to the next level.
 
-There are 8 different magical artifacts in this version of rogue.
+There are 8 different magical artifacts in urogue.
 The first is on level 25 and is relatively easy to pick up.  The last is
 on level 100 and is very difficult to get.  Carrying any of these
-treasures allows the rogue to go up the stairs.  To win the game, 
+treasures allows the rogue to go up stairs.  To win the game, 
 work your way down through the dungeon collecting artifacts, and then climb
 back out again.
 
@@ -162,6 +166,7 @@ Here are a few other commands to get you started:
     z	zap a magic wand
     S	save game
     Q	quit
+    %   run to, or use, stairs (once you've found them)
 
 To restore a saved game from the default location, just run urogue again.
 To restore a different saved game, use "urogue \<filename\>".  If you don't
